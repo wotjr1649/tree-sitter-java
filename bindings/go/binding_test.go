@@ -7,11 +7,19 @@ import (
 	tree_sitter_java "github.com/tree-sitter/tree-sitter-java/bindings/go"
 )
 
-func TestCanLoadGrammar(t *testing.T) {
+func TestCanParseJava(t *testing.T) {
 	language := tree_sitter.NewLanguage(tree_sitter_java.Language())
 	parser := tree_sitter.NewParser()
 	defer parser.Close()
 	if err := parser.SetLanguage(language); err != nil {
 		t.Fatalf("Error loading Java grammar: %v", err)
+	}
+	tree := parser.Parse([]byte("class Example {}"), nil)
+	if tree == nil {
+		t.Fatal("Java parser returned no tree")
+	}
+	defer tree.Close()
+	if root := tree.RootNode(); root.HasError() {
+		t.Fatalf("Error parsing Java: %s", root.ToSexp())
 	}
 }

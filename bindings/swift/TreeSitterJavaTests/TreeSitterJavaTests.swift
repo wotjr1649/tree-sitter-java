@@ -3,10 +3,11 @@ import SwiftTreeSitter
 import TreeSitterJava
 
 final class TreeSitterJavaTests: XCTestCase {
-    func testCanLoadGrammar() throws {
+    func testCanParseJava() throws {
         let parser = Parser()
         let language = Language(language: tree_sitter_java())
-        XCTAssertNoThrow(try parser.setLanguage(language),
-                         "Error loading Java grammar")
+        try parser.setLanguage(language)
+        let root = try XCTUnwrap(parser.parse("class Example {}")?.rootNode)
+        XCTAssertFalse(root.hasError)
     }
 }

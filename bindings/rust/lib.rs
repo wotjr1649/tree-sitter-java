@@ -50,10 +50,12 @@ pub const TAGS_QUERY: &str = include_str!("../../queries/tags.scm");
 #[cfg(test)]
 mod tests {
     #[test]
-    fn test_can_load_grammar() {
+    fn test_can_parse_java() {
         let mut parser = tree_sitter::Parser::new();
         parser
             .set_language(&super::LANGUAGE.into())
             .expect("Error loading Java parser");
+        let tree = parser.parse("class Example {}", None).expect("No Java tree");
+        assert!(!tree.root_node().has_error());
     }
 }
