@@ -19,6 +19,11 @@
   statement, such as `outer.<T>super(n);`, used to parse cleanly as a `method_invocation` named `super` and is now
   an `explicit_constructor_invocation`. Constructor bodies with statements before the invocation that used to
   contain ERROR or MISSING now parse cleanly. The `repeat(choice(...))` form matches orchard's Java grammar.
+- Parse `default` in a `case` label list, as in `case null, default` (JLS 25 §14.11.1), as the anonymous
+  `default` token of `switch_label` instead of an `identifier`. No node kind or field changes. Trees change only
+  where a `case` label list held `default` as an `identifier`: `default` is a reserved keyword, so no valid
+  program names it. Any position in the list is accepted, as in javac's parser (`case null, default, 1` parses
+  there and is rejected only in attribution).
 
 ## 1.0.0
 

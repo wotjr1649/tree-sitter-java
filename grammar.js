@@ -509,7 +509,8 @@ module.exports = grammar({
       seq('case',
         choice(
           $.pattern,
-          commaSep1($.expression),
+          // `case null, default` (JLS 25 §14.11.1); javac's parser also takes labels after it, so any position is allowed
+          commaSep1(choice($.expression, 'default')),
         ),
         optional($.guard),
       ),

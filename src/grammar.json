@@ -3659,8 +3659,17 @@
                   "type": "SEQ",
                   "members": [
                     {
-                      "type": "SYMBOL",
-                      "name": "expression"
+                      "type": "CHOICE",
+                      "members": [
+                        {
+                          "type": "SYMBOL",
+                          "name": "expression"
+                        },
+                        {
+                          "type": "STRING",
+                          "value": "default"
+                        }
+                      ]
                     },
                     {
                       "type": "REPEAT",
@@ -3672,8 +3681,17 @@
                             "value": ","
                           },
                           {
-                            "type": "SYMBOL",
-                            "name": "expression"
+                            "type": "CHOICE",
+                            "members": [
+                              {
+                                "type": "SYMBOL",
+                                "name": "expression"
+                              },
+                              {
+                                "type": "STRING",
+                                "value": "default"
+                              }
+                            ]
                           }
                         ]
                       }

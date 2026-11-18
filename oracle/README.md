@@ -19,8 +19,9 @@ name is not a syntax rejection; the runner's self-test shows one.
 Case sets: `bundle` (the six minimal inputs and probes of go-treesitter's java evidence bundle: `q71-inputs`,
 `p97-probes`), `pr233` (the four inputs of `test/corpus/java25.txt` from tree-sitter-java PR #233, by arraypress,
 MIT), `probes` (written in this task: a `this(...)` probe for K2 and adjacent invalid inputs for K1-K3), `k1`
-(valid and adjacent invalid `import module` inputs of the K1 fix) and `k2` (valid and adjacent invalid inputs with
-statements before `super(...)`/`this(...)` of the K2 fix). Every
+(valid and adjacent invalid `import module` inputs of the K1 fix), `k2` (valid and adjacent invalid inputs with
+statements before `super(...)`/`this(...)` of the K2 fix) and `k3` (valid and adjacent invalid `case null, default`
+inputs of the K3 fix). Every
 case names its origin in `provenance`: the bundle path with its `SHA256SUMS` hash, the PR, or "written in this task".
 IDs are prefixed with the set name. To add a case, append a line, hash its `source` (SHA-256 of the UTF-8 bytes; the
 replay prints the actual hash when it differs), then regenerate that set's verdicts.
