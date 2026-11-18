@@ -73,6 +73,21 @@ const files = (dir, ext) => {
 
 // --- inputs ---------------------------------------------------------------------------------------------------
 
+// Every assertion field the replay reads is checked here, so a wrong shape is an input error (exit 2), not a crash.
+const isStrings = (v) => Array.isArray(v) && v.every((x) => typeof x === 'string');
+function checkAssertions(name, c) {
+  if (c.assert === undefined) return;
+  const where = `${name}: ${c.id} assert`;
+  if (!Array.isArray(c.assert)) fail(`${where} must be an array`);
+  for (const a of c.assert) {
+    if (!isObject(a) || a.type !== 'range-kinds') fail(`${where}: each assertion is an object of type "range-kinds"`);
+    if (typeof a.in !== 'string' || typeof a.text !== 'string') fail(`${where}: "in" and "text" must be strings`);
+    if (a.require !== undefined && !(Array.isArray(a.require) && a.require.every((r) => isObject(r) && typeof r.kind === 'string' && typeof r.named === 'boolean')))
+      fail(`${where}: "require" must be an array of {kind: string, named: boolean}`);
+    if (a.forbid !== undefined && !isStrings(a.forbid)) fail(`${where}: "forbid" must be an array of strings`);
+  }
+}
+
 export function loadCases() {
   const sets = [];
   const ids = new Set();
@@ -89,7 +104,9 @@ export function loadCases() {
       if (!isObject(c)) fail(`${name}: a case line is not an object`);
       for (const key of ['id', 'sha256', 'source'])
         if (typeof c[key] !== 'string') fail(`${name}: a case has no string "${key}"`);
-      if (!c.provenance) fail(`${name}: ${c.id} has no provenance`);
+      if (!isObject(c.provenance)) fail(`${name}: ${c.id} needs a "provenance" object`);
+      if (c.file != null && typeof c.file !== 'string') fail(`${name}: ${c.id} "file" must be a string or null`);
+      checkAssertions(name, c);
       const actual = sha256(Buffer.from(c.source, 'utf8'));
       if (actual !== c.sha256) fail(`${name}: ${c.id} sha256 is ${c.sha256}, its source hashes to ${actual}`);
       if (ids.has(c.id)) fail(`duplicate case id ${c.id}`);
@@ -109,8 +126,8 @@ export function loadVerdicts(sets) {
   const levels = new Set();
   for (const name of files(`${DATA}verdicts/`, '.json')) {
     const file = parseJson(readBytes(`${DATA}verdicts/${name}`).toString('utf8'), name);
+    if (!isObject(file) || !isObject(file.meta) || !isObject(file.verdicts)) fail(`${name}: must be an object with "meta" and "verdicts" objects`);
     const { meta, verdicts: v } = file;
-    if (!isObject(meta) || !isObject(v)) fail(`${name}: needs "meta" and "verdicts" objects`);
     const set = sets.find((s) => s.sha === meta.cases_sha256);
     if (!set) fail(`${name}: made from cases that are not in the repository`);
     if (covered.has(set.name)) fail(`${name}: a second verdict file for ${set.name}`);
@@ -204,10 +221,12 @@ export function loadExpected(sets, verdicts) {
   for (const [key, want] of Object.entries(GRAMMAR_BASE))
     if (expected.grammar_base[key] !== want) fail(`expected-failures.json: grammar_base.${key} is ${expected.grammar_base[key]}, the base v1.0.0 has ${want}`);
   for (const [id, e] of Object.entries(expected.cases)) {
+    if (!isObject(e)) fail(`expected-failures.json: the entry of ${id} must be an object`);
+    for (const key of ['k', 'sha256', 'base_tree'])
+      if (typeof e[key] !== 'string' || !e[key]) fail(`expected-failures.json: the entry of ${id} needs a non-empty string "${key}"`);
     if (!byId[id]) fail(`expected-failures.json: unknown case ${id}`);
     if (e.sha256 !== byId[id].sha256) fail(`expected-failures.json: ${id} is bound to a different input (${e.sha256})`);
     if (verdicts[id].length) fail(`expected-failures.json: ${id} is not a confirmed mismatch, javac rejected it`);
-    if (!e.base_tree || !e.k) fail(`expected-failures.json: ${id} needs "k" and "base_tree"`);
   }
   return expected;
 }

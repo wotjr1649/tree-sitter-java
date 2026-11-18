@@ -45,10 +45,15 @@ and no host fields, so regenerating on any host gives byte-identical files; CI r
 difference. Each file's `meta` records `java.vendor`, `java.runtime.version`, `release`, `preview`, `options`,
 `source_encoding` (cases are JSON strings, hashed and parsed as UTF-8), `cases_sha256` (the case file's bytes) and
 `runner_sha256` (the bytes of the source file the launcher is running, `jdk.launcher.sourcefile`; the runner has no
-option to hash another file). The runner reads the sources from the case file and parses each one under the name
-`Case.java`; a case may set `file` to a plain name matching `[A-Za-z0-9_.-]{1,64}\.java` (anything else is a runner
-fault). javac's parser does not look at the file name (a module declaration
-parses under `Case.java` and under `module-info.java`; the self-test proves it).
+option to hash another file). The runner reads the sources from the case file and parses each one as a virtual file.
+
+The virtual file name (the optional case field `file`) only selects the kind of compilation unit that javac's
+file manager expects, such as `module-info.java` or `package-info.java`; javac's parser itself does not look at it (the
+same module declaration parses under `Case.java` and under `module-info.java`, which the self-test proves). An absent
+`file` field, or `"file": null`, means `Case.java`. A `file` must match `[A-Za-z0-9_.-]{1,64}\.java`. The restriction to
+ASCII is intentional: it keeps the name a safe URI path component with no path separators, spaces or control
+characters, and non-ASCII names such as `한글.java` are refused on purpose (runner fault, exit 2) rather than encoded.
+Any other value, including a non-string, is a runner fault too.
 
 Exit codes: **0** done (self-test passed); **1** the self-test failed; **2** runner fault: crash, unreadable or
 inconsistent case file (bad hash, duplicate id, a case set with no cases, a bad `file`), a JDK other than the pinned
