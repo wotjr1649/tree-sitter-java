@@ -26,20 +26,33 @@ replay prints the actual hash when it differs), then regenerate that set's verdi
 ## Verdicts
 
 ```sh
-java oracle/runner/ParseOracle.java --self-test
-java oracle/runner/ParseOracle.java --cases oracle/data/cases/<set>.jsonl --out oracle/data/verdicts/temurin-25.0.5+8.<set>.json
+mkdir -p build/oracle/empty
+java -cp build/oracle/empty oracle/runner/ParseOracle.java --self-test
+java -cp build/oracle/empty oracle/runner/ParseOracle.java --cases oracle/data/cases/<set>.jsonl --out oracle/data/verdicts/temurin-25.0.5+8.<set>.json
 ```
 
-The runner needs exactly Temurin 25.0.5+8 (a JDK, not a JRE); any other JDK is a runner fault. It writes no timestamps
+Always start the runner with the JVM class path set to one existing **empty directory** (`-cp build/oracle/empty`),
+never `-cp ""` or the default: javac loads compiler plugins and annotation processors through the class path (an
+empty class path element means the current directory), and a plugin that adds a diagnostic would be stored as a
+syntax rejection. The runner refuses to run (exit 2) unless the class path is exactly one empty directory and there is
+no module path. It also passes `-proc:none`.
+
+The runner needs exactly Temurin 25.0.5+8 (a JDK, not a JRE); any other JDK is a runner fault. Preview is off (no
+`--enable-preview`), but `parse()` reports only the preview diagnostics that the parser itself emits: a preview
+feature that javac rejects in a later phase is accepted by the parse-only verdict (for example primitive type patterns
+in `switch`: `javac --release 25` rejects them, `parse()` accepts them). It writes no timestamps
 and no host fields, so regenerating on any host gives byte-identical files; CI regenerates every file and fails on any
 difference. Each file's `meta` records `java.vendor`, `java.runtime.version`, `release`, `preview`, `options`,
 `source_encoding` (cases are JSON strings, hashed and parsed as UTF-8), `cases_sha256` (the case file's bytes) and
-`runner_sha256` (the runner source's bytes). The runner reads the sources from the case file and parses each one under
-the name `Case.java`; a case may set `file`. javac's parser does not look at the file name (a module declaration
+`runner_sha256` (the bytes of the source file the launcher is running, `jdk.launcher.sourcefile`; the runner has no
+option to hash another file). The runner reads the sources from the case file and parses each one under the name
+`Case.java`; a case may set `file` to a plain name matching `[A-Za-z0-9_.-]{1,64}\.java` (anything else is a runner
+fault). javac's parser does not look at the file name (a module declaration
 parses under `Case.java` and under `module-info.java`; the self-test proves it).
 
 Exit codes: **0** done (self-test passed); **1** the self-test failed; **2** runner fault: crash, unreadable or
-inconsistent case file (bad hash, duplicate id), a JDK other than the pinned one. A fault is never recorded as a
+inconsistent case file (bad hash, duplicate id, a case set with no cases, a bad `file`), a JDK other than the pinned
+one, a class path that is not one empty directory. A fault is never recorded as a
 rejection. Only javac errors count as a rejection; warnings do not.
 
 ## Replay
@@ -65,8 +78,12 @@ A case is a **mismatch** when javac accepts it and the tree is bad. A case javac
 
 Exit codes: **0** the results equal the baseline; **1** they differ (a mismatch that is not in the expected-failure
 set, or a listed case that no longer fails); **2** the inputs are inconsistent (a case's hash does not match its
-source, verdicts made from other cases or another runner or JDK, an expected-failure entry bound to a different
-input or to a case javac rejected).
+source, an empty case set, a file that cannot be read or is not valid JSON, verdicts made from other cases or
+another runner, or a verdict file whose `meta` is not the oracle (vendor, runtime, API, options, encoding, `release`,
+`preview`, or a `case_count` that differs from the real count) or whose values are not arrays of strings, an
+`expected-failures.json` whose `grammar_base` is not the fixed v1.0.0 evidence, an entry bound to a different input or
+to a case javac rejected, or, while `src/parser.c` is the base parser, a `base_tree` that is not the case's current
+tree).
 
 ## Rule (a): the expected-failure set
 
@@ -74,11 +91,13 @@ input or to a case javac rejected).
 and the base grammar errs or fails an assertion. Each entry is bound to the case id, the SHA-256 of its input, the
 `K` it belongs to, and its base tree, all measured at grammar base `a241253` (v1.0.0). `6744e4a` (v1.0.0 plus three
 Dependabot workflow bumps) has identical `grammar.js` and `src/`. The replay fails on a mismatch that is not listed
-and on a listed case that no longer fails. If a listed case still fails but its tree differs from the recorded base
-tree it prints a note.
+and on a listed case that no longer fails. `grammar_base` (commit `a241253…`, `parser.c` and `grammar.js` sha256) must equal the fixed evidence in the replay.
+While `src/parser.c` equals the base parser, every listed `base_tree` must equal the current tree (otherwise exit 2).
+After a fix PR changes the parser, a listed case that still fails but whose tree changed only prints a note.
 
 A later K pull request that fixes a defect **deletes its entries** from `expected-failures.json` (and only those; the
-cases and their assertions stay as passing cases). After K3 (and K4, which the PR #233 cases cover) the set is empty.
+cases and their assertions stay as passing cases). After K3 only the two K4 entries (`pr233/record-pattern-qualified`, `pr233/switch-final-type-pattern`) remain, until
+the owner decides the scope of K4; the set is empty once K4 is fixed or its entries are deliberately re-decided.
 A new input that the grammar fails but javac accepts is never added silently: it is a new defect, so it needs its own
 fix, or a recorded entry with its javac verdict and evidence.
 

@@ -5,10 +5,10 @@
     "cases_sha256": "59848409d6b4df0ccd06197ed42ba49ee9220f2602dfe8b0926808dcd19e6a7c",
     "java.runtime.version": "25.0.5+8-LTS",
     "java.vendor": "Eclipse Adoptium",
-    "options": ["--release", "25"],
+    "options": ["--release", "25", "-proc:none"],
     "preview": false,
     "release": "25",
-    "runner_sha256": "939ae4728c8aebaded36937ddf148ef263a19e9055b44a8484060bb7e1ad699e",
+    "runner_sha256": "c45e32e314b98ccb46481c4db18aa25173ca9b2fe46e45888f0a743ceb6c70ee",
     "source_encoding": "UTF-8"
   },
   "verdicts": {

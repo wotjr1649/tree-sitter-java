@@ -7,7 +7,8 @@
 //
 // Usage: node scripts/oracle-replay.mjs
 // Exit 0: results equal the baseline. 1: they differ (an unlisted mismatch, or a listed case that no longer
-// fails). 2: the inputs are inconsistent (hash mismatch, verdicts made from other cases, bad entry).
+// fails). 2: the inputs are inconsistent: an unreadable or malformed file, a hash mismatch, verdicts made from other
+// cases or by another oracle, an empty case set, a bad expected-failure entry.
 import { createHash } from 'node:crypto';
 import { readFileSync, readdirSync } from 'node:fs';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -18,6 +19,24 @@ const root = fileURLToPath(new URL('..', import.meta.url));
 const DATA = `${root}oracle/data/`;
 const RUNNER = `${root}oracle/runner/ParseOracle.java`;
 
+// The oracle a verdict file must come from (oracle/runner/ParseOracle.java fixes the same values).
+export const ORACLE = {
+  'java.vendor': 'Eclipse Adoptium',
+  'java.runtime.version': '25.0.5+8-LTS',
+  api: 'com.sun.source.util.JavacTask.parse()',
+  options: ['--release', '25', '-proc:none'],
+  preview: false,
+  release: '25',
+  source_encoding: 'UTF-8',
+};
+
+// Fixed evidence for rule (a): the grammar base v1.0.0 (a241253). 6744e4a has identical grammar.js and src/.
+export const GRAMMAR_BASE = {
+  commit: 'a241253570b20a5f83c9dde367a5a50f0116a978',
+  parser_c_sha256: '85977add5c0918e0991c2decf75ad7aa66539811786703653ee9c9f1ed4ef523',
+  grammar_js_sha256: 'b89ada7566bda16a8d7a710755c27824d6097e44b8d3b1dafbb749f3c34d13e0',
+};
+
 export class Inconsistent extends Error {}
 const fail = (message) => {
   throw new Inconsistent(message);
@@ -25,10 +44,32 @@ const fail = (message) => {
 
 export const sha256 = (data) => createHash('sha256').update(data).digest('hex');
 
-const files = (dir, ext) =>
-  readdirSync(dir)
-    .filter((name) => name.endsWith(ext))
-    .sort();
+// File and JSON errors are inconsistent inputs (exit 2) and name the file.
+const readBytes = (path) => {
+  try {
+    return readFileSync(path);
+  } catch (e) {
+    return fail(`${path}: cannot read: ${e.message}`);
+  }
+};
+const parseJson = (text, where) => {
+  try {
+    return JSON.parse(text);
+  } catch (e) {
+    return fail(`${where}: malformed JSON: ${e.message}`);
+  }
+};
+const isObject = (v) => v !== null && typeof v === 'object' && !Array.isArray(v);
+
+const files = (dir, ext) => {
+  try {
+    return readdirSync(dir)
+      .filter((name) => name.endsWith(ext))
+      .sort();
+  } catch (e) {
+    return fail(`${dir}: cannot list: ${e.message}`);
+  }
+};
 
 // --- inputs ---------------------------------------------------------------------------------------------------
 
@@ -36,13 +77,16 @@ export function loadCases() {
   const sets = [];
   const ids = new Set();
   for (const name of files(`${DATA}cases/`, '.jsonl')) {
-    const bytes = readFileSync(`${DATA}cases/${name}`);
+    const bytes = readBytes(`${DATA}cases/${name}`);
     const cases = bytes
       .toString('utf8')
       .split('\n')
-      .filter((line) => line.trim())
-      .map((line) => JSON.parse(line));
+      .map((line, n) => [line, n + 1])
+      .filter(([line]) => line.trim())
+      .map(([line, n]) => parseJson(line, `${name}:${n}`));
+    if (!cases.length) fail(`${name}: no cases`);
     for (const c of cases) {
+      if (!isObject(c)) fail(`${name}: a case line is not an object`);
       for (const key of ['id', 'sha256', 'source'])
         if (typeof c[key] !== 'string') fail(`${name}: a case has no string "${key}"`);
       if (!c.provenance) fail(`${name}: ${c.id} has no provenance`);
@@ -61,19 +105,27 @@ export function loadCases() {
 export function loadVerdicts(sets) {
   const verdicts = {};
   const covered = new Set();
-  const runnerSha = sha256(readFileSync(RUNNER));
+  const runnerSha = sha256(readBytes(RUNNER));
   const levels = new Set();
   for (const name of files(`${DATA}verdicts/`, '.json')) {
-    const { meta, verdicts: v } = JSON.parse(readFileSync(`${DATA}verdicts/${name}`, 'utf8'));
+    const file = parseJson(readBytes(`${DATA}verdicts/${name}`).toString('utf8'), name);
+    const { meta, verdicts: v } = file;
+    if (!isObject(meta) || !isObject(v)) fail(`${name}: needs "meta" and "verdicts" objects`);
     const set = sets.find((s) => s.sha === meta.cases_sha256);
     if (!set) fail(`${name}: made from cases that are not in the repository`);
     if (covered.has(set.name)) fail(`${name}: a second verdict file for ${set.name}`);
     covered.add(set.name);
-    if (meta.release !== '25' || meta.preview !== false) fail(`${name}: not Java 25 with preview off`);
+    for (const [key, want] of Object.entries(ORACLE))
+      if (JSON.stringify(meta[key]) !== JSON.stringify(want))
+        fail(`${name}: meta.${key} is ${JSON.stringify(meta[key])}, the oracle is ${JSON.stringify(want)}`);
+    if (meta.case_count !== set.cases.length) fail(`${name}: meta.case_count is ${meta.case_count}, ${set.name} has ${set.cases.length} cases`);
     if (meta.runner_sha256 !== runnerSha) fail(`${name}: made by a different runner than oracle/runner`);
     levels.add(`${meta['java.vendor']} ${meta['java.runtime.version']}`);
     const ids = set.cases.map((c) => c.id);
     if (JSON.stringify(Object.keys(v)) !== JSON.stringify(ids)) fail(`${name}: verdict ids differ from ${set.name}`);
+    for (const [id, codes] of Object.entries(v))
+      if (!Array.isArray(codes) || codes.some((code) => typeof code !== 'string'))
+        fail(`${name}: the verdict of ${id} is not an array of strings`);
     Object.assign(verdicts, v);
   }
   for (const s of sets) if (!covered.has(s.name)) fail(`${s.name}: no verdict file`);
@@ -146,9 +198,11 @@ export function judgeAll(sets) {
 // --- baseline -------------------------------------------------------------------------------------------------
 
 export function loadExpected(sets, verdicts) {
-  const expected = JSON.parse(readFileSync(`${DATA}expected-failures.json`, 'utf8'));
+  const expected = parseJson(readBytes(`${DATA}expected-failures.json`).toString('utf8'), 'expected-failures.json');
+  if (!isObject(expected) || !isObject(expected.cases) || !isObject(expected.grammar_base)) fail('expected-failures.json: needs "grammar_base" and "cases" objects');
   const byId = Object.fromEntries(sets.flatMap((s) => s.cases.map((c) => [c.id, c])));
-  if (!expected.grammar_base?.commit || !expected.grammar_base?.parser_c_sha256) fail('expected-failures.json: no grammar_base');
+  for (const [key, want] of Object.entries(GRAMMAR_BASE))
+    if (expected.grammar_base[key] !== want) fail(`expected-failures.json: grammar_base.${key} is ${expected.grammar_base[key]}, the base v1.0.0 has ${want}`);
   for (const [id, e] of Object.entries(expected.cases)) {
     if (!byId[id]) fail(`expected-failures.json: unknown case ${id}`);
     if (e.sha256 !== byId[id].sha256) fail(`expected-failures.json: ${id} is bound to a different input (${e.sha256})`);
@@ -175,6 +229,12 @@ function main() {
   const { verdicts, jdk } = loadVerdicts(sets);
   const expected = loadExpected(sets, verdicts);
   const results = judgeAll(sets);
+  // At the grammar base the recorded base trees must be exactly the current trees; after a fix PR changes the parser
+  // they are history, and a changed tree is only noted.
+  const atBase = sha256(readBytes(`${root}src/parser.c`)) === GRAMMAR_BASE.parser_c_sha256;
+  if (atBase)
+    for (const [id, e] of Object.entries(expected.cases))
+      if (results[id].tree !== e.base_tree) fail(`expected-failures.json: the base_tree of ${id} is not its tree at the grammar base`);
   const r = compare(expected, verdicts, results);
 
   console.log(`oracle: ${jdk}, --release 25, preview off; ${Object.keys(results).length} cases`);
@@ -184,9 +244,7 @@ function main() {
     const note = r.mismatches.includes(id) ? (r.unlisted.includes(id) ? 'MISMATCH' : 'expected failure') : r.rejectedClean.includes(id) ? 'rejected-clean' : 'agree';
     console.log(`${id.padEnd(44)} javac ${javac.padEnd(38)} tree ${tree}  [${note}]`);
   }
-  const grammar = sha256(readFileSync(`${root}src/parser.c`));
-  if (grammar !== expected.grammar_base.parser_c_sha256)
-    console.log(`note: src/parser.c differs from the grammar base ${expected.grammar_base.commit.slice(0, 7)}`);
+  if (!atBase) console.log(`note: src/parser.c differs from the grammar base ${GRAMMAR_BASE.commit.slice(0, 7)}`);
   for (const id of r.changedTree) console.log(`note: ${id} still fails, but its tree differs from the recorded base tree`);
   if (r.rejectedClean.length)
     console.log(`info: ${r.rejectedClean.length} case(s) javac rejects parse clean (the grammar is not required to reject them)`);

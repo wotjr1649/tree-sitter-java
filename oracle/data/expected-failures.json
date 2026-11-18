@@ -1,6 +1,6 @@
 {
   "rule": "a",
-  "note": "Expected-failure set (oracle/README.md, rule (a)): only cases javac accepts and the base grammar fails. A K pull request deletes its entries; the set is empty after K3.",
+  "note": "Expected-failure set (oracle/README.md, rule (a)): only cases javac accepts and the base grammar fails. A K pull request deletes its entries. After K3 only the two K4 entries remain, until the owner decides the scope of K4.",
   "grammar_base": {
     "commit": "a241253570b20a5f83c9dde367a5a50f0116a978",
     "tag": "v1.0.0",

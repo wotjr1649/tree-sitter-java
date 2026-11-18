@@ -74,7 +74,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v7
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           cache: npm
           node-version: ${{ vars.NODE_VERSION || 'lts/*' }}
@@ -97,12 +97,14 @@ jobs:
           distribution: temurin
           java-version: 25.0.5+8
       - name: Run the runner self-test
-        run: java oracle/runner/ParseOracle.java --self-test
+        run: |
+          mkdir "$RUNNER_TEMP/empty"
+          java -cp "$RUNNER_TEMP/empty" oracle/runner/ParseOracle.java --self-test
       - name: Regenerate every verdict file
         shell: bash
         run: |
           for cases in oracle/data/cases/*.jsonl; do
-            java oracle/runner/ParseOracle.java --cases "$cases" \
+            java -cp "$RUNNER_TEMP/empty" oracle/runner/ParseOracle.java --cases "$cases" \
               --out "oracle/data/verdicts/temurin-25.0.5+8.$(basename "$cases" .jsonl).json"
           done
       - name: Verdicts equal the committed files

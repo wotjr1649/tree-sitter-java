@@ -3,8 +3,13 @@
 // Verdict = the diagnostics javac's parser reports (JavacTask.parse()), nothing later: no enter, attribute or flow.
 // Fixed level: --release 25, preview off, on the pinned JDK (EXPECTED_RUNTIME). Any other JDK is a runner fault.
 //
-//   java oracle/runner/ParseOracle.java --self-test
-//   java oracle/runner/ParseOracle.java --cases oracle/data/cases/<set>.jsonl --out oracle/data/verdicts/<name>.json
+// Always start it with the JVM class path set to one existing EMPTY directory, so that no plugin or annotation processor
+// found on a class path can add diagnostics (the runner refuses to run otherwise). Not `-cp ""`: an empty class path
+// element means the current directory, where javac would find plugins.
+//
+//   mkdir -p build/oracle/empty
+//   java -cp build/oracle/empty oracle/runner/ParseOracle.java --self-test
+//   java -cp build/oracle/empty oracle/runner/ParseOracle.java --cases oracle/data/cases/<set>.jsonl --out oracle/data/verdicts/<name>.json
 //
 // Exit 0: done. 1: the self-test failed. 2: runner fault (crash, unreadable or inconsistent case file, wrong JDK);
 // a fault is never recorded as a rejection.
@@ -33,9 +38,14 @@ public class ParseOracle {
     static final String RELEASE = "25";
     static final String EXPECTED_RUNTIME = "25.0.5+8-LTS"; // Eclipse Temurin 25.0.5+8
     static final String EXPECTED_VENDOR = "Eclipse Adoptium";
-    // Preview is never enabled: no --enable-preview, so preview syntax is rejected with a preview.feature.disabled code.
-    static final List<String> OPTIONS = List.of("--release", RELEASE);
+    // No --enable-preview: preview is off. parse() reports only the preview diagnostics the parser itself emits (for
+    // example a preview keyword or module syntax); a preview feature that javac rejects in a later phase is accepted
+    // here (primitive type patterns in switch are: javac --release 25 rejects them, parse() does not).
+    // -proc:none: no annotation processing.
+    static final List<String> OPTIONS = List.of("--release", RELEASE, "-proc:none");
     static final String DEFAULT_FILE = "Case.java";
+    // The optional case field "file" is the virtual file name: a plain Java file name, nothing else.
+    static final java.util.regex.Pattern FILE_NAME = java.util.regex.Pattern.compile("[A-Za-z0-9_.-]{1,64}\\.java");
 
     static class Fault extends RuntimeException {
         Fault(String m) { super(m); }
@@ -51,14 +61,13 @@ public class ParseOracle {
     }
 
     static int run(String[] args) throws Exception {
-        String cases = null, out = null, runner = "oracle/runner/ParseOracle.java";
+        String cases = null, out = null;
         boolean selfTest = false;
         for (int i = 0; i < args.length; i++) {
             switch (args[i]) {
                 case "--self-test" -> selfTest = true;
                 case "--cases" -> cases = arg(args, ++i);
                 case "--out" -> out = arg(args, ++i);
-                case "--runner-source" -> runner = arg(args, ++i);
                 default -> throw new Fault("unknown argument " + args[i]);
             }
         }
@@ -66,7 +75,10 @@ public class ParseOracle {
         if (selfTest) return selfTest();
         if (cases == null || out == null) throw new Fault("need --cases and --out (or --self-test)");
         byte[] caseBytes = readBytes(cases);
-        byte[] runnerBytes = readBytes(runner);
+        // The runner hashes the file the launcher is running, never a file the caller names.
+        String running = System.getProperty("jdk.launcher.sourcefile");
+        if (running == null) throw new Fault("run the runner as a source file: java -cp <empty dir> ParseOracle.java");
+        byte[] runnerBytes = readBytes(running);
 
         Map<String, Object> meta = new LinkedHashMap<>();
         meta.put("api", "com.sun.source.util.JavacTask.parse()");
@@ -87,11 +99,14 @@ public class ParseOracle {
             if (!(parsed instanceof Map<?, ?> c)) throw new Fault("case line is not an object: " + line);
             String id = str(c, "id"), source = str(c, "source"), sha = str(c, "sha256");
             Object file = c.get("file");
+            if (file != null && !(file instanceof String f && FILE_NAME.matcher(f).matches()))
+                throw new Fault("case " + id + ": file must match " + FILE_NAME.pattern());
             if (!sha.equals(sha256(source.getBytes(StandardCharsets.UTF_8))))
                 throw new Fault("case " + id + ": sha256 does not match its source");
             if (verdicts.put(id, parse(file == null ? DEFAULT_FILE : (String) file, source)) != null)
                 throw new Fault("duplicate case id " + id);
         }
+        if (verdicts.isEmpty()) throw new Fault(cases + " has no cases");
         meta.put("case_count", verdicts.size());
         Files.write(Path.of(out), render(meta, verdicts).getBytes(StandardCharsets.UTF_8));
         System.out.println("wrote " + out + " (" + verdicts.size() + " cases, " + System.getProperty("java.runtime.version") + ")");
@@ -102,6 +117,21 @@ public class ParseOracle {
         String rt = System.getProperty("java.runtime.version"), vendor = System.getProperty("java.vendor");
         if (!EXPECTED_RUNTIME.equals(rt) || !EXPECTED_VENDOR.equals(vendor))
             throw new Fault("expected " + EXPECTED_VENDOR + " " + EXPECTED_RUNTIME + ", running " + vendor + " " + rt);
+        // javac loads plugins and processors through the JVM's class and module paths. Verdicts must not depend on them.
+        String cp = System.getProperty("java.class.path", ""), mp = System.getProperty("jdk.module.path");
+        if (mp != null && !mp.isEmpty()) throw new Fault("start the runner without a module path; jdk.module.path=[" + mp + "]");
+        if (cp.contains(java.io.File.pathSeparator) || !emptyDirectory(cp))
+            throw new Fault("start the runner with the class path set to one existing empty directory"
+                + " (java -cp <empty dir> ParseOracle.java); java.class.path=[" + cp + "]");
+    }
+
+    static boolean emptyDirectory(String dir) {
+        if (dir.isEmpty()) return false;
+        try (var entries = Files.newDirectoryStream(Path.of(dir))) {
+            return !entries.iterator().hasNext();
+        } catch (IOException | RuntimeException e) {
+            return false;
+        }
     }
 
     static String arg(String[] a, int i) {
