@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.13)
 project(tree-sitter-java
         VERSION "0.23.5"
         DESCRIPTION "Java grammar for tree-sitter"
-        HOMEPAGE_URL "https://github.com/tree-sitter/tree-sitter-java"
+        HOMEPAGE_URL "https://github.com/wotjr1649/tree-sitter-java"
         LANGUAGES C)
 
 option(BUILD_SHARED_LIBS "Build using shared libraries" ON)

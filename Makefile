@@ -3,7 +3,7 @@ $(error Windows is not supported)
 endif
 
 LANGUAGE_NAME := tree-sitter-java
-HOMEPAGE_URL := https://github.com/tree-sitter/tree-sitter-java
+HOMEPAGE_URL := https://github.com/wotjr1649/tree-sitter-java
 VERSION := 0.23.5
 
 # repository

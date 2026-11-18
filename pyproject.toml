@@ -24,10 +24,10 @@ license.text = "MIT"
 readme = "README.md"
 
 [project.urls]
-Homepage = "https://github.com/tree-sitter/tree-sitter-java"
+Homepage = "https://github.com/wotjr1649/tree-sitter-java"
 
 [project.optional-dependencies]
-core = ["tree-sitter~=0.22"]
+core = ["tree-sitter~=0.25.0"]
 
 [tool.cibuildwheel]
 build = "cp39-*"
