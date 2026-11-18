@@ -3,15 +3,11 @@ name: Lint
 on:
   push:
     branches: [main]
-    paths:
-      - .github/workflows/lint.yml
-      - grammar.js
-      - package*.json
   pull_request:
-    paths:
-      - .github/workflows/lint.yml
-      - grammar.js
-      - package*.json
+  workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   lint:
