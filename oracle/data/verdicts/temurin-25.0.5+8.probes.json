@@ -1,0 +1,23 @@
+{
+  "meta": {
+    "api": "com.sun.source.util.JavacTask.parse()",
+    "case_count": 7,
+    "cases_sha256": "e06852510c1c080f6bb0cc73bc5100aedd4bab92d44c8e33ca57d441714fa0d7",
+    "java.runtime.version": "25.0.5+8-LTS",
+    "java.vendor": "Eclipse Adoptium",
+    "options": ["--release", "25", "-proc:none"],
+    "preview": false,
+    "release": "25",
+    "runner_sha256": "c45e32e314b98ccb46481c4db18aa25173ca9b2fe46e45888f0a743ceb6c70ee",
+    "source_encoding": "UTF-8"
+  },
+  "verdicts": {
+    "probes/k2-this-after-statements": [],
+    "probes/k1-import-module-missing-name": ["compiler.err.expected"],
+    "probes/k1-import-module-wildcard": ["compiler.err.expected"],
+    "probes/k2-super-unclosed-after-statement": ["compiler.err.illegal.start.of.expr"],
+    "probes/k3-case-default-null-order": ["compiler.err.default.label.not.allowed"],
+    "probes/k3-case-null-default-no-comma": ["compiler.err.expected2"],
+    "probes/k3-case-null-default-colon": []
+  }
+}
