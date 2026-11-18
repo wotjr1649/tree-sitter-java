@@ -3,8 +3,9 @@
 ## Unreleased
 
 - Parse `import module` declarations (JEP 511, JLS 25 §7.5.5) as an `import_declaration` with an anonymous
-  `module` token. No node kind or field changes; trees of existing inputs are unchanged, and `module` as an ordinary
-  name keeps its `identifier` tree.
+  `module` token. No node kind or field changes. Inputs that parsed without errors keep their trees; inputs
+  with `import module` that used to contain ERROR now parse cleanly. `module` as an ordinary name keeps its
+  `identifier` tree.
 - Add a javac parse-only oracle (Eclipse Temurin 25.0.5+8, `--release 25`, preview off) with committed
   cases, verdicts and a tree-sitter API replay (`oracle/`, `scripts/oracle-replay.mjs`). Known baseline mismatches
   are an expected-failure set that each fix removes (`oracle/README.md`). No grammar or `src/` change.
