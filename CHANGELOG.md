@@ -12,6 +12,13 @@
 - Add a node kind and field snapshot (`test/node-kinds.txt`, `scripts/generate-node-kinds.mjs --check`) and a
   parser cost script (`scripts/parser-cost.mjs`).
 - Add the `oracle-replay` and `oracle-javac` jobs to `ci.yml`.
+- Parse statements before `super(...)` and `this(...)` in a constructor body (JEP 513, JLS 25 §8.8.7). The call
+  stays an `explicit_constructor_invocation`, also when qualified (`outer.super(...)`) or generic (`<T>this(...)`).
+  As in javac's parser, more than one invocation in a body is not a syntax error. No node kind or field changes.
+  Inputs that parsed without errors keep their trees, with one exception: a qualified generic call after a
+  statement, such as `outer.<T>super(n);`, used to parse cleanly as a `method_invocation` named `super` and is now
+  an `explicit_constructor_invocation`. Constructor bodies with statements before the invocation that used to
+  contain ERROR or MISSING now parse cleanly. The `repeat(choice(...))` form matches orchard's Java grammar.
 
 ## 1.0.0
 

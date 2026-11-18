@@ -982,10 +982,11 @@ module.exports = grammar({
       field('parameters', $.formal_parameters),
     ),
 
+    // JEP 513 (JLS 25 §8.8.7): statements may precede the invocation. More than one invocation is
+    // left to semantic checks, as javac's parser accepts it too.
     constructor_body: $ => seq(
       '{',
-      optional($.explicit_constructor_invocation),
-      repeat($.statement),
+      repeat(choice($.explicit_constructor_invocation, $.statement)),
       '}',
     ),
 
