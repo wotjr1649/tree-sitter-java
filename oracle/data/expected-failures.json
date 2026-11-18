@@ -10,23 +10,11 @@
     "grammar_js_sha256": "b89ada7566bda16a8d7a710755c27824d6097e44b8d3b1dafbb749f3c34d13e0"
   },
   "cases": {
-    "bundle/q71-constructor": {
-      "k": "K2",
-      "sha256": "1fe5e557a285d6c2a96d5fc4c1ee61030b2a0988804c4d11c9428a9c083fe445",
-      "base_failure": "root hasError; 1 ERROR",
-      "base_tree": "(program (class_declaration name: (identifier) body: (class_body (constructor_declaration name: (identifier) parameters: (formal_parameters) body: (constructor_body (local_variable_declaration type: (integral_type) declarator: (variable_declarator name: (identifier) value: (decimal_integer_literal))) (ERROR (super) (formal_parameters)))))))"
-    },
     "bundle/q71-switch-label": {
       "k": "K3",
       "sha256": "06513ff5b58b7ee5bcb391f2c5d0451001a03b176ba184e270a728aea0514c60",
       "base_failure": "\"default\" has no anonymous default node (found: identifier); \"default\" has a identifier node (found: identifier)",
       "base_tree": "(program (class_declaration name: (identifier) body: (class_body (method_declaration type: (integral_type) name: (identifier) parameters: (formal_parameters (formal_parameter type: (type_identifier) name: (identifier))) body: (block (return_statement (switch_expression condition: (parenthesized_expression (identifier)) body: (switch_block (switch_rule (switch_label (null_literal) (identifier)) (expression_statement (decimal_integer_literal)))))))))))"
-    },
-    "bundle/p97-02-statements-before-super": {
-      "k": "K2",
-      "sha256": "75b1f10d442caa2900784dde6c28cacf39475ac8b18059a9c22c1078b54d2722",
-      "base_failure": "root hasError; 1 ERROR",
-      "base_tree": "(program (class_declaration name: (identifier) superclass: (superclass (type_identifier)) body: (class_body (constructor_declaration name: (identifier) parameters: (formal_parameters (formal_parameter type: (integral_type) name: (identifier))) body: (constructor_body (if_statement condition: (parenthesized_expression (binary_expression left: (identifier) right: (decimal_integer_literal))) consequence: (throw_statement (object_creation_expression type: (type_identifier) arguments: (argument_list)))) (local_variable_declaration type: (type_identifier) declarator: (variable_declarator name: (identifier) value: (binary_expression left: (identifier) right: (decimal_integer_literal)))) (ERROR (super)) (expression_statement (parenthesized_expression (identifier))))))))"
     },
     "bundle/p97-03-case-null-default": {
       "k": "K3",
@@ -40,23 +28,11 @@
       "base_failure": "root hasError; 1 ERROR; 1 MISSING",
       "base_tree": "(program (class_declaration name: (identifier) body: (class_body (method_declaration type: (void_type) name: (identifier) parameters: (formal_parameters (formal_parameter type: (type_identifier) name: (identifier))) body: (block (if_statement condition: (parenthesized_expression (instanceof_expression left: (identifier) right: (scoped_type_identifier (type_identifier) (type_identifier))) (MISSING \")\")) (ERROR (formal_parameters (formal_parameter type: (type_identifier) name: (identifier)) (formal_parameter type: (type_identifier) name: (identifier)))) consequence: (block)))))))"
     },
-    "pr233/flexible-ctor": {
-      "k": "K2",
-      "sha256": "9c580af41fb85111b5331f78e7b5be05809277625697944f88a84c56d19ca09d",
-      "base_failure": "root hasError; 1 ERROR",
-      "base_tree": "(program (class_declaration name: (identifier) superclass: (superclass (type_identifier)) body: (class_body (constructor_declaration name: (identifier) parameters: (formal_parameters (formal_parameter type: (integral_type) name: (identifier))) body: (constructor_body (if_statement condition: (parenthesized_expression (binary_expression left: (identifier) right: (decimal_integer_literal))) consequence: (throw_statement (object_creation_expression type: (type_identifier) arguments: (argument_list)))) (ERROR (super)) (expression_statement (parenthesized_expression (identifier))))))))"
-    },
     "pr233/switch-final-type-pattern": {
       "k": "K4",
       "sha256": "3696ef747e268c6724051d828919188aed6a2feebc69a2f11f361a58e5f70dfe",
       "base_failure": "root hasError; 1 ERROR",
       "base_tree": "(program (class_declaration name: (identifier) body: (class_body (method_declaration type: (integral_type) name: (identifier) parameters: (formal_parameters (formal_parameter type: (type_identifier) name: (identifier))) body: (block (return_statement (switch_expression condition: (parenthesized_expression (identifier)) body: (switch_block (switch_rule (switch_label (pattern (type_pattern (type_identifier) (identifier)))) (ERROR (identifier)) (expression_statement (decimal_integer_literal))) (switch_rule (switch_label) (expression_statement (decimal_integer_literal)))))))))))"
-    },
-    "probes/k2-this-after-statements": {
-      "k": "K2",
-      "sha256": "844af5e7f31b6b6ac3a1c1156eb47b5ed520767efaada79ccac86646cfbee29f",
-      "base_failure": "root hasError; 1 ERROR; 1 MISSING",
-      "base_tree": "(program (class_declaration name: (identifier) body: (class_body (constructor_declaration name: (identifier) parameters: (formal_parameters) body: (constructor_body (explicit_constructor_invocation constructor: (this) arguments: (argument_list (decimal_integer_literal) (decimal_integer_literal))))) (constructor_declaration name: (identifier) parameters: (formal_parameters (formal_parameter type: (integral_type) name: (identifier))) body: (constructor_body (if_statement condition: (parenthesized_expression (binary_expression left: (identifier) right: (decimal_integer_literal))) consequence: (throw_statement (object_creation_expression type: (type_identifier) arguments: (argument_list)))) (local_variable_declaration type: (type_identifier) declarator: (variable_declarator name: (identifier) value: (binary_expression left: (identifier) right: (decimal_integer_literal)))) (expression_statement (this) (MISSING \";\")) (expression_statement (parenthesized_expression (ERROR (identifier)) (decimal_integer_literal))))) (constructor_declaration name: (identifier) parameters: (formal_parameters (formal_parameter type: (integral_type) name: (identifier)) (formal_parameter type: (integral_type) name: (identifier))) body: (constructor_body)))))"
     },
     "probes/k3-case-null-default-colon": {
       "k": "K3",

@@ -616,6 +616,164 @@ class Point {
               (decimal_integer_literal))))))))
 
 ================================================================================
+Constructor with statements before and after super (JEP 513)
+================================================================================
+
+class A extends B {
+  A(int x) {
+    if (x < 0) throw new IllegalArgumentException();
+    var y = x * 2;
+    super(y);
+    int z = y;
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    superclass: (superclass
+      (type_identifier))
+    body: (class_body
+      (constructor_declaration
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (integral_type)
+            name: (identifier)))
+        body: (constructor_body
+          (if_statement
+            condition: (parenthesized_expression
+              (binary_expression
+                left: (identifier)
+                right: (decimal_integer_literal)))
+            consequence: (throw_statement
+              (object_creation_expression
+                type: (type_identifier)
+                arguments: (argument_list))))
+          (local_variable_declaration
+            type: (type_identifier)
+            declarator: (variable_declarator
+              name: (identifier)
+              value: (binary_expression
+                left: (identifier)
+                right: (decimal_integer_literal))))
+          (explicit_constructor_invocation
+            constructor: (super)
+            arguments: (argument_list
+              (identifier)))
+          (local_variable_declaration
+            type: (integral_type)
+            declarator: (variable_declarator
+              name: (identifier)
+              value: (identifier))))))))
+
+================================================================================
+Constructor with statements before this (JEP 513)
+================================================================================
+
+class A {
+  A() {
+    this.f = 0;
+    this(1, 2);
+  }
+  A(int x, int z) {}
+}
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (constructor_declaration
+        name: (identifier)
+        parameters: (formal_parameters)
+        body: (constructor_body
+          (expression_statement
+            (assignment_expression
+              left: (field_access
+                object: (this)
+                field: (identifier))
+              right: (decimal_integer_literal)))
+          (explicit_constructor_invocation
+            constructor: (this)
+            arguments: (argument_list
+              (decimal_integer_literal)
+              (decimal_integer_literal)))))
+      (constructor_declaration
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (integral_type)
+            name: (identifier))
+          (formal_parameter
+            type: (integral_type)
+            name: (identifier)))
+        body: (constructor_body)))))
+
+================================================================================
+Qualified super and generic this after statements (JEP 513)
+================================================================================
+
+class I extends O.N {
+  I(O o) {
+    O p = o;
+    p.super();
+  }
+  I(int x) {
+    int y = x;
+    <String>this(y);
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    superclass: (superclass
+      (scoped_type_identifier
+        (type_identifier)
+        (type_identifier)))
+    body: (class_body
+      (constructor_declaration
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (type_identifier)
+            name: (identifier)))
+        body: (constructor_body
+          (local_variable_declaration
+            type: (type_identifier)
+            declarator: (variable_declarator
+              name: (identifier)
+              value: (identifier)))
+          (explicit_constructor_invocation
+            object: (identifier)
+            constructor: (super)
+            arguments: (argument_list))))
+      (constructor_declaration
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (integral_type)
+            name: (identifier)))
+        body: (constructor_body
+          (local_variable_declaration
+            type: (integral_type)
+            declarator: (variable_declarator
+              name: (identifier)
+              value: (identifier)))
+          (explicit_constructor_invocation
+            type_arguments: (type_arguments
+              (type_identifier))
+            constructor: (this)
+            arguments: (argument_list
+              (identifier))))))))
+
+================================================================================
 Nested field expression in receiver parameter
 ================================================================================
 
