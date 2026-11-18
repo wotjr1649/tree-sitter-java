@@ -10,12 +10,6 @@
     "grammar_js_sha256": "b89ada7566bda16a8d7a710755c27824d6097e44b8d3b1dafbb749f3c34d13e0"
   },
   "cases": {
-    "bundle/q71-module-import": {
-      "k": "K1",
-      "sha256": "1d2528f48617c5651937a80769fc22d22c2759e7b973dcb54fb6a5e7bed3c989",
-      "base_failure": "root hasError; 1 ERROR",
-      "base_tree": "(program (import_declaration (scoped_identifier scope: (identifier) (ERROR (identifier)) name: (identifier))))"
-    },
     "bundle/q71-constructor": {
       "k": "K2",
       "sha256": "1fe5e557a285d6c2a96d5fc4c1ee61030b2a0988804c4d11c9428a9c083fe445",
@@ -27,12 +21,6 @@
       "sha256": "06513ff5b58b7ee5bcb391f2c5d0451001a03b176ba184e270a728aea0514c60",
       "base_failure": "\"default\" has no anonymous default node (found: identifier); \"default\" has a identifier node (found: identifier)",
       "base_tree": "(program (class_declaration name: (identifier) body: (class_body (method_declaration type: (integral_type) name: (identifier) parameters: (formal_parameters (formal_parameter type: (type_identifier) name: (identifier))) body: (block (return_statement (switch_expression condition: (parenthesized_expression (identifier)) body: (switch_block (switch_rule (switch_label (null_literal) (identifier)) (expression_statement (decimal_integer_literal)))))))))))"
-    },
-    "bundle/p97-01-import-module": {
-      "k": "K1",
-      "sha256": "204c54aa09939013b0680728d8513437f4356ce6f4a17380be498e12c4029f5c",
-      "base_failure": "root hasError; 1 ERROR",
-      "base_tree": "(program (import_declaration (scoped_identifier scope: (identifier) (ERROR (identifier)) name: (identifier))) (class_declaration name: (identifier) body: (class_body)))"
     },
     "bundle/p97-02-statements-before-super": {
       "k": "K2",
@@ -51,12 +39,6 @@
       "sha256": "795f70f91947acdd1bc83a51455d8426692618f7066fc8a7960de540ffeb7cfc",
       "base_failure": "root hasError; 1 ERROR; 1 MISSING",
       "base_tree": "(program (class_declaration name: (identifier) body: (class_body (method_declaration type: (void_type) name: (identifier) parameters: (formal_parameters (formal_parameter type: (type_identifier) name: (identifier))) body: (block (if_statement condition: (parenthesized_expression (instanceof_expression left: (identifier) right: (scoped_type_identifier (type_identifier) (type_identifier))) (MISSING \")\")) (ERROR (formal_parameters (formal_parameter type: (type_identifier) name: (identifier)) (formal_parameter type: (type_identifier) name: (identifier)))) consequence: (block)))))))"
-    },
-    "pr233/module-import": {
-      "k": "K1",
-      "sha256": "fdcfbba12a8530926ea49dbc2711930bc3d6f68103128e774b80c8e88f675821",
-      "base_failure": "root hasError; 1 ERROR",
-      "base_tree": "(program (import_declaration (scoped_identifier scope: (identifier) (ERROR (identifier)) name: (identifier))) (class_declaration name: (identifier) body: (class_body)))"
     },
     "pr233/flexible-ctor": {
       "k": "K2",

@@ -1,0 +1,190 @@
+================================================================================
+Single-module import declaration
+:cst
+================================================================================
+
+import module java.base;
+
+class A {}
+
+--------------------------------------------------------------------------------
+
+1:0  - 4:0    program
+1:0  - 1:24     import_declaration
+1:0  - 1:6        "import"
+1:7  - 1:13       "module"
+1:14 - 1:23       scoped_identifier
+1:14 - 1:18         scope: identifier `java`
+1:18 - 1:19         "."
+1:19 - 1:23         name: identifier `base`
+1:23 - 1:24       ";"
+3:0  - 3:10     class_declaration
+3:0  - 3:5        "class"
+3:6  - 3:7        name: identifier `A`
+3:8  - 3:10       body: class_body
+3:8  - 3:9          "{"
+3:9  - 3:10         "}"
+
+================================================================================
+Single-module imports mixed with other imports
+================================================================================
+
+package p;
+
+import java.util.List;
+import module java.sql;
+import static java.lang.Math.max;
+import module m.a.b;
+import java.util.*;
+
+class A {}
+
+--------------------------------------------------------------------------------
+
+(program
+  (package_declaration
+    (identifier))
+  (import_declaration
+    (scoped_identifier
+      scope: (scoped_identifier
+        scope: (identifier)
+        name: (identifier))
+      name: (identifier)))
+  (import_declaration
+    (scoped_identifier
+      scope: (identifier)
+      name: (identifier)))
+  (import_declaration
+    (scoped_identifier
+      scope: (scoped_identifier
+        scope: (scoped_identifier
+          scope: (identifier)
+          name: (identifier))
+        name: (identifier))
+      name: (identifier)))
+  (import_declaration
+    (scoped_identifier
+      scope: (scoped_identifier
+        scope: (identifier)
+        name: (identifier))
+      name: (identifier)))
+  (import_declaration
+    (scoped_identifier
+      scope: (identifier)
+      name: (identifier))
+    (asterisk))
+  (class_declaration
+    name: (identifier)
+    body: (class_body)))
+
+================================================================================
+Single-module import before a module declaration
+================================================================================
+
+import module java.base;
+import java.util.List;
+
+module com.foo {
+  requires java.sql;
+}
+
+--------------------------------------------------------------------------------
+
+(program
+  (import_declaration
+    (scoped_identifier
+      scope: (identifier)
+      name: (identifier)))
+  (import_declaration
+    (scoped_identifier
+      scope: (scoped_identifier
+        scope: (identifier)
+        name: (identifier))
+      name: (identifier)))
+  (module_declaration
+    name: (scoped_identifier
+      scope: (identifier)
+      name: (identifier))
+    body: (module_body
+      (requires_module_directive
+        module: (scoped_identifier
+          scope: (identifier)
+          name: (identifier))))))
+
+================================================================================
+Single-module import of module names spelled module
+================================================================================
+
+import module module.foo;
+import module module;
+
+--------------------------------------------------------------------------------
+
+(program
+  (import_declaration
+    (scoped_identifier
+      scope: (identifier)
+      name: (identifier)))
+  (import_declaration
+    (identifier)))
+
+================================================================================
+module as an ordinary name in imports, packages and variables
+================================================================================
+
+package module.foo;
+
+import module.Foo;
+import module.*;
+import static module.Foo.bar;
+import static module.*;
+
+class A {
+  void f() {
+    int module = 1;
+    module = module + 1;
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(program
+  (package_declaration
+    (scoped_identifier
+      scope: (identifier)
+      name: (identifier)))
+  (import_declaration
+    (scoped_identifier
+      scope: (identifier)
+      name: (identifier)))
+  (import_declaration
+    (identifier)
+    (asterisk))
+  (import_declaration
+    (scoped_identifier
+      scope: (scoped_identifier
+        scope: (identifier)
+        name: (identifier))
+      name: (identifier)))
+  (import_declaration
+    (identifier)
+    (asterisk))
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters)
+        body: (block
+          (local_variable_declaration
+            type: (integral_type)
+            declarator: (variable_declarator
+              name: (identifier)
+              value: (decimal_integer_literal)))
+          (expression_statement
+            (assignment_expression
+              left: (identifier)
+              right: (binary_expression
+                left: (identifier)
+                right: (decimal_integer_literal)))))))))
