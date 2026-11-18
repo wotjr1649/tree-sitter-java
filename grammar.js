@@ -840,9 +840,15 @@ module.exports = grammar({
 
     import_declaration: $ => seq(
       'import',
-      optional('static'),
-      $._name,
-      optional(seq('.', $.asterisk)),
+      choice(
+        seq(
+          optional('static'),
+          $._name,
+          optional(seq('.', $.asterisk)),
+        ),
+        // JLS 25 §7.5.5 single-module import (JEP 511); no `static`, no `.*`
+        seq('module', $._name),
+      ),
       ';',
     ),
 

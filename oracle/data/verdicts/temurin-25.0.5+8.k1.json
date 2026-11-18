@@ -1,0 +1,26 @@
+{
+  "meta": {
+    "api": "com.sun.source.util.JavacTask.parse()",
+    "case_count": 10,
+    "cases_sha256": "2b6a5e782e4c68dbbc4bb14ccc781d92162083d09d99c9fbaa1712de8a28072d",
+    "java.runtime.version": "25.0.5+8-LTS",
+    "java.vendor": "Eclipse Adoptium",
+    "options": ["--release", "25", "-proc:none"],
+    "preview": false,
+    "release": "25",
+    "runner_sha256": "c45e32e314b98ccb46481c4db18aa25173ca9b2fe46e45888f0a743ceb6c70ee",
+    "source_encoding": "UTF-8"
+  },
+  "verdicts": {
+    "k1/n01-import-module-java-base": [],
+    "k1/n02-mixed-imports": [],
+    "k1/n03-before-module-declaration": [],
+    "k1/n04-module-named-module": [],
+    "k1/n05-module-as-name": [],
+    "k1/x01-import-module-no-name": ["compiler.err.expected"],
+    "k1/x02-import-module-on-demand": ["compiler.err.expected"],
+    "k1/x03-import-static-module": ["compiler.err.expected"],
+    "k1/x04-import-module-missing-semicolon": ["compiler.err.expected"],
+    "k1/x05-import-module-static": ["compiler.err.expected"]
+  }
+}
