@@ -7,7 +7,7 @@ let package = Package(
         .library(name: "TreeSitterJava", targets: ["TreeSitterJava"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/tree-sitter/swift-tree-sitter", .exact("0.25.0")),
+        .package(url: "https://github.com/tree-sitter/swift-tree-sitter", .upToNextMinor(from: "0.25.0")),
     ],
     targets: [
         .target(
