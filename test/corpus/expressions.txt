@@ -1855,6 +1855,163 @@ switch (c) {
         (block)))))
 
 ================================================================================
+switch rule with case null, default
+:cst
+================================================================================
+
+switch (o) {
+    case null, default -> 1;
+}
+
+--------------------------------------------------------------------------------
+
+1:0  - 4:0    program
+1:0  - 3:1      switch_expression
+1:0  - 1:6        "switch"
+1:7  - 1:10       condition: parenthesized_expression
+1:7  - 1:8          "("
+1:8  - 1:9          identifier `o`
+1:9  - 1:10         ")"
+1:11 - 3:1        body: switch_block
+1:11 - 1:12         "{"
+2:4  - 2:28         switch_rule
+2:4  - 2:22           switch_label
+2:4  - 2:8              "case"
+2:9  - 2:13             null_literal `null`
+2:13 - 2:14             ","
+2:15 - 2:22             "default"
+2:23 - 2:25           "->"
+2:26 - 2:28           expression_statement
+2:26 - 2:27             decimal_integer_literal `1`
+2:27 - 2:28             ";"
+3:0  - 3:1          "}"
+
+================================================================================
+switch group with case null, default
+:cst
+================================================================================
+
+switch (o) {
+    case null, default:
+        break;
+}
+
+--------------------------------------------------------------------------------
+
+1:0  - 5:0    program
+1:0  - 4:1      switch_expression
+1:0  - 1:6        "switch"
+1:7  - 1:10       condition: parenthesized_expression
+1:7  - 1:8          "("
+1:8  - 1:9          identifier `o`
+1:9  - 1:10         ")"
+1:11 - 4:1        body: switch_block
+1:11 - 1:12         "{"
+2:4  - 3:14         switch_block_statement_group
+2:4  - 2:22           switch_label
+2:4  - 2:8              "case"
+2:9  - 2:13             null_literal `null`
+2:13 - 2:14             ","
+2:15 - 2:22             "default"
+2:22 - 2:23           ":"
+3:8  - 3:14           break_statement
+3:8  - 3:13             "break"
+3:13 - 3:14             ";"
+4:0  - 4:1          "}"
+
+================================================================================
+case null, default in switch expressions next to case null and default
+================================================================================
+
+class A {
+    int f(Object o) {
+        int a = switch (o) {
+            case null, default -> 1;
+        };
+        int b = switch (o) {
+            case null, default:
+                yield 2;
+        };
+        switch (o) {
+            case null -> {}
+            default -> {}
+        }
+        switch (o) {
+            case null:
+            default:
+                break;
+        }
+        return a + b;
+    }
+}
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (integral_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (type_identifier)
+            name: (identifier)))
+        body: (block
+          (local_variable_declaration
+            type: (integral_type)
+            declarator: (variable_declarator
+              name: (identifier)
+              value: (switch_expression
+                condition: (parenthesized_expression
+                  (identifier))
+                body: (switch_block
+                  (switch_rule
+                    (switch_label
+                      (null_literal))
+                    (expression_statement
+                      (decimal_integer_literal)))))))
+          (local_variable_declaration
+            type: (integral_type)
+            declarator: (variable_declarator
+              name: (identifier)
+              value: (switch_expression
+                condition: (parenthesized_expression
+                  (identifier))
+                body: (switch_block
+                  (switch_block_statement_group
+                    (switch_label
+                      (null_literal))
+                    (yield_statement
+                      (decimal_integer_literal)))))))
+          (switch_expression
+            condition: (parenthesized_expression
+              (identifier))
+            body: (switch_block
+              (switch_rule
+                (switch_label
+                  (null_literal))
+                (block))
+              (switch_rule
+                (switch_label)
+                (block))))
+          (switch_expression
+            condition: (parenthesized_expression
+              (identifier))
+            body: (switch_block
+              (switch_block_statement_group
+                (switch_label
+                  (null_literal)))
+              (switch_block_statement_group
+                (switch_label)
+                (break_statement))))
+          (return_statement
+            (binary_expression
+              left: (identifier)
+              right: (identifier))))))))
+
+================================================================================
 underscore pattern
 ================================================================================
 

@@ -1,0 +1,28 @@
+{
+  "meta": {
+    "api": "com.sun.source.util.JavacTask.parse()",
+    "case_count": 12,
+    "cases_sha256": "e6c7edece6bb8049ceaee923324bda5f05be824910a3fb2e12327d6935930869",
+    "java.runtime.version": "25.0.5+8-LTS",
+    "java.vendor": "Eclipse Adoptium",
+    "options": ["--release", "25", "-proc:none"],
+    "preview": false,
+    "release": "25",
+    "runner_sha256": "c45e32e314b98ccb46481c4db18aa25173ca9b2fe46e45888f0a743ceb6c70ee",
+    "source_encoding": "UTF-8"
+  },
+  "verdicts": {
+    "k3/n01-statement-rule": [],
+    "k3/n02-expression-group-yield": [],
+    "k3/n03-after-patterns": [],
+    "k3/n04-next-to-null-and-default": [],
+    "k3/n05-contextual-keyword-names": [],
+    "k3/n06-default-elsewhere": [],
+    "k3/n07-label-after-null-default": [],
+    "k3/n08-two-nulls-then-default": [],
+    "k3/x01-constant-then-default": ["compiler.err.default.label.not.allowed"],
+    "k3/x02-default-with-guard": ["compiler.err.guard.not.allowed"],
+    "k3/x03-case-default": ["compiler.err.default.label.not.allowed"],
+    "k3/x04-default-twice": ["compiler.err.default.label.not.allowed"]
+  }
+}
