@@ -1,6 +1,8 @@
 # Changelog
 
-## Unreleased
+## 1.1.0
+
+Java 25 syntax fixes (K1-K3). Node kinds and field names are unchanged.
 
 - Parse `import module` declarations (JEP 511, JLS 25 §7.5.5) as an `import_declaration` with an anonymous
   `module` token. No node kind or field changes. Inputs that parsed without errors keep their trees; inputs
@@ -26,6 +28,10 @@
   which accepts labels after `null, default` (`case null, default, 1` is rejected only in attribution) but rejects
   `case default` and `case 1, default`. Invalid inputs that used `default` as an expression, such as
   `case default + 1 ->`, may now get a different error-recovery tree with ERROR where they used to parse cleanly.
+- Set `tree-sitter.json` `metadata.version` and the package manifests to 1.1.0. CLI 0.27.2 embeds the metadata
+  version in `src/parser.c`, so the generated parser differs from 1.0.0 in that field too.
+- Known open item: two inputs that javac accepts still parse with errors (a qualified record pattern and
+  `case final String s`, K4). They stay in `oracle/data/expected-failures.json` until their scope is decided.
 
 ## 1.0.0
 
