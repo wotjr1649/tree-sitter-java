@@ -1,0 +1,68 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{github.workflow}}-${{github.ref}}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Test parser
+    runs-on: ${{matrix.os}}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-latest, macos-15]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up tree-sitter
+        uses: tree-sitter/setup-action/cli@v2
+        with:
+          tree-sitter-ref: v0.27.2
+      - name: Verify generated sources
+        shell: bash
+        run: |
+          tree-sitter generate --abi 15 --js-runtime native
+          git diff --exit-code -- src
+          parser_abi=$(sed -n 's/^#define LANGUAGE_VERSION //p' src/parser.c)
+          test "$parser_abi" = "$(sed -n 's/^set(TREE_SITTER_ABI_VERSION \([0-9]*\) CACHE .*/\1/p' CMakeLists.txt)"
+      - name: Set up examples
+        run: |-
+          git clone https://github.com/elastic/elasticsearch examples/elasticsearch --single-branch --depth=1 --filter=blob:none
+          git clone https://github.com/google/guava examples/guava --single-branch --depth=1 --filter=blob:none
+          git clone https://github.com/ReactiveX/RxJava examples/RxJava --single-branch --depth=1 --filter=blob:none
+          git clone https://github.com/apache/flink examples/flink --single-branch --depth=1 --filter=blob:none
+          git clone https://github.com/apache/logging-log4j2 examples/log4j2 --single-branch --depth=1 --filter=blob:none
+          git clone https://github.com/apache/cassandra examples/cassandra --single-branch --depth=1 --filter=blob:none
+      - name: Run tests
+        uses: tree-sitter/parser-test-action@v2
+        env:
+          PIP_CONSTRAINT: ${{ github.workspace }}/bindings/python/tests/requirements.txt
+        with:
+          generate: false
+          test-rust: true
+          test-node: true
+          test-python: true
+          test-go: true
+          go-version: "1.23.x"
+          test-swift: true
+      - name: Parse examples
+        id: examples
+        continue-on-error: true
+        uses: tree-sitter/parse-action@v4
+        with:
+          files: examples/**/*.java
+      - uses: actions/upload-artifact@v4
+        if: steps.examples.outputs.failures != ''
+        with:
+          name: failures-${{matrix.os}}
+          path: ${{steps.examples.outputs.failures}}
