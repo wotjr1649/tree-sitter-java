@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.13)
 
 project(tree-sitter-java
-        VERSION "1.1.0"
+        VERSION "2.0.0"
         DESCRIPTION "Java grammar for tree-sitter"
         HOMEPAGE_URL "https://github.com/wotjr1649/tree-sitter-java"
         LANGUAGES C)
