@@ -66,3 +66,47 @@ jobs:
         with:
           name: failures-${{matrix.os}}
           path: ${{steps.examples.outputs.failures}}
+
+  oracle-replay:
+    name: Oracle replay
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          cache: npm
+          node-version: ${{ vars.NODE_VERSION || 'lts/*' }}
+      - name: Install modules
+        run: npm ci --legacy-peer-deps
+      - name: Replay the javac oracle
+        run: node scripts/oracle-replay.mjs
+      - name: Check the node kind snapshot
+        run: node scripts/generate-node-kinds.mjs --check
+
+  oracle-javac:
+    name: javac verdicts
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+      - name: Set up Temurin 25.0.5+8
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 25.0.5+8
+      - name: Run the runner self-test
+        run: java oracle/runner/ParseOracle.java --self-test
+      - name: Regenerate every verdict file
+        shell: bash
+        run: |
+          for cases in oracle/data/cases/*.jsonl; do
+            java oracle/runner/ParseOracle.java --cases "$cases" \
+              --out "oracle/data/verdicts/temurin-25.0.5+8.$(basename "$cases" .jsonl).json"
+          done
+      - name: Verdicts equal the committed files
+        shell: bash
+        run: |
+          git status --short -- oracle/data/verdicts
+          test -z "$(git status --porcelain -- oracle/data/verdicts)"

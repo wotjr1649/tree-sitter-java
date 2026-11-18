@@ -1,0 +1,20 @@
+{
+  "meta": {
+    "api": "com.sun.source.util.JavacTask.parse()",
+    "case_count": 4,
+    "cases_sha256": "3087ec0de4f0237b0c46a14aa1cda4ba0c5b194719476bcf3dfbe7b8bf3af362",
+    "java.runtime.version": "25.0.5+8-LTS",
+    "java.vendor": "Eclipse Adoptium",
+    "options": ["--release", "25"],
+    "preview": false,
+    "release": "25",
+    "runner_sha256": "939ae4728c8aebaded36937ddf148ef263a19e9055b44a8484060bb7e1ad699e",
+    "source_encoding": "UTF-8"
+  },
+  "verdicts": {
+    "pr233/record-pattern-qualified": [],
+    "pr233/module-import": [],
+    "pr233/flexible-ctor": [],
+    "pr233/switch-final-type-pattern": []
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "meta": {
+    "api": "com.sun.source.util.JavacTask.parse()",
+    "case_count": 6,
+    "cases_sha256": "59848409d6b4df0ccd06197ed42ba49ee9220f2602dfe8b0926808dcd19e6a7c",
+    "java.runtime.version": "25.0.5+8-LTS",
+    "java.vendor": "Eclipse Adoptium",
+    "options": ["--release", "25"],
+    "preview": false,
+    "release": "25",
+    "runner_sha256": "939ae4728c8aebaded36937ddf148ef263a19e9055b44a8484060bb7e1ad699e",
+    "source_encoding": "UTF-8"
+  },
+  "verdicts": {
+    "bundle/q71-module-import": [],
+    "bundle/q71-constructor": [],
+    "bundle/q71-switch-label": [],
+    "bundle/p97-01-import-module": [],
+    "bundle/p97-02-statements-before-super": [],
+    "bundle/p97-03-case-null-default": []
+  }
+}

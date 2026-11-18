@@ -1,0 +1,34 @@
+pr233.jsonl contains the inputs of the test cases in test/corpus/java25.txt from
+https://github.com/tree-sitter/tree-sitter-java/pull/233 (author: arraypress, head 93426133ad4e, closed
+unmerged on 2026-10-02): "Record pattern qualified", "Module import", "Flexible ctor" and
+"Switch final type pattern". Only the input texts were kept. The expected trees of that file were not
+imported; this repository records its own baseline trees (oracle/data/expected-failures.json) and the
+javac verdicts (oracle/data/verdicts).
+
+That repository is licensed under the MIT License. The pull request was a contribution to it, and the
+MIT License of tree-sitter-java applies to the borrowed inputs:
+
+MIT License
+
+Copyright (c) 2017 Ayman Nadeem
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+bundle.jsonl holds the minimal inputs and probes of go-treesitter's java evidence bundle
+(java-evidence: q71-inputs, p97-probes). probes.jsonl was written in this task.

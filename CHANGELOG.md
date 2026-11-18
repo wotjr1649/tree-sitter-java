@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased
+
+- Add a javac parse-only oracle (Eclipse Temurin 25.0.5+8, `--release 25`, preview off) with committed
+  cases, verdicts and a tree-sitter API replay (`oracle/`, `scripts/oracle-replay.mjs`). Known baseline mismatches
+  are an expected-failure set that each fix removes (`oracle/README.md`). No grammar or `src/` change.
+- Add a node kind and field snapshot (`test/node-kinds.txt`, `scripts/generate-node-kinds.mjs --check`) and a
+  parser cost script (`scripts/parser-cost.mjs`).
+- Add the `oracle-replay` and `oracle-javac` jobs to `ci.yml`.
+
 ## 1.0.0
 
 - Establish the independent Java grammar baseline from upstream v0.23.5.
