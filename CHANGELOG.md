@@ -22,7 +22,7 @@
 - Parse annotations before the `...` of a variable arity parameter, as in `Object @Nullable ... args` (JLS 25
   §8.4.1; tree-sitter-java issue #205), in methods, constructors, record components and lambda parameters. The
   annotations are children of `spread_parameter` before the anonymous `...` token, like the annotations after it.
-  Only `spread_parameter` changes: `dimensions` and the conflicts are as in 2.0.0, with no GLR split, so inputs that
+  Only `spread_parameter` changes: `dimensions` is as in 2.0.0 and K5 adds no conflict or GLR split, so inputs that
   parsed without errors keep their trees (an array type with nine annotated dimensions keeps one flat `dimensions`;
   a corpus case fixes it). No node kind or field changes and `node-types.json` is unchanged. Known limit: an
   annotation right after an array dimension still starts another dimension, so `int @A [] @B ... xs` and
