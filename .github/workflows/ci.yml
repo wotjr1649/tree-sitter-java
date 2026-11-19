@@ -74,28 +74,38 @@ jobs:
           fetch flink apache/flink cc91df476a0b39ae7d6eb50eb8cf96f1dbad2b47
           fetch log4j2 apache/logging-log4j2 572cd83040450763a673ea749ad0c960563eeec9
           fetch cassandra apache/cassandra 53c3561e9db3fa0b1ed8e29ce462fde6ce566ff0
-      # continue-on-error lets the comparison below report the difference.
+      # The CLI exits 1 for syntax errors and for read errors alike, so the exit code
+      # cannot tell a complete run from an aborted one. Only a final summary that lists
+      # exactly the inputs counts as complete; anything else fails the job here.
       - name: Parse examples
         id: examples
-        continue-on-error: true
-        uses: tree-sitter/parse-action@v5
-        with:
-          files: examples/**/*.java
-      - name: Failures equal test/examples/failures.txt
         shell: bash
-        env:
-          FAILURES: ${{steps.examples.outputs.failures}}
-          OUTCOME: ${{steps.examples.outcome}}
         run: |
-          if [ "$OUTCOME" = failure ] && [ -z "$FAILURES" ]; then
-            echo "::error::Parse examples failed without a failure list"
+          find examples -type f -name '*.java' | LC_ALL=C sort > "$RUNNER_TEMP/inputs.txt"
+          test -s "$RUNNER_TEMP/inputs.txt" || { echo "::error::No example inputs found"; exit 1; }
+          status=0
+          tree-sitter parse -q --paths "$RUNNER_TEMP/inputs.txt" --json-summary > "$RUNNER_TEMP/stdout.txt" || status=$?
+          if [ "$status" -gt 1 ]; then
+            echo "::error::tree-sitter parse crashed (exit $status)"
             exit 1
           fi
-          printf '%s\n' "$FAILURES" | sed '/^$/d' | LC_ALL=C sort -u > "$RUNNER_TEMP/failures.txt"
-          # "<" is a baseline entry that now parses, ">" is a new failure.
-          diff -u test/examples/failures.txt "$RUNNER_TEMP/failures.txt"
+          # stdout: the error lines, then the JSON summary that starts at a line holding only "{".
+          sed -n '/^{$/,$p' "$RUNNER_TEMP/stdout.txt" > "$RUNNER_TEMP/summary.json"
+          if ! jq -r '.parse_summaries[].file' "$RUNNER_TEMP/summary.json" | LC_ALL=C sort > "$RUNNER_TEMP/parsed.txt" \
+            || ! cmp -s "$RUNNER_TEMP/inputs.txt" "$RUNNER_TEMP/parsed.txt"; then
+            echo "::error::Incomplete parse: the summary is missing or does not list exactly the $(wc -l < "$RUNNER_TEMP/inputs.txt") inputs (tree-sitter exit $status)"
+            exit 1
+          fi
+          jq -r '.parse_summaries[] | select(.successful | not) | .file' "$RUNNER_TEMP/summary.json" | LC_ALL=C sort > "$RUNNER_TEMP/failures.txt"
+          echo "Parsed $(wc -l < "$RUNNER_TEMP/parsed.txt") files, $(wc -l < "$RUNNER_TEMP/failures.txt") failed"
+          delimiter="EOF_$RANDOM$RANDOM$RANDOM"
+          { echo "failures<<$delimiter"; cat "$RUNNER_TEMP/failures.txt"; echo "$delimiter"; } >> "$GITHUB_OUTPUT"
+      - name: Failures equal test/examples/failures.txt
+        shell: bash
+        # "<" is a baseline entry that now parses, ">" is a new failure.
+        run: diff -u test/examples/failures.txt "$RUNNER_TEMP/failures.txt"
       - uses: actions/upload-artifact@v7
-        if: steps.examples.outputs.failures != ''
+        if: ${{ !cancelled() && steps.examples.outputs.failures != '' }}
         with:
           name: failures
           path: ${{steps.examples.outputs.failures}}
