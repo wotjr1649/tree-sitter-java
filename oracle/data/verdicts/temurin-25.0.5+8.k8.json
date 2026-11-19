@@ -1,8 +1,8 @@
 {
   "meta": {
     "api": "com.sun.source.util.JavacTask.parse()",
-    "case_count": 83,
-    "cases_sha256": "47db06762ac0dedd6228b20d31d20ec1ec36a421f53a35e9a25814054e8e2677",
+    "case_count": 87,
+    "cases_sha256": "1ad131bd83e3ea6d60ac41aa706b7f70e8da2ad21aa086bf3a0bc9201eb6000b",
     "java.runtime.version": "25.0.5+8-LTS",
     "java.vendor": "Eclipse Adoptium",
     "options": ["--release", "25", "-proc:none"],
@@ -94,6 +94,10 @@
     "k8/probe-eof-text-block-tail-nul": ["compiler.err.unclosed.text.block", "compiler.err.premature.eof"],
     "k8/probe-eof-text-block-tail-quotes": ["compiler.err.unclosed.text.block", "compiler.err.premature.eof"],
     "k8/probe-eof-char-no-nul": ["compiler.err.unclosed.char.lit", "compiler.err.premature.eof"],
-    "k8/probe-eof-char-tail-nul": ["compiler.err.unclosed.char.lit", "compiler.err.premature.eof"]
+    "k8/probe-eof-char-tail-nul": ["compiler.err.unclosed.char.lit", "compiler.err.premature.eof"],
+    "k8/probe-escape-string-raw-invalid": ["compiler.err.illegal.esc.char"],
+    "k8/probe-escape-string-plain-invalid": ["compiler.err.illegal.esc.char"],
+    "k8/probe-escape-text-block-raw-invalid": ["compiler.err.illegal.esc.char"],
+    "k8/probe-escape-text-block-plain-invalid": ["compiler.err.illegal.esc.char"]
   }
 }
