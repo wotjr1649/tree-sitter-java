@@ -1,6 +1,9 @@
 # Changelog
 
-## Unreleased
+## 2.1.0
+
+More Java 25 syntax fixes found through the javac oracle and the pinned examples (K4, K5). Node kinds and field
+names are unchanged; `node-types.json` only gains child types (K4). Some trees change, as described below.
 
 - Add `scripts/tree-compare.mjs`, a full-tree comparison of two parser builds over a file list that runs in batches
   of 100 files per child process by default (at most 500) with a memory cap that the child checks after every file and
@@ -33,6 +36,13 @@
   as expected failures (`k5/v04-after-dimensions`, `k5/v05-many-dimensions`). Annotations after `...`
   (`int... @Foo x`) are still accepted, although javac rejects them. The 14 pinned example files that failed on
   annotations before `...` now parse, so `test/examples/failures.txt` drops them (23 to 9 paths).
+
+- Set `tree-sitter.json` `metadata.version` and the package manifests to 2.1.0 (the generated `parser.c` embeds it).
+- Known limitations:
+  - A raw NUL byte (U+0000) inside a string literal makes the literal fail to parse. The pinned examples have 2 such
+    files. The tree-sitter generator 0.27.2 excludes NUL from negated character classes, so the grammar cannot fix it.
+  - The pinned examples baseline now holds 9 paths: 6 Maven archetype templates (`package ${package};`, which javac
+    also rejects), 2 files with a raw NUL in a string, and 1 file with `00d`, to be fixed in the next release.
 
 ## 2.0.0
 
