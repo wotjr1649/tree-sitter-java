@@ -1,5 +1,22 @@
 # Changelog
 
+## Unreleased
+
+- Parse decimal floating point literals whose digits start with a zero followed by more digits, such as `00d`,
+  `01d`, `00f`, `01e1` and `08d` (JLS 25 §3.10.2: the digits before an exponent or a type suffix may have leading
+  zeros and are not octal). They used to split into an `octal_integer_literal` or `decimal_integer_literal` and an
+  ERROR. They are now one `decimal_floating_point_literal`, like `0d` and `00.5`. Integer literals such as `00`,
+  `007` and `08` keep their trees.
+- Accept one or more underscores between digits in every numeric literal (JLS 25 §3.10.1-2; tree-sitter-java issue
+  #227): decimal, octal, hex and binary integers (`1__0`, `0_7`, `0__7`, `0x1__F`, `0b1__0`) and decimal and hex
+  floating point literals (`1__0.5`, `1e1__0`, `0x1__F.8p1`). A hex floating point exponent may start with zeros
+  (`0x1p03`, `0x1p0_3`). These inputs used to contain ERROR. Underscores at the start or end of the digits, next to
+  the point, a prefix, an exponent marker or a suffix still give ERROR (`1_`, `0x_1`, `1._5`, `1_.5`, `0_x1`, `1e_5`,
+  `1_L`), as javac rejects them.
+- The two entries above change no node kind or field, and `node-types.json` is unchanged. Inputs that parsed without
+  errors keep their trees. The pinned example file that failed on `00d` now parses, so `test/examples/failures.txt`
+  drops it (9 to 8 paths).
+
 ## 2.1.0
 
 More Java 25 syntax fixes found through the javac oracle and the pinned examples (K4, K5). Node kinds and field
@@ -39,21 +56,6 @@ names are unchanged; `node-types.json` only gains child types (K4). Some trees c
   as expected failures (`k5/v04-after-dimensions`, `k5/v05-many-dimensions`). Annotations after `...`
   (`int... @Foo x`) are still accepted, although javac rejects them. The 14 pinned example files that failed on
   annotations before `...` now parse, so `test/examples/failures.txt` drops them (23 to 9 paths).
-- Parse decimal floating point literals whose digits start with a zero followed by more digits, such as `00d`,
-  `01d`, `00f`, `01e1` and `08d` (JLS 25 §3.10.2: the digits before an exponent or a type suffix may have leading
-  zeros and are not octal). They used to split into an `octal_integer_literal` or `decimal_integer_literal` and an
-  ERROR. They are now one `decimal_floating_point_literal`, like `0d` and `00.5`. Integer literals such as `00`,
-  `007` and `08` keep their trees.
-- Accept one or more underscores between digits in every numeric literal (JLS 25 §3.10.1-2; tree-sitter-java issue
-  #227): decimal, octal, hex and binary integers (`1__0`, `0_7`, `0__7`, `0x1__F`, `0b1__0`) and decimal and hex
-  floating point literals (`1__0.5`, `1e1__0`, `0x1__F.8p1`). A hex floating point exponent may start with zeros
-  (`0x1p03`, `0x1p0_3`). These inputs used to contain ERROR. Underscores at the start or end of the digits, next to
-  the point, a prefix, an exponent marker or a suffix still give ERROR (`1_`, `0x_1`, `1._5`, `1_.5`, `0_x1`, `1e_5`,
-  `1_L`), as javac rejects them.
-- The two entries above change no node kind or field, and `node-types.json` is unchanged. Inputs that parsed without
-  errors keep their trees. The pinned example file that failed on `00d` now parses, so `test/examples/failures.txt`
-  drops it (9 to 8 paths).
-
 - Set `tree-sitter.json` `metadata.version` and the package manifests to 2.1.0 (the generated `parser.c` embeds it).
 - Known limitations:
   - A raw NUL byte (U+0000) inside a string literal makes the literal fail to parse (2 pinned example files): the
