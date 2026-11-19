@@ -93,6 +93,12 @@ module.exports = grammar({
 
   word: $ => $.identifier,
 
+  // `final` and `this` are never identifiers: without this, a lookahead the current state cannot use as a keyword
+  // was read as an identifier, so `@A final e` parsed with `final` as a type name.
+  reserved: {
+    global: _ => ['final', 'this'],
+  },
+
   rules: {
     program: $ => repeat($._toplevel_statement),
 
@@ -321,7 +327,7 @@ module.exports = grammar({
       ),
     )),
 
-    _instanceof_modifiers: $ => seq(repeat1($._annotation), 'final', repeat(choice('final', $._annotation))),
+    _instanceof_modifiers: $ => seq(repeat1($._annotation), 'final', repeat($._annotation)),
 
     lambda_expression: $ => seq(
       field('parameters', choice(

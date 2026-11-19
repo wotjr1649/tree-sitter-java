@@ -1,8 +1,8 @@
 {
   "meta": {
     "api": "com.sun.source.util.JavacTask.parse()",
-    "case_count": 25,
-    "cases_sha256": "db926a0feb72a69f0ae4952741b13420244ef631d71fd90ff7375f48ebfc7fd6",
+    "case_count": 31,
+    "cases_sha256": "1c85bc6f85f196f21cc5d7a8bba061920d2574b428263678dd820f3ff6715725",
     "java.runtime.version": "25.0.5+8-LTS",
     "java.vendor": "Eclipse Adoptium",
     "options": ["--release", "25", "-proc:none"],
@@ -20,6 +20,8 @@
     "k7/cx1-final-in-alt": ["compiler.err.illegal.start.of.type", "compiler.err.expected", "compiler.err.premature.eof"],
     "k7/cx2-annotation-without-type": ["compiler.err.expected"],
     "k7/cx3-trailing-bar": ["compiler.err.illegal.start.of.type"],
+    "k7/cx4-final-as-type": ["compiler.err.illegal.start.of.type", "compiler.err.expected", "compiler.err.premature.eof"],
+    "k7/cx5-this-as-name": ["compiler.err.this.as.identifier"],
     "k7/r01-annotated": [],
     "k7/r02-annotated-then-param": [],
     "k7/r03-annotated-scoped-type": [],
@@ -36,6 +38,10 @@
     "k7/i06-final": [],
     "k7/ix1-no-binding": ["compiler.err.mod.not.allowed.here"],
     "k7/ix2-static": ["compiler.err.mod.not.allowed.here"],
-    "k7/ix3-final-only": ["compiler.err.illegal.start.of.type"]
+    "k7/ix4-duplicate-final": ["compiler.err.repeated.modifier"],
+    "k7/ix5-final-var": ["compiler.err.restricted.type.not.allowed.here"],
+    "k7/ix6-final-this": ["compiler.err.mod.not.allowed.here", "compiler.err.expected", "compiler.err.not.stmt"],
+    "k7/ix3-final-only": ["compiler.err.illegal.start.of.type"],
+    "k7/lx1-lambda-receiver": ["compiler.err.illegal.start.of.expr", "compiler.err.expected"]
   }
 }

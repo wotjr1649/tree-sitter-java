@@ -2476,17 +2476,8 @@
         {
           "type": "REPEAT",
           "content": {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "STRING",
-                "value": "final"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "_annotation"
-              }
-            ]
+            "type": "SYMBOL",
+            "name": "_annotation"
           }
         }
       ]
@@ -8055,5 +8046,16 @@
     "_unannotated_type",
     "module_directive"
   ],
-  "reserved": {}
+  "reserved": {
+    "global": [
+      {
+        "type": "STRING",
+        "value": "final"
+      },
+      {
+        "type": "STRING",
+        "value": "this"
+      }
+    ]
+  }
 }

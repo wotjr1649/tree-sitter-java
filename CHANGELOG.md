@@ -11,12 +11,25 @@
   - An annotated receiver parameter without a qualifier, `void m(@A Inner this)` (JLS 25 §8.4; issue #234), used to
     parse cleanly as a `formal_parameter` whose name was an `identifier` spelled `this`. It is now a
     `receiver_parameter`, like the unannotated and the qualified forms. Its `this` is now captured as
-    `@variable.builtin` instead of `@variable` in `queries/highlights.scm`. No other error-free tree changes.
+    `@variable.builtin` instead of `@variable` in `queries/highlights.scm`. The receiver also wins in other
+    lists that share `formal_parameters`: `(@A T this) -> 0` and `record R(@A T this) {}`, which javac rejects, also give a `receiver_parameter`
+    through the shared `formal_parameters`, and an unannotated `(T this) -> 0` already did. This existing tolerance
+    is unchanged. Other error-free trees change only as the next two bullets say.
   - Annotations before `final` in an `instanceof` type pattern, `o instanceof @A final String s` (JLS 25 §14.30.1):
     the annotations and `final` form a `modifiers` child, as in a `type_pattern` (K4). `instanceof final T x` keeps
     its anonymous `final` token and `instanceof final @A T x` its `annotated_type`. Two invalid inputs that used to
     parse cleanly by reading `final` as a type name, `o instanceof @A final String` and `o instanceof @A final`, now
-    contain MISSING or ERROR; javac rejects both.
+    contain MISSING or ERROR; javac rejects both. The modifiers allow one `final` and any annotations around it, so
+    `o instanceof @A final final T x` is an error, as it is without the annotation (javac: `repeated.modifier`).
+  - `final` and `this` are reserved words (`reserved.global` in `grammar.js`): the lexer no longer falls back to an
+    identifier for them where the parser state cannot use the keyword. Before this, `catch (T1 | @A final e)`,
+    `catch (T1 | @A T2 this)` and `o instanceof @A final T this` parsed cleanly with `final` as a type name or `this`
+    as a variable name; they now contain ERROR, as at the base. Inputs that javac rejects and that parsed cleanly
+    before also contain ERROR now, for example `catch (T1 | final e)`, `o instanceof final T this`,
+    `o instanceof @A T this`, `void m(@A Inner this, @B Inner this)` and `int this = 1;`. Against the base, the 63,832
+    files of the pinned examples and every other corpus and oracle input keep their trees. Still read cleanly although
+    javac rejects them: `o instanceof @A final var x`, like `o instanceof final var x` before, because `var` is a
+    valid name in a qualified type.
 
 ## 2.1.0
 
