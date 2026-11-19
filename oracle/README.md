@@ -22,8 +22,9 @@ Case sets: `bundle` (the six minimal inputs and probes of go-treesitter's java e
 MIT), `probes` (written in this task: a `this(...)` probe for K2 and adjacent invalid inputs for K1-K3), `k1`
 (valid and adjacent invalid `import module` inputs of the K1 fix), `k2` (valid and adjacent invalid inputs with
 statements before `super(...)`/`this(...)` of the K2 fix), `k3` (valid and adjacent invalid `case null, default`
-inputs of the K3 fix) and `k4` (valid and adjacent invalid qualified record patterns and `final` or annotated type
-patterns of the K4 fix). Every
+inputs of the K3 fix), `k4` (valid and adjacent invalid qualified record patterns and `final` or annotated type
+patterns of the K4 fix) and `k5` (valid and adjacent invalid variable arity parameters with annotations before
+`...` of the K5 fix). Every
 case names its origin in `provenance`: the bundle path with its `SHA256SUMS` hash, the PR, or "written in this task".
 IDs are prefixed with the set name. To add a case, append a line, hash its `source` (SHA-256 of the UTF-8 bytes; the
 replay prints the actual hash when it differs), then regenerate that set's verdicts.
@@ -106,8 +107,9 @@ While `src/parser.c` equals the base parser, every listed `base_tree` must equal
 After a fix PR changes the parser, a listed case that still fails but whose tree changed only prints a note.
 
 A later K pull request that fixes a defect **deletes its entries** from `expected-failures.json` (and only those; the
-cases and their assertions stay as passing cases). K4 deleted the last two entries (`pr233/record-pattern-qualified`, `pr233/switch-final-type-pattern`), so the set is
-empty.
+cases and their assertions stay as passing cases). K4 deleted the last two entries (`pr233/record-pattern-qualified`, `pr233/switch-final-type-pattern`), so the set was
+empty. K5 adds two cases it does not fix, `k5/v04-after-dimensions` and `k5/v05-many-dimensions`: an annotation right
+after an array dimension and before `...` (`int @A [] @B ... xs`) still starts a dimension and errs.
 A new input that the grammar fails but javac accepts is never added silently: it is a new defect, so it needs its own
 fix, or a recorded entry with its javac verdict and evidence.
 
