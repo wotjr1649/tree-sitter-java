@@ -29,7 +29,7 @@ remaining baseline paths are Maven archetype templates (`package ${package};`) t
   rejects them.
 - The two entries above change no node kind or field, and `node-types.json` is unchanged. Inputs that parsed without
   errors keep their trees. The pinned example file that failed on `00d` now parses, so `test/examples/failures.txt`
-  drops it (9 to 8 paths).
+  drops it (7 to 6 paths, after K8).
 - Accept a raw NUL byte (U+0000) inside string literals, text blocks and char literals, as javac's parser does. The
   generator renders a negated character class such as `[^"\\]` without NUL, so `"a<NUL>b"`, `"""…<NUL>…"""` and
   `'<NUL>'` used to produce an ERROR. `string_fragment`, `multiline_string_fragment` and `character_literal` now
@@ -37,10 +37,12 @@ remaining baseline paths are Maven archetype templates (`package ${package};`) t
   literal accepts exactly one NUL and nothing else (`'<NUL>a'` and `'<NUL><NUL>'` stay ERROR); the grammar still
   tolerates `'ab'` as before. NUL in a string or text block follows the tolerance the grammar already had without NUL: a
   raw CR or LF in an ordinary string (also as `\<newline>`), text on the opening line of a text block and an invalid
-  escape sequence such as `\q` parse cleanly with or without a NUL, although javac rejects all three. An unterminated
+  escape sequence such as `\q` parse cleanly with or without a NUL, although javac rejects all three. The same holds
+  for string templates (`STR."a<NUL>\{x}b"`): the grammar keeps its existing template rule, which javac 25 rejects
+  with or without a NUL. An unterminated
   string, text block or char literal that holds a NUL still contains an ERROR. Two pinned example files
   that failed on this (`MultiValueArrayOrderInlineNullBinaryDocValuesReaderTests.java`,
-  `CsvRecordTokenizerTests.java`) now parse, so `test/examples/failures.txt` drops them (8 to 6 paths).
+  `CsvRecordTokenizerTests.java`) now parse, so `test/examples/failures.txt` drops them (9 to 7 paths).
 - Parse annotations in three more positions (K7). No node kind or field is removed or renamed; `src/node-types.json`
   gains two child types: `catch_type` takes `_type` instead of `_unannotated_type`, and `instanceof_expression` takes
   an optional `modifiers` child.
