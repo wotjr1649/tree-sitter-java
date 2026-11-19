@@ -165,14 +165,18 @@ module.exports = grammar({
 
     false: _ => 'false',
 
-    character_literal: _ => token(seq(
-      '\'',
-      repeat1(choice(
-        /[^\\'\n]+|\x00/,
-        /\\./,
-        /\\\n/,
-      )),
-      '\'',
+    character_literal: _ => token(choice(
+      seq(
+        '\'',
+        repeat1(choice(
+          /[^\\'\n\x00]/,
+          /\\./,
+          /\\\n/,
+        )),
+        '\'',
+      ),
+      // Exactly one raw NUL. A NUL in the repeat above would also accept '<NUL><NUL>' and '<NUL>a', which javac rejects.
+      '\'\x00\'',
     )),
 
     string_literal: $ => choice($._string_literal, $._multiline_string_literal),
