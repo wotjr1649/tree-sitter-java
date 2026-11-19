@@ -1,6 +1,11 @@
 # Changelog
 
-## Unreleased
+## 2.2.0
+
+More Java 25 syntax fixes found through the javac oracle and the pinned examples: numeric literals (K6), annotation
+positions (K7) and a raw NUL inside literals (K8). No node kind or field name is removed or renamed;
+`node-types.json` only widens (K7). Every pinned example file that javac accepts now parses without errors: the 6
+remaining baseline paths are Maven archetype templates (`package ${package};`) that javac also rejects.
 
 - Parse decimal floating point literals whose digits start with a zero followed by more digits, such as `00d`,
   `01d`, `00f`, `01e1` and `08d` (JLS 25 §3.10.2: the digits before an exponent or a type suffix may have leading
@@ -66,6 +71,17 @@
     valid name in a qualified type. Likewise `catch (T1 | @A static e)` and `o instanceof @A final T static`, which javac
     rejects, parse cleanly with `static` read as a type name and as a variable name, as `catch (@A T1 | static e)` and
     `o instanceof final @A T static` already do at 2.1.0.
+
+- Set `tree-sitter.json` `metadata.version` and the package manifests to 2.2.0 (the generated `parser.c` embeds it).
+- Review criterion used in this release: a javac-rejected input that newly parses cleanly is kept, and pinned by
+  corpus and oracle cases, when the same shape with the newly accepted part replaced by a valid value already parsed
+  cleanly at 2.1.0 (existing tolerance). The entries above name each such case. Keywords read as identifiers in such
+  positions are left for a later release.
+- Known limitations:
+  - The 2.1.0 limitation on a raw NUL inside a string literal is resolved (K8).
+  - The two K5 forms with annotated dimensions before an annotated `...` (`int @A [] @B ... xs`) still contain ERROR
+    and remain the oracle's expected failures.
+  - A raw NUL outside any literal (`int x<NUL>y`) still errs, although javac accepts it.
 
 ## 2.1.0
 
