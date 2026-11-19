@@ -60,7 +60,22 @@ jobs:
           tree-sitter-ref: v0.27.2
       # Pinned heads of the default branches, taken 2026-11-19. To move a pin,
       # change the SHA, run this job and update test/examples/failures.txt.
+      # The cache key hashes the six fetch lines below (repository and SHA), so a moved pin
+      # starts a fresh cache. A run that fails before its last step does not save the cache.
+      - name: Key the examples cache
+        id: pins
+        shell: bash
+        run: |
+          test "$(grep -cE '^ +fetch [A-Za-z0-9]+ [^ ]+ [0-9a-f]{40}$' .github/workflows/ci.yml)" = 6
+          echo "key=examples-$(grep -E '^ +fetch [A-Za-z0-9]+ ' .github/workflows/ci.yml | sha256sum | cut -c1-32)" >> "$GITHUB_OUTPUT"
+      - name: Restore examples
+        id: examples-cache
+        uses: actions/cache@v6
+        with:
+          path: examples
+          key: ${{ steps.pins.outputs.key }}
       - name: Set up examples
+        if: steps.examples-cache.outputs.cache-hit != 'true'
         shell: bash
         run: |
           fetch() {
