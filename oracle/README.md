@@ -15,6 +15,7 @@ name is not a syntax rejection; the runner's self-test shows one.
 | `../scripts/oracle-replay.mjs` | Judges every case through the tree-sitter API and compares with the baseline |
 | `../scripts/generate-node-kinds.mjs` | Snapshot of node kinds and fields, `test/node-kinds.txt` (`--check` in CI) |
 | `../scripts/parser-cost.mjs` | Size and table counts of `src/parser.c`, for one tree or base against head |
+| `../scripts/tree-compare.mjs` | Full-tree comparison of two parser builds over a file list, in memory-bounded batches |
 
 Case sets: `bundle` (the six minimal inputs and probes of go-treesitter's java evidence bundle: `q71-inputs`,
 `p97-probes`), `pr233` (the four inputs of `test/corpus/java25.txt` from tree-sitter-java PR #233, by arraypress,
@@ -122,6 +123,23 @@ version and a CHANGELOG entry (AGENTS.md).
 `node scripts/parser-cost.mjs [<tree> [<tree>]]` prints `src/parser.c` bytes, `STATE_COUNT`, `LARGE_STATE_COUNT`,
 `SYMBOL_COUNT`, `PRODUCTION_ID_COUNT` and the field-map entries for this repository, for a tree, or as base against head
 for two trees (repository roots or `parser.c` files).
+
+## Comparing trees
+
+`node scripts/tree-compare.mjs --base <base.node> --head <head.node> --list <paths file> [--root <dir>] [--json]`
+compares the trees two compiled bindings make over a list of files (see Windows below for building one). It checks every
+node, anonymous ones included: kind, field, named and MISSING flags, start and end offset, and the root's end. Offsets are
+the Node binding's `startIndex`/`endIndex`, which count UTF-16 code units, not bytes: they agree with byte offsets only for
+ASCII text, and a reported range in a file with non-ASCII characters is not a byte range. It prints
+a summary (`files`, `same`, `changed`, `base_error`, `head_error`, peak child memory) and, per changed file, the first
+differing node with its parents. Exit 0: no change, 1: changes, 2: bad input or infrastructure error. `--self-test`
+runs the built-in checks. Use it instead of a one-off comparison script: it runs 100 files per child process by default
+(`--batch`), caps a child at `--max-old-space-size=1024` and stops the run with exit 2 at 2 GB resident (`--max-rss-mb`),
+and starts at most 3 children (`--jobs`, the shared-machine thread limit). The cap is checked by the child after every
+file and after the last garbage collection of its batch (so a batch of one file is covered), and by the parent, which reads
+every child's resident memory every 500 ms and kills all children when one passes the cap. The Node binding frees trees
+only when V8 collects them, which is why an unbatched loop once reached 21 GB.
+
 
 ## Windows
 
