@@ -22,3 +22,17 @@ approves tags and releases separately.
 
 For later fixes, the planned Java syntax oracle is the parse phase of `javac`.
 Oracle setup and compiler version selection are future work.
+
+## Amendment (2026-11-19): release versions
+
+Decided by the owner on 2026-11-19, following tree-sitter-mssql's ADR-0007:
+
+- The 1.x line is the upstream baseline. v1.0.0 is byte-identical in grammar and generated source to upstream v0.23.5
+  regenerated with CLI 0.27.2.
+- Releases that carry this repository's own grammar fixes start at v2.0.0. Within 2.x, versions follow semantic
+  versioning, and removing or renaming a node kind or field still needs a new major version (AGENTS.md).
+- The first such release, the Java 25 fixes K1-K3, is v2.0.0. No v1.1.0 tag was made; the 1.1.0 manifest values on
+  `main` between PR #11 and the v2.0.0 release PR were never tagged.
+- From v2.0.0 the Go module path carries the major version suffix (`github.com/wotjr1649/tree-sitter-java/v2`), as Go
+  modules require for v2 and later.
+- Tags and any GitHub Release remain separate owner approvals. Registry publishing stays disabled.
