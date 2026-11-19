@@ -3,9 +3,11 @@
 ## Unreleased
 
 - Add `scripts/tree-compare.mjs`, a full-tree comparison of two parser builds over a file list that runs in batches
-  of 100 files per child process by default (at most 500) with a memory cap (`oracle/README.md`). The CI `examples` job caches the six
-  pinned example checkouts, keyed by their repositories and SHAs, and skips the fetch on a cache hit. No grammar or
-  parser change.
+  of 100 files per child process by default (at most 500) with a memory cap that the child checks after every file and
+  the parent watches while the child runs (`oracle/README.md`). The CI `examples` job caches the six pinned example
+  checkouts, keyed by their repositories and SHAs, and skips the fetch on a cache hit; a new "Verify examples" step
+  checks every checkout against its pinned commit and Java file list before the parse, so a partial or stale cache
+  fails the job. No grammar or parser change.
 - Parse qualified record patterns and `final` or annotated type patterns (K4, JLS 25 §14.30.1). A `record_pattern`
   may now name its type with a `scoped_type_identifier` (`o instanceof a.b.R(int x)`, `case Outer.Box(Outer.Point(var
   x, var y))`). A `type_pattern` in a `case` label and a `record_pattern_component` take an optional `modifiers` child

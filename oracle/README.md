@@ -126,13 +126,21 @@ for two trees (repository roots or `parser.c` files).
 
 `node scripts/tree-compare.mjs --base <base.node> --head <head.node> --list <paths file> [--root <dir>] [--json]`
 compares the trees two compiled bindings make over a list of files (see Windows below for building one). It checks every
-node, anonymous ones included: kind, field, named and MISSING flags, start and end offset, and the root's end. It prints
+node, anonymous ones included: kind, field, named and MISSING flags, start and end offset, and the root's end. Offsets are
+the Node binding's `startIndex`/`endIndex`, which count UTF-16 code units, not bytes: they agree with byte offsets only for
+ASCII text, and a reported range in a file with non-ASCII characters is not a byte range. It prints
 a summary (`files`, `same`, `changed`, `base_error`, `head_error`, peak child memory) and, per changed file, the first
 differing node with its parents. Exit 0: no change, 1: changes, 2: bad input or infrastructure error. `--self-test`
 runs the built-in checks. Use it instead of a one-off comparison script: it runs 100 files per child process by default
-(`--batch`), caps a child at `--max-old-space-size=1024` and stops it at 2 GB resident (`--max-rss-mb`), and starts at
-most 3 children (`--jobs`, the shared-machine thread limit). The Node binding frees trees only when V8 collects them, which is why an unbatched loop
-once reached 21 GB.
+(`--batch`), caps a child at `--max-old-space-size=1024` and stops the run with exit 2 at 2 GB resident (`--max-rss-mb`),
+and starts at most 3 children (`--jobs`, the shared-machine thread limit). The cap is checked by the child after every
+file and after the last garbage collection of its batch (so a batch of one file is covered), and by the parent, which reads
+every child's resident memory every 500 ms and kills all children when one passes the cap. The Node binding frees trees
+only when V8 collects them, which is why an unbatched loop once reached 21 GB.
+
+The CI `examples` job does not trust its cache: after a restore or a fresh fetch, the step "Verify examples" requires each
+of the six checkouts to sit at its pinned commit, to hold exactly the `.java` files `git ls-files` lists for it, and to have
+none of them modified, before anything is parsed.
 
 ## Windows
 

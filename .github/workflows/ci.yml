@@ -89,6 +89,39 @@ jobs:
           fetch flink apache/flink cc91df476a0b39ae7d6eb50eb8cf96f1dbad2b47
           fetch log4j2 apache/logging-log4j2 572cd83040450763a673ea749ad0c960563eeec9
           fetch cassandra apache/cassandra 53c3561e9db3fa0b1ed8e29ce462fde6ce566ff0
+      # A restored cache is not trusted, and a fresh fetch is checked the same way. Each checkout must
+      # sit at its pinned commit (read from the six lines above), hold exactly the Java files that commit
+      # lists, and have none of them modified; otherwise the parse below would pass on a partial tree.
+      - name: Verify examples
+        shell: bash
+        run: |
+          export GIT_OPTIONAL_LOCKS=0
+          bad=0
+          count=0
+          while read -r _ name _ sha; do
+            count=$((count + 1))
+            dir="examples/$name"
+            head=$(git -C "$dir" rev-parse HEAD 2>/dev/null) || head=missing
+            if [ "$head" != "$sha" ]; then
+              echo "::error::$name: HEAD is $head, pinned $sha"
+              bad=1
+              continue
+            fi
+            git -C "$dir" -c core.quotePath=false ls-files '*.java' | LC_ALL=C sort > "$RUNNER_TEMP/tracked.txt"
+            (cd "$dir" && find . -type f -name '*.java' | sed 's|^\./||' | LC_ALL=C sort) > "$RUNNER_TEMP/present.txt"
+            if ! cmp -s "$RUNNER_TEMP/tracked.txt" "$RUNNER_TEMP/present.txt"; then
+              echo "::error::$name: the Java files present differ from the files commit $sha lists"
+              diff "$RUNNER_TEMP/tracked.txt" "$RUNNER_TEMP/present.txt" | head -5
+              bad=1
+            fi
+            if [ -n "$(git -C "$dir" status --porcelain --untracked-files=no -- '*.java')" ]; then
+              echo "::error::$name: tracked Java files differ from commit $sha"
+              git -C "$dir" status --porcelain --untracked-files=no -- '*.java' | head -5
+              bad=1
+            fi
+            echo "$name: $(wc -l < "$RUNNER_TEMP/tracked.txt") Java files at $sha"
+          done < <(grep -E '^ +fetch [A-Za-z0-9]+ [^ ]+ [0-9a-f]{40}$' .github/workflows/ci.yml)
+          test "$count" = 6 && test "$bad" = 0
       # The CLI exits 1 for syntax errors and for read errors alike, so the exit code
       # cannot tell a complete run from an aborted one. Only a final summary that lists
       # exactly the inputs counts as complete; anything else fails the job here.

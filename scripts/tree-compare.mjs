@@ -14,12 +14,17 @@
 // unreadable list or file, missing build, a child over the memory cap or crashed).
 //
 // Memory: the Node binding frees a tree only when V8 collects it, and V8 cannot see native memory, so trees pile up
-// in a long run (21 GB over 6k files, 2026-11-19). Each child process therefore gets at most --batch files (default 100, at most 500),
-// runs with --max-old-space-size=1024 and --expose-gc, collects garbage every 25 files, keeps nothing after a file
-// and stops with an error when its resident memory passes --max-rss-mb (default 2048). Up to 4 children run at once.
-import { fork } from 'node:child_process';
+// in a long run (21 GB over 6k files, 2026-11-19). Each child process therefore gets at most --batch files (default 100,
+// at most 500), runs with --max-old-space-size=1024 and --expose-gc, collects garbage every 25 files and keeps nothing
+// after a file. The cap --max-rss-mb (default 2048) is checked twice: the child compares its own resident memory with it
+// after every file and after the last garbage collection of its batch, and the parent reads every child's resident memory
+// every 500 ms (tasklist on Windows, ps elsewhere) and kills all children when one passes the cap. Either stops the run
+// with exit 2. Up to 3 children run at once.
+import { execFile, fork, spawn } from 'node:child_process';
+import { promisify } from 'node:util';
 import { createRequire } from 'node:module';
-import { readFileSync } from 'node:fs';
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { resolve, join } from 'node:path';
 import { parseArgs } from 'node:util';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -86,22 +91,26 @@ async function runBatch({ base, head, root, files, maxRssMb }) {
   });
   const results = [];
   let peak = 0;
-  const rss = () => (peak = Math.max(peak, process.memoryUsage.rss()));
+  // Resident memory against the cap: after every file (its trees still alive) and again after the last collection.
+  const check = (where) => {
+    peak = Math.max(peak, process.memoryUsage.rss());
+    if (peak > maxRssMb * 2 ** 20) throw new Inconsistent(`child over the memory cap of ${maxRssMb} MB: ${(peak / 2 ** 20).toFixed(0)} MB resident ${where}`);
+  };
   for (const [i, file] of files.entries()) {
     let src = readFileSync(join(root, file), 'utf8');
     const size = Math.max(32 * 1024, src.length * 4);
     let trees = parsers.map((p) => p.parse(src, null, { bufferSize: size }));
     const diff = firstDiff(trees[0].walk(), trees[1].walk());
     results.push({ file, diff, baseError: trees[0].rootNode.hasError, headError: trees[1].rootNode.hasError });
+    check(`at ${file}`);
     src = trees = null;
     if (i % 25 === 24) {
       globalThis.gc();
-      if (rss() > maxRssMb * 2 ** 20)
-        throw new Inconsistent(`child over the memory cap: ${(peak / 2 ** 20).toFixed(0)} MB resident after ${i + 1} files`);
+      check(`after ${i + 1} files`);
     }
   }
   globalThis.gc();
-  rss();
+  check('at the end of the batch');
   return { results, peak };
 }
 
@@ -118,16 +127,40 @@ function readList(listPath) {
   return files;
 }
 
-function dispatch(job) {
+// Resident memory in bytes of the given process ids, read from outside: Map pid -> bytes (a process that is gone is absent).
+export async function rssOf(pids) {
+  const run = promisify(execFile);
+  const out = new Map();
+  if (process.platform === 'win32') {
+    // CSV rows: "Image","PID","Session","Session#","Mem Usage" with the usage as "12,345 K" (the working set, what rss reports).
+    const { stdout } = await run('tasklist', ['/FO', 'CSV', '/NH'], { maxBuffer: 2 ** 24 });
+    for (const line of stdout.split(/\r?\n/)) {
+      const f = line.match(/"([^"]*)"/g)?.map((x) => x.slice(1, -1));
+      if (f?.length >= 5 && pids.has(Number(f[1]))) out.set(Number(f[1]), Number(f[4].replace(/\D/g, '')) * 1024);
+    }
+  } else {
+    // ps exits 1 when none of the ids exist.
+    const { stdout } = await run('ps', ['-o', 'pid=,rss=', '-p', [...pids].join(',')]).catch((e) => (e.code === 1 ? { stdout: '' } : Promise.reject(e)));
+    for (const line of stdout.split('\n')) {
+      const [pid, kb] = line.trim().split(/\s+/).map(Number);
+      if (pid && pids.has(pid)) out.set(pid, kb * 1024);
+    }
+  }
+  return out;
+}
+
+function dispatch(job, live) {
   return new Promise((done, fail) => {
     const child = fork(fileURLToPath(import.meta.url), ['--child'], {
       execArgv: ['--max-old-space-size=1024', '--expose-gc'],
       stdio: ['ignore', 'inherit', 'inherit', 'ipc'],
     });
+    live.add(child);
     let reply;
     child.on('message', (m) => (reply = m));
     child.on('error', fail);
     child.on('exit', (code, signal) => {
+      live.delete(child);
       if (reply?.error) fail(new Inconsistent(reply.error));
       else if (reply?.results) done(reply);
       else fail(new Inconsistent(`child ended without a result (exit ${code ?? signal})`));
@@ -143,15 +176,47 @@ export async function compare({ base, head, list, root = '.', jobs = 2, batch = 
   const out = new Array(batches.length);
   let next = 0;
   let peak = 0;
+  let stop = false;
+  const live = new Set();
+  const killAll = () => {
+    stop = true;
+    for (const c of live) c.kill();
+  };
+  // The parent's own watch of every running child; a breach rejects `breached`, which ends the run.
+  let breach;
+  const breached = new Promise((_, reject) => (breach = reject));
+  let polling = false;
+  const timer = setInterval(async () => {
+    if (polling || !live.size) return;
+    polling = true;
+    try {
+      for (const [pid, bytes] of await rssOf(new Set([...live].map((c) => c.pid)))) {
+        peak = Math.max(peak, bytes);
+        if (bytes > maxRssMb * 2 ** 20) throw new Inconsistent(`child ${pid} over the memory cap of ${maxRssMb} MB: ${Math.round(bytes / 2 ** 20)} MB resident`);
+      }
+    } catch (e) {
+      killAll();
+      breach(e instanceof Inconsistent ? e : new Inconsistent(`cannot watch the children's memory: ${e.message}`));
+    } finally {
+      polling = false;
+    }
+  }, 500);
   const worker = async () => {
-    while (next < batches.length) {
+    while (next < batches.length && !stop) {
       const i = next++;
-      const r = await dispatch({ base, head, root, files: batches[i], maxRssMb });
+      const r = await dispatch({ base, head, root, files: batches[i], maxRssMb }, live);
       out[i] = r.results;
       peak = Math.max(peak, r.peak);
     }
   };
-  await Promise.all(Array.from({ length: Math.min(jobs, batches.length) }, worker));
+  try {
+    await Promise.race([Promise.all(Array.from({ length: Math.min(jobs, batches.length) }, worker)), breached]);
+  } catch (e) {
+    killAll();
+    throw e;
+  } finally {
+    clearInterval(timer);
+  }
   const results = out.flat();
   const changed = results.filter((r) => r.diff).map(({ file, diff }) => ({ file, ...diff }));
   const summary = {
@@ -220,6 +285,19 @@ async function selfTest() {
   const field = firstDiff(cursor(fake('a', [0, 5], [fake('b', [0, 5], [], { field: 'x' })])), cursor(fake('a', [0, 5], [fake('b', [0, 5], [], { field: 'y' })])));
   assert.equal(field.head.field, 'y', 'field change');
 
+  // The parent's view of a child's memory: a process that holds 200 MB shows up as at least 150 MB.
+  const hog = spawn(process.execPath, ['-e', 'const b = Buffer.alloc(200 * 2 ** 20, 1); setTimeout(() => b.length, 15000)'], { stdio: 'ignore' });
+  try {
+    let seen = 0;
+    for (let i = 0; i < 40 && seen < 150 * 2 ** 20; i++) {
+      await new Promise((r) => setTimeout(r, 250));
+      seen = (await rssOf(new Set([hog.pid]))).get(hog.pid) ?? 0;
+    }
+    assert.ok(seen >= 150 * 2 ** 20, `rssOf saw ${seen} bytes of a 200 MB process`);
+  } finally {
+    hog.kill();
+  }
+
   // End to end: the real binding of this repository, two copies as base and head, in one child.
   const build = fileURLToPath(new URL('../build/Release/tree_sitter_java_binding.node', import.meta.url));
   const Parser = createRequire(import.meta.url)('tree-sitter');
@@ -234,6 +312,18 @@ async function selfTest() {
   assert.equal(firstDiff(parse('class A { int x; }'), parse('class A { int x; }')), null);
   // The root's end differs first, in document order.
   assert.deepEqual(firstDiff(parse('class A {}'), parse('class A { int x; }')).head, { field: null, kind: 'program', named: true, missing: false, start: 0, end: 18, row: 1 });
+
+  // The cap applies to a batch of one file, far short of the 25-file collection interval: a child over the cap fails the run.
+  const dir = mkdtempSync(join(tmpdir(), 'tree-compare-'));
+  try {
+    writeFileSync(join(dir, 'A.java'), 'class A {}');
+    writeFileSync(join(dir, 'list.txt'), 'A.java\n');
+    const job = { base: build, head: build, list: join(dir, 'list.txt'), root: dir, jobs: 1, batch: 1 };
+    assert.equal((await compare({ ...job, maxRssMb: 2048 })).summary.changed, 0, 'a normal cap passes');
+    await assert.rejects(compare({ ...job, maxRssMb: 16 }), /over the memory cap/, 'one file over the cap fails');
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
   console.log('self-test: passed');
 }
 
