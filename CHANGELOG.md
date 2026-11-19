@@ -30,6 +30,8 @@ unchanged, but some trees change (K2, K3 below), which can affect consumers of n
   which accepts labels after `null, default` (`case null, default, 1` is rejected only in attribution) but rejects
   `case default` and `case 1, default`. Invalid inputs that used `default` as an expression, such as
   `case default + 1 ->`, may now get a different error-recovery tree with ERROR where they used to parse cleanly.
+- The Go module path is now `github.com/wotjr1649/tree-sitter-java/v2`, as Go requires for v2 releases. Import the
+  binding from `github.com/wotjr1649/tree-sitter-java/v2/bindings/go`.
 - Set `tree-sitter.json` `metadata.version` and the package manifests to 2.0.0. CLI 0.27.2 embeds the metadata
   version in `src/parser.c`, so the generated parser differs from 1.0.0 in that field too.
 - Known open item: two inputs that javac accepts still parse with errors (a qualified record pattern and

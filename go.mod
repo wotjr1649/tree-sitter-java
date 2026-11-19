@@ -1,4 +1,4 @@
-module github.com/wotjr1649/tree-sitter-java
+module github.com/wotjr1649/tree-sitter-java/v2
 
 go 1.23
 
