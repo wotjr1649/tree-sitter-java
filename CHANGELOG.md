@@ -19,6 +19,15 @@
   contain MISSING. The expected-failure set is now empty. The 13 pinned example files that failed on qualified
   record patterns now parse, so `test/examples/failures.txt` drops them (36 to 23 paths). Upstream tree-sitter-java issue #229 and PRs #230 (by
   DragonAxe), #231 (by akd-devvine) and #232 (by mihailkirov) proposed the same two changes.
+- Parse annotations before the `...` of a variable arity parameter, as in `Object @Nullable ... args` and
+  `int @A [] @B ... xs` (JLS 25 §8.4.1; tree-sitter-java issue #205), in methods, constructors, record components
+  and lambda parameters. The annotations are children of `spread_parameter` before the anonymous `...` token,
+  like the annotations after it. No node kind or field changes and `node-types.json` is unchanged. Inputs that
+  parsed without errors keep their trees: `dimensions` is now built from two hidden rules so that an annotation
+  after `[]` can start the next dimension or precede `...` (resolved in GLR, preferring the flat `dimensions` as
+  before). Annotations after `...` (`int... @Foo x`) are still accepted, although javac rejects them. The 14
+  pinned example files that failed on annotations before `...` now parse, so `test/examples/failures.txt` drops
+  them (23 to 9 paths).
 
 ## 2.0.0
 

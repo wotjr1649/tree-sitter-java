@@ -21,8 +21,9 @@ Case sets: `bundle` (the six minimal inputs and probes of go-treesitter's java e
 MIT), `probes` (written in this task: a `this(...)` probe for K2 and adjacent invalid inputs for K1-K3), `k1`
 (valid and adjacent invalid `import module` inputs of the K1 fix), `k2` (valid and adjacent invalid inputs with
 statements before `super(...)`/`this(...)` of the K2 fix), `k3` (valid and adjacent invalid `case null, default`
-inputs of the K3 fix) and `k4` (valid and adjacent invalid qualified record patterns and `final` or annotated type
-patterns of the K4 fix). Every
+inputs of the K3 fix), `k4` (valid and adjacent invalid qualified record patterns and `final` or annotated type
+patterns of the K4 fix) and `k5` (valid and adjacent invalid variable arity parameters with annotations before
+`...` of the K5 fix). Every
 case names its origin in `provenance`: the bundle path with its `SHA256SUMS` hash, the PR, or "written in this task".
 IDs are prefixed with the set name. To add a case, append a line, hash its `source` (SHA-256 of the UTF-8 bytes; the
 replay prints the actual hash when it differs), then regenerate that set's verdicts.

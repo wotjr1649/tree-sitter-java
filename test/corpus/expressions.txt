@@ -2108,3 +2108,118 @@ void foo(int... @Foo x) {
         (variable_declarator
           (identifier))))
     (block)))
+
+================================================================================
+Annotation between a spread parameter's type and ellipsis
+:cst
+================================================================================
+
+void f(Object @N ... a) {}
+
+--------------------------------------------------------------------------------
+
+1:0  - 2:0    program
+1:0  - 1:26     method_declaration
+1:0  - 1:4        type: void_type `void`
+1:5  - 1:6        name: identifier `f`
+1:6  - 1:23       parameters: formal_parameters
+1:6  - 1:7          "("
+1:7  - 1:22         spread_parameter
+1:7  - 1:13           type_identifier `Object`
+1:14 - 1:16           marker_annotation
+1:14 - 1:15             "@"
+1:15 - 1:16             name: identifier `N`
+1:17 - 1:20           "..."
+1:21 - 1:22           variable_declarator
+1:21 - 1:22             name: identifier `a`
+1:22 - 1:23         ")"
+1:24 - 1:26       body: block
+1:24 - 1:25         "{"
+1:25 - 1:26         "}"
+
+================================================================================
+Several annotations before a spread parameter's ellipsis, with modifiers
+================================================================================
+
+void f(final @N Object @A @B(1) ... a) {}
+
+---
+
+(program
+  (method_declaration
+    type: (void_type)
+    name: (identifier)
+    parameters: (formal_parameters
+      (spread_parameter
+        (modifiers
+          (marker_annotation
+            name: (identifier)))
+        (type_identifier)
+        (marker_annotation
+          name: (identifier))
+        (annotation
+          name: (identifier)
+          arguments: (annotation_argument_list
+            (decimal_integer_literal)))
+        (variable_declarator
+          name: (identifier))))
+    body: (block)))
+
+================================================================================
+Annotation before the ellipsis after annotated array dimensions
+================================================================================
+
+void g(int @A [] @B ... xs) {}
+
+---
+
+(program
+  (method_declaration
+    type: (void_type)
+    name: (identifier)
+    parameters: (formal_parameters
+      (spread_parameter
+        (array_type
+          element: (integral_type)
+          dimensions: (dimensions
+            (marker_annotation
+              name: (identifier))))
+        (marker_annotation
+          name: (identifier))
+        (variable_declarator
+          name: (identifier))))
+    body: (block)))
+
+================================================================================
+Annotation before the ellipsis in a record component and a lambda parameter
+================================================================================
+
+record R(String @A ... xs) {}
+F f = (String @A ... xs) -> {};
+
+---
+
+(program
+  (record_declaration
+    name: (identifier)
+    parameters: (formal_parameters
+      (spread_parameter
+        (type_identifier)
+        (marker_annotation
+          name: (identifier))
+        (variable_declarator
+          name: (identifier))))
+    body: (class_body))
+  (local_variable_declaration
+    type: (type_identifier)
+    declarator: (variable_declarator
+      name: (identifier)
+      value: (lambda_expression
+        parameters: (formal_parameters
+          (spread_parameter
+            (type_identifier)
+            (marker_annotation
+              name: (identifier))
+            (variable_declarator
+              name: (identifier))))
+        body: (block)))))

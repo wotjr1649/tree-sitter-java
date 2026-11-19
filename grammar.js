@@ -89,6 +89,8 @@ module.exports = grammar({
     [$.yield_statement, $._reserved_identifier],
     // `case @A ...`: pattern modifiers or an annotated type, as for `modifiers` above
     [$.type_pattern, $.annotated_type],
+    [$._dimensions_bracket],
+    [$._dimensions_annotated],
   ],
 
   word: $ => $.identifier,
@@ -477,9 +479,11 @@ module.exports = grammar({
       seq($.super, $._type),
     ),
 
-    dimensions: $ => prec.right(repeat1(
-      seq(repeat($._annotation), '[', ']'),
-    )),
+    dimensions: $ => choice($._dimensions_bracket, $._dimensions_annotated),
+
+    _dimensions_bracket: $ => dimensionList($, seq('[', ']')),
+
+    _dimensions_annotated: $ => dimensionList($, seq(repeat1($._annotation), '[', ']')),
 
     switch_expression: $ => seq(
       'switch',
@@ -1255,6 +1259,8 @@ module.exports = grammar({
     spread_parameter: $ => seq(
       optional($.modifiers),
       $._unannotated_type,
+      // JLS 25 §8.4.1: {Annotation} before the ellipsis; the annotations after it are kept for existing trees
+      repeat($._annotation),
       '...',
       repeat($._annotation),
       $.variable_declarator,
@@ -1350,4 +1356,23 @@ function commaSep1(rule) {
  */
 function commaSep(rule) {
   return optional(commaSep1(rule));
+}
+
+/**
+ * One dimension followed by the rest of the list. A next dimension that starts with `[` is always taken
+ * (as `prec.right` did); one that starts with an annotation is taken in GLR, because the annotation can also
+ * precede the `...` of a spread parameter (`int @A [] @B ... xs`, JLS 25 §8.4.1).
+ *
+ * @param {GrammarSymbols<string>} $
+ *
+ * @param {RuleOrLiteral} first
+ *
+ * @returns {ChoiceRule}
+ */
+function dimensionList($, first) {
+  return choice(
+    first,
+    prec(1, seq(first, $._dimensions_bracket)),
+    prec.dynamic(1, seq(first, $._dimensions_annotated)),
+  );
 }
