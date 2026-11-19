@@ -2166,29 +2166,41 @@ void f(final @N Object @A @B(1) ... a) {}
     body: (block)))
 
 ================================================================================
-Annotation before the ellipsis after annotated array dimensions
+Nine annotated array dimensions keep one flat dimensions node
 ================================================================================
 
-void g(int @A [] @B ... xs) {}
+class C { int @A [] @A [] @A [] @A [] @A [] @A [] @A [] @A [] @A [] x; }
 
 ---
 
 (program
-  (method_declaration
-    type: (void_type)
+  (class_declaration
     name: (identifier)
-    parameters: (formal_parameters
-      (spread_parameter
-        (array_type
+    body: (class_body
+      (field_declaration
+        type: (array_type
           element: (integral_type)
           dimensions: (dimensions
             (marker_annotation
+              name: (identifier))
+            (marker_annotation
+              name: (identifier))
+            (marker_annotation
+              name: (identifier))
+            (marker_annotation
+              name: (identifier))
+            (marker_annotation
+              name: (identifier))
+            (marker_annotation
+              name: (identifier))
+            (marker_annotation
+              name: (identifier))
+            (marker_annotation
+              name: (identifier))
+            (marker_annotation
               name: (identifier))))
-        (marker_annotation
-          name: (identifier))
-        (variable_declarator
-          name: (identifier))))
-    body: (block)))
+        declarator: (variable_declarator
+          name: (identifier))))))
 
 ================================================================================
 Annotation before the ellipsis in a record component and a lambda parameter

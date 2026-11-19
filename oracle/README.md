@@ -106,8 +106,9 @@ While `src/parser.c` equals the base parser, every listed `base_tree` must equal
 After a fix PR changes the parser, a listed case that still fails but whose tree changed only prints a note.
 
 A later K pull request that fixes a defect **deletes its entries** from `expected-failures.json` (and only those; the
-cases and their assertions stay as passing cases). K4 deleted the last two entries (`pr233/record-pattern-qualified`, `pr233/switch-final-type-pattern`), so the set is
-empty.
+cases and their assertions stay as passing cases). K4 deleted the last two entries (`pr233/record-pattern-qualified`, `pr233/switch-final-type-pattern`), so the set was
+empty. K5 adds two cases it does not fix, `k5/v04-after-dimensions` and `k5/v05-many-dimensions`: an annotation right
+after an array dimension and before `...` (`int @A [] @B ... xs`) still starts a dimension and errs.
 A new input that the grammar fails but javac accepts is never added silently: it is a new defect, so it needs its own
 fix, or a recorded entry with its javac verdict and evidence.
 

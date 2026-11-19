@@ -3493,96 +3493,15 @@
       ]
     },
     "dimensions": {
-      "type": "CHOICE",
-      "members": [
-        {
-          "type": "SYMBOL",
-          "name": "_dimensions_bracket"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "_dimensions_annotated"
-        }
-      ]
-    },
-    "_dimensions_bracket": {
-      "type": "CHOICE",
-      "members": [
-        {
+      "type": "PREC_RIGHT",
+      "value": 0,
+      "content": {
+        "type": "REPEAT1",
+        "content": {
           "type": "SEQ",
           "members": [
             {
-              "type": "STRING",
-              "value": "["
-            },
-            {
-              "type": "STRING",
-              "value": "]"
-            }
-          ]
-        },
-        {
-          "type": "PREC",
-          "value": 1,
-          "content": {
-            "type": "SEQ",
-            "members": [
-              {
-                "type": "SEQ",
-                "members": [
-                  {
-                    "type": "STRING",
-                    "value": "["
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "]"
-                  }
-                ]
-              },
-              {
-                "type": "SYMBOL",
-                "name": "_dimensions_bracket"
-              }
-            ]
-          }
-        },
-        {
-          "type": "PREC_DYNAMIC",
-          "value": 1,
-          "content": {
-            "type": "SEQ",
-            "members": [
-              {
-                "type": "SEQ",
-                "members": [
-                  {
-                    "type": "STRING",
-                    "value": "["
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "]"
-                  }
-                ]
-              },
-              {
-                "type": "SYMBOL",
-                "name": "_dimensions_annotated"
-              }
-            ]
-          }
-        }
-      ]
-    },
-    "_dimensions_annotated": {
-      "type": "CHOICE",
-      "members": [
-        {
-          "type": "SEQ",
-          "members": [
-            {
-              "type": "REPEAT1",
+              "type": "REPEAT",
               "content": {
                 "type": "SYMBOL",
                 "name": "_annotation"
@@ -3597,74 +3516,8 @@
               "value": "]"
             }
           ]
-        },
-        {
-          "type": "PREC",
-          "value": 1,
-          "content": {
-            "type": "SEQ",
-            "members": [
-              {
-                "type": "SEQ",
-                "members": [
-                  {
-                    "type": "REPEAT1",
-                    "content": {
-                      "type": "SYMBOL",
-                      "name": "_annotation"
-                    }
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "["
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "]"
-                  }
-                ]
-              },
-              {
-                "type": "SYMBOL",
-                "name": "_dimensions_bracket"
-              }
-            ]
-          }
-        },
-        {
-          "type": "PREC_DYNAMIC",
-          "value": 1,
-          "content": {
-            "type": "SEQ",
-            "members": [
-              {
-                "type": "SEQ",
-                "members": [
-                  {
-                    "type": "REPEAT1",
-                    "content": {
-                      "type": "SYMBOL",
-                      "name": "_annotation"
-                    }
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "["
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "]"
-                  }
-                ]
-              },
-              {
-                "type": "SYMBOL",
-                "name": "_dimensions_annotated"
-              }
-            ]
-          }
         }
-      ]
+      }
     },
     "switch_expression": {
       "type": "SEQ",
@@ -8096,12 +7949,6 @@
     [
       "type_pattern",
       "annotated_type"
-    ],
-    [
-      "_dimensions_bracket"
-    ],
-    [
-      "_dimensions_annotated"
     ]
   ],
   "precedences": [],
