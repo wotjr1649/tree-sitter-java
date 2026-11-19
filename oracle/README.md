@@ -26,7 +26,9 @@ inputs of the K3 fix), `k4` (valid and adjacent invalid qualified record pattern
 patterns of the K4 fix), `k5` (valid and adjacent invalid variable arity parameters with annotations before
 `...` of the K5 fix), `k6` (valid and adjacent invalid numeric literals of the K6 fix: decimal floating point
 literals with leading zeros such as `00d`, underscores between digits such as `1__0` and `0_7`, and hex floating
-point exponents with leading zeros such as `0x1p03`) and `k8` (a raw NUL byte inside string literals, text blocks
+point exponents with leading zeros such as `0x1p03`), `k7` (valid and adjacent invalid annotated multi-catch
+alternatives, annotated receiver parameters and `instanceof` type patterns with annotations before `final` of the K7
+fix) and `k8` (a raw NUL byte inside string literals, text blocks
 and char literals, with adjacent unterminated literals, of the K8 fix, plus the probes of the PR #19 review: raw NUL
 next to CR, LF, line continuations and text block delimiters, with NUL-free controls). Every
 case names its origin in `provenance`: the bundle path with its `SHA256SUMS` hash, the PR, or "written in this task".

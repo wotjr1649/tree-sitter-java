@@ -36,6 +36,36 @@
   string, text block or char literal that holds a NUL still contains an ERROR. Two pinned example files
   that failed on this (`MultiValueArrayOrderInlineNullBinaryDocValuesReaderTests.java`,
   `CsvRecordTokenizerTests.java`) now parse, so `test/examples/failures.txt` drops them (8 to 6 paths).
+- Parse annotations in three more positions (K7). No node kind or field is removed or renamed; `src/node-types.json`
+  gains two child types: `catch_type` takes `_type` instead of `_unannotated_type`, and `instanceof_expression` takes
+  an optional `modifiers` child.
+  - Annotated alternatives of a multi-catch, as in `catch (T1 | @A T2 e)` (JLS 25 §14.20; tree-sitter-java issue
+    #208): every alternative after `|` may be an `annotated_type`. Annotations before the first alternative stay in
+    the parameter's `modifiers`, as before. The idea is from tree-sitter-java PR #206 (by theawless).
+  - An annotated receiver parameter without a qualifier, `void m(@A Inner this)` (JLS 25 §8.4; issue #234), used to
+    parse cleanly as a `formal_parameter` whose name was an `identifier` spelled `this`. It is now a
+    `receiver_parameter`, like the unannotated and the qualified forms. Its `this` is now captured as
+    `@variable.builtin` instead of `@variable` in `queries/highlights.scm`. The receiver also wins in other
+    lists that share `formal_parameters`: `(@A T this) -> 0` and `record R(@A T this) {}`, which javac rejects, also give a `receiver_parameter`
+    through the shared `formal_parameters`, and an unannotated `(T this) -> 0` already did. This existing tolerance
+    is unchanged. Other error-free trees change only as the next two bullets say.
+  - Annotations before `final` in an `instanceof` type pattern, `o instanceof @A final String s` (JLS 25 §14.30.1):
+    the annotations and `final` form a `modifiers` child, as in a `type_pattern` (K4). `instanceof final T x` keeps
+    its anonymous `final` token and `instanceof final @A T x` its `annotated_type`. Two invalid inputs that used to
+    parse cleanly by reading `final` as a type name, `o instanceof @A final String` and `o instanceof @A final`, now
+    contain MISSING or ERROR; javac rejects both. The modifiers allow one `final` and any annotations around it, so
+    `o instanceof @A final final T x` is an error, as it is without the annotation (javac: `repeated.modifier`).
+  - `final` and `this` are reserved words (`reserved.global` in `grammar.js`): the lexer no longer falls back to an
+    identifier for them where the parser state cannot use the keyword. Before this, `catch (T1 | @A final e)`,
+    `catch (T1 | @A T2 this)` and `o instanceof @A final T this` parsed cleanly with `final` as a type name or `this`
+    as a variable name; they now contain ERROR, as at the base. Inputs that javac rejects and that parsed cleanly
+    before also contain ERROR now, for example `catch (T1 | final e)`, `o instanceof final T this`,
+    `o instanceof @A T this`, `void m(@A Inner this, @B Inner this)` and `int this = 1;`. Against the base, the 63,832
+    files of the pinned examples and every other corpus and oracle input keep their trees. Still read cleanly although
+    javac rejects them: `o instanceof @A final var x`, like `o instanceof final var x` before, because `var` is a
+    valid name in a qualified type. Likewise `catch (T1 | @A static e)` and `o instanceof @A final T static`, which javac
+    rejects, parse cleanly with `static` read as a type name and as a variable name, as `catch (@A T1 | static e)` and
+    `o instanceof final @A T static` already do at 2.1.0.
 
 ## 2.1.0
 

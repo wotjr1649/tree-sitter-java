@@ -860,6 +860,78 @@ public class A {
         (constructor_body)))))
 
 ================================================================================
+Annotated receiver parameters with and without a qualifier
+================================================================================
+
+class Outer {
+  class Inner {
+    void m(@Owned Inner this) {}
+    void n(@A @B(1) Inner this, int x) {}
+    void g(@A Outer.Inner this) {}
+    Inner(@A Outer Outer.this) {}
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (class_declaration
+        name: (identifier)
+        body: (class_body
+          (method_declaration
+            type: (void_type)
+            name: (identifier)
+            parameters: (formal_parameters
+              (receiver_parameter
+                (marker_annotation
+                  name: (identifier))
+                (type_identifier)
+                (this)))
+            body: (block))
+          (method_declaration
+            type: (void_type)
+            name: (identifier)
+            parameters: (formal_parameters
+              (receiver_parameter
+                (marker_annotation
+                  name: (identifier))
+                (annotation
+                  name: (identifier)
+                  arguments: (annotation_argument_list
+                    (decimal_integer_literal)))
+                (type_identifier)
+                (this))
+              (formal_parameter
+                type: (integral_type)
+                name: (identifier)))
+            body: (block))
+          (method_declaration
+            type: (void_type)
+            name: (identifier)
+            parameters: (formal_parameters
+              (receiver_parameter
+                (marker_annotation
+                  name: (identifier))
+                (scoped_type_identifier
+                  (type_identifier)
+                  (type_identifier))
+                (this)))
+            body: (block))
+          (constructor_declaration
+            name: (identifier)
+            parameters: (formal_parameters
+              (receiver_parameter
+                (marker_annotation
+                  name: (identifier))
+                (type_identifier)
+                (identifier)
+                (this)))
+            body: (constructor_body)))))))
+
+================================================================================
 throws
 ================================================================================
 
