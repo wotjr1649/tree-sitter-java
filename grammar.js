@@ -171,14 +171,18 @@ module.exports = grammar({
 
     false: _ => 'false',
 
-    character_literal: _ => token(seq(
-      '\'',
-      repeat1(choice(
-        /[^\\'\n]/,
-        /\\./,
-        /\\\n/,
-      )),
-      '\'',
+    character_literal: _ => token(choice(
+      seq(
+        '\'',
+        repeat1(choice(
+          /[^\\'\n\x00]/,
+          /\\./,
+          /\\\n/,
+        )),
+        '\'',
+      ),
+      // Exactly one raw NUL. A NUL in the repeat above would also accept '<NUL><NUL>' and '<NUL>a', which javac rejects.
+      '\'\x00\'',
     )),
 
     string_literal: $ => choice($._string_literal, $._multiline_string_literal),
@@ -204,10 +208,12 @@ module.exports = grammar({
     // We give names to the token() constructs containing a regexp
     // so as to obtain a node in the CST.
 
-    string_fragment: _ => token.immediate(prec(1, /[^"\\]+/)),
+    // The generator renders a negated class like [^"\\] without NUL. `([^"\\]|\x00)` merges back into one such class,
+    // so NUL needs its own transition: `([^"\\]+|\x00)`. The same holds for the multiline fragment and char literal.
+    string_fragment: _ => token.immediate(prec(1, /([^"\\]+|\x00)+/)),
     _multiline_string_fragment: _ => choice(
-      /[^"\\]+/,
-      /"([^"\\]|\\")*/,
+      /([^"\\]+|\x00)+/,
+      /"([^"\\]+|\x00|\\")*/,
     ),
 
     string_interpolation: $ => seq(
