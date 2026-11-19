@@ -846,9 +846,9 @@ invalid method call on a 0o literal with two underscores: 0o1__7.foo()
       (identifier)
       (argument_list))))
 
-=======================================================================================
-invalid hex float without an exponent and two underscores in the integer part: 0x1__F.8
-=======================================================================================
+===============================================================================================
+hex float without an exponent, two underscores in the integer part (javac rejects it): 0x1__F.8
+===============================================================================================
 
 0x1__F.8;
 
@@ -856,15 +856,41 @@ invalid hex float without an exponent and two underscores in the integer part: 0
 
 (program
   (expression_statement
-    (hex_integer_literal)
-    (ERROR
-      (decimal_integer_literal))))
+    (hex_floating_point_literal)))
 
-==================================================================================
-invalid hex float without an exponent and two underscores in the fraction: 0x.8__8
-==================================================================================
+==========================================================================================
+hex float without an exponent, two underscores in the fraction (javac rejects it): 0x.8__8
+==========================================================================================
 
 0x.8__8;
+
+---
+
+(program
+  (expression_statement
+    (hex_floating_point_literal)))
+
+======================================================================================
+invalid call on a hex literal with two underscores and an attached point: 0x1__F.foo()
+======================================================================================
+
+0x1__F.foo();
+
+---
+
+(program
+  (ERROR
+    (hex_floating_point_literal))
+  (expression_statement
+    (method_invocation
+      (identifier)
+      (argument_list))))
+
+===============================================================================================
+invalid field access on a hex literal with two underscores and an attached point: 0x1__F.length
+===============================================================================================
+
+0x1__F.length;
 
 ---
 
@@ -873,3 +899,84 @@ invalid hex float without an exponent and two underscores in the fraction: 0x.8_
     (hex_floating_point_literal)
     (ERROR
       (identifier))))
+
+====================================================================================
+invalid call on a hex literal with one underscore and an attached point: 0x1_F.foo()
+====================================================================================
+
+0x1_F.foo();
+
+---
+
+(program
+  (ERROR
+    (hex_floating_point_literal))
+  (expression_statement
+    (method_invocation
+      (identifier)
+      (argument_list))))
+
+===============================================================
+invalid call on a hex literal and an attached point: 0x1F.foo()
+===============================================================
+
+0x1F.foo();
+
+---
+
+(program
+  (ERROR
+    (hex_floating_point_literal))
+  (expression_statement
+    (method_invocation
+      (identifier)
+      (argument_list))))
+
+=================================================
+hex floats without an exponent that javac rejects
+=================================================
+
+0x1__F.;
+0x1__F.f;
+0x1_F.8;
+0x1_F.;
+
+---
+
+(program
+  (expression_statement
+    (hex_floating_point_literal))
+  (expression_statement
+    (hex_floating_point_literal))
+  (expression_statement
+    (hex_floating_point_literal))
+  (expression_statement
+    (hex_floating_point_literal)))
+
+====================================================================
+calls on hex literals with two underscores without an attached point
+====================================================================
+
+(0x1__F).toString();
+0x1__F .foo();
+0x1__FL.foo();
+
+---
+
+(program
+  (expression_statement
+    (method_invocation
+      (parenthesized_expression
+        (hex_integer_literal))
+      (identifier)
+      (argument_list)))
+  (expression_statement
+    (method_invocation
+      (hex_integer_literal)
+      (identifier)
+      (argument_list)))
+  (expression_statement
+    (method_invocation
+      (hex_integer_literal)
+      (identifier)
+      (argument_list))))

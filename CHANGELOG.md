@@ -13,9 +13,12 @@
   (`0x1p03`, `0x1p0_3`). These inputs used to contain ERROR. Underscores at the start or end of the digits, next to
   the point, a prefix, an exponent marker or a suffix still give ERROR (`1_`, `0x_1`, `1._5`, `1_.5`, `0_x1`, `1e_5`,
   `1_L`), as javac rejects them.
-  Two forms that javac rejects keep the single-underscore rule they had: the non-Java `0o`/`0O` octal prefix (`0o1__7`
-  still gives ERROR) and a hex floating point literal without a `p` exponent (`0x.8__8` still gives ERROR; `0x5.4` and
-  `0x1_F.8` still parse).
+  The non-Java `0o`/`0O` octal prefix keeps the single-underscore rule it had (`0o1__7` still gives ERROR).
+  The grammar keeps parsing hex floating point literals without a `p` exponent, which javac rejects, as it did for
+  `0x5.4` and `0x1_F.8`. They now also take runs of underscores: `0x1__F.8`, `0x.8__8`, `0x1__F.` and `0x1__F.f` parse
+  as one `hex_floating_point_literal` without ERROR. Hex digits directly followed by a point therefore still form
+  such a literal, so `0x1__F.foo()` gives ERROR as `0x1F.foo()` does, while `0x1__F .foo()` and
+  `(0x1__F).toString()` parse as calls.
 - The two entries above change no node kind or field, and `node-types.json` is unchanged. Inputs that parsed without
   errors keep their trees. The pinned example file that failed on `00d` now parses, so `test/examples/failures.txt`
   drops it (9 to 8 paths).

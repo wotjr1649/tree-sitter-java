@@ -1,8 +1,8 @@
 {
   "meta": {
     "api": "com.sun.source.util.JavacTask.parse()",
-    "case_count": 77,
-    "cases_sha256": "123a713927f077e16767b07a983ab3ebae124b6731a7824c990a1adc4d6b42b0",
+    "case_count": 88,
+    "cases_sha256": "824d88d900c0f7542cdf1fa4bd79e84d4186b36dadff2041e1a4915dbeed2970",
     "java.runtime.version": "25.0.5+8-LTS",
     "java.vendor": "Eclipse Adoptium",
     "options": ["--release", "25", "-proc:none"],
@@ -88,6 +88,17 @@
     "k6/x27-0O1__7L": ["compiler.err.expected", "compiler.err.expected"],
     "k6/x28-0o1__7.foo()": ["compiler.err.expected", "compiler.err.expected"],
     "k6/x29-0x1__F.8": ["compiler.err.malformed.fp.lit"],
-    "k6/x30-0x.8__8": ["compiler.err.malformed.fp.lit"]
+    "k6/x30-0x.8__8": ["compiler.err.malformed.fp.lit"],
+    "k6/x31-0x1__F.foo()": ["compiler.err.malformed.fp.lit", "compiler.err.expected"],
+    "k6/x32-0x1__F.": ["compiler.err.malformed.fp.lit"],
+    "k6/x33-0x1__F.length": ["compiler.err.malformed.fp.lit", "compiler.err.expected", "compiler.err.expected"],
+    "k6/x34-0x1__F.f": ["compiler.err.malformed.fp.lit"],
+    "k6/x35-0x1_F.foo()": ["compiler.err.malformed.fp.lit", "compiler.err.expected"],
+    "k6/x36-0x1F.foo()": ["compiler.err.malformed.fp.lit", "compiler.err.expected"],
+    "k6/x37-0x5.4": ["compiler.err.malformed.fp.lit"],
+    "k6/x38-0x1_F.8": ["compiler.err.malformed.fp.lit"],
+    "k6/v48-(0x1__F).toString()": [],
+    "k6/v49-0x1__F-space-.foo()": [],
+    "k6/v50-0x1__FL.foo()": []
   }
 }
