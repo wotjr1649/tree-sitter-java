@@ -2,6 +2,40 @@
 
 ## Unreleased
 
+- Parse decimal floating point literals whose digits start with a zero followed by more digits, such as `00d`,
+  `01d`, `00f`, `01e1` and `08d` (JLS 25 §3.10.2: the digits before an exponent or a type suffix may have leading
+  zeros and are not octal). They used to split into an `octal_integer_literal` or `decimal_integer_literal` and an
+  ERROR. They are now one `decimal_floating_point_literal`, like `0d` and `00.5`. Integer literals such as `00`,
+  `007` and `08` keep their trees.
+- Accept one or more underscores between digits in every numeric literal (JLS 25 §3.10.1-2; tree-sitter-java issue
+  #227): decimal, octal, hex and binary integers (`1__0`, `0_7`, `0__7`, `0x1__F`, `0b1__0`) and decimal and hex
+  floating point literals (`1__0.5`, `1e1__0`, `0x1__F.8p1`). A hex floating point exponent may start with zeros
+  (`0x1p03`, `0x1p0_3`). These inputs used to contain ERROR. Underscores at the start or end of the digits, next to
+  the point, a prefix, an exponent marker or a suffix still give ERROR (`1_`, `0x_1`, `1._5`, `1_.5`, `0_x1`, `1e_5`,
+  `1_L`), as javac rejects them.
+  The non-Java `0o`/`0O` octal prefix keeps the single-underscore rule it had (`0o1__7` still gives ERROR).
+  The grammar keeps parsing hex floating point literals without a `p` exponent, which javac rejects, as it did for
+  `0x5.4` and `0x1_F.8`. They now also take runs of underscores: `0x1__F.8`, `0x.8__8`, `0x1__F.` and `0x1__F.f` parse
+  as one `hex_floating_point_literal` without ERROR. Hex digits directly followed by a point therefore still form
+  such a literal, so `0x1__F.foo()` gives ERROR as `0x1F.foo()` does, while `0x1__F .foo()` and
+  `(0x1__F).toString()` parse as calls.
+  After a digit token that is newly accepted, member access keeps the existing tolerance for keywords as field
+  names, as at v2.1.0: `0x1__F .class` and `1__0 .class` parse as `field_access` like `0x1F .class`, although javac
+  rejects them.
+- The two entries above change no node kind or field, and `node-types.json` is unchanged. Inputs that parsed without
+  errors keep their trees. The pinned example file that failed on `00d` now parses, so `test/examples/failures.txt`
+  drops it (9 to 8 paths).
+- Accept a raw NUL byte (U+0000) inside string literals, text blocks and char literals, as javac's parser does. The
+  generator renders a negated character class such as `[^"\\]` without NUL, so `"a<NUL>b"`, `"""…<NUL>…"""` and
+  `'<NUL>'` used to produce an ERROR. `string_fragment`, `multiline_string_fragment` and `character_literal` now
+  include NUL; no node kind or field changes and a fragment stays one node. Inputs without NUL keep their trees. A char
+  literal accepts exactly one NUL and nothing else (`'<NUL>a'` and `'<NUL><NUL>'` stay ERROR); the grammar still
+  tolerates `'ab'` as before. NUL in a string or text block follows the tolerance the grammar already had without NUL: a
+  raw CR or LF in an ordinary string (also as `\<newline>`), text on the opening line of a text block and an invalid
+  escape sequence such as `\q` parse cleanly with or without a NUL, although javac rejects all three. An unterminated
+  string, text block or char literal that holds a NUL still contains an ERROR. Two pinned example files
+  that failed on this (`MultiValueArrayOrderInlineNullBinaryDocValuesReaderTests.java`,
+  `CsvRecordTokenizerTests.java`) now parse, so `test/examples/failures.txt` drops them (8 to 6 paths).
 - Parse annotations in three more positions (K7). No node kind or field is removed or renamed; `src/node-types.json`
   gains two child types: `catch_type` takes `_type` instead of `_unannotated_type`, and `instanceof_expression` takes
   an optional `modifiers` child.

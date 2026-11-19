@@ -9,9 +9,13 @@
 /// <reference types="tree-sitter-cli/dsl" />
 // @ts-check
 
-const DIGITS = token(choice('0', seq(/[1-9]/, optional(seq(optional('_'), sep1(/[0-9]+/, /_+/))))));
-const DECIMAL_DIGITS = token(sep1(/[0-9]+/, '_'));
-const HEX_DIGITS = token(sep1(/[A-Fa-f0-9]+/, '_'));
+// JLS 25 3.10.1-2: one or more underscores may separate digits (tree-sitter-java issue #227).
+const DIGITS = token(choice('0', seq(/[1-9]/, optional(seq(optional(/_+/), sep1(/[0-9]+/, /_+/))))));
+// JLS Digits: leading zeros allowed; 00d and 0__1e1f are decimal floats, not octal.
+const DECIMAL_DIGITS = token(sep1(/[0-9]+/, /_+/));
+const HEX_DIGITS = token(sep1(/[A-Fa-f0-9]+/, /_+/));
+// Single underscores only: the non-Java 0o/0O octal prefix keeps its base behaviour (javac rejects it).
+const SINGLE_UNDERSCORE_OCTAL = token(sep1(/[0-7]+/, '_'));
 
 /* eslint-disable no-multi-spaces */
 
@@ -135,22 +139,24 @@ module.exports = grammar({
     )),
 
     octal_integer_literal: _ => token(seq(
-      choice('0o', '0O', '0'),
-      sep1(/[0-7]+/, '_'),
+      choice(
+        seq(choice('0o', '0O'), SINGLE_UNDERSCORE_OCTAL),
+        seq('0', optional(/_+/), sep1(/[0-7]+/, /_+/)),
+      ),
       optional(choice('l', 'L')),
     )),
 
     binary_integer_literal: _ => token(seq(
       choice('0b', '0B'),
-      sep1(/[01]+/, '_'),
+      sep1(/[01]+/, /_+/),
       optional(choice('l', 'L')),
     )),
 
     decimal_floating_point_literal: _ => token(choice(
       seq(DECIMAL_DIGITS, '.', optional(DECIMAL_DIGITS), optional(seq((/[eE]/), optional(choice('-', '+')), DECIMAL_DIGITS)), optional(/[fFdD]/)),
       seq('.', DECIMAL_DIGITS, optional(seq((/[eE]/), optional(choice('-', '+')), DECIMAL_DIGITS)), optional(/[fFdD]/)),
-      seq(DIGITS, /[eE]/, optional(choice('-', '+')), DECIMAL_DIGITS, optional(/[fFdD]/)),
-      seq(DIGITS, optional(seq((/[eE]/), optional(choice('-', '+')), DECIMAL_DIGITS)), (/[fFdD]/)),
+      seq(DECIMAL_DIGITS, /[eE]/, optional(choice('-', '+')), DECIMAL_DIGITS, optional(/[fFdD]/)),
+      seq(DECIMAL_DIGITS, optional(seq((/[eE]/), optional(choice('-', '+')), DECIMAL_DIGITS)), (/[fFdD]/)),
     )),
 
     hex_floating_point_literal: _ => token(seq(
@@ -162,7 +168,7 @@ module.exports = grammar({
       optional(seq(
         /[pP]/,
         optional(choice('-', '+')),
-        DIGITS,
+        DECIMAL_DIGITS,
         optional(/[fFdD]/),
       )),
     )),
@@ -171,14 +177,18 @@ module.exports = grammar({
 
     false: _ => 'false',
 
-    character_literal: _ => token(seq(
-      '\'',
-      repeat1(choice(
-        /[^\\'\n]/,
-        /\\./,
-        /\\\n/,
-      )),
-      '\'',
+    character_literal: _ => token(choice(
+      seq(
+        '\'',
+        repeat1(choice(
+          /[^\\'\n\x00]/,
+          /\\./,
+          /\\\n/,
+        )),
+        '\'',
+      ),
+      // Exactly one raw NUL. A NUL in the repeat above would also accept '<NUL><NUL>' and '<NUL>a', which javac rejects.
+      '\'\x00\'',
     )),
 
     string_literal: $ => choice($._string_literal, $._multiline_string_literal),
@@ -204,10 +214,12 @@ module.exports = grammar({
     // We give names to the token() constructs containing a regexp
     // so as to obtain a node in the CST.
 
-    string_fragment: _ => token.immediate(prec(1, /[^"\\]+/)),
+    // The generator renders a negated class like [^"\\] without NUL. `([^"\\]|\x00)` merges back into one such class,
+    // so NUL needs its own transition: `([^"\\]+|\x00)`. The same holds for the multiline fragment and char literal.
+    string_fragment: _ => token.immediate(prec(1, /([^"\\]+|\x00)+/)),
     _multiline_string_fragment: _ => choice(
-      /[^"\\]+/,
-      /"([^"\\]|\\")*/,
+      /([^"\\]+|\x00)+/,
+      /"([^"\\]+|\x00|\\")*/,
     ),
 
     string_interpolation: $ => seq(

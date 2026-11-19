@@ -24,8 +24,13 @@ MIT), `probes` (written in this task: a `this(...)` probe for K2 and adjacent in
 statements before `super(...)`/`this(...)` of the K2 fix), `k3` (valid and adjacent invalid `case null, default`
 inputs of the K3 fix), `k4` (valid and adjacent invalid qualified record patterns and `final` or annotated type
 patterns of the K4 fix), `k5` (valid and adjacent invalid variable arity parameters with annotations before
-`...` of the K5 fix) and `k7` (valid and adjacent invalid annotated multi-catch alternatives, annotated receiver
-parameters and `instanceof` type patterns with annotations before `final` of the K7 fix). Every
+`...` of the K5 fix), `k6` (valid and adjacent invalid numeric literals of the K6 fix: decimal floating point
+literals with leading zeros such as `00d`, underscores between digits such as `1__0` and `0_7`, and hex floating
+point exponents with leading zeros such as `0x1p03`), `k7` (valid and adjacent invalid annotated multi-catch
+alternatives, annotated receiver parameters and `instanceof` type patterns with annotations before `final` of the K7
+fix) and `k8` (a raw NUL byte inside string literals, text blocks
+and char literals, with adjacent unterminated literals, of the K8 fix, plus the probes of the PR #19 review: raw NUL
+next to CR, LF, line continuations and text block delimiters, with NUL-free controls). Every
 case names its origin in `provenance`: the bundle path with its `SHA256SUMS` hash, the PR, or "written in this task".
 IDs are prefixed with the set name. To add a case, append a line, hash its `source` (SHA-256 of the UTF-8 bytes; the
 replay prints the actual hash when it differs), then regenerate that set's verdicts.
