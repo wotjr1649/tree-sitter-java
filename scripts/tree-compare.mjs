@@ -5,7 +5,7 @@
 // first differing node in document order (kind, field, range, parent kinds), enough to map a change to a fix.
 //
 // Usage: node scripts/tree-compare.mjs --base <base.node> --head <head.node> --list <paths file> [--root <dir>]
-//          [--json] [--jobs 1..4] [--batch 1..500, default 100] [--max-rss-mb 2048]
+//          [--json] [--jobs 1..3] [--batch 1..500, default 100] [--max-rss-mb 2048]
 //        node scripts/tree-compare.mjs --self-test
 // A build is a compiled grammar binding (build/Release/tree_sitter_java_binding.node, see oracle/README.md); the
 // tree-sitter Node module is the runtime for both. Offsets are the Node binding's `startIndex`/`endIndex`
@@ -264,10 +264,10 @@ async function main() {
     return v;
   };
   if (positionals.length || !values.base || !values.head || !values.list)
-    throw new Inconsistent('usage: tree-compare.mjs --base <base.node> --head <head.node> --list <paths file> [--root <dir>] [--json] [--jobs 1-4] [--batch 1-500] [--max-rss-mb N]');
+    throw new Inconsistent('usage: tree-compare.mjs --base <base.node> --head <head.node> --list <paths file> [--root <dir>] [--json] [--jobs 1-3] [--batch 1-500] [--max-rss-mb N]');
   const { summary, changed } = await compare({
     base: values.base, head: values.head, list: values.list, root: values.root,
-    jobs: num('jobs', 1, 4), batch: num('batch', 1, 500), maxRssMb: num('max-rss-mb', 64, 2048),
+    jobs: num('jobs', 1, 3), batch: num('batch', 1, 500), maxRssMb: num('max-rss-mb', 64, 2048),
   });
   if (values.json) console.log(JSON.stringify({ summary, changed }, null, 2));
   else {

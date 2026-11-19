@@ -131,7 +131,7 @@ a summary (`files`, `same`, `changed`, `base_error`, `head_error`, peak child me
 differing node with its parents. Exit 0: no change, 1: changes, 2: bad input or infrastructure error. `--self-test`
 runs the built-in checks. Use it instead of a one-off comparison script: it runs 100 files per child process by default
 (`--batch`), caps a child at `--max-old-space-size=1024` and stops it at 2 GB resident (`--max-rss-mb`), and starts at
-most 4 children (`--jobs`). The Node binding frees trees only when V8 collects them, which is why an unbatched loop
+most 3 children (`--jobs`, the shared-machine thread limit). The Node binding frees trees only when V8 collects them, which is why an unbatched loop
 once reached 21 GB.
 
 ## Windows
