@@ -168,7 +168,7 @@ module.exports = grammar({
     character_literal: _ => token(seq(
       '\'',
       repeat1(choice(
-        /[^\\'\n]/,
+        /[^\\'\n]+|\x00/,
         /\\./,
         /\\\n/,
       )),
@@ -198,10 +198,12 @@ module.exports = grammar({
     // We give names to the token() constructs containing a regexp
     // so as to obtain a node in the CST.
 
-    string_fragment: _ => token.immediate(prec(1, /[^"\\]+/)),
+    // The generator renders a negated class like [^"\\] without NUL. `([^"\\]|\x00)` merges back into one such class,
+    // so NUL needs its own transition: `([^"\\]+|\x00)`. The same holds for the multiline fragment and char literal.
+    string_fragment: _ => token.immediate(prec(1, /([^"\\]+|\x00)+/)),
     _multiline_string_fragment: _ => choice(
-      /[^"\\]+/,
-      /"([^"\\]|\\")*/,
+      /([^"\\]+|\x00)+/,
+      /"([^"\\]+|\x00|\\")*/,
     ),
 
     string_interpolation: $ => seq(

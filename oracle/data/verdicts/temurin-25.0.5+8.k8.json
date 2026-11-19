@@ -1,0 +1,27 @@
+{
+  "meta": {
+    "api": "com.sun.source.util.JavacTask.parse()",
+    "case_count": 11,
+    "cases_sha256": "22d51e63f3377393cc7fd9cd03a3b8b0b4118e33d562e2971f7589b3cc48b391",
+    "java.runtime.version": "25.0.5+8-LTS",
+    "java.vendor": "Eclipse Adoptium",
+    "options": ["--release", "25", "-proc:none"],
+    "preview": false,
+    "release": "25",
+    "runner_sha256": "c45e32e314b98ccb46481c4db18aa25173ca9b2fe46e45888f0a743ceb6c70ee",
+    "source_encoding": "UTF-8"
+  },
+  "verdicts": {
+    "k8/v01-string": [],
+    "k8/v02-string-only-nul": [],
+    "k8/v03-string-edges": [],
+    "k8/v04-string-escapes": [],
+    "k8/v05-text-block": [],
+    "k8/v06-text-block-quotes": [],
+    "k8/v07-char": [],
+    "k8/x01-unterminated-string": ["compiler.err.unclosed.str.lit"],
+    "k8/x02-unterminated-text-block": ["compiler.err.unclosed.text.block"],
+    "k8/x03-two-nuls-char": ["compiler.err.unclosed.char.lit", "compiler.err.illegal.char", "compiler.err.premature.eof"],
+    "k8/x04-unterminated-char": ["compiler.err.unclosed.char.lit"]
+  }
+}

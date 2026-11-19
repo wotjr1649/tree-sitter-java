@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased
+
+- Accept a raw NUL byte (U+0000) inside string literals, text blocks and char literals, as javac's parser does. The
+  generator renders a negated character class such as `[^"\\]` without NUL, so `"a<NUL>b"`, `"""…<NUL>…"""` and
+  `'<NUL>'` used to produce an ERROR. `string_fragment`, `multiline_string_fragment` and `character_literal` now
+  include NUL; no node kind or field changes and a fragment stays one node. Inputs without NUL keep their trees. An
+  unterminated string, text block or char literal that holds a NUL still contains an ERROR. Two pinned example files
+  that failed on this (`MultiValueArrayOrderInlineNullBinaryDocValuesReaderTests.java`,
+  `CsvRecordTokenizerTests.java`) now parse, so `test/examples/failures.txt` drops them (9 to 7 paths).
+
 ## 2.1.0
 
 More Java 25 syntax fixes found through the javac oracle and the pinned examples (K4, K5). Node kinds and field
