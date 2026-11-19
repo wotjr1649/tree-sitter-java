@@ -19,6 +19,9 @@
   as one `hex_floating_point_literal` without ERROR. Hex digits directly followed by a point therefore still form
   such a literal, so `0x1__F.foo()` gives ERROR as `0x1F.foo()` does, while `0x1__F .foo()` and
   `(0x1__F).toString()` parse as calls.
+  After a digit token that is newly accepted, member access keeps the existing tolerance for keywords as field
+  names, as at v2.1.0: `0x1__F .class` and `1__0 .class` parse as `field_access` like `0x1F .class`, although javac
+  rejects them.
 - The two entries above change no node kind or field, and `node-types.json` is unchanged. Inputs that parsed without
   errors keep their trees. The pinned example file that failed on `00d` now parses, so `test/examples/failures.txt`
   drops it (9 to 8 paths).

@@ -980,3 +980,101 @@ calls on hex literals with two underscores without an attached point
       (hex_integer_literal)
       (identifier)
       (argument_list))))
+
+=================================================================================
+keywords as field names after literals that K6 newly accepts (javac rejects them)
+=================================================================================
+
+0x1__F .class;
+0x1__F .if;
+0x1__F .this;
+0b1__0 .class;
+0__7 .class;
+1__0 .class;
+0_7 .class;
+
+---
+
+(program
+  (expression_statement
+    (field_access
+      (hex_integer_literal)
+      (identifier)))
+  (expression_statement
+    (field_access
+      (hex_integer_literal)
+      (identifier)))
+  (expression_statement
+    (field_access
+      (hex_integer_literal)
+      (this)))
+  (expression_statement
+    (field_access
+      (binary_integer_literal)
+      (identifier)))
+  (expression_statement
+    (field_access
+      (octal_integer_literal)
+      (identifier)))
+  (expression_statement
+    (field_access
+      (decimal_integer_literal)
+      (identifier)))
+  (expression_statement
+    (field_access
+      (octal_integer_literal)
+      (identifier))))
+
+====================================================================================================
+keywords as field names after literals that v2.1.0 accepts (javac rejects them, parsed since v2.1.0)
+====================================================================================================
+
+0x1F .class;
+0x1_F .class;
+0x1_F .if;
+0x1_F .this;
+0b10 .class;
+0b1_0 .class;
+07 .class;
+10 .class;
+1_0 .class;
+
+---
+
+(program
+  (expression_statement
+    (field_access
+      (hex_integer_literal)
+      (identifier)))
+  (expression_statement
+    (field_access
+      (hex_integer_literal)
+      (identifier)))
+  (expression_statement
+    (field_access
+      (hex_integer_literal)
+      (identifier)))
+  (expression_statement
+    (field_access
+      (hex_integer_literal)
+      (this)))
+  (expression_statement
+    (field_access
+      (binary_integer_literal)
+      (identifier)))
+  (expression_statement
+    (field_access
+      (binary_integer_literal)
+      (identifier)))
+  (expression_statement
+    (field_access
+      (octal_integer_literal)
+      (identifier)))
+  (expression_statement
+    (field_access
+      (decimal_integer_literal)
+      (identifier)))
+  (expression_statement
+    (field_access
+      (decimal_integer_literal)
+      (identifier))))
