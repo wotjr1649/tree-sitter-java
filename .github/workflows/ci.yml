@@ -35,14 +35,6 @@ jobs:
           git diff --exit-code -- src
           parser_abi=$(sed -n 's/^#define LANGUAGE_VERSION //p' src/parser.c)
           test "$parser_abi" = "$(sed -n 's/^set(TREE_SITTER_ABI_VERSION \([0-9]*\) CACHE .*/\1/p' CMakeLists.txt)"
-      - name: Set up examples
-        run: |-
-          git clone https://github.com/elastic/elasticsearch examples/elasticsearch --single-branch --depth=1 --filter=blob:none
-          git clone https://github.com/google/guava examples/guava --single-branch --depth=1 --filter=blob:none
-          git clone https://github.com/ReactiveX/RxJava examples/RxJava --single-branch --depth=1 --filter=blob:none
-          git clone https://github.com/apache/flink examples/flink --single-branch --depth=1 --filter=blob:none
-          git clone https://github.com/apache/logging-log4j2 examples/log4j2 --single-branch --depth=1 --filter=blob:none
-          git clone https://github.com/apache/cassandra examples/cassandra --single-branch --depth=1 --filter=blob:none
       - name: Run tests
         uses: tree-sitter/parser-test-action@v2
         env:
@@ -55,16 +47,67 @@ jobs:
           test-go: true
           go-version: "1.23.x"
           test-swift: true
+
+  examples:
+    name: Parse examples
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+      - name: Set up tree-sitter
+        uses: tree-sitter/setup-action/cli@v2
+        with:
+          tree-sitter-ref: v0.27.2
+      # Pinned heads of the default branches, taken 2026-11-19. To move a pin,
+      # change the SHA, run this job and update test/examples/failures.txt.
+      - name: Set up examples
+        shell: bash
+        run: |
+          fetch() {
+            git init -q "examples/$1"
+            git -C "examples/$1" fetch -q --depth=1 --filter=blob:none "https://github.com/$2" "$3"
+            git -C "examples/$1" checkout -q --detach FETCH_HEAD
+          }
+          fetch elasticsearch elastic/elasticsearch fad3d94329d6857092b576a393795d8aa619aff2
+          fetch guava google/guava 1dfc2cbc4c3db95d135525aee1d4243c966fdb7e
+          fetch RxJava ReactiveX/RxJava ca68c460f34b4591cec3a69ba67872f5040ef346
+          fetch flink apache/flink cc91df476a0b39ae7d6eb50eb8cf96f1dbad2b47
+          fetch log4j2 apache/logging-log4j2 572cd83040450763a673ea749ad0c960563eeec9
+          fetch cassandra apache/cassandra 53c3561e9db3fa0b1ed8e29ce462fde6ce566ff0
+      # The CLI exits 1 for syntax errors and for read errors alike, so the exit code
+      # cannot tell a complete run from an aborted one. Only a final summary that lists
+      # exactly the inputs counts as complete; anything else fails the job here.
       - name: Parse examples
         id: examples
-        continue-on-error: true
-        uses: tree-sitter/parse-action@v5
-        with:
-          files: examples/**/*.java
+        shell: bash
+        run: |
+          find examples -type f -name '*.java' | LC_ALL=C sort > "$RUNNER_TEMP/inputs.txt"
+          test -s "$RUNNER_TEMP/inputs.txt" || { echo "::error::No example inputs found"; exit 1; }
+          status=0
+          tree-sitter parse -q --paths "$RUNNER_TEMP/inputs.txt" --json-summary > "$RUNNER_TEMP/stdout.txt" || status=$?
+          if [ "$status" -gt 1 ]; then
+            echo "::error::tree-sitter parse crashed (exit $status)"
+            exit 1
+          fi
+          # stdout: the error lines, then the JSON summary that starts at a line holding only "{".
+          sed -n '/^{$/,$p' "$RUNNER_TEMP/stdout.txt" > "$RUNNER_TEMP/summary.json"
+          if ! jq -r '.parse_summaries[].file' "$RUNNER_TEMP/summary.json" | LC_ALL=C sort > "$RUNNER_TEMP/parsed.txt" \
+            || ! cmp -s "$RUNNER_TEMP/inputs.txt" "$RUNNER_TEMP/parsed.txt"; then
+            echo "::error::Incomplete parse: the summary is missing or does not list exactly the $(wc -l < "$RUNNER_TEMP/inputs.txt") inputs (tree-sitter exit $status)"
+            exit 1
+          fi
+          jq -r '.parse_summaries[] | select(.successful | not) | .file' "$RUNNER_TEMP/summary.json" | LC_ALL=C sort > "$RUNNER_TEMP/failures.txt"
+          echo "Parsed $(wc -l < "$RUNNER_TEMP/parsed.txt") files, $(wc -l < "$RUNNER_TEMP/failures.txt") failed"
+          delimiter="EOF_$RANDOM$RANDOM$RANDOM"
+          { echo "failures<<$delimiter"; cat "$RUNNER_TEMP/failures.txt"; echo "$delimiter"; } >> "$GITHUB_OUTPUT"
+      - name: Failures equal test/examples/failures.txt
+        shell: bash
+        # "<" is a baseline entry that now parses, ">" is a new failure.
+        run: diff -u test/examples/failures.txt "$RUNNER_TEMP/failures.txt"
       - uses: actions/upload-artifact@v7
-        if: steps.examples.outputs.failures != ''
+        if: ${{ !cancelled() && steps.examples.outputs.failures != '' }}
         with:
-          name: failures-${{matrix.os}}
+          name: failures
           path: ${{steps.examples.outputs.failures}}
 
   oracle-replay:
