@@ -1,7 +1,16 @@
 # Changelog
 
-## Unreleased
+## 2.1.0
 
+More Java 25 syntax fixes found through the javac oracle and the pinned examples (K4, K5). Node kinds and field
+names are unchanged; `node-types.json` only gains child types (K4). Some trees change, as described below.
+
+- CI parses the six example repositories once on Ubuntu at pinned commits and fails when the failing paths differ
+  from `test/examples/failures.txt` (a new failure or a baseline entry that now parses). It replaced the unpinned,
+  non-blocking example step on all three OS (#13).
+- Add `scripts/tree-compare.mjs`, a full-tree comparison of two parser builds over a file list that runs in batches
+  of 100 files per child process by default (at most 500) with a memory cap that the child checks after every file and
+  the parent watches while the child runs (`oracle/README.md`). No grammar or parser change.
 - Parse qualified record patterns and `final` or annotated type patterns (K4, JLS 25 §14.30.1). A `record_pattern`
   may now name its type with a `scoped_type_identifier` (`o instanceof a.b.R(int x)`, `case Outer.Box(Outer.Point(var
   x, var y))`). A `type_pattern` in a `case` label and a `record_pattern_component` take an optional `modifiers` child
@@ -44,6 +53,14 @@
 - The two entries above change no node kind or field, and `node-types.json` is unchanged. Inputs that parsed without
   errors keep their trees. The pinned example file that failed on `00d` now parses, so `test/examples/failures.txt`
   drops it (9 to 8 paths).
+
+- Set `tree-sitter.json` `metadata.version` and the package manifests to 2.1.0 (the generated `parser.c` embeds it).
+- Known limitations:
+  - A raw NUL byte (U+0000) inside a string literal makes the literal fail to parse (2 pinned example files): the
+    current string rules exclude NUL, as the tree-sitter generator 0.27.2 renders negated character classes without
+    it. An explicit NUL alternative in the grammar fixes this; it is planned for the next release.
+  - The pinned examples baseline now holds 9 paths: 6 Maven archetype templates (`package ${package};`, which javac
+    also rejects), 2 files with a raw NUL in a string, and 1 file with `00d`; the last three are planned for the next release.
 
 ## 2.0.0
 
