@@ -420,3 +420,120 @@ class A {
                   (switch_label)
                   (expression_statement
                     (decimal_integer_literal)))))))))))
+
+================================================================================
+Constant subtraction non-sealed as a case label
+================================================================================
+
+class T {
+  static final int non = 2, sealed = 1;
+  static int f(int x) {
+    return switch (x) {
+      case non-sealed -> 1;
+      default -> 0;
+    };
+  }
+  static int g(int x) {
+    switch (x) {
+      case non-sealed: return 1;
+      default: return 0;
+    }
+  }
+  static int h(int x) {
+    return switch (x) {
+      case non-sealed, 0 -> 1;
+      default -> 0;
+    };
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (field_declaration
+        (modifiers)
+        type: (integral_type)
+        declarator: (variable_declarator
+          name: (identifier)
+          value: (decimal_integer_literal))
+        declarator: (variable_declarator
+          name: (identifier)
+          value: (decimal_integer_literal)))
+      (method_declaration
+        (modifiers)
+        type: (integral_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (integral_type)
+            name: (identifier)))
+        body: (block
+          (return_statement
+            (switch_expression
+              condition: (parenthesized_expression
+                (identifier))
+              body: (switch_block
+                (switch_rule
+                  (switch_label
+                    (binary_expression
+                      left: (identifier)
+                      right: (identifier)))
+                  (expression_statement
+                    (decimal_integer_literal)))
+                (switch_rule
+                  (switch_label)
+                  (expression_statement
+                    (decimal_integer_literal))))))))
+      (method_declaration
+        (modifiers)
+        type: (integral_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (integral_type)
+            name: (identifier)))
+        body: (block
+          (switch_expression
+            condition: (parenthesized_expression
+              (identifier))
+            body: (switch_block
+              (switch_block_statement_group
+                (switch_label
+                  (binary_expression
+                    left: (identifier)
+                    right: (identifier)))
+                (return_statement
+                  (decimal_integer_literal)))
+              (switch_block_statement_group
+                (switch_label)
+                (return_statement
+                  (decimal_integer_literal)))))))
+      (method_declaration
+        (modifiers)
+        type: (integral_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (integral_type)
+            name: (identifier)))
+        body: (block
+          (return_statement
+            (switch_expression
+              condition: (parenthesized_expression
+                (identifier))
+              body: (switch_block
+                (switch_rule
+                  (switch_label
+                    (binary_expression
+                      left: (identifier)
+                      right: (identifier))
+                    (decimal_integer_literal))
+                  (expression_statement
+                    (decimal_integer_literal)))
+                (switch_rule
+                  (switch_label)
+                  (expression_statement
+                    (decimal_integer_literal)))))))))))

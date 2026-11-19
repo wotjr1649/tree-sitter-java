@@ -1,8 +1,8 @@
 {
   "meta": {
     "api": "com.sun.source.util.JavacTask.parse()",
-    "case_count": 21,
-    "cases_sha256": "d97993049a87da7c6f0c8b4457a8c5975c8d7b6b6a9708165a12378ea1344684",
+    "case_count": 24,
+    "cases_sha256": "15f02f7b195166938d0a9cddbd7deee3f1b0f5402df1974554d50c9427fdc9d5",
     "java.runtime.version": "25.0.5+8-LTS",
     "java.vendor": "Eclipse Adoptium",
     "options": ["--release", "25", "-proc:none"],
@@ -26,6 +26,9 @@
     "k4/v12-instanceof-final": [],
     "k4/v13-switch-qualified-enum": [],
     "k4/v14-switch-method-call-label": [],
+    "k4/v15-switch-non-sealed-subtraction": [],
+    "k4/v16-switch-non-sealed-colon": [],
+    "k4/v17-switch-non-sealed-before-comma": [],
     "k4/x01-qualified-unclosed": ["compiler.err.expected"],
     "k4/x02-qualified-empty-name": ["compiler.err.expected"],
     "k4/x03-final-without-type": ["compiler.err.expected"],

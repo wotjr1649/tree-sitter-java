@@ -87,6 +87,8 @@ module.exports = grammar({
     [$.inferred_parameters, $.primary_expression],
     [$.argument_list, $.record_pattern_body],
     [$.yield_statement, $._reserved_identifier],
+    // `case @A ...`: pattern modifiers or an annotated type, as for `modifiers` above
+    [$.type_pattern, $.annotated_type],
   ],
 
   word: $ => $.identifier,
@@ -522,14 +524,16 @@ module.exports = grammar({
       $.record_pattern,
     ),
     // TypePattern is a LocalVariableDeclaration (JLS 25 §14.30.1), so it takes final and annotations as modifiers
-    type_pattern: $ => seq(optional($.modifiers), $._unannotated_type, choice($.identifier, $._reserved_identifier)),
+    type_pattern: $ => seq(optional(alias($._pattern_modifiers, $.modifiers)), $._unannotated_type, choice($.identifier, $._reserved_identifier)),
+    // Only VariableModifier (JLS 25 §4.12.4): other modifier keywords such as `non-sealed` would split `case non-sealed ->`
+    _pattern_modifiers: $ => repeat1(choice('final', $._annotation)),
     // RecordPattern: ReferenceType ( ... ), so the type may be qualified (JLS 25 §14.30.1)
     record_pattern: $ => seq(choice($.identifier, $._reserved_identifier, $.scoped_type_identifier, $.generic_type), $.record_pattern_body),
     record_pattern_body: $ => seq('(', commaSep(choice($.record_pattern_component, $.record_pattern)), ')'),
     record_pattern_component: $ => choice(
       $.underscore_pattern,
       seq(
-        optional($.modifiers),
+        optional(alias($._pattern_modifiers, $.modifiers)),
         $._unannotated_type,
         choice($.identifier, $._reserved_identifier),
       ),
