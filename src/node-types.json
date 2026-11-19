@@ -3126,6 +3126,10 @@
         {
           "type": "record_pattern_body",
           "named": true
+        },
+        {
+          "type": "scoped_type_identifier",
+          "named": true
         }
       ]
     }
@@ -3163,6 +3167,10 @@
         },
         {
           "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "modifiers",
           "named": true
         },
         {
@@ -3891,6 +3899,10 @@
         },
         {
           "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "modifiers",
           "named": true
         }
       ]

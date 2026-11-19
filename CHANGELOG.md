@@ -1,5 +1,25 @@
 # Changelog
 
+## Unreleased
+
+- Parse qualified record patterns and `final` or annotated type patterns (K4, JLS 25 §14.30.1). A `record_pattern`
+  may now name its type with a `scoped_type_identifier` (`o instanceof a.b.R(int x)`, `case Outer.Box(Outer.Point(var
+  x, var y))`). A `type_pattern` in a `case` label and a `record_pattern_component` take an optional `modifiers` child
+  holding only `final` and annotations, the variable modifiers that JLS 25 §4.12.4 allows there (`case final String
+  s`, `case @A final a.b.C c`, `R(final var x, @A String s)`). No node kind or field is removed or renamed. `src/node-types.json` gains three
+  child types: `scoped_type_identifier` under `record_pattern`, and `modifiers` under `type_pattern` and
+  `record_pattern_component`. Inputs that parsed without errors keep their trees, with one exception: a qualified record
+  pattern with an empty component list or only `_`, such as `case T.R() -> 1;` or `case T.R(_) -> 1;`, used to
+  parse cleanly as a `method_invocation` and is now a `pattern` holding a `record_pattern`, as javac's parser reads
+  it. The call captures on them go away: `@function.method` in `queries/highlights.scm` and `@reference.call`
+  in `queries/tags.scm`; `T` and `R` are captured as `@type` instead. Inputs with these patterns that used to contain ERROR or MISSING now parse cleanly. `instanceof final T x` keeps its anonymous `final` token. Other
+  modifier keywords are not accepted there (`case static String s` contains ERROR, as before), so a constant
+  subtraction such as `case non-sealed -> 1` keeps its `binary_expression` tree. Two invalid
+  inputs that used to parse cleanly by reading `final` as a type name, `case final s` and `case final String`, now
+  contain MISSING. The expected-failure set is now empty. The 13 pinned example files that failed on qualified
+  record patterns now parse, so `test/examples/failures.txt` drops them (36 to 23 paths). Upstream tree-sitter-java issue #229 and PRs #230 (by
+  DragonAxe), #231 (by akd-devvine) and #232 (by mihailkirov) proposed the same two changes.
+
 ## 2.0.0
 
 First release with the owner's grammar fixes: Java 25 syntax (K1-K3). The 1.x line is the upstream v0.23.5

@@ -3737,6 +3737,23 @@
       "type": "SEQ",
       "members": [
         {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "ALIAS",
+              "content": {
+                "type": "SYMBOL",
+                "name": "_pattern_modifiers"
+              },
+              "named": true,
+              "value": "modifiers"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
           "type": "SYMBOL",
           "name": "_unannotated_type"
         },
@@ -3755,6 +3772,22 @@
         }
       ]
     },
+    "_pattern_modifiers": {
+      "type": "REPEAT1",
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "STRING",
+            "value": "final"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "_annotation"
+          }
+        ]
+      }
+    },
     "record_pattern": {
       "type": "SEQ",
       "members": [
@@ -3768,6 +3801,10 @@
             {
               "type": "SYMBOL",
               "name": "_reserved_identifier"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "scoped_type_identifier"
             },
             {
               "type": "SYMBOL",
@@ -3855,6 +3892,23 @@
         {
           "type": "SEQ",
           "members": [
+            {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "ALIAS",
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "_pattern_modifiers"
+                  },
+                  "named": true,
+                  "value": "modifiers"
+                },
+                {
+                  "type": "BLANK"
+                }
+              ]
+            },
             {
               "type": "SYMBOL",
               "name": "_unannotated_type"
@@ -7884,6 +7938,10 @@
     [
       "yield_statement",
       "_reserved_identifier"
+    ],
+    [
+      "type_pattern",
+      "annotated_type"
     ]
   ],
   "precedences": [],
