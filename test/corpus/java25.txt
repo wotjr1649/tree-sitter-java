@@ -188,3 +188,235 @@ class A {
               right: (binary_expression
                 left: (identifier)
                 right: (decimal_integer_literal)))))))))
+
+================================================================================
+Record patterns with qualified type names
+================================================================================
+
+class A {
+  void f(Object o) {
+    if (o instanceof Shapes.Point(var x, var y)) {}
+    if (o instanceof a.b.R(int x)) {}
+    switch (o) {
+      case a.b.R(var x) -> {}
+      case a.b.R<String>(var x) -> {}
+      case Outer.Box(Outer.Point(var x, var y)) -> {}
+      default -> {}
+    }
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (type_identifier)
+            name: (identifier)))
+        body: (block
+          (if_statement
+            condition: (parenthesized_expression
+              (instanceof_expression
+                left: (identifier)
+                pattern: (record_pattern
+                  (scoped_type_identifier
+                    (type_identifier)
+                    (type_identifier))
+                  (record_pattern_body
+                    (record_pattern_component
+                      (type_identifier)
+                      (identifier))
+                    (record_pattern_component
+                      (type_identifier)
+                      (identifier))))))
+            consequence: (block))
+          (if_statement
+            condition: (parenthesized_expression
+              (instanceof_expression
+                left: (identifier)
+                pattern: (record_pattern
+                  (scoped_type_identifier
+                    (scoped_type_identifier
+                      (type_identifier)
+                      (type_identifier))
+                    (type_identifier))
+                  (record_pattern_body
+                    (record_pattern_component
+                      (integral_type)
+                      (identifier))))))
+            consequence: (block))
+          (switch_expression
+            condition: (parenthesized_expression
+              (identifier))
+            body: (switch_block
+              (switch_rule
+                (switch_label
+                  (pattern
+                    (record_pattern
+                      (scoped_type_identifier
+                        (scoped_type_identifier
+                          (type_identifier)
+                          (type_identifier))
+                        (type_identifier))
+                      (record_pattern_body
+                        (record_pattern_component
+                          (type_identifier)
+                          (identifier))))))
+                (block))
+              (switch_rule
+                (switch_label
+                  (pattern
+                    (record_pattern
+                      (generic_type
+                        (scoped_type_identifier
+                          (scoped_type_identifier
+                            (type_identifier)
+                            (type_identifier))
+                          (type_identifier))
+                        (type_arguments
+                          (type_identifier)))
+                      (record_pattern_body
+                        (record_pattern_component
+                          (type_identifier)
+                          (identifier))))))
+                (block))
+              (switch_rule
+                (switch_label
+                  (pattern
+                    (record_pattern
+                      (scoped_type_identifier
+                        (type_identifier)
+                        (type_identifier))
+                      (record_pattern_body
+                        (record_pattern
+                          (scoped_type_identifier
+                            (type_identifier)
+                            (type_identifier))
+                          (record_pattern_body
+                            (record_pattern_component
+                              (type_identifier)
+                              (identifier))
+                            (record_pattern_component
+                              (type_identifier)
+                              (identifier))))))))
+                (block))
+              (switch_rule
+                (switch_label)
+                (block)))))))))
+
+================================================================================
+Type patterns with final and annotations
+================================================================================
+
+class A {
+  int f(Object o) {
+    if (o instanceof R(final var x, @A String s)) {}
+    return switch (o) {
+      case final String s -> 1;
+      case @A Integer i -> 2;
+      case @A final a.b.C c when c.ok() -> 3;
+      case R(final int x) -> 4;
+      default -> 0;
+    };
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (integral_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (type_identifier)
+            name: (identifier)))
+        body: (block
+          (if_statement
+            condition: (parenthesized_expression
+              (instanceof_expression
+                left: (identifier)
+                pattern: (record_pattern
+                  (identifier)
+                  (record_pattern_body
+                    (record_pattern_component
+                      (modifiers)
+                      (type_identifier)
+                      (identifier))
+                    (record_pattern_component
+                      (modifiers
+                        (marker_annotation
+                          name: (identifier)))
+                      (type_identifier)
+                      (identifier))))))
+            consequence: (block))
+          (return_statement
+            (switch_expression
+              condition: (parenthesized_expression
+                (identifier))
+              body: (switch_block
+                (switch_rule
+                  (switch_label
+                    (pattern
+                      (type_pattern
+                        (modifiers)
+                        (type_identifier)
+                        (identifier))))
+                  (expression_statement
+                    (decimal_integer_literal)))
+                (switch_rule
+                  (switch_label
+                    (pattern
+                      (type_pattern
+                        (modifiers
+                          (marker_annotation
+                            name: (identifier)))
+                        (type_identifier)
+                        (identifier))))
+                  (expression_statement
+                    (decimal_integer_literal)))
+                (switch_rule
+                  (switch_label
+                    (pattern
+                      (type_pattern
+                        (modifiers
+                          (marker_annotation
+                            name: (identifier)))
+                        (scoped_type_identifier
+                          (scoped_type_identifier
+                            (type_identifier)
+                            (type_identifier))
+                          (type_identifier))
+                        (identifier)))
+                    (guard
+                      (method_invocation
+                        object: (identifier)
+                        name: (identifier)
+                        arguments: (argument_list))))
+                  (expression_statement
+                    (decimal_integer_literal)))
+                (switch_rule
+                  (switch_label
+                    (pattern
+                      (record_pattern
+                        (identifier)
+                        (record_pattern_body
+                          (record_pattern_component
+                            (modifiers)
+                            (integral_type)
+                            (identifier))))))
+                  (expression_statement
+                    (decimal_integer_literal)))
+                (switch_rule
+                  (switch_label)
+                  (expression_statement
+                    (decimal_integer_literal)))))))))))

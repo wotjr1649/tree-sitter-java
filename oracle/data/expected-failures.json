@@ -1,6 +1,6 @@
 {
   "rule": "a",
-  "note": "Expected-failure set (oracle/README.md, rule (a)): only cases javac accepts and the base grammar fails. A K pull request deletes its entries. After K3 only the two K4 entries remain, until the owner decides the scope of K4.",
+  "note": "Expected-failure set (oracle/README.md, rule (a)): only cases javac accepts and the base grammar fails. A K pull request deletes its entries. K4 deleted the last two, so the set is empty.",
   "grammar_base": {
     "commit": "a241253570b20a5f83c9dde367a5a50f0116a978",
     "tag": "v1.0.0",
@@ -9,18 +9,5 @@
     "parser_c_sha256": "85977add5c0918e0991c2decf75ad7aa66539811786703653ee9c9f1ed4ef523",
     "grammar_js_sha256": "b89ada7566bda16a8d7a710755c27824d6097e44b8d3b1dafbb749f3c34d13e0"
   },
-  "cases": {
-    "pr233/record-pattern-qualified": {
-      "k": "K4",
-      "sha256": "795f70f91947acdd1bc83a51455d8426692618f7066fc8a7960de540ffeb7cfc",
-      "base_failure": "root hasError; 1 ERROR; 1 MISSING",
-      "base_tree": "(program (class_declaration name: (identifier) body: (class_body (method_declaration type: (void_type) name: (identifier) parameters: (formal_parameters (formal_parameter type: (type_identifier) name: (identifier))) body: (block (if_statement condition: (parenthesized_expression (instanceof_expression left: (identifier) right: (scoped_type_identifier (type_identifier) (type_identifier))) (MISSING \")\")) (ERROR (formal_parameters (formal_parameter type: (type_identifier) name: (identifier)) (formal_parameter type: (type_identifier) name: (identifier)))) consequence: (block)))))))"
-    },
-    "pr233/switch-final-type-pattern": {
-      "k": "K4",
-      "sha256": "3696ef747e268c6724051d828919188aed6a2feebc69a2f11f361a58e5f70dfe",
-      "base_failure": "root hasError; 1 ERROR",
-      "base_tree": "(program (class_declaration name: (identifier) body: (class_body (method_declaration type: (integral_type) name: (identifier) parameters: (formal_parameters (formal_parameter type: (type_identifier) name: (identifier))) body: (block (return_statement (switch_expression condition: (parenthesized_expression (identifier)) body: (switch_block (switch_rule (switch_label (pattern (type_pattern (type_identifier) (identifier)))) (ERROR (identifier)) (expression_statement (decimal_integer_literal))) (switch_rule (switch_label) (expression_statement (decimal_integer_literal)))))))))))"
-    }
-  }
+  "cases": {}
 }

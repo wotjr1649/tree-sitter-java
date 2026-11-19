@@ -521,12 +521,15 @@ module.exports = grammar({
       $.type_pattern,
       $.record_pattern,
     ),
-    type_pattern: $ => seq($._unannotated_type, choice($.identifier, $._reserved_identifier)),
-    record_pattern: $ => seq(choice($.identifier, $._reserved_identifier, $.generic_type), $.record_pattern_body),
+    // TypePattern is a LocalVariableDeclaration (JLS 25 §14.30.1), so it takes final and annotations as modifiers
+    type_pattern: $ => seq(optional($.modifiers), $._unannotated_type, choice($.identifier, $._reserved_identifier)),
+    // RecordPattern: ReferenceType ( ... ), so the type may be qualified (JLS 25 §14.30.1)
+    record_pattern: $ => seq(choice($.identifier, $._reserved_identifier, $.scoped_type_identifier, $.generic_type), $.record_pattern_body),
     record_pattern_body: $ => seq('(', commaSep(choice($.record_pattern_component, $.record_pattern)), ')'),
     record_pattern_component: $ => choice(
       $.underscore_pattern,
       seq(
+        optional($.modifiers),
         $._unannotated_type,
         choice($.identifier, $._reserved_identifier),
       ),
