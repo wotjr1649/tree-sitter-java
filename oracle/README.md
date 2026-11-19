@@ -140,9 +140,6 @@ file and after the last garbage collection of its batch (so a batch of one file 
 every child's resident memory every 500 ms and kills all children when one passes the cap. The Node binding frees trees
 only when V8 collects them, which is why an unbatched loop once reached 21 GB.
 
-The CI `examples` job does not trust its cache: after a restore or a fresh fetch, the step "Verify examples" requires each
-of the six checkouts to sit at its pinned commit, to hold exactly the `.java` files `git ls-files` lists for it, and to have
-none of them modified, before anything is parsed.
 
 ## Windows
 
