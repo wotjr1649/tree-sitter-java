@@ -35,14 +35,6 @@ jobs:
           git diff --exit-code -- src
           parser_abi=$(sed -n 's/^#define LANGUAGE_VERSION //p' src/parser.c)
           test "$parser_abi" = "$(sed -n 's/^set(TREE_SITTER_ABI_VERSION \([0-9]*\) CACHE .*/\1/p' CMakeLists.txt)"
-      - name: Set up examples
-        run: |-
-          git clone https://github.com/elastic/elasticsearch examples/elasticsearch --single-branch --depth=1 --filter=blob:none
-          git clone https://github.com/google/guava examples/guava --single-branch --depth=1 --filter=blob:none
-          git clone https://github.com/ReactiveX/RxJava examples/RxJava --single-branch --depth=1 --filter=blob:none
-          git clone https://github.com/apache/flink examples/flink --single-branch --depth=1 --filter=blob:none
-          git clone https://github.com/apache/logging-log4j2 examples/log4j2 --single-branch --depth=1 --filter=blob:none
-          git clone https://github.com/apache/cassandra examples/cassandra --single-branch --depth=1 --filter=blob:none
       - name: Run tests
         uses: tree-sitter/parser-test-action@v2
         env:
@@ -55,16 +47,57 @@ jobs:
           test-go: true
           go-version: "1.23.x"
           test-swift: true
+
+  examples:
+    name: Parse examples
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+      - name: Set up tree-sitter
+        uses: tree-sitter/setup-action/cli@v2
+        with:
+          tree-sitter-ref: v0.27.2
+      # Pinned heads of the default branches, taken 2026-11-19. To move a pin,
+      # change the SHA, run this job and update test/examples/failures.txt.
+      - name: Set up examples
+        shell: bash
+        run: |
+          fetch() {
+            git init -q "examples/$1"
+            git -C "examples/$1" fetch -q --depth=1 --filter=blob:none "https://github.com/$2" "$3"
+            git -C "examples/$1" checkout -q --detach FETCH_HEAD
+          }
+          fetch elasticsearch elastic/elasticsearch fad3d94329d6857092b576a393795d8aa619aff2
+          fetch guava google/guava 1dfc2cbc4c3db95d135525aee1d4243c966fdb7e
+          fetch RxJava ReactiveX/RxJava ca68c460f34b4591cec3a69ba67872f5040ef346
+          fetch flink apache/flink cc91df476a0b39ae7d6eb50eb8cf96f1dbad2b47
+          fetch log4j2 apache/logging-log4j2 572cd83040450763a673ea749ad0c960563eeec9
+          fetch cassandra apache/cassandra 53c3561e9db3fa0b1ed8e29ce462fde6ce566ff0
+      # continue-on-error lets the comparison below report the difference.
       - name: Parse examples
         id: examples
         continue-on-error: true
         uses: tree-sitter/parse-action@v5
         with:
           files: examples/**/*.java
+      - name: Failures equal test/examples/failures.txt
+        shell: bash
+        env:
+          FAILURES: ${{steps.examples.outputs.failures}}
+          OUTCOME: ${{steps.examples.outcome}}
+        run: |
+          if [ "$OUTCOME" = failure ] && [ -z "$FAILURES" ]; then
+            echo "::error::Parse examples failed without a failure list"
+            exit 1
+          fi
+          printf '%s\n' "$FAILURES" | sed '/^$/d' | LC_ALL=C sort -u > "$RUNNER_TEMP/failures.txt"
+          # "<" is a baseline entry that now parses, ">" is a new failure.
+          diff -u test/examples/failures.txt "$RUNNER_TEMP/failures.txt"
       - uses: actions/upload-artifact@v7
         if: steps.examples.outputs.failures != ''
         with:
-          name: failures-${{matrix.os}}
+          name: failures
           path: ${{steps.examples.outputs.failures}}
 
   oracle-replay:
