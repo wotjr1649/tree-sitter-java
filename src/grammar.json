@@ -7608,6 +7608,13 @@
           "name": "_unannotated_type"
         },
         {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_annotation"
+          }
+        },
+        {
           "type": "STRING",
           "value": "..."
         },

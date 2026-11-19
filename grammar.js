@@ -1255,6 +1255,9 @@ module.exports = grammar({
     spread_parameter: $ => seq(
       optional($.modifiers),
       $._unannotated_type,
+      // JLS 25 §8.4.1: {Annotation} before the ellipsis; the annotations after it are kept for existing trees.
+      // An annotation right after `[]` still starts a dimension (`int @A [] @B ... xs` errs; see CHANGELOG).
+      repeat($._annotation),
       '...',
       repeat($._annotation),
       $.variable_declarator,

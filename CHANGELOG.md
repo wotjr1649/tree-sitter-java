@@ -19,6 +19,17 @@
   contain MISSING. The expected-failure set is now empty. The 13 pinned example files that failed on qualified
   record patterns now parse, so `test/examples/failures.txt` drops them (36 to 23 paths). Upstream tree-sitter-java issue #229 and PRs #230 (by
   DragonAxe), #231 (by akd-devvine) and #232 (by mihailkirov) proposed the same two changes.
+- Parse annotations before the `...` of a variable arity parameter, as in `Object @Nullable ... args` (JLS 25
+  §8.4.1; tree-sitter-java issue #205), in methods, constructors, record components and lambda parameters. The
+  annotations are children of `spread_parameter` before the anonymous `...` token, like the annotations after it.
+  Only `spread_parameter` changes: `dimensions` is as in 2.0.0 and K5 adds no conflict or GLR split, so inputs that
+  parsed without errors keep their trees (an array type with nine annotated dimensions keeps one flat `dimensions`;
+  a corpus case fixes it). No node kind or field changes and `node-types.json` is unchanged. Known limit: an
+  annotation right after an array dimension still starts another dimension, so `int @A [] @B ... xs` and
+  `int @A [] @B @C [] [] @D @E ... r` contain ERROR as in 2.0.0, although javac accepts them; the oracle lists them
+  as expected failures (`k5/v04-after-dimensions`, `k5/v05-many-dimensions`). Annotations after `...`
+  (`int... @Foo x`) are still accepted, although javac rejects them. The 14 pinned example files that failed on
+  annotations before `...` now parse, so `test/examples/failures.txt` drops them (23 to 9 paths).
 
 ## 2.0.0
 
