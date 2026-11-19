@@ -29,7 +29,9 @@
     `o instanceof @A T this`, `void m(@A Inner this, @B Inner this)` and `int this = 1;`. Against the base, the 63,832
     files of the pinned examples and every other corpus and oracle input keep their trees. Still read cleanly although
     javac rejects them: `o instanceof @A final var x`, like `o instanceof final var x` before, because `var` is a
-    valid name in a qualified type.
+    valid name in a qualified type. Likewise `catch (T1 | @A static e)` and `o instanceof @A final T static`, which javac
+    rejects, parse cleanly with `static` read as a type name and as a variable name, as `catch (@A T1 | static e)` and
+    `o instanceof final @A T static` already do at 2.1.0.
 
 ## 2.1.0
 

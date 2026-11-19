@@ -1,8 +1,8 @@
 {
   "meta": {
     "api": "com.sun.source.util.JavacTask.parse()",
-    "case_count": 31,
-    "cases_sha256": "1c85bc6f85f196f21cc5d7a8bba061920d2574b428263678dd820f3ff6715725",
+    "case_count": 36,
+    "cases_sha256": "f6422073cc8ce2f412fee3b6275c9e3c878376ad45dcb54c1ee4798aa81b3686",
     "java.runtime.version": "25.0.5+8-LTS",
     "java.vendor": "Eclipse Adoptium",
     "options": ["--release", "25", "-proc:none"],
@@ -42,6 +42,11 @@
     "k7/ix5-final-var": ["compiler.err.restricted.type.not.allowed.here"],
     "k7/ix6-final-this": ["compiler.err.mod.not.allowed.here", "compiler.err.expected", "compiler.err.not.stmt"],
     "k7/ix3-final-only": ["compiler.err.illegal.start.of.type"],
-    "k7/lx1-lambda-receiver": ["compiler.err.illegal.start.of.expr", "compiler.err.expected"]
+    "k7/lx1-lambda-receiver": ["compiler.err.illegal.start.of.expr", "compiler.err.expected"],
+    "k7/cx6-annotated-static-type": ["compiler.err.illegal.start.of.type", "compiler.err.expected", "compiler.err.class.method.or.field.expected"],
+    "k7/cx7-static-type-control": ["compiler.err.illegal.start.of.type", "compiler.err.expected", "compiler.err.class.method.or.field.expected"],
+    "k7/ix7-final-static-name": ["compiler.err.mod.not.allowed.here", "compiler.err.expected", "compiler.err.illegal.start.of.expr", "compiler.err.illegal.start.of.type", "compiler.err.class.method.or.field.expected"],
+    "k7/ix8-static-name-control": ["compiler.err.mod.not.allowed.here", "compiler.err.expected", "compiler.err.illegal.start.of.expr", "compiler.err.illegal.start.of.type", "compiler.err.class.method.or.field.expected"],
+    "k7/ix9-final-var-control": ["compiler.err.restricted.type.not.allowed.here"]
   }
 }
