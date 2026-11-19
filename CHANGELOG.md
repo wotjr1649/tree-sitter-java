@@ -5,6 +5,9 @@
 More Java 25 syntax fixes found through the javac oracle and the pinned examples (K4, K5). Node kinds and field
 names are unchanged; `node-types.json` only gains child types (K4). Some trees change, as described below.
 
+- CI parses the six example repositories once on Ubuntu at pinned commits and fails when the failing paths differ
+  from `test/examples/failures.txt` (a new failure or a baseline entry that now parses). It replaced the unpinned,
+  non-blocking example step on all three OS (#13).
 - Add `scripts/tree-compare.mjs`, a full-tree comparison of two parser builds over a file list that runs in batches
   of 100 files per child process by default (at most 500) with a memory cap that the child checks after every file and
   the parent watches while the child runs (`oracle/README.md`). No grammar or parser change.
@@ -39,10 +42,11 @@ names are unchanged; `node-types.json` only gains child types (K4). Some trees c
 
 - Set `tree-sitter.json` `metadata.version` and the package manifests to 2.1.0 (the generated `parser.c` embeds it).
 - Known limitations:
-  - A raw NUL byte (U+0000) inside a string literal makes the literal fail to parse. The pinned examples have 2 such
-    files. The tree-sitter generator 0.27.2 excludes NUL from negated character classes, so the grammar cannot fix it.
+  - A raw NUL byte (U+0000) inside a string literal makes the literal fail to parse (2 pinned example files): the
+    current string rules exclude NUL, as the tree-sitter generator 0.27.2 renders negated character classes without
+    it. An explicit NUL alternative in the grammar fixes this; it is planned for the next release.
   - The pinned examples baseline now holds 9 paths: 6 Maven archetype templates (`package ${package};`, which javac
-    also rejects), 2 files with a raw NUL in a string, and 1 file with `00d`, to be fixed in the next release.
+    also rejects), 2 files with a raw NUL in a string, and 1 file with `00d`; the last three are planned for the next release.
 
 ## 2.0.0
 
