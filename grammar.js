@@ -14,6 +14,9 @@ const DIGITS = token(choice('0', seq(/[1-9]/, optional(seq(optional(/_+/), sep1(
 // JLS Digits: leading zeros allowed; 00d and 0__1e1f are decimal floats, not octal.
 const DECIMAL_DIGITS = token(sep1(/[0-9]+/, /_+/));
 const HEX_DIGITS = token(sep1(/[A-Fa-f0-9]+/, /_+/));
+// Single underscores only: the non-Java 0o prefix and hex floats without a p exponent keep their base behaviour (javac rejects both).
+const SINGLE_UNDERSCORE_OCTAL = token(sep1(/[0-7]+/, '_'));
+const SINGLE_UNDERSCORE_HEX = token(sep1(/[A-Fa-f0-9]+/, '_'));
 
 /* eslint-disable no-multi-spaces */
 
@@ -131,8 +134,10 @@ module.exports = grammar({
     )),
 
     octal_integer_literal: _ => token(seq(
-      choice('0o', '0O', seq('0', optional(/_+/))),
-      sep1(/[0-7]+/, /_+/),
+      choice(
+        seq(choice('0o', '0O'), SINGLE_UNDERSCORE_OCTAL),
+        seq('0', optional(/_+/), sep1(/[0-7]+/, /_+/)),
+      ),
       optional(choice('l', 'L')),
     )),
 
@@ -152,15 +157,20 @@ module.exports = grammar({
     hex_floating_point_literal: _ => token(seq(
       choice('0x', '0X'),
       choice(
-        seq(HEX_DIGITS, optional('.')),
-        seq(optional(HEX_DIGITS), '.', HEX_DIGITS),
+        seq(
+          choice(
+            seq(HEX_DIGITS, optional('.')),
+            seq(optional(HEX_DIGITS), '.', HEX_DIGITS),
+          ),
+          /[pP]/,
+          optional(choice('-', '+')),
+          DECIMAL_DIGITS,
+          optional(/[fFdD]/),
+        ),
+        // No exponent: javac rejects it, the base grammar accepts it with single underscores only.
+        seq(SINGLE_UNDERSCORE_HEX, optional('.')),
+        seq(optional(SINGLE_UNDERSCORE_HEX), '.', SINGLE_UNDERSCORE_HEX),
       ),
-      optional(seq(
-        /[pP]/,
-        optional(choice('-', '+')),
-        DECIMAL_DIGITS,
-        optional(/[fFdD]/),
-      )),
     )),
 
     true: _ => 'true',

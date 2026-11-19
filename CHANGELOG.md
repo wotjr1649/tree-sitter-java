@@ -13,6 +13,9 @@
   (`0x1p03`, `0x1p0_3`). These inputs used to contain ERROR. Underscores at the start or end of the digits, next to
   the point, a prefix, an exponent marker or a suffix still give ERROR (`1_`, `0x_1`, `1._5`, `1_.5`, `0_x1`, `1e_5`,
   `1_L`), as javac rejects them.
+  Two forms that javac rejects keep the single-underscore rule they had: the non-Java `0o`/`0O` octal prefix (`0o1__7`
+  still gives ERROR) and a hex floating point literal without a `p` exponent (`0x.8__8` still gives ERROR; `0x5.4` and
+  `0x1_F.8` still parse).
 - The two entries above change no node kind or field, and `node-types.json` is unchanged. Inputs that parsed without
   errors keep their trees. The pinned example file that failed on `00d` now parses, so `test/examples/failures.txt`
   drops it (9 to 8 paths).
@@ -56,6 +59,7 @@ names are unchanged; `node-types.json` only gains child types (K4). Some trees c
   as expected failures (`k5/v04-after-dimensions`, `k5/v05-many-dimensions`). Annotations after `...`
   (`int... @Foo x`) are still accepted, although javac rejects them. The 14 pinned example files that failed on
   annotations before `...` now parse, so `test/examples/failures.txt` drops them (23 to 9 paths).
+
 - Set `tree-sitter.json` `metadata.version` and the package manifests to 2.1.0 (the generated `parser.c` embeds it).
 - Known limitations:
   - A raw NUL byte (U+0000) inside a string literal makes the literal fail to parse (2 pinned example files): the

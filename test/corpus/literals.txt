@@ -800,3 +800,76 @@ String.class;
 (program
   (expression_statement
     (class_literal (type_identifier))))
+
+====================================================================
+invalid octal literal with the 0o prefix and two underscores: 0o1__7
+====================================================================
+
+0o1__7;
+
+---
+
+(program
+  (ERROR
+    (octal_integer_literal))
+  (expression_statement
+    (identifier)))
+
+==================================================================
+invalid octal long with the 0O prefix and two underscores: 0O1__7L
+==================================================================
+
+0O1__7L;
+
+---
+
+(program
+  (ERROR
+    (octal_integer_literal))
+  (expression_statement
+    (identifier)))
+
+======================================================================
+invalid method call on a 0o literal with two underscores: 0o1__7.foo()
+======================================================================
+
+0o1__7.foo();
+
+---
+
+(program
+  (ERROR
+    (octal_integer_literal))
+  (expression_statement
+    (method_invocation
+      (identifier)
+      (identifier)
+      (argument_list))))
+
+=======================================================================================
+invalid hex float without an exponent and two underscores in the integer part: 0x1__F.8
+=======================================================================================
+
+0x1__F.8;
+
+---
+
+(program
+  (expression_statement
+    (hex_integer_literal)
+    (ERROR
+      (decimal_integer_literal))))
+
+==================================================================================
+invalid hex float without an exponent and two underscores in the fraction: 0x.8__8
+==================================================================================
+
+0x.8__8;
+
+---
+
+(program
+  (expression_statement
+    (hex_floating_point_literal)
+    (ERROR
+      (identifier))))

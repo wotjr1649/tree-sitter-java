@@ -1,8 +1,8 @@
 {
   "meta": {
     "api": "com.sun.source.util.JavacTask.parse()",
-    "case_count": 72,
-    "cases_sha256": "89e47e2dcd4b9a2eb7c84938523092ccdc2a66de7256fabc75f608aabf2efd5a",
+    "case_count": 77,
+    "cases_sha256": "123a713927f077e16767b07a983ab3ebae124b6731a7824c990a1adc4d6b42b0",
     "java.runtime.version": "25.0.5+8-LTS",
     "java.vendor": "Eclipse Adoptium",
     "options": ["--release", "25", "-proc:none"],
@@ -83,6 +83,11 @@
     "k6/x22-1_L": ["compiler.err.illegal.underscore"],
     "k6/x23-0_8": ["compiler.err.illegal.digit.in.octal.literal"],
     "k6/x24-1e5_": ["compiler.err.illegal.underscore"],
-    "k6/x25-0x1p3_": ["compiler.err.illegal.underscore"]
+    "k6/x25-0x1p3_": ["compiler.err.illegal.underscore"],
+    "k6/x26-0o1__7": ["compiler.err.expected", "compiler.err.expected"],
+    "k6/x27-0O1__7L": ["compiler.err.expected", "compiler.err.expected"],
+    "k6/x28-0o1__7.foo()": ["compiler.err.expected", "compiler.err.expected"],
+    "k6/x29-0x1__F.8": ["compiler.err.malformed.fp.lit"],
+    "k6/x30-0x.8__8": ["compiler.err.malformed.fp.lit"]
   }
 }
