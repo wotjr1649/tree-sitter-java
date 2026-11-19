@@ -300,15 +300,28 @@ module.exports = grammar({
     instanceof_expression: $ => prec(PREC.REL, seq(
       field('left', $.expression),
       'instanceof',
-      optional('final'),
       choice(
         seq(
-          field('right', $._type),
-          optional(field('name', choice($.identifier, $._reserved_identifier))),
+          optional('final'),
+          choice(
+            seq(
+              field('right', $._type),
+              optional(field('name', choice($.identifier, $._reserved_identifier))),
+            ),
+            field('pattern', $.record_pattern),
+          ),
         ),
-        field('pattern', $.record_pattern),
+        // JLS 25 §14.30.1: a TypePattern takes {VariableModifier}; annotations before `final` are its modifiers,
+        // as in `type_pattern`. A leading `final` stays an anonymous token, so `instanceof final T x` keeps its tree.
+        seq(
+          alias($._instanceof_modifiers, $.modifiers),
+          field('right', $._unannotated_type),
+          field('name', choice($.identifier, $._reserved_identifier)),
+        ),
       ),
     )),
+
+    _instanceof_modifiers: $ => seq(repeat1($._annotation), 'final', repeat(choice('final', $._annotation))),
 
     lambda_expression: $ => seq(
       field('parameters', choice(
@@ -642,7 +655,9 @@ module.exports = grammar({
       $._variable_declarator_id,
     ),
 
-    catch_type: $ => sep1($._unannotated_type, '|'),
+    // JLS 25 §14.20: each CatchType alternative may be annotated. The first type's annotations stay in the
+    // parameter's `modifiers`, as before; later alternatives are `annotated_type` (tree-sitter-java PR #206).
+    catch_type: $ => seq($._unannotated_type, repeat(seq('|', $._type))),
 
     finally_clause: $ => seq('finally', $.block),
 
@@ -1245,12 +1260,14 @@ module.exports = grammar({
       $._variable_declarator_id,
     ),
 
-    receiver_parameter: $ => seq(
+    // `@A T this` also parses as a formal_parameter whose name is `this` read as an identifier (issue #234);
+    // javac never accepts that, so the receiver wins the GLR choice.
+    receiver_parameter: $ => prec.dynamic(1, seq(
       repeat($._annotation),
       $._unannotated_type,
       repeat(seq($.identifier, '.')),
       $.this,
-    ),
+    )),
 
     spread_parameter: $ => seq(
       optional($.modifiers),

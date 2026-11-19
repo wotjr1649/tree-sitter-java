@@ -2348,67 +2348,148 @@
             "type": "CHOICE",
             "members": [
               {
-                "type": "STRING",
-                "value": "final"
-              },
-              {
-                "type": "BLANK"
-              }
-            ]
-          },
-          {
-            "type": "CHOICE",
-            "members": [
-              {
                 "type": "SEQ",
                 "members": [
                   {
-                    "type": "FIELD",
-                    "name": "right",
-                    "content": {
-                      "type": "SYMBOL",
-                      "name": "_type"
-                    }
+                    "type": "CHOICE",
+                    "members": [
+                      {
+                        "type": "STRING",
+                        "value": "final"
+                      },
+                      {
+                        "type": "BLANK"
+                      }
+                    ]
                   },
                   {
                     "type": "CHOICE",
                     "members": [
                       {
-                        "type": "FIELD",
-                        "name": "name",
-                        "content": {
-                          "type": "CHOICE",
-                          "members": [
-                            {
+                        "type": "SEQ",
+                        "members": [
+                          {
+                            "type": "FIELD",
+                            "name": "right",
+                            "content": {
                               "type": "SYMBOL",
-                              "name": "identifier"
-                            },
-                            {
-                              "type": "SYMBOL",
-                              "name": "_reserved_identifier"
+                              "name": "_type"
                             }
-                          ]
-                        }
+                          },
+                          {
+                            "type": "CHOICE",
+                            "members": [
+                              {
+                                "type": "FIELD",
+                                "name": "name",
+                                "content": {
+                                  "type": "CHOICE",
+                                  "members": [
+                                    {
+                                      "type": "SYMBOL",
+                                      "name": "identifier"
+                                    },
+                                    {
+                                      "type": "SYMBOL",
+                                      "name": "_reserved_identifier"
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "type": "BLANK"
+                              }
+                            ]
+                          }
+                        ]
                       },
                       {
-                        "type": "BLANK"
+                        "type": "FIELD",
+                        "name": "pattern",
+                        "content": {
+                          "type": "SYMBOL",
+                          "name": "record_pattern"
+                        }
                       }
                     ]
                   }
                 ]
               },
               {
-                "type": "FIELD",
-                "name": "pattern",
-                "content": {
-                  "type": "SYMBOL",
-                  "name": "record_pattern"
-                }
+                "type": "SEQ",
+                "members": [
+                  {
+                    "type": "ALIAS",
+                    "content": {
+                      "type": "SYMBOL",
+                      "name": "_instanceof_modifiers"
+                    },
+                    "named": true,
+                    "value": "modifiers"
+                  },
+                  {
+                    "type": "FIELD",
+                    "name": "right",
+                    "content": {
+                      "type": "SYMBOL",
+                      "name": "_unannotated_type"
+                    }
+                  },
+                  {
+                    "type": "FIELD",
+                    "name": "name",
+                    "content": {
+                      "type": "CHOICE",
+                      "members": [
+                        {
+                          "type": "SYMBOL",
+                          "name": "identifier"
+                        },
+                        {
+                          "type": "SYMBOL",
+                          "name": "_reserved_identifier"
+                        }
+                      ]
+                    }
+                  }
+                ]
               }
             ]
           }
         ]
       }
+    },
+    "_instanceof_modifiers": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "REPEAT1",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_annotation"
+          }
+        },
+        {
+          "type": "STRING",
+          "value": "final"
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "STRING",
+                "value": "final"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "_annotation"
+              }
+            ]
+          }
+        }
+      ]
     },
     "lambda_expression": {
       "type": "SEQ",
@@ -4413,7 +4494,7 @@
               },
               {
                 "type": "SYMBOL",
-                "name": "_unannotated_type"
+                "name": "_type"
               }
             ]
           }
@@ -7553,40 +7634,44 @@
       ]
     },
     "receiver_parameter": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "REPEAT",
-          "content": {
+      "type": "PREC_DYNAMIC",
+      "value": 1,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "REPEAT",
+            "content": {
+              "type": "SYMBOL",
+              "name": "_annotation"
+            }
+          },
+          {
             "type": "SYMBOL",
-            "name": "_annotation"
+            "name": "_unannotated_type"
+          },
+          {
+            "type": "REPEAT",
+            "content": {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "identifier"
+                },
+                {
+                  "type": "STRING",
+                  "value": "."
+                }
+              ]
+            }
+          },
+          {
+            "type": "SYMBOL",
+            "name": "this"
           }
-        },
-        {
-          "type": "SYMBOL",
-          "name": "_unannotated_type"
-        },
-        {
-          "type": "REPEAT",
-          "content": {
-            "type": "SEQ",
-            "members": [
-              {
-                "type": "SYMBOL",
-                "name": "identifier"
-              },
-              {
-                "type": "STRING",
-                "value": "."
-              }
-            ]
-          }
-        },
-        {
-          "type": "SYMBOL",
-          "name": "this"
-        }
-      ]
+        ]
+      }
     },
     "spread_parameter": {
       "type": "SEQ",

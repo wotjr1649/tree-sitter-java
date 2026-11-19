@@ -1,5 +1,23 @@
 # Changelog
 
+## Unreleased
+
+- Parse annotations in three more positions (K7). No node kind or field is removed or renamed; `src/node-types.json`
+  gains two child types: `catch_type` takes `_type` instead of `_unannotated_type`, and `instanceof_expression` takes
+  an optional `modifiers` child.
+  - Annotated alternatives of a multi-catch, as in `catch (T1 | @A T2 e)` (JLS 25 §14.20; tree-sitter-java issue
+    #208): every alternative after `|` may be an `annotated_type`. Annotations before the first alternative stay in
+    the parameter's `modifiers`, as before. The idea is from tree-sitter-java PR #206 (by theawless).
+  - An annotated receiver parameter without a qualifier, `void m(@A Inner this)` (JLS 25 §8.4; issue #234), used to
+    parse cleanly as a `formal_parameter` whose name was an `identifier` spelled `this`. It is now a
+    `receiver_parameter`, like the unannotated and the qualified forms. Its `this` is now captured as
+    `@variable.builtin` instead of `@variable` in `queries/highlights.scm`. No other error-free tree changes.
+  - Annotations before `final` in an `instanceof` type pattern, `o instanceof @A final String s` (JLS 25 §14.30.1):
+    the annotations and `final` form a `modifiers` child, as in a `type_pattern` (K4). `instanceof final T x` keeps
+    its anonymous `final` token and `instanceof final @A T x` its `annotated_type`. Two invalid inputs that used to
+    parse cleanly by reading `final` as a type name, `o instanceof @A final String` and `o instanceof @A final`, now
+    contain MISSING or ERROR; javac rejects both.
+
 ## 2.1.0
 
 More Java 25 syntax fixes found through the javac oracle and the pinned examples (K4, K5). Node kinds and field

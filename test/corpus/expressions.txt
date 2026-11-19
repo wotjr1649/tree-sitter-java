@@ -2235,3 +2235,197 @@ F f = (String @A ... xs) -> {};
             (variable_declarator
               name: (identifier))))
         body: (block)))))
+
+================================================================================
+Annotated alternative types in a multi-catch
+================================================================================
+
+class A {
+  void m() {
+    try {
+    } catch (T1 | @A T2 e) {
+    } catch (@A T1 | T2 e) {
+    } catch (final @A T e) {
+    } catch (@A final @B T1 | @C(1) @D T2 | @E a.b.T3 e) {
+    }
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters)
+        body: (block
+          (try_statement
+            body: (block)
+            (catch_clause
+              (catch_formal_parameter
+                (catch_type
+                  (type_identifier)
+                  (annotated_type
+                    (marker_annotation
+                      name: (identifier))
+                    (type_identifier)))
+                name: (identifier))
+              body: (block))
+            (catch_clause
+              (catch_formal_parameter
+                (modifiers
+                  (marker_annotation
+                    name: (identifier)))
+                (catch_type
+                  (type_identifier)
+                  (type_identifier))
+                name: (identifier))
+              body: (block))
+            (catch_clause
+              (catch_formal_parameter
+                (modifiers
+                  (marker_annotation
+                    name: (identifier)))
+                (catch_type
+                  (type_identifier))
+                name: (identifier))
+              body: (block))
+            (catch_clause
+              (catch_formal_parameter
+                (modifiers
+                  (marker_annotation
+                    name: (identifier))
+                  (marker_annotation
+                    name: (identifier)))
+                (catch_type
+                  (type_identifier)
+                  (annotated_type
+                    (annotation
+                      name: (identifier)
+                      arguments: (annotation_argument_list
+                        (decimal_integer_literal)))
+                    (marker_annotation
+                      name: (identifier))
+                    (type_identifier))
+                  (annotated_type
+                    (marker_annotation
+                      name: (identifier))
+                    (scoped_type_identifier
+                      (scoped_type_identifier
+                        (type_identifier)
+                        (type_identifier))
+                      (type_identifier))))
+                name: (identifier))
+              body: (block))))))))
+
+================================================================================
+Type patterns with annotations before final in instanceof
+================================================================================
+
+a instanceof @A final String s;
+b instanceof @A @B(1) final String s;
+c instanceof @A final @B String s;
+d instanceof final @A String s;
+e instanceof @A String s;
+f instanceof @A final List<String> l && l.isEmpty();
+
+--------------------------------------------------------------------------------
+
+(program
+  (expression_statement
+    (instanceof_expression
+      left: (identifier)
+      (modifiers
+        (marker_annotation
+          name: (identifier)))
+      right: (type_identifier)
+      name: (identifier)))
+  (expression_statement
+    (instanceof_expression
+      left: (identifier)
+      (modifiers
+        (marker_annotation
+          name: (identifier))
+        (annotation
+          name: (identifier)
+          arguments: (annotation_argument_list
+            (decimal_integer_literal))))
+      right: (type_identifier)
+      name: (identifier)))
+  (expression_statement
+    (instanceof_expression
+      left: (identifier)
+      (modifiers
+        (marker_annotation
+          name: (identifier))
+        (marker_annotation
+          name: (identifier)))
+      right: (type_identifier)
+      name: (identifier)))
+  (expression_statement
+    (instanceof_expression
+      left: (identifier)
+      right: (annotated_type
+        (marker_annotation
+          name: (identifier))
+        (type_identifier))
+      name: (identifier)))
+  (expression_statement
+    (instanceof_expression
+      left: (identifier)
+      right: (annotated_type
+        (marker_annotation
+          name: (identifier))
+        (type_identifier))
+      name: (identifier)))
+  (expression_statement
+    (binary_expression
+      left: (instanceof_expression
+        left: (identifier)
+        (modifiers
+          (marker_annotation
+            name: (identifier)))
+        right: (generic_type
+          (type_identifier)
+          (type_arguments
+            (type_identifier)))
+        name: (identifier))
+      right: (method_invocation
+        object: (identifier)
+        name: (identifier)
+        arguments: (argument_list)))))
+
+================================================================================
+final inside the modifiers of an instanceof type pattern and as a bare token
+:cst
+================================================================================
+
+a instanceof @A final String s;
+d instanceof final D bar;
+
+--------------------------------------------------------------------------------
+
+1:0  - 3:0    program
+1:0  - 1:31     expression_statement
+1:0  - 1:30       instanceof_expression
+1:0  - 1:1          left: identifier `a`
+1:2  - 1:12         "instanceof"
+1:13 - 1:21         modifiers
+1:13 - 1:15           marker_annotation
+1:13 - 1:14             "@"
+1:14 - 1:15             name: identifier `A`
+1:16 - 1:21           "final"
+1:22 - 1:28         right: type_identifier `String`
+1:29 - 1:30         name: identifier `s`
+1:30 - 1:31       ";"
+2:0  - 2:25     expression_statement
+2:0  - 2:24       instanceof_expression
+2:0  - 2:1          left: identifier `d`
+2:2  - 2:12         "instanceof"
+2:13 - 2:18         "final"
+2:19 - 2:20         right: type_identifier `D`
+2:21 - 2:24         name: identifier `bar`
+2:24 - 2:25       ";"
