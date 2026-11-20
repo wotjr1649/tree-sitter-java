@@ -29,7 +29,7 @@ Oracle setup and compiler version selection are future work.
 
 Decided by the owner on 2026-11-19, following tree-sitter-mssql's ADR-0007:
 
-- The 1.x line is the baseline from the original grammar. v1.0.0 is byte-identical in grammar and generated source to its v0.23.5
+- The 1.x line is the baseline from the original grammar. v1.0.0 is byte-identical in grammar and generated source to the original grammar's v0.23.5
   regenerated with CLI 0.27.2.
 - Releases that carry this repository's own grammar fixes start at v2.0.0. Within 2.x, versions follow semantic
   versioning, and removing or renaming a node kind or field still needs a new major version (AGENTS.md).

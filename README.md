@@ -4,7 +4,7 @@
 
 Java grammar for [tree-sitter](https://github.com/tree-sitter/tree-sitter).
 
-**Origin.** This repository is independent
+**Origin.** From v2.0.0 on this repository is independent
 ([ADR-0002](docs/decisions/ADR-0002-independent-repository.md)). It started from the original grammar,
 [tree-sitter/tree-sitter-java](https://github.com/tree-sitter/tree-sitter-java) v0.23.5 (commit
 `94703d5`), merged with its full history as v1.0.0 ([ADR-0001](docs/decisions/ADR-0001-continue-from-upstream.md)). Its
