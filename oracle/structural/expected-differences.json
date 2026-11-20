@@ -102,21 +102,21 @@
     {"kind": "MEMBER_REFERENCE", "start": 467, "end": 486, "status": "mismatched_kind", "reason": "K20"}
   ],
   "structural/p8/switch/colon-guard-when-binding": [
-    {"kind": "PATTERN_CASE_LABEL", "start": 46, "end": 57, "status": "no_node_at_range", "reason": "K25"},
-    {"kind": "BINDING_PATTERN", "start": 46, "end": 57, "status": "no_node_at_range", "reason": "K25"},
-    {"kind": "METHOD_INVOCATION", "start": 63, "end": 77, "status": "no_node_at_range", "reason": "K25"},
-    {"kind": "IDENTIFIER", "start": 63, "end": 67, "status": "mismatched_kind", "reason": "K25"}
+    {"kind": "PATTERN_CASE_LABEL", "start": 46, "end": 57, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "BINDING_PATTERN", "start": 46, "end": 57, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "METHOD_INVOCATION", "start": 63, "end": 77, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "IDENTIFIER", "start": 63, "end": 67, "status": "mismatched_kind", "reason": "limit"}
   ],
   "structural/p8/switch/guard-when-binding": [
-    {"kind": "PATTERN_CASE_LABEL", "start": 183, "end": 194, "status": "no_node_at_range", "reason": "K25"},
-    {"kind": "BINDING_PATTERN", "start": 183, "end": 194, "status": "no_node_at_range", "reason": "K25"},
-    {"kind": "GREATER_THAN", "start": 200, "end": 217, "status": "no_node_at_range", "reason": "K25"},
-    {"kind": "METHOD_INVOCATION", "start": 200, "end": 213, "status": "no_node_at_range", "reason": "K25"},
-    {"kind": "IDENTIFIER", "start": 200, "end": 204, "status": "mismatched_kind", "reason": "K25"}
+    {"kind": "PATTERN_CASE_LABEL", "start": 183, "end": 194, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "BINDING_PATTERN", "start": 183, "end": 194, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "GREATER_THAN", "start": 200, "end": 217, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "METHOD_INVOCATION", "start": 200, "end": 213, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "IDENTIFIER", "start": 200, "end": 204, "status": "mismatched_kind", "reason": "limit"}
   ],
   "structural/p8/switch/guard-when-binding-bool": [
-    {"kind": "PATTERN_CASE_LABEL", "start": 183, "end": 194, "status": "no_node_at_range", "reason": "K25"},
-    {"kind": "BINDING_PATTERN", "start": 183, "end": 194, "status": "no_node_at_range", "reason": "K25"}
+    {"kind": "PATTERN_CASE_LABEL", "start": 183, "end": 194, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "BINDING_PATTERN", "start": 183, "end": 194, "status": "no_node_at_range", "reason": "limit"}
   ],
   "structural/p8/switch/lambda-arm-constant": [
     {"kind": "CONSTANT_CASE_LABEL", "start": 187, "end": 190, "status": "mismatched_kind", "reason": "K22"},
@@ -133,8 +133,8 @@
     {"kind": "LAMBDA_EXPRESSION", "start": 215, "end": 229, "status": "no_node_at_range", "reason": "K22"}
   ],
   "structural/p8/switch/unguarded-when-binding": [
-    {"kind": "PATTERN_CASE_LABEL", "start": 183, "end": 194, "status": "no_node_at_range", "reason": "K25"},
-    {"kind": "BINDING_PATTERN", "start": 183, "end": 194, "status": "no_node_at_range", "reason": "K25"}
+    {"kind": "PATTERN_CASE_LABEL", "start": 183, "end": 194, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "BINDING_PATTERN", "start": 183, "end": 194, "status": "no_node_at_range", "reason": "limit"}
   ],
   "structural/p9/cast-update": [
     {"kind": "TYPE_CAST", "start": 32, "end": 41, "status": "mismatched_kind", "reason": "K21"},
@@ -221,5 +221,117 @@
     {"kind": "SWITCH_EXPRESSION", "start": 70, "end": 98, "status": "no_node_at_range", "reason": "limit"},
     {"kind": "PARENTHESIZED", "start": 77, "end": 80, "status": "mismatched_kind", "reason": "limit"},
     {"kind": "CASE", "start": 83, "end": 96, "status": "no_node_at_range", "reason": "limit"}
+  ],
+  "corpus/k25.txt/K25 arrow": [
+    {"kind": "PATTERN_CASE_LABEL", "start": 68, "end": 79, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "BINDING_PATTERN", "start": 68, "end": 79, "status": "no_node_at_range", "reason": "limit"}
+  ],
+  "corpus/k25.txt/K25 colon": [
+    {"kind": "PATTERN_CASE_LABEL", "start": 49, "end": 60, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "BINDING_PATTERN", "start": 49, "end": 60, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "METHOD_INVOCATION", "start": 66, "end": 80, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "IDENTIFIER", "start": 66, "end": 70, "status": "mismatched_kind", "reason": "limit"}
+  ],
+  "corpus/k25.txt/K25 colon-plain": [
+    {"kind": "PATTERN_CASE_LABEL", "start": 49, "end": 60, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "BINDING_PATTERN", "start": 49, "end": 60, "status": "no_node_at_range", "reason": "limit"}
+  ],
+  "corpus/k25.txt/K25 constant-instanceof-binding": [
+    {"kind": "CONSTANT_CASE_LABEL", "start": 53, "end": 77, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "INSTANCE_OF", "start": 53, "end": 77, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "BINDING_PATTERN", "start": 66, "end": 77, "status": "no_node_at_range", "reason": "limit"}
+  ],
+  "corpus/k25.txt/K25 guard": [
+    {"kind": "PATTERN_CASE_LABEL", "start": 68, "end": 79, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "BINDING_PATTERN", "start": 68, "end": 79, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "GREATER_THAN", "start": 85, "end": 102, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "METHOD_INVOCATION", "start": 85, "end": 98, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "IDENTIFIER", "start": 85, "end": 89, "status": "mismatched_kind", "reason": "limit"}
+  ],
+  "corpus/k25.txt/K25 guard-bool": [
+    {"kind": "PATTERN_CASE_LABEL", "start": 68, "end": 79, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "BINDING_PATTERN", "start": 68, "end": 79, "status": "no_node_at_range", "reason": "limit"}
+  ],
+  "corpus/k25.txt/K25 instanceof": [
+    {"kind": "INSTANCE_OF", "start": 40, "end": 64, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "BINDING_PATTERN", "start": 53, "end": 64, "status": "no_node_at_range", "reason": "limit"}
+  ],
+  "corpus/k25.txt/K25 instanceof-and": [
+    {"kind": "INSTANCE_OF", "start": 40, "end": 64, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "BINDING_PATTERN", "start": 53, "end": 64, "status": "no_node_at_range", "reason": "limit"}
+  ],
+  "corpus/k25.txt/K25 instanceof-final": [
+    {"kind": "INSTANCE_OF", "start": 40, "end": 70, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "BINDING_PATTERN", "start": 53, "end": 70, "status": "no_node_at_range", "reason": "limit"}
+  ],
+  "corpus/k25.txt/K25 instanceof-in-guard": [
+    {"kind": "INSTANCE_OF", "start": 77, "end": 101, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "BINDING_PATTERN", "start": 90, "end": 101, "status": "no_node_at_range", "reason": "limit"}
+  ],
+  "corpus/k25.txt/K25 multi-first-binding": [
+    {"kind": "PATTERN_CASE_LABEL", "start": 68, "end": 79, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "BINDING_PATTERN", "start": 68, "end": 79, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "PATTERN_CASE_LABEL", "start": 81, "end": 90, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "BINDING_PATTERN", "start": 81, "end": 90, "status": "no_node_at_range", "reason": "limit"}
+  ],
+  "corpus/k25.txt/K25 when-type-and-name": [
+    {"kind": "PATTERN_CASE_LABEL", "start": 89, "end": 98, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "BINDING_PATTERN", "start": 89, "end": 98, "status": "no_node_at_range", "reason": "limit"}
+  ],
+  "k25/arrow": [
+    {"kind": "PATTERN_CASE_LABEL", "start": 67, "end": 78, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "BINDING_PATTERN", "start": 67, "end": 78, "status": "no_node_at_range", "reason": "limit"}
+  ],
+  "k25/colon": [
+    {"kind": "PATTERN_CASE_LABEL", "start": 48, "end": 59, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "BINDING_PATTERN", "start": 48, "end": 59, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "METHOD_INVOCATION", "start": 65, "end": 79, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "IDENTIFIER", "start": 65, "end": 69, "status": "mismatched_kind", "reason": "limit"}
+  ],
+  "k25/colon-plain": [
+    {"kind": "PATTERN_CASE_LABEL", "start": 48, "end": 59, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "BINDING_PATTERN", "start": 48, "end": 59, "status": "no_node_at_range", "reason": "limit"}
+  ],
+  "k25/constant-instanceof-binding": [
+    {"kind": "CONSTANT_CASE_LABEL", "start": 52, "end": 76, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "INSTANCE_OF", "start": 52, "end": 76, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "BINDING_PATTERN", "start": 65, "end": 76, "status": "no_node_at_range", "reason": "limit"}
+  ],
+  "k25/guard": [
+    {"kind": "PATTERN_CASE_LABEL", "start": 67, "end": 78, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "BINDING_PATTERN", "start": 67, "end": 78, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "GREATER_THAN", "start": 84, "end": 101, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "METHOD_INVOCATION", "start": 84, "end": 97, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "IDENTIFIER", "start": 84, "end": 88, "status": "mismatched_kind", "reason": "limit"}
+  ],
+  "k25/guard-bool": [
+    {"kind": "PATTERN_CASE_LABEL", "start": 67, "end": 78, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "BINDING_PATTERN", "start": 67, "end": 78, "status": "no_node_at_range", "reason": "limit"}
+  ],
+  "k25/instanceof": [
+    {"kind": "INSTANCE_OF", "start": 39, "end": 63, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "BINDING_PATTERN", "start": 52, "end": 63, "status": "no_node_at_range", "reason": "limit"}
+  ],
+  "k25/instanceof-and": [
+    {"kind": "INSTANCE_OF", "start": 39, "end": 63, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "BINDING_PATTERN", "start": 52, "end": 63, "status": "no_node_at_range", "reason": "limit"}
+  ],
+  "k25/instanceof-final": [
+    {"kind": "INSTANCE_OF", "start": 39, "end": 69, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "BINDING_PATTERN", "start": 52, "end": 69, "status": "no_node_at_range", "reason": "limit"}
+  ],
+  "k25/instanceof-in-guard": [
+    {"kind": "INSTANCE_OF", "start": 76, "end": 100, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "BINDING_PATTERN", "start": 89, "end": 100, "status": "no_node_at_range", "reason": "limit"}
+  ],
+  "k25/multi-first-binding": [
+    {"kind": "PATTERN_CASE_LABEL", "start": 67, "end": 78, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "BINDING_PATTERN", "start": 67, "end": 78, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "PATTERN_CASE_LABEL", "start": 80, "end": 89, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "BINDING_PATTERN", "start": 80, "end": 89, "status": "no_node_at_range", "reason": "limit"}
+  ],
+  "k25/when-type-and-name": [
+    {"kind": "PATTERN_CASE_LABEL", "start": 88, "end": 97, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "BINDING_PATTERN", "start": 88, "end": 97, "status": "no_node_at_range", "reason": "limit"}
   ]
 }

@@ -49,6 +49,10 @@
   nodes. The limits also record the direct prefix updates and signed operand that javac accepts outside the JLS grammar.
   See [known limits](docs/tolerances.md#known-limits) and
   [JLS 25 §15.16](https://docs.oracle.com/javase/specs/jls/se25/html/jls-15.html#jls-15.16).
+- Document type-pattern bindings named `when` in switch labels and `instanceof` as a known limit (K25).
+  Javac accepts these bindings, and the existing grammar can report an error. The smallest tested candidate
+  that passed the corpus added 6.74% to `parser.c` and 84 parser states. The pinned examples contain no occurrence.
+  The grammar and parser are unchanged. See [known limits](docs/tolerances.md#known-limits).
 - Parse qualified types starting with `open`, `module`, or `with` (K29, K20 follow-up 3 report and
   [K29 oracle cases](oracle/data/cases/k29.jsonl)). A declaration such as `open.A x = null` gets a
   `scoped_type_identifier` in its `type` field. Qualified references such as `open.A.super::m` also parse
