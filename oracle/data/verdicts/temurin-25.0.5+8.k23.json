@@ -1,8 +1,8 @@
 {
   "meta": {
     "api": "com.sun.source.util.JavacTask.parse()",
-    "case_count": 15,
-    "cases_sha256": "6192a0f093397abf5bef99cd08d5aad48a9f6dbccc58323ee87bad1d0a6cbb50",
+    "case_count": 17,
+    "cases_sha256": "3c8b90e65b41171ae9a98d3db181d9791bea14964d15a51363ce60bdd4924836",
     "java.runtime.version": "25.0.5+8-LTS",
     "java.vendor": "Eclipse Adoptium",
     "options": ["--release", "25", "-proc:none"],
@@ -26,6 +26,8 @@
     "k23/unclosed-string-cr": ["compiler.err.unclosed.str.lit"],
     "k23/unclosed-char-cr": ["compiler.err.unclosed.char.lit"],
     "k23/invalid-code-after-cr": ["compiler.err.expected", "compiler.err.illegal.start.of.expr"],
-    "k23/unclosed-block-comment": ["compiler.err.unclosed.comment", "compiler.err.premature.eof"]
+    "k23/unclosed-block-comment": ["compiler.err.unclosed.comment", "compiler.err.premature.eof"],
+    "k23/cr-comment-then-illegal-escape": ["compiler.err.illegal.esc.char"],
+    "k23/lf-comment-then-illegal-escape-control": ["compiler.err.illegal.esc.char"]
   }
 }

@@ -27,7 +27,10 @@
   javac rejects and that parsed at 2.3.0 only because a comment swallowed a delimiter now produce errors, as in
   `"""<LF>/* x """ */ """` and `"""<LF>// a """ """<LF>"""`.
 - End a `line_comment` before CR, LF or CRLF (K23). Code after a lone CR now gets its own nodes, and a CRLF
-  comment's range ends before the CR, consistent with LF. `node-types.json` and the documented tolerances are unchanged.
+  comment's range ends before the CR, consistent with LF: in files with CRLF line ends every line comment is one
+  byte shorter and its text has no trailing CR. Code after a lone CR that was hidden in a comment now parses, so
+  javac-rejected code there now errs, and existing tolerances such as an illegal string escape apply to it as after
+  an LF (pinned with an LF control). `node-types.json` and the documented tolerances are unchanged.
   [JLS 25 §§3.4 and 3.7](https://docs.oracle.com/javase/specs/jls/se25/html/jls-3.html#jls-3.4),
   [grammar-orchard issue #42](https://codeberg.org/grammar-orchard/tree-sitter-java-orchard/issues/42).
 
