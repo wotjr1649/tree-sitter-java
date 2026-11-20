@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased
+
+- Parse a parenthesized name followed by `+` or `-` as the left operand of a `binary_expression` (K16,
+  Phase 3 cast/additive probes). In `(n) + k * 3`, the multiplication is the right operand of the addition. Primitive
+  casts such as `(int) -b`, ordinary reference casts and parenthesized lambda parameters keep their trees.
+  `node-types.json` and the documented tolerances are unchanged.
+  [JLS 25 §§15.15–15.18](https://docs.oracle.com/javase/specs/jls/se25/html/jls-15.html#jls-15.15),
+  [grammar-orchard issue #45](https://codeberg.org/grammar-orchard/tree-sitter-java-orchard/issues/45).
+
 ## 2.3.0
 
 Phase 2 of the final-release plan: OpenJDK 25.0.5+8 as a second pinned example set, the Java 25 syntax fixes that
