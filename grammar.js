@@ -727,11 +727,12 @@ module.exports = grammar({
       ';',
     ),
 
-    yield_statement: $ => seq(
+    // Prefer a yield statement to an unqualified call when both parses succeed.
+    yield_statement: $ => prec.dynamic(1, seq(
       'yield',
       $.expression,
       ';',
-    ),
+    )),
 
     synchronized_statement: $ => seq(
       'synchronized',

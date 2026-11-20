@@ -1,0 +1,76 @@
+================================================================================
+K27 yield parenthesized addition
+================================================================================
+
+class C { int f(int n, int k) { return switch (0) { default -> { yield (n) + k * 3; } }; } }
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (integral_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (integral_type)
+            name: (identifier))
+          (formal_parameter
+            type: (integral_type)
+            name: (identifier)))
+        body: (block
+          (return_statement
+            (switch_expression
+              condition: (parenthesized_expression
+                (decimal_integer_literal))
+              body: (switch_block
+                (switch_rule
+                  (switch_label)
+                  (block
+                    (yield_statement
+                      (binary_expression
+                        left: (parenthesized_expression
+                          (identifier))
+                        right: (binary_expression
+                          left: (identifier)
+                          right: (decimal_integer_literal))))))))))))))
+
+================================================================================
+K27 yield parenthesized addition in a colon group
+================================================================================
+
+class C { int f(int n, int k) { return switch (0) { default: yield (n) + k * 3; }; } }
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (integral_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (integral_type)
+            name: (identifier))
+          (formal_parameter
+            type: (integral_type)
+            name: (identifier)))
+        body: (block
+          (return_statement
+            (switch_expression
+              condition: (parenthesized_expression
+                (decimal_integer_literal))
+              body: (switch_block
+                (switch_block_statement_group
+                  (switch_label)
+                  (yield_statement
+                    (binary_expression
+                      left: (parenthesized_expression
+                        (identifier))
+                      right: (binary_expression
+                        left: (identifier)
+                        right: (decimal_integer_literal)))))))))))))
