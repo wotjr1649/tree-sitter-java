@@ -169,12 +169,6 @@
   "structural/p9/provides": [
     {"kind": "PROVIDES", "start": 25, "end": 86, "status": "mismatched_kind", "reason": "K17"}
   ],
-  "structural/p9/raw-cr-clean": [
-    {"kind": "PRIMITIVE_TYPE", "start": 18, "end": 21, "status": "no_node_at_range", "reason": "K23"}
-  ],
-  "structural/p9/raw-cr-missing": [
-    {"kind": "PRIMITIVE_TYPE", "start": 18, "end": 21, "status": "no_node_at_range", "reason": "K23"}
-  ],
   "structural/p9/ref-super": [
     {"kind": "MEMBER_REFERENCE", "start": 115, "end": 131, "status": "mismatched_kind", "reason": "K20"}
   ],

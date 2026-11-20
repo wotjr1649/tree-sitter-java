@@ -11,6 +11,10 @@
   After `yield`, `yield (n) + k * 3;` still reads `yield(n)` as a method call (as at 2.3.0); that is tracked as K27.
   [JLS 25 §§15.15–15.18](https://docs.oracle.com/javase/specs/jls/se25/html/jls-15.html#jls-15.15),
   [grammar-orchard issue #45](https://codeberg.org/grammar-orchard/tree-sitter-java-orchard/issues/45).
+- End a `line_comment` before CR, LF or CRLF (K23). Code after a lone CR now gets its own nodes, and a CRLF
+  comment's range ends before the CR, consistent with LF. `node-types.json` and the documented tolerances are unchanged.
+  [JLS 25 §§3.4 and 3.7](https://docs.oracle.com/javase/specs/jls/se25/html/jls-3.html#jls-3.4),
+  [grammar-orchard issue #42](https://codeberg.org/grammar-orchard/tree-sitter-java-orchard/issues/42).
 
 ## 2.3.0
 
