@@ -1,0 +1,170 @@
+{
+  "corpus/contextual-keyword-types.txt/K9 open module declaration and directives": [
+    {"kind": "PROVIDES", "start": 40, "end": 58, "status": "mismatched_kind", "reason": "K17"}
+  ],
+  "corpus/declarations.txt/module directive with requires, exports, opens, uses and provides": [
+    {"kind": "PROVIDES", "start": 350, "end": 398, "status": "mismatched_kind", "reason": "K17"}
+  ],
+  "corpus/k11.txt/K11 constant then pattern": [
+    {"kind": "BINDING_PATTERN", "start": 71, "end": 80, "status": "no_node_at_range", "reason": "error-case"}
+  ],
+  "corpus/k11.txt/K11 null then pattern": [
+    {"kind": "BINDING_PATTERN", "start": 73, "end": 82, "status": "no_node_at_range", "reason": "error-case"}
+  ],
+  "corpus/k11.txt/K11 pattern then constant": [
+    {"kind": "CONSTANT_CASE_LABEL", "start": 79, "end": 80, "status": "mismatched_kind", "reason": "error-case"}
+  ],
+  "corpus/raw-nul.txt/review probe text-block/crlf-line-continuation": [
+    {"kind": "STRING_LITERAL", "start": 30, "end": 51, "status": "mismatched_kind", "reason": "K19"}
+  ],
+  "corpus/raw-nul.txt/review probe text-block/crlf-raw-line-continuation": [
+    {"kind": "STRING_LITERAL", "start": 30, "end": 52, "status": "mismatched_kind", "reason": "K19"}
+  ],
+  "corpus/raw-nul.txt/review probe text-block/line-continuation": [
+    {"kind": "STRING_LITERAL", "start": 30, "end": 48, "status": "mismatched_kind", "reason": "K19"}
+  ],
+  "corpus/raw-nul.txt/review probe text-block/raw-line-continuation": [
+    {"kind": "STRING_LITERAL", "start": 30, "end": 49, "status": "mismatched_kind", "reason": "K19"}
+  ],
+  "k8/probe-text-block-crlf-line-continuation": [
+    {"kind": "STRING_LITERAL", "start": 29, "end": 50, "status": "mismatched_kind", "reason": "K19"}
+  ],
+  "k8/probe-text-block-crlf-raw-line-continuation": [
+    {"kind": "STRING_LITERAL", "start": 29, "end": 51, "status": "mismatched_kind", "reason": "K19"}
+  ],
+  "k8/probe-text-block-line-continuation": [
+    {"kind": "STRING_LITERAL", "start": 29, "end": 47, "status": "mismatched_kind", "reason": "K19"}
+  ],
+  "k8/probe-text-block-raw-line-continuation": [
+    {"kind": "STRING_LITERAL", "start": 29, "end": 48, "status": "mismatched_kind", "reason": "K19"}
+  ],
+  "k9/module-declaration": [
+    {"kind": "PROVIDES", "start": 39, "end": 57, "status": "mismatched_kind", "reason": "K17"}
+  ],
+  "structural/p8/annotation/cast-array-element": [
+    {"kind": "ARRAY_TYPE", "start": 293, "end": 304, "status": "mismatched_kind", "reason": "limit"},
+    {"kind": "ANNOTATED_TYPE", "start": 293, "end": 302, "status": "no_node_at_range", "reason": "limit"}
+  ],
+  "structural/p8/annotation/cast-array-two-dimensions": [
+    {"kind": "ARRAY_TYPE", "start": 293, "end": 314, "status": "mismatched_kind", "reason": "limit"},
+    {"kind": "ANNOTATED_TYPE", "start": 293, "end": 302, "status": "no_node_at_range", "reason": "limit"}
+  ],
+  "structural/p8/annotation/cast-primitive-post-inc": [
+    {"kind": "TYPE_CAST", "start": 292, "end": 304, "status": "mismatched_kind", "reason": "K21"},
+    {"kind": "POSTFIX_INCREMENT", "start": 301, "end": 304, "status": "no_node_at_range", "reason": "K21"}
+  ],
+  "structural/p8/annotation/explicit-type-argument-array": [
+    {"kind": "ARRAY_TYPE", "start": 315, "end": 330, "status": "mismatched_kind", "reason": "limit"},
+    {"kind": "ANNOTATED_TYPE", "start": 315, "end": 324, "status": "no_node_at_range", "reason": "limit"}
+  ],
+  "structural/p8/annotation/instanceof-array-element": [
+    {"kind": "ARRAY_TYPE", "start": 305, "end": 316, "status": "mismatched_kind", "reason": "limit"},
+    {"kind": "ANNOTATED_TYPE", "start": 305, "end": 314, "status": "no_node_at_range", "reason": "limit"}
+  ],
+  "structural/p8/annotation/instanceof-generic-arg": [
+    {"kind": "ANNOTATED_TYPE", "start": 320, "end": 324, "status": "mismatched_kind", "reason": "limit"}
+  ],
+  "structural/p8/annotation/instanceof-type-pattern": [
+    {"kind": "MODIFIERS", "start": 305, "end": 307, "status": "mismatched_kind", "reason": "limit"}
+  ],
+  "structural/p8/annotation/new-explicit-constructor": [
+    {"kind": "PARAMETERIZED_TYPE", "start": 308, "end": 325, "status": "no_node_at_range", "reason": "limit"}
+  ],
+  "structural/p8/annotation/new-generic-object": [
+    {"kind": "PARAMETERIZED_TYPE", "start": 296, "end": 313, "status": "no_node_at_range", "reason": "limit"}
+  ],
+  "structural/p8/cast/intersection-complement": [
+    {"kind": "BITWISE_COMPLEMENT", "start": 136, "end": 138, "status": "no_node_at_range", "reason": "K24"}
+  ],
+  "structural/p8/cast/intersection-not": [
+    {"kind": "LOGICAL_COMPLEMENT", "start": 137, "end": 142, "status": "no_node_at_range", "reason": "K24"}
+  ],
+  "structural/p8/cast/primitive-post-dec": [
+    {"kind": "TYPE_CAST", "start": 104, "end": 113, "status": "mismatched_kind", "reason": "K21"},
+    {"kind": "POSTFIX_DECREMENT", "start": 110, "end": 113, "status": "no_node_at_range", "reason": "K21"}
+  ],
+  "structural/p8/cast/primitive-post-inc": [
+    {"kind": "TYPE_CAST", "start": 104, "end": 113, "status": "mismatched_kind", "reason": "K21"},
+    {"kind": "POSTFIX_INCREMENT", "start": 110, "end": 113, "status": "no_node_at_range", "reason": "K21"}
+  ],
+  "structural/p8/cast/reference-post-inc": [
+    {"kind": "TYPE_CAST", "start": 104, "end": 117, "status": "mismatched_kind", "reason": "K21"},
+    {"kind": "POSTFIX_INCREMENT", "start": 114, "end": 117, "status": "no_node_at_range", "reason": "K21"}
+  ],
+  "structural/p8/operator/unary-postfix": [
+    {"kind": "UNARY_MINUS", "start": 150, "end": 154, "status": "mismatched_kind", "reason": "K21"},
+    {"kind": "POSTFIX_INCREMENT", "start": 151, "end": 154, "status": "no_node_at_range", "reason": "K21"}
+  ],
+  "structural/p8/operator/unary-postfix-array": [
+    {"kind": "BITWISE_COMPLEMENT", "start": 150, "end": 157, "status": "mismatched_kind", "reason": "K21"},
+    {"kind": "POSTFIX_INCREMENT", "start": 151, "end": 157, "status": "no_node_at_range", "reason": "K21"}
+  ],
+  "structural/p8/operator/unary-postfix-decrement": [
+    {"kind": "UNARY_MINUS", "start": 150, "end": 154, "status": "mismatched_kind", "reason": "K21"},
+    {"kind": "POSTFIX_DECREMENT", "start": 151, "end": 154, "status": "no_node_at_range", "reason": "K21"}
+  ],
+  "structural/p8/operator/unary-postfix-field": [
+    {"kind": "UNARY_PLUS", "start": 150, "end": 156, "status": "mismatched_kind", "reason": "K21"},
+    {"kind": "POSTFIX_INCREMENT", "start": 151, "end": 156, "status": "no_node_at_range", "reason": "K21"}
+  ],
+  "structural/p8/switch/colon-guard-when-binding": [
+    {"kind": "PATTERN_CASE_LABEL", "start": 46, "end": 57, "status": "no_node_at_range", "reason": "K25"},
+    {"kind": "BINDING_PATTERN", "start": 46, "end": 57, "status": "no_node_at_range", "reason": "K25"},
+    {"kind": "METHOD_INVOCATION", "start": 63, "end": 77, "status": "no_node_at_range", "reason": "K25"},
+    {"kind": "IDENTIFIER", "start": 63, "end": 67, "status": "mismatched_kind", "reason": "K25"}
+  ],
+  "structural/p8/switch/guard-when-binding": [
+    {"kind": "PATTERN_CASE_LABEL", "start": 183, "end": 194, "status": "no_node_at_range", "reason": "K25"},
+    {"kind": "BINDING_PATTERN", "start": 183, "end": 194, "status": "no_node_at_range", "reason": "K25"},
+    {"kind": "GREATER_THAN", "start": 200, "end": 217, "status": "no_node_at_range", "reason": "K25"},
+    {"kind": "METHOD_INVOCATION", "start": 200, "end": 213, "status": "no_node_at_range", "reason": "K25"},
+    {"kind": "IDENTIFIER", "start": 200, "end": 204, "status": "mismatched_kind", "reason": "K25"}
+  ],
+  "structural/p8/switch/guard-when-binding-bool": [
+    {"kind": "PATTERN_CASE_LABEL", "start": 183, "end": 194, "status": "no_node_at_range", "reason": "K25"},
+    {"kind": "BINDING_PATTERN", "start": 183, "end": 194, "status": "no_node_at_range", "reason": "K25"}
+  ],
+  "structural/p8/switch/lambda-arm-constant": [
+    {"kind": "CONSTANT_CASE_LABEL", "start": 187, "end": 190, "status": "mismatched_kind", "reason": "K22"},
+    {"kind": "LAMBDA_EXPRESSION", "start": 194, "end": 208, "status": "no_node_at_range", "reason": "K22"}
+  ],
+  "structural/p8/switch/lambda-arm-guard-name": [
+    {"kind": "LAMBDA_EXPRESSION", "start": 212, "end": 235, "status": "no_node_at_range", "reason": "K22"}
+  ],
+  "structural/p8/switch/lambda-arm-guard-parens": [
+    {"kind": "PARENTHESIZED", "start": 201, "end": 210, "status": "mismatched_kind", "reason": "K22"},
+    {"kind": "LAMBDA_EXPRESSION", "start": 214, "end": 237, "status": "no_node_at_range", "reason": "K22"}
+  ],
+  "structural/p8/switch/lambda-arm-guard-record": [
+    {"kind": "LAMBDA_EXPRESSION", "start": 215, "end": 229, "status": "no_node_at_range", "reason": "K22"}
+  ],
+  "structural/p8/switch/unguarded-when-binding": [
+    {"kind": "PATTERN_CASE_LABEL", "start": 183, "end": 194, "status": "no_node_at_range", "reason": "K25"},
+    {"kind": "BINDING_PATTERN", "start": 183, "end": 194, "status": "no_node_at_range", "reason": "K25"}
+  ],
+  "structural/p9/cast-update": [
+    {"kind": "TYPE_CAST", "start": 32, "end": 41, "status": "mismatched_kind", "reason": "K21"},
+    {"kind": "POSTFIX_INCREMENT", "start": 38, "end": 41, "status": "no_node_at_range", "reason": "K21"},
+    {"kind": "TYPE_CAST", "start": 67, "end": 78, "status": "mismatched_kind", "reason": "K21"},
+    {"kind": "POSTFIX_DECREMENT", "start": 73, "end": 78, "status": "no_node_at_range", "reason": "K21"}
+  ],
+  "structural/p9/provides": [
+    {"kind": "PROVIDES", "start": 25, "end": 86, "status": "mismatched_kind", "reason": "K17"}
+  ],
+  "structural/p9/raw-cr-clean": [
+    {"kind": "PRIMITIVE_TYPE", "start": 18, "end": 21, "status": "no_node_at_range", "reason": "K23"}
+  ],
+  "structural/p9/raw-cr-missing": [
+    {"kind": "PRIMITIVE_TYPE", "start": 18, "end": 21, "status": "no_node_at_range", "reason": "K23"}
+  ],
+  "structural/p9/switch-lambda": [
+    {"kind": "CONSTANT_CASE_LABEL", "start": 115, "end": 120, "status": "mismatched_kind", "reason": "K22"},
+    {"kind": "LAMBDA_EXPRESSION", "start": 124, "end": 134, "status": "no_node_at_range", "reason": "K22"}
+  ],
+  "structural/p9/switch-lambda-guard": [
+    {"kind": "LAMBDA_EXPRESSION", "start": 110, "end": 120, "status": "no_node_at_range", "reason": "K22"}
+  ],
+  "structural/p9/text-continuation": [
+    {"kind": "STRING_LITERAL", "start": 24, "end": 55, "status": "mismatched_kind", "reason": "K19"}
+  ]
+}

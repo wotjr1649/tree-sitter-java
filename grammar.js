@@ -237,7 +237,8 @@ module.exports = grammar({
     // so NUL needs its own transition: `([^"\\]+|\x00)`. The same holds for the multiline fragment and char literal.
     string_fragment: _ => token.immediate(prec(1, /([^"\\]+|\x00)+/)),
     _multiline_string_fragment: _ => choice(
-      /([^"\\]+|\x00)+/,
+      // Prefer text over comment extras while leaving the closing delimiter ahead of a single quote.
+      token(prec(PREC.COMMENT + 1, /([^"\\]+|\x00)+/)),
       /"([^"\\]+|\x00|\\")*/,
     ),
 
@@ -300,12 +301,13 @@ module.exports = grammar({
     ),
 
     cast_expression: $ => prec(PREC.CAST, choice(
-      seq(
+      // JLS 25 §15.16: (Name) + x and (Name) - x are additive expressions.
+      prec.dynamic(-1, seq(
         '(',
         field('type', $._type),
         ')',
         field('value', $.expression),
-      ),
+      )),
       seq(
         '(',
         sep1(field('type', $._type), '&'),
@@ -597,7 +599,8 @@ module.exports = grammar({
 
     pattern: $ => choice(
       $.type_pattern,
-      $.record_pattern,
+      // A case label can also read an empty record pattern as a method call.
+      prec.dynamic(1, $.record_pattern),
     ),
     // Public aliases keep the same tree for the patterns that follow a comma.
     _additional_case_pattern: $ => choice(

@@ -37,9 +37,15 @@ backslashes before literal content and closing delimiters, quote boundaries and 
 (multiple type and record patterns in a `case` label, with adjacent invalid inputs and single-pattern controls),
 `k12` (parenthesized assignment targets, adjacent invalid inputs, and base-clean controls for expression and
 identifier tolerances), `k13` (typed and bare underscores in record patterns, other unnamed-variable contexts,
-and adjacent invalid patterns), and `k20` (qualified `super` method references, with explicit type arguments,
-control references, and adjacent invalid inputs). Every case names its origin in `provenance`: the bundle path with
-its `SHA256SUMS` hash, the PR, or "written in this task". IDs are prefixed with the set name. To add a case, append a line, hash its
+and adjacent invalid patterns), `k16` (parenthesized names before additive operators, with cast and lambda controls
+and adjacent invalid inputs), `k18` (comment-like text in text blocks, escape and delimiter boundaries, CRLF and raw
+NUL, controls for comments outside literals and in interpolation expressions, and adjacent invalid inputs), `k20`
+(qualified `super` method references, with explicit type arguments, control references, and adjacent invalid inputs),
+`k26` (guarded empty record patterns in colon labels and arrow rules, with adjacent invalid inputs and unchanged
+controls), and `structural` (Phase 3 ambiguity probes and independently written reproducers). Every case names its
+origin in `provenance`: the bundle path with its `SHA256SUMS` hash, the PR, or "written in this task" (the task that
+added the case; the 56 `structural/p9/` probes say "independently written for Phase 3"). IDs are prefixed with the
+set name. To add a case, append a line, hash its
 `source` (SHA-256 of the UTF-8 bytes; the
 replay prints the actual hash when it differs), then regenerate that set's verdicts.
 
@@ -170,6 +176,35 @@ version and a CHANGELOG entry (AGENTS.md).
 for two trees (repository roots or `parser.c` files).
 With `--check` it compares this repository's `parser.c` bytes and `STATE_COUNT` with `test/parser-cost.json` and exits 1
 on any difference (CI job `parser-cost`); a grammar change that moves either number updates that file and says why.
+
+## Structural oracle
+
+`scripts/structural-compare.mjs` compares the parse-only javac AST and the tree-sitter tree over the same UTF-8
+byte intervals. It checks node kinds, namedness, and selected syntax attributes for javac-accepted oracle cases,
+the corpus and the Phase 3 probes. See the [mapping](structural/mapping.md) for projections, context exclusions
+and the current coverage of child roles. The pinned example repositories are outside this CI check.
+
+On Linux or Windows with the pinned Temurin JDK on `PATH` and the Node binding installed (see [Windows](#windows)):
+
+```sh
+npm ci --legacy-peer-deps
+node scripts/structural-compare.mjs --self-test
+node scripts/structural-compare.mjs --check
+```
+
+To select another installed JDK binary, pass `--java` with its path, for example
+`--java "$env:JAVA_HOME/bin/java.exe"` in PowerShell. A separately built grammar binding and Node runtime can be
+selected with `--binding <addon.node>` and `--runtime <tree-sitter package directory>`.
+Output goes under `build/phase3/` by default. The tool compares sequential batches of 100 sources, caps Node's V8
+heap at 1 GiB and javac's heap at 512 MiB, and stops if a worker exceeds 2 GiB RSS.
+
+`--check` requires the exact multiset in [expected-differences.json](structural/expected-differences.json), using case
+ID, javac kind, half-open UTF-8 range and status. It reports every added and missing difference and exits 1 on any
+change (2 on a tool or input fault). The reasons identify a K fix, a known projection limit (`limit`), or a corpus
+recovery case (`error-case`). When a K fix lands, delete the resolved entries for that K and rerun
+`--check`. Delete its entries in `data/expected-failures.json` as well if the fix removes an ERROR or MISSING from
+an oracle probe. Per-case comparison details are in the `*.results.jsonl` files. The summary lists every `compare` or
+`compare-range-only` row that no input reached (`uncompared_rows`, `uncompared_row_count`); such a row has no evidence.
 
 ## Comparing trees
 
