@@ -44,6 +44,11 @@
   an LF (pinned with an LF control). `node-types.json` and the documented tolerances are unchanged.
   [JLS 25 §§3.4 and 3.7](https://docs.oracle.com/javase/specs/jls/se25/html/jls-3.html#jls-3.4),
   [grammar-orchard issue #42](https://codeberg.org/grammar-orchard/tree-sitter-java-orchard/issues/42).
+- Document intersection casts followed by logical or bitwise complements, nested casts, postfix updates, or a
+  switch expression as a known limit (K24). The oracle records the existing errors and misplaced postfix update
+  nodes. The limits also record the direct prefix updates and signed operand that javac accepts outside the JLS grammar.
+  See [known limits](docs/tolerances.md#known-limits) and
+  [JLS 25 §15.16](https://docs.oracle.com/javase/specs/jls/se25/html/jls-15.html#jls-15.16).
 - Document type-pattern bindings named `when` in switch labels and `instanceof` as a known limit (K25).
   Javac accepts these bindings, and the existing grammar can report an error. The smallest tested candidate
   that passed the corpus added 6.74% to `parser.c` and 84 parser states. The pinned examples contain no occurrence.
