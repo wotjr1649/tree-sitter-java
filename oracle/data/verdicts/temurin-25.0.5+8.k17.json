@@ -1,0 +1,25 @@
+{
+  "meta": {
+    "api": "com.sun.source.util.JavacTask.parse()",
+    "case_count": 9,
+    "cases_sha256": "0399fafd14c282a283d0c47fab83a5ba0da59c84489f8c0a51bb217b09974e8a",
+    "java.runtime.version": "25.0.5+8-LTS",
+    "java.vendor": "Eclipse Adoptium",
+    "options": ["--release", "25", "-proc:none"],
+    "preview": false,
+    "release": "25",
+    "runner_sha256": "c45e32e314b98ccb46481c4db18aa25173ca9b2fe46e45888f0a743ceb6c70ee",
+    "source_encoding": "UTF-8"
+  },
+  "verdicts": {
+    "k17/single": [],
+    "k17/simple-list": [],
+    "k17/qualified-list": [],
+    "k17/directive-controls": [],
+    "k17/empty-list": ["compiler.err.expected"],
+    "k17/trailing-comma": ["compiler.err.expected"],
+    "k17/leading-comma": ["compiler.err.expected"],
+    "k17/missing-comma": ["compiler.err.expected", "compiler.err.invalid.module.directive"],
+    "k17/missing-with": ["compiler.err.expected.str", "compiler.err.expected"]
+  }
+}

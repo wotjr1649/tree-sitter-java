@@ -2765,45 +2765,45 @@ static const TSMapSlice ts_field_map_slices[PRODUCTION_ID_COUNT] = {
   [177] = {.index = 439, .length = 4},
   [178] = {.index = 443, .length = 2},
   [179] = {.index = 445, .length = 2},
-  [180] = {.index = 447, .length = 1},
-  [182] = {.index = 448, .length = 3},
-  [183] = {.index = 451, .length = 3},
-  [184] = {.index = 454, .length = 3},
-  [185] = {.index = 457, .length = 3},
-  [186] = {.index = 460, .length = 3},
-  [187] = {.index = 463, .length = 5},
-  [188] = {.index = 468, .length = 4},
-  [189] = {.index = 472, .length = 4},
-  [190] = {.index = 476, .length = 2},
-  [191] = {.index = 478, .length = 6},
-  [192] = {.index = 484, .length = 3},
-  [193] = {.index = 487, .length = 1},
-  [194] = {.index = 488, .length = 3},
-  [195] = {.index = 491, .length = 2},
-  [196] = {.index = 493, .length = 1},
-  [197] = {.index = 494, .length = 2},
-  [198] = {.index = 496, .length = 2},
-  [201] = {.index = 498, .length = 4},
-  [202] = {.index = 502, .length = 4},
-  [203] = {.index = 506, .length = 4},
-  [204] = {.index = 510, .length = 4},
-  [205] = {.index = 514, .length = 4},
-  [206] = {.index = 518, .length = 5},
-  [207] = {.index = 523, .length = 5},
-  [208] = {.index = 528, .length = 2},
-  [209] = {.index = 530, .length = 1},
-  [210] = {.index = 531, .length = 3},
-  [211] = {.index = 534, .length = 3},
-  [212] = {.index = 537, .length = 3},
-  [213] = {.index = 540, .length = 5},
-  [214] = {.index = 545, .length = 5},
-  [215] = {.index = 550, .length = 5},
-  [216] = {.index = 555, .length = 3},
-  [217] = {.index = 558, .length = 3},
-  [218] = {.index = 561, .length = 4},
-  [219] = {.index = 565, .length = 4},
-  [220] = {.index = 569, .length = 6},
-  [221] = {.index = 575, .length = 4},
+  [180] = {.index = 447, .length = 2},
+  [182] = {.index = 449, .length = 3},
+  [183] = {.index = 452, .length = 3},
+  [184] = {.index = 455, .length = 3},
+  [185] = {.index = 458, .length = 3},
+  [186] = {.index = 461, .length = 3},
+  [187] = {.index = 464, .length = 5},
+  [188] = {.index = 469, .length = 4},
+  [189] = {.index = 473, .length = 4},
+  [190] = {.index = 477, .length = 2},
+  [191] = {.index = 479, .length = 6},
+  [192] = {.index = 485, .length = 3},
+  [193] = {.index = 488, .length = 1},
+  [194] = {.index = 489, .length = 3},
+  [195] = {.index = 492, .length = 2},
+  [196] = {.index = 494, .length = 1},
+  [197] = {.index = 495, .length = 3},
+  [198] = {.index = 498, .length = 2},
+  [201] = {.index = 500, .length = 4},
+  [202] = {.index = 504, .length = 4},
+  [203] = {.index = 508, .length = 4},
+  [204] = {.index = 512, .length = 4},
+  [205] = {.index = 516, .length = 4},
+  [206] = {.index = 520, .length = 5},
+  [207] = {.index = 525, .length = 5},
+  [208] = {.index = 530, .length = 2},
+  [209] = {.index = 532, .length = 1},
+  [210] = {.index = 533, .length = 3},
+  [211] = {.index = 536, .length = 3},
+  [212] = {.index = 539, .length = 3},
+  [213] = {.index = 542, .length = 5},
+  [214] = {.index = 547, .length = 5},
+  [215] = {.index = 552, .length = 5},
+  [216] = {.index = 557, .length = 3},
+  [217] = {.index = 560, .length = 3},
+  [218] = {.index = 563, .length = 4},
+  [219] = {.index = 567, .length = 4},
+  [220] = {.index = 571, .length = 6},
+  [221] = {.index = 577, .length = 4},
 };
 
 static const TSFieldMapEntry ts_field_map_entries[] = {
@@ -3410,171 +3410,173 @@ static const TSFieldMapEntry ts_field_map_entries[] = {
     {field_package, 1},
   [447] =
     {field_provided, 1},
-  [448] =
+    {field_provider, 3},
+  [449] =
     {field_body, 7},
     {field_update, 4},
     {field_update, 5, .inherited = true},
-  [451] =
+  [452] =
     {field_body, 7},
     {field_condition, 3},
     {field_update, 5},
-  [454] =
+  [455] =
     {field_body, 7},
     {field_init, 2},
     {field_update, 5},
-  [457] =
+  [458] =
     {field_body, 7},
     {field_condition, 4},
     {field_init, 2},
-  [460] =
+  [461] =
     {field_body, 7},
     {field_init, 2},
     {field_init, 3, .inherited = true},
-  [463] =
+  [464] =
     {field_body, 7},
     {field_dimensions, 3, .inherited = true},
     {field_name, 3, .inherited = true},
     {field_type, 2},
     {field_value, 5},
-  [468] =
+  [469] =
     {field_body, 7},
     {field_init, 2},
     {field_update, 4},
     {field_update, 5, .inherited = true},
-  [472] =
+  [473] =
     {field_body, 7},
     {field_condition, 3},
     {field_init, 2},
     {field_update, 5},
-  [476] =
+  [477] =
     {field_name, 1},
     {field_type, 0},
-  [478] =
+  [479] =
     {field_body, 7},
     {field_interfaces, 5},
     {field_name, 2},
     {field_permits, 6},
     {field_superclass, 4},
     {field_type_parameters, 3},
-  [484] =
+  [485] =
     {field_arguments, 2},
     {field_constructor, 1},
     {field_type_arguments, 0},
-  [487] =
-    {field_modules, 1},
   [488] =
+    {field_modules, 1},
+  [489] =
     {field_modules, 3},
     {field_modules, 4, .inherited = true},
     {field_package, 1},
-  [491] =
+  [492] =
     {field_modules, 0, .inherited = true},
     {field_modules, 1, .inherited = true},
-  [493] =
-    {field_provider, 1},
   [494] =
+    {field_provider, 1},
+  [495] =
     {field_provided, 1},
+    {field_provider, 3},
     {field_provider, 4, .inherited = true},
-  [496] =
+  [498] =
     {field_provider, 0, .inherited = true},
     {field_provider, 1, .inherited = true},
-  [498] =
+  [500] =
     {field_body, 8},
     {field_condition, 3},
     {field_update, 5},
     {field_update, 6, .inherited = true},
-  [502] =
+  [504] =
     {field_body, 8},
     {field_init, 2},
     {field_update, 5},
     {field_update, 6, .inherited = true},
-  [506] =
+  [508] =
     {field_body, 8},
     {field_condition, 4},
     {field_init, 2},
     {field_update, 6},
-  [510] =
+  [512] =
     {field_body, 8},
     {field_init, 2},
     {field_init, 3, .inherited = true},
     {field_update, 6},
-  [514] =
+  [516] =
     {field_body, 8},
     {field_condition, 5},
     {field_init, 2},
     {field_init, 3, .inherited = true},
-  [518] =
+  [520] =
     {field_body, 8},
     {field_dimensions, 4, .inherited = true},
     {field_name, 4, .inherited = true},
     {field_type, 3},
     {field_value, 6},
-  [523] =
+  [525] =
     {field_body, 8},
     {field_condition, 3},
     {field_init, 2},
     {field_update, 5},
     {field_update, 6, .inherited = true},
-  [528] =
+  [530] =
     {field_name, 2},
     {field_type, 1},
-  [530] =
+  [532] =
     {field_value, 1},
-  [531] =
+  [533] =
     {field_dimensions, 4},
     {field_name, 1},
     {field_type, 0},
-  [534] =
+  [536] =
     {field_name, 1},
     {field_type, 0},
     {field_value, 4, .inherited = true},
-  [537] =
+  [539] =
     {field_arguments, 3},
     {field_constructor, 2},
     {field_object, 0},
-  [540] =
+  [542] =
     {field_body, 9},
     {field_condition, 4},
     {field_init, 2},
     {field_update, 6},
     {field_update, 7, .inherited = true},
-  [545] =
+  [547] =
     {field_body, 9},
     {field_init, 2},
     {field_init, 3, .inherited = true},
     {field_update, 6},
     {field_update, 7, .inherited = true},
-  [550] =
+  [552] =
     {field_body, 9},
     {field_condition, 5},
     {field_init, 2},
     {field_init, 3, .inherited = true},
     {field_update, 7},
-  [555] =
+  [557] =
     {field_dimensions, 5},
     {field_name, 2},
     {field_type, 1},
-  [558] =
+  [560] =
     {field_name, 2},
     {field_type, 1},
     {field_value, 5, .inherited = true},
-  [561] =
+  [563] =
     {field_dimensions, 4},
     {field_name, 1},
     {field_type, 0},
     {field_value, 5, .inherited = true},
-  [565] =
+  [567] =
     {field_arguments, 4},
     {field_constructor, 3},
     {field_object, 0},
     {field_type_arguments, 2},
-  [569] =
+  [571] =
     {field_body, 10},
     {field_condition, 5},
     {field_init, 2},
     {field_init, 3, .inherited = true},
     {field_update, 7},
     {field_update, 8, .inherited = true},
-  [575] =
+  [577] =
     {field_dimensions, 5},
     {field_name, 2},
     {field_type, 1},

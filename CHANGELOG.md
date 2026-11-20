@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased
+
+- **Breaking change (K17)**. In a module directive such as `provides S with A, B;`, every service implementation
+  now has the `provider` field, including a sole implementation. The first `provider` lookup returns `A`, and
+  iterating the field yields `A, B` in source order. In `node-types.json`, `provider` is required and the unnamed
+  `children` entry is removed from `provides_module_directive`.
+  [JLS 25 §7.7.4](https://docs.oracle.com/javase/specs/jls/se25/html/jls-7.html#jls-7.7.4) ·
+  [grammar-orchard PR #20](https://codeberg.org/grammar-orchard/tree-sitter-java-orchard/pulls/20)
+
 ## 2.4.0
 
 Phase 3 adds a structural oracle and CI check that compare javac ASTs and tree-sitter trees over the same
