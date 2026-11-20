@@ -24,6 +24,11 @@
   Typed `_` keeps its visible `identifier` node and uses `underscore_pattern` as its underlying grammar symbol.
   Bare `_` still exposes `underscore_pattern`. `node-types.json` is byte-identical, and the pinned examples retain
   all 192 baseline failure paths.
+- Add the CI jobs `fuzz` (`tree-sitter fuzz` over the corpus, up to 3 random edits and 10 iterations per case, 120 s
+  cap; after the edits it checks the incremental tree's sizes and changed ranges, and after undoing them that the
+  incremental reparse equals the expected corpus tree) and
+  `parser-cost` (`scripts/parser-cost.mjs --check`: `parser.c` bytes and `STATE_COUNT` must equal
+  `test/parser-cost.json`). No grammar change.
 - Parse Unicode escapes with repeated `u` in string literals and text blocks and escapes where `\u005c` supplies the
   backslash before a matching quote, as in `"\u005c""` and `'\u005c''` (JLS 25 §3.3 and §3.10.7,
   tree-sitter-java issues #207 and #209, based on PR #210 by theawless). String and text block escape nodes now span
