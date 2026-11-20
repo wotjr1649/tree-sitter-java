@@ -1,0 +1,184 @@
+================================================================================
+K28 contextual keywords as statement labels and jump targets
+================================================================================
+
+class C {
+  void m(boolean stop) {
+    open: for (;;) { if (stop) break open; continue open; }
+    module: for (;;) { if (stop) break module; continue module; }
+    with: for (;;) { if (stop) break with; continue with; }
+    record: for (;;) { if (stop) break record; continue record; }
+    sealed: for (;;) { if (stop) break sealed; continue sealed; }
+    yield: for (;;) { if (stop) break yield; continue yield; }
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter type: (boolean_type) name: (identifier)))
+        body: (block
+          (labeled_statement
+            (identifier)
+            (for_statement
+              body: (block
+                (if_statement
+                  condition: (parenthesized_expression
+                    (identifier))
+                  consequence: (break_statement
+                    (identifier)))
+                (continue_statement
+                  (identifier)))))
+          (labeled_statement
+            (identifier)
+            (for_statement
+              body: (block
+                (if_statement
+                  condition: (parenthesized_expression
+                    (identifier))
+                  consequence: (break_statement
+                    (identifier)))
+                (continue_statement
+                  (identifier)))))
+          (labeled_statement
+            (identifier)
+            (for_statement
+              body: (block
+                (if_statement
+                  condition: (parenthesized_expression
+                    (identifier))
+                  consequence: (break_statement
+                    (identifier)))
+                (continue_statement
+                  (identifier)))))
+          (labeled_statement
+            (identifier)
+            (for_statement
+              body: (block
+                (if_statement
+                  condition: (parenthesized_expression
+                    (identifier))
+                  consequence: (break_statement
+                    (identifier)))
+                (continue_statement
+                  (identifier)))))
+          (labeled_statement
+            (identifier)
+            (for_statement
+              body: (block
+                (if_statement
+                  condition: (parenthesized_expression
+                    (identifier))
+                  consequence: (break_statement
+                    (identifier)))
+                (continue_statement
+                  (identifier)))))
+          (labeled_statement
+            (identifier)
+            (for_statement
+              body: (block
+                (if_statement
+                  condition: (parenthesized_expression
+                    (identifier))
+                  consequence: (break_statement
+                    (identifier)))
+                (continue_statement
+                  (identifier))))))))))
+
+================================================================================
+K28 statement labels inside switch blocks
+================================================================================
+
+class C {
+  int arrow(int n) {
+    return switch (n) { default -> { yield: yield 1; } };
+  }
+  int colon(int n) {
+    return switch (n) { default: open: { break open; } yield n; };
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (integral_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter type: (integral_type) name: (identifier)))
+        body: (block
+          (return_statement
+            (switch_expression
+              condition: (parenthesized_expression (identifier))
+              body: (switch_block
+                (switch_rule
+                  (switch_label)
+                  (block
+                    (labeled_statement
+                      (identifier)
+                      (yield_statement (decimal_integer_literal))))))))))
+      (method_declaration
+        type: (integral_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter type: (integral_type) name: (identifier)))
+        body: (block
+          (return_statement
+            (switch_expression
+              condition: (parenthesized_expression (identifier))
+              body: (switch_block
+                (switch_block_statement_group
+                  (switch_label)
+                  (labeled_statement (identifier) (block (break_statement (identifier))))
+                  (yield_statement (identifier)))))))))))
+
+================================================================================
+K28 existing labeled-statement tolerances with contextual labels
+================================================================================
+
+class C {
+  void m() {
+    ordinary: int n = 0;
+    ordinary: class Inner {}
+    ordinary: 7;
+    ordinary: yield(0, 3);
+    yield: int n = 0;
+    yield: class Inner {}
+    yield: 7;
+    yield: yield(0, 3);
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters)
+        body: (block
+          (labeled_statement (identifier) (local_variable_declaration type: (integral_type)
+            declarator: (variable_declarator name: (identifier) value: (decimal_integer_literal))))
+          (labeled_statement (identifier) (class_declaration name: (identifier) body: (class_body)))
+          (labeled_statement (identifier) (expression_statement (decimal_integer_literal)))
+          (labeled_statement (identifier) (expression_statement (method_invocation name: (identifier)
+            arguments: (argument_list (decimal_integer_literal) (decimal_integer_literal)))))
+          (labeled_statement (identifier) (local_variable_declaration type: (integral_type)
+            declarator: (variable_declarator name: (identifier) value: (decimal_integer_literal))))
+          (labeled_statement (identifier) (class_declaration name: (identifier) body: (class_body)))
+          (labeled_statement (identifier) (expression_statement (decimal_integer_literal)))
+          (labeled_statement (identifier) (expression_statement (method_invocation name: (identifier)
+            arguments: (argument_list (decimal_integer_literal) (decimal_integer_literal))))))))))

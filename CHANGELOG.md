@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+- Parse the contextual keywords `module`, `open`, `record`, `sealed`, `with` and `yield` as `identifier`
+  children of `labeled_statement` (K28, REVIEW-38 and grammar-orchard PR #22). The same names already
+  parse as `identifier` targets of `break_statement` and `continue_statement`. Switch blocks can contain
+  labels such as `yield: yield 1;`. The generated node schema is unchanged. Existing labeled-body tolerances
+  also apply to the newly recognized labels: local variable or class declarations, non-statement expressions,
+  and unqualified `yield` calls that javac rejects.
+  [JLS 25 §3.9](https://docs.oracle.com/javase/specs/jls/se25/html/jls-3.html#jls-3.9) ·
+  [§14.7](https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html#jls-14.7) ·
+  [§14.15](https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html#jls-14.15) ·
+  [§14.16](https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html#jls-14.16)
 - Add a CI-checked structural oracle for javac and tree-sitter ranges and node kinds, with Phase 3 probes and an
   exact baseline of known differences. This is a tooling change only.
 - Parse a parenthesized name followed by `+` or `-` as the left operand of a `binary_expression` (K16,
