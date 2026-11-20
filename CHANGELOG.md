@@ -33,6 +33,16 @@
   13. Numeric spellings added by K6 with `.class` or `.if` read as field access (`literals.txt`).
   14. Numeric spellings already accepted in 2.1.0 with `.class` or `.if` read as field access (`literals.txt`).
 
+  Existing oracle inputs also pin the following withdrawn forms.
+
+  - [K11](oracle/data/cases/k11.jsonl) single and list patterns with an underscore type, an annotated or
+    qualified `new` type, `List<null>`, or a component binding such as `R(int new)`.
+  - [K12](oracle/data/cases/k12.jsonl) the unparenthesized call-argument and field-assignment controls
+    `get().m(x = _)` and `obj.if = 1`.
+  - [K20](oracle/data/cases/k20.jsonl) generic or annotated qualifiers before a `super` method reference,
+    and repeated `super` qualifiers, including the `open` controls.
+  - [K25](oracle/data/cases/k25.jsonl) `o instanceof super value`, where `super` previously parsed as a type name.
+
   Among 83,367 pinned Java files the new parser reports errors in seven more OpenJDK files, all rejected
   by javac's parser. The example failure baseline rises from 183 to 190. See
   [withdrawn and retained tolerances](docs/tolerances.md#withdrawn-in-300).

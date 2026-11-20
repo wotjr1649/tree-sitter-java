@@ -2,7 +2,7 @@
   "meta": {
     "api": "com.sun.source.util.JavacTask.parse()",
     "case_count": 73,
-    "cases_sha256": "042004362eefc9ae534235d0ef19ae2b6e1d7c8a127d376f16400d0901546cd0",
+    "cases_sha256": "0a24382f8ab12e5d40c97f08f4da05e1edcb8f3d488d2ccea17e4a02e900a4c8",
     "java.runtime.version": "25.0.5+8-LTS",
     "java.vendor": "Eclipse Adoptium",
     "options": ["--release", "25", "-proc:none"],
