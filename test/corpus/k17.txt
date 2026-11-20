@@ -1,0 +1,123 @@
+====================
+K17 one qualified provider
+====================
+
+module m { provides p.S with p.A; }
+
+---
+
+(program
+  (module_declaration
+    name: (identifier)
+    body: (module_body
+      (provides_module_directive
+        provided: (scoped_identifier
+          scope: (identifier)
+          name: (identifier))
+        provider: (scoped_identifier
+          scope: (identifier)
+          name: (identifier))))))
+
+====================
+K17 two simple providers
+====================
+
+import p.S; import p.A; import p.B; module m { provides S with A, B; }
+
+---
+
+(program
+  (import_declaration
+    (scoped_identifier
+      scope: (identifier)
+      name: (identifier)))
+  (import_declaration
+    (scoped_identifier
+      scope: (identifier)
+      name: (identifier)))
+  (import_declaration
+    (scoped_identifier
+      scope: (identifier)
+      name: (identifier)))
+  (module_declaration
+    name: (identifier)
+    body: (module_body
+      (provides_module_directive
+        provided: (identifier)
+        provider: (identifier)
+        provider: (identifier)))))
+
+====================
+K17 three qualified providers
+====================
+
+module m { provides p.S with p.A, p.B, p.C; }
+
+---
+
+(program
+  (module_declaration
+    name: (identifier)
+    body: (module_body
+      (provides_module_directive
+        provided: (scoped_identifier
+          scope: (identifier)
+          name: (identifier))
+        provider: (scoped_identifier
+          scope: (identifier)
+          name: (identifier))
+        provider: (scoped_identifier
+          scope: (identifier)
+          name: (identifier))
+        provider: (scoped_identifier
+          scope: (identifier)
+          name: (identifier))))))
+
+====================
+K17 several directives and their module fields
+====================
+
+module m { uses p.S; opens p to java.base, java.logging; exports p to java.base, java.logging; provides p.S with p.A; provides java.lang.Runnable with p.R; }
+
+---
+
+(program
+  (module_declaration
+    name: (identifier)
+    body: (module_body
+      (uses_module_directive
+        type: (scoped_identifier
+          scope: (identifier)
+          name: (identifier)))
+      (opens_module_directive
+        package: (identifier)
+        modules: (scoped_identifier
+          scope: (identifier)
+          name: (identifier))
+        modules: (scoped_identifier
+          scope: (identifier)
+          name: (identifier)))
+      (exports_module_directive
+        package: (identifier)
+        modules: (scoped_identifier
+          scope: (identifier)
+          name: (identifier))
+        modules: (scoped_identifier
+          scope: (identifier)
+          name: (identifier)))
+      (provides_module_directive
+        provided: (scoped_identifier
+          scope: (identifier)
+          name: (identifier))
+        provider: (scoped_identifier
+          scope: (identifier)
+          name: (identifier)))
+      (provides_module_directive
+        provided: (scoped_identifier
+          scope: (scoped_identifier
+            scope: (identifier)
+            name: (identifier))
+          name: (identifier))
+        provider: (scoped_identifier
+          scope: (identifier)
+          name: (identifier))))))

@@ -38,8 +38,9 @@ backslashes before literal content and closing delimiters, quote boundaries and 
 `k12` (parenthesized assignment targets, adjacent invalid inputs, and base-clean controls for expression and
 identifier tolerances), `k13` (typed and bare underscores in record patterns, other unnamed-variable contexts,
 and adjacent invalid patterns), `k16` (parenthesized names before additive operators, with cast and lambda controls
-and adjacent invalid inputs), `k18` (comment-like text in text blocks, escape and delimiter boundaries, CRLF and raw
-NUL, controls for comments outside literals and in interpolation expressions, and adjacent invalid inputs), `k19`
+and adjacent invalid inputs), `k17` (single and multiple service providers in module directives, neighboring
+directives and malformed provider lists), `k18` (comment-like text in text blocks, escape and delimiter boundaries, CRLF
+and raw NUL, controls for comments outside literals and in interpolation expressions, and adjacent invalid inputs), `k19`
 (text-block line continuations with LF, CRLF and CR, with adjacent escape controls and invalid inputs), `k20`
 (qualified `super` method references, with explicit type arguments, `open`, `module` and `with` as qualifiers,
 control references, and adjacent invalid inputs), `k21` (postfix precedence under casts and unary expressions,

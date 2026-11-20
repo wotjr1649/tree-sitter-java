@@ -1,10 +1,4 @@
 {
-  "corpus/contextual-keyword-types.txt/K9 open module declaration and directives": [
-    {"kind": "PROVIDES", "start": 40, "end": 58, "status": "mismatched_kind", "reason": "K17"}
-  ],
-  "corpus/declarations.txt/module directive with requires, exports, opens, uses and provides": [
-    {"kind": "PROVIDES", "start": 350, "end": 398, "status": "mismatched_kind", "reason": "K17"}
-  ],
   "corpus/k11.txt/K11 constant then pattern": [
     {"kind": "BINDING_PATTERN", "start": 71, "end": 80, "status": "no_node_at_range", "reason": "error-case"}
   ],
@@ -13,9 +7,6 @@
   ],
   "corpus/k11.txt/K11 pattern then constant": [
     {"kind": "CONSTANT_CASE_LABEL", "start": 79, "end": 80, "status": "mismatched_kind", "reason": "error-case"}
-  ],
-  "k9/module-declaration": [
-    {"kind": "PROVIDES", "start": 39, "end": 57, "status": "mismatched_kind", "reason": "K17"}
   ],
   "structural/p8/annotation/cast-array-element": [
     {"kind": "ARRAY_TYPE", "start": 293, "end": 304, "status": "mismatched_kind", "reason": "limit"},
@@ -71,9 +62,6 @@
   "structural/p8/switch/unguarded-when-binding": [
     {"kind": "PATTERN_CASE_LABEL", "start": 183, "end": 194, "status": "no_node_at_range", "reason": "limit"},
     {"kind": "BINDING_PATTERN", "start": 183, "end": 194, "status": "no_node_at_range", "reason": "limit"}
-  ],
-  "structural/p9/provides": [
-    {"kind": "PROVIDES", "start": 25, "end": 86, "status": "mismatched_kind", "reason": "K17"}
   ],
   "corpus/k24.txt/K24 intersection annotated": [
     {"kind": "LOGICAL_COMPLEMENT", "start": 172, "end": 177, "status": "no_node_at_range", "reason": "limit"}

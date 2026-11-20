@@ -4,6 +4,12 @@
 
 - **Breaking change (Go).** For v3, the module path is `github.com/wotjr1649/tree-sitter-java/v3`. Update Go imports
   to `github.com/wotjr1649/tree-sitter-java/v3/bindings/go`.
+- **Breaking change (K17)**. In a module directive such as `provides S with A, B;`, every service implementation
+  now has the `provider` field, including a sole implementation. The first `provider` lookup returns `A`, and
+  iterating the field yields `A, B` in source order. In `node-types.json`, `provider` is required and the unnamed
+  `children` entry is removed from `provides_module_directive`.
+  [JLS 25 §7.7.4](https://docs.oracle.com/javase/specs/jls/se25/html/jls-7.html#jls-7.7.4) ·
+  [grammar-orchard PR #20](https://codeberg.org/grammar-orchard/tree-sitter-java-orchard/pulls/20)
 - **Breaking change (Phase 5).** Reserve all 51 Java keywords and the spellings `true`, `false` and `null`
   in identifier positions. Contextual keywords remain usable as identifiers. Unnamed lambda parameters
   keep their `identifier` nodes. The public node schema is unchanged by this change.
