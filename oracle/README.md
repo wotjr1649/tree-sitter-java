@@ -14,7 +14,7 @@ name is not a syntax rejection; the runner's self-test shows one.
 | `data/expected-failures.json` | Rule (a): the confirmed baseline mismatches |
 | `../scripts/oracle-replay.mjs` | Judges every case through the tree-sitter API and compares with the baseline |
 | `../scripts/generate-node-kinds.mjs` | Snapshot of node kinds and fields, `test/node-kinds.txt` (`--check` in CI) |
-| `../scripts/parser-cost.mjs` | Size and table counts of `src/parser.c`, for one tree or base against head |
+| `../scripts/parser-cost.mjs` | Size and table counts of `src/parser.c`, for one tree or base against head; `--check` against `test/parser-cost.json` |
 | `../scripts/tree-compare.mjs` | Full-tree comparison of two parser builds over a file list, in memory-bounded batches |
 
 Case sets: `bundle` (the six minimal inputs and probes of go-treesitter's java evidence bundle: `q71-inputs`,
@@ -129,6 +129,8 @@ version and a CHANGELOG entry (AGENTS.md).
 `node scripts/parser-cost.mjs [<tree> [<tree>]]` prints `src/parser.c` bytes, `STATE_COUNT`, `LARGE_STATE_COUNT`,
 `SYMBOL_COUNT`, `PRODUCTION_ID_COUNT` and the field-map entries for this repository, for a tree, or as base against head
 for two trees (repository roots or `parser.c` files).
+With `--check` it compares this repository's `parser.c` bytes and `STATE_COUNT` with `test/parser-cost.json` and exits 1
+on any difference (CI job `parser-cost`); a grammar change that moves either number updates that file and says why.
 
 ## Comparing trees
 

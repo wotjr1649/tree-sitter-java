@@ -48,6 +48,47 @@ jobs:
           go-version: "1.23.x"
           test-swift: true
 
+  fuzz:
+    name: Fuzz parser corpus
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+      - name: Set up tree-sitter
+        uses: tree-sitter/setup-action/cli@v2
+        with:
+          tree-sitter-ref: v0.27.2
+      - name: Fuzz corpus
+        shell: bash
+        env:
+          TREE_SITTER_LIBDIR: ${{ runner.temp }}/fuzz-lib
+          TREE_SITTER_LOG_SEED: '1'
+        run: |
+          log="$RUNNER_TEMP/fuzz.log"
+          timeout --kill-after=10s 120s tree-sitter fuzz --edits 3 --iterations 10 2>&1 | tee "$log"
+          # CLI 0.27.2 logs corpus failures without returning a nonzero status.
+          if grep -Eq '^[1-9][0-9]* java corpus tests failed fuzzing$' "$log"; then
+            echo "::error::Corpus fuzzing failed (see case and seed above)"
+            exit 1
+          fi
+          if ! grep -Eq '^  [0-9]+\. java - ' "$log"; then
+            echo "::error::No Java corpus cases ran"
+            exit 1
+          fi
+
+  parser-cost:
+    name: Check parser cost
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: ${{ vars.NODE_VERSION || 'lts/*' }}
+      - run: node scripts/parser-cost.mjs --check
+
   examples:
     name: Parse examples
     runs-on: ubuntu-24.04

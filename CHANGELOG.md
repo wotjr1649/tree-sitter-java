@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Add the CI jobs `fuzz` (`tree-sitter fuzz` over the corpus, 3 edits and 10 iterations per case, 120 s cap) and
+  `parser-cost` (`scripts/parser-cost.mjs --check`: `parser.c` bytes and `STATE_COUNT` must equal
+  `test/parser-cost.json`). No grammar change.
+
 ## 2.2.0
 
 More Java 25 syntax fixes found through the javac oracle and the pinned examples: numeric literals (K6), annotation
