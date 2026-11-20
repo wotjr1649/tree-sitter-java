@@ -240,3 +240,88 @@ K10 malformed Unicode escape after an encoded backslash
 class Case { String s = "\u005c\uuu041"; }
 
 ---
+
+=====================================
+K10 mixed backslashes before a bracket
+=====================================
+
+"\u005c\]";
+"\\]";
+
+---
+
+(program
+  (expression_statement
+    (string_literal
+      (escape_sequence)
+      (escape_sequence)
+      (string_fragment)))
+  (expression_statement
+    (string_literal
+      (escape_sequence)
+      (string_fragment))))
+
+=====================================
+K10 mixed backslashes before braces
+=====================================
+
+"\u005c\{1}";
+"\\{1}";
+
+---
+
+(program
+  (expression_statement
+    (string_literal
+      (escape_sequence)
+      (escape_sequence)
+      (string_fragment)))
+  (expression_statement
+    (string_literal
+      (escape_sequence)
+      (string_fragment))))
+
+=====================================
+K10 mixed backslashes before text block content
+=====================================
+
+"""
+\u005c\q
+""";
+"""
+\\q
+""";
+
+---
+
+(program
+  (expression_statement
+    (string_literal
+      (multiline_string_fragment)
+      (escape_sequence)
+      (escape_sequence)
+      (multiline_string_fragment)))
+  (expression_statement
+    (string_literal
+      (multiline_string_fragment)
+      (escape_sequence)
+      (multiline_string_fragment))))
+
+=====================================
+K10 repeated u after an encoded backslash
+=====================================
+
+"\u005c\uu0041";
+"\u005c\u0041";
+
+---
+
+(program
+  (expression_statement
+    (string_literal
+      (escape_sequence)
+      (escape_sequence)))
+  (expression_statement
+    (string_literal
+      (escape_sequence)
+      (escape_sequence))))

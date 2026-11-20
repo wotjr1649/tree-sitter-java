@@ -14,8 +14,10 @@
   backslash before a matching quote, as in `"\u005c""` and `'\u005c''` (JLS 25 §3.3 and §3.10.7,
   tree-sitter-java issues #207 and #209, based on PR #210 by theawless). String and text block escape nodes now span
   the complete repeated-`u` escape, an encoded backslash with an escaped double quote, or a pair of encoded
-  backslashes. Strings and text blocks also parse an encoded backslash paired with a raw backslash before the
-  closing delimiter. Each backslash in a mixed pair has its own `escape_sequence` node.
+  backslashes. Strings and text blocks parse an encoded backslash paired with a raw backslash both before the
+  closing delimiter and within the literal body. Each backslash in a mixed pair has its own `escape_sequence` node,
+  and ordinary characters after the pair form a `string_fragment` or `multiline_string_fragment`.
+  In `"\u005c\{1}"`, a `string_fragment` for `{1}` replaces the previous `string_interpolation`.
   An encoded backslash before the only closing double quote or text block delimiter now leaves the literal
   unterminated. Repeated `u` inherits ordinary string tolerances for encoded quotes and line breaks, illegal
   escape tails, raw line breaks and string templates. In `"\uuu005cu0041"`, `u0041` is a string fragment, as in the

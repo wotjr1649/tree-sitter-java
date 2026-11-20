@@ -1,8 +1,8 @@
 {
   "meta": {
     "api": "com.sun.source.util.JavacTask.parse()",
-    "case_count": 64,
-    "cases_sha256": "cd6fcc62739fe14e5da44c90a7a7e0f8bf1be8f79c2f81525238c40f9ec05b5b",
+    "case_count": 72,
+    "cases_sha256": "fa9ea6c71fccf83deacc1bd4ae4103a7c58570e5d8739b2bb27c08abf926a694",
     "java.runtime.version": "25.0.5+8-LTS",
     "java.vendor": "Eclipse Adoptium",
     "options": ["--release", "25", "-proc:none"],
@@ -75,6 +75,14 @@
     "k10/string-encoded-and-raw-slash": [],
     "k10/text-encoded-and-raw-slash": [],
     "k10/text-terminal-mixed": [],
-    "k10/string-mixed-before-short-many-u": ["compiler.err.illegal.unicode.esc", "compiler.err.unclosed.str.lit", "compiler.err.premature.eof"]
+    "k10/string-mixed-before-short-many-u": ["compiler.err.illegal.unicode.esc", "compiler.err.unclosed.str.lit", "compiler.err.premature.eof"],
+    "k10/string-mixed-backslashes-before-bracket": [],
+    "k10/string-raw-backslashes-before-bracket": [],
+    "k10/string-mixed-backslashes-before-braces": [],
+    "k10/string-raw-backslashes-before-braces": [],
+    "k10/text-mixed-backslashes-before-q": [],
+    "k10/text-raw-backslashes-before-q": [],
+    "k10/string-many-u-after-encoded-backslash": ["compiler.err.illegal.esc.char"],
+    "k10/string-one-u-after-encoded-backslash": ["compiler.err.illegal.esc.char"]
   }
 }

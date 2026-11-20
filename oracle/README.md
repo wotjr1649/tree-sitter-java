@@ -31,8 +31,9 @@ alternatives, annotated receiver parameters and `instanceof` type patterns with 
 fix), `k8` (a raw NUL byte inside string literals, text blocks and char literals, with adjacent unterminated literals,
 of the K8 fix, plus the probes of the PR #19 review: raw NUL next to CR, LF, line continuations and text block
 delimiters, with NUL-free controls), and `k10` (Unicode escapes in strings, text blocks and character literals, with
-controls for repeated `u`, encoded backslashes, quote boundaries and adjacent invalid inputs). Every case names its
-origin in `provenance`: the bundle path with its `SHA256SUMS` hash, the PR, or "written in this task".
+controls for repeated `u`, including after an encoded backslash, mixed encoded and raw backslashes before literal
+content and closing delimiters, quote boundaries and adjacent invalid inputs). Every case names its origin in
+`provenance`: the bundle path with its `SHA256SUMS` hash, the PR, or "written in this task".
 IDs are prefixed with the set name. To add a case, append a line, hash its `source` (SHA-256 of the UTF-8 bytes; the
 replay prints the actual hash when it differs), then regenerate that set's verdicts.
 
