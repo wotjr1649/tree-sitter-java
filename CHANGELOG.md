@@ -4,6 +4,8 @@
 
 - Record the pinned javac parse verdict, diagnostic codes and original file hash for each example baseline failure.
   CI checks the verdict file against the failure list and the pinned checkouts.
+- Document the [grammar tolerances and known limits](docs/tolerances.md), including forms accepted by
+  javac's parser and rejected during full compilation.
 
 - Parse parenthesized assignment targets (K12, JLS 25 §§15.8.5 and 15.26), including `(x) = 1`, `((x)) += 7`,
   `(this.field) = x` and `(a[0]) <<= 1` in statements, `for` clauses and lambda bodies. The
@@ -29,7 +31,7 @@
   escape outside a string or char literal can form an identifier, a keyword, a separator, a comment delimiter or a
   line end (`int \u0061lpha;`). The grammar reads such escapes only inside literals; elsewhere they give ERROR,
   or, inside a comment, a token boundary that differs from javac's (`// \u000A int f;` stays one `line_comment`)
-  (grammar-orchard issue #51).
+  (grammar-orchard issue #51). See the [pinned Unicode cases](docs/tolerances.md#unicode-escapes-outside-literals).
 - Parse `open`, `module`, and `with` as type names in local and array declarations, casts, and `instanceof` (JLS 25
   §3.8, reported in grammar-orchard issue #43). Generic locals such as `module<String> x = null;` now form a
   `local_variable_declaration` instead of an `expression_statement`, and `module.class` now forms a `class_literal`

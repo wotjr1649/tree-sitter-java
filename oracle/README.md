@@ -42,6 +42,9 @@ hash, the PR, or "written in this task". IDs are prefixed with the set name. To 
 `source` (SHA-256 of the UTF-8 bytes; the
 replay prints the actual hash when it differs), then regenerate that set's verdicts.
 
+See [grammar tolerances and known limits](../docs/tolerances.md) for accepted invalid forms, deliberate
+grammar errors, and known differences on valid input.
+
 ## Verdicts
 
 ```sh
