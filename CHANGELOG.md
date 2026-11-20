@@ -1,6 +1,31 @@
 # Changelog
 
-## Unreleased
+## 3.0.0
+
+Phase 5 makes three breaking changes. Java's reserved keywords and the literals `true`, `false` and `null`
+now produce parse errors when used as names in the withdrawn forms. K17 narrows the `provides_module_directive`
+schema so every implementation is a `provider`. The Go module path ends in `/v3`. This release records 32
+withdrawn forms and fixes contextual names in constructors (K30), enum constants (K31) and `requires` directives
+(K33). Pattern bindings and certain `for` variables named `when` remain known limits (K25 and K32) because
+keyword extraction selects `when` in parse states that have a guard-keyword action. ADR-0002 records the
+repository's independent maintenance after v1.0.0 in the documentation.
+
+Compared with 2.4.0, `parser.c` grows from 2,960,978 to 3,037,379 bytes (+76,401, +2.58%)
+and the parser grows from 1,648 to 1,685 states (+37, +2.25%).
+
+### Migration
+
+- Update fixtures that relied on reserved words as names to expect `ERROR` or `MISSING`, or use legal identifiers.
+  The [withdrawn forms](docs/tolerances.md#withdrawn-in-300) cover type and pattern names, assignments,
+  field access and method references, among other contexts.
+- Update queries and tree walkers for `provides_module_directive` to read every implementation through
+  `provider:`. The field is required and repeatable. The unfielded `identifier` and `scoped_identifier`
+  implementation alternatives are removed from the schema. For `provides S with A, B;`, the first field
+  lookup now returns `A`. Node kind and field names retain their spellings.
+- Update Go dependencies and imports to `github.com/wotjr1649/tree-sitter-java/v3`, with the binding at
+  `github.com/wotjr1649/tree-sitter-java/v3/bindings/go`.
+
+### Changes
 
 - **K33.** Parse `transitive` as the dependency name in `requires transitive;` and
   `requires static transitive;`, and as the first segment of a qualified dependency name.
@@ -17,8 +42,10 @@
   `children` entry is removed from `provides_module_directive`.
   [JLS 25 §7.7.4](https://docs.oracle.com/javase/specs/jls/se25/html/jls-7.html#jls-7.7.4) ·
   [grammar-orchard PR #20](https://codeberg.org/grammar-orchard/tree-sitter-java-orchard/pulls/20)
-- Record the repository as independent (ADR-0002): tree-sitter/tree-sitter-java v0.23.5 is the original grammar it
-  started from, not an upstream. Its later changes are not tracked or merged. Documentation only; no grammar change.
+- Document independent maintenance in [ADR-0002](docs/decisions/ADR-0002-independent-repository.md).
+  The original tree-sitter/tree-sitter-java v0.23.5 grammar became this repository's v1.0.0.
+  This repository fixes defects independently and ended upstream tracking and merges at v1.0.0.
+  The ADR updates documentation only.
 - **Breaking change (Phase 5).** Reserve all 51 Java keywords and the spellings `true`, `false` and `null`
   in identifier positions. Contextual keywords remain usable as identifiers. Unnamed lambda parameters
   keep their `identifier` nodes. The public node schema is unchanged by this change.
@@ -52,7 +79,7 @@
     and repeated `super` qualifiers, including the `open` controls.
   - [K25](oracle/data/cases/k25.jsonl) `o instanceof super value`, where `super` previously parsed as a type name.
 
-  Among 83,367 pinned Java files the new parser reports errors in seven more OpenJDK files, all rejected
+  Among 83,367 pinned Java files, this release reports errors in seven more OpenJDK files, all rejected
   by javac's parser. The example failure baseline rises from 183 to 190. See
   [withdrawn and retained tolerances](docs/tolerances.md#withdrawn-in-300).
 - **K31.** `sealed` as an enum constant name no longer produces errors: `enum E { sealed }`, `sealed(1)`,
@@ -77,8 +104,8 @@
   `for (String when[] : a)` and `for (String when = "", x = ""; ;)`. Javac accepts these, and the grammar can report an
   error. The smallest correct candidate added 10.9% to `parser.c`. The cause it shares with K25: where the guard keyword
   `when` has any action, tree-sitter's keyword extraction picks the keyword over `identifier`, and reserved sets and
-  lexical precedence cannot change that. The tested alternatives that fixed
-  these forms added 6.7% to 22.9%; cheaper experiments did not fix them or failed the corpus. The grammar and
+  lexical precedence cannot change that. Tested alternatives that addressed K25, K32 or both added 6.7% to
+  22.9% to `parser.c`. Cheaper experiments did not fix the forms or failed the corpus. The grammar and
   parser are unchanged. See [known limits](docs/tolerances.md#known-limits).
 
 ## 2.4.0
