@@ -4,8 +4,6 @@ examples/flink/flink-walkthroughs/flink-walkthrough-datastream-java/src/main/res
 examples/flink/flink-walkthroughs/flink-walkthrough-table-java/src/main/resources/archetype-resources/src/main/java/MyFloor.java
 examples/flink/flink-walkthroughs/flink-walkthrough-table-java/src/main/resources/archetype-resources/src/main/java/SpendReport.java
 examples/flink/flink-walkthroughs/flink-walkthrough-table-java/src/main/resources/archetype-resources/src/test/java/SpendReportTest.java
-examples/jdk/src/java.base/share/classes/jdk/internal/classfile/impl/verifier/ParserVerifier.java
-examples/jdk/src/jdk.jdeps/share/classes/com/sun/tools/jdeps/Dependencies.java
 examples/jdk/test/langtools/tools/javac/6440583/A.java
 examples/jdk/test/langtools/tools/javac/7167125/DiffResultAfterSameOperationInnerClasses.java
 examples/jdk/test/langtools/tools/javac/8245153/T8245153.java
@@ -159,10 +157,7 @@ examples/jdk/test/langtools/tools/javac/patterns/PatternCaseErrorRecovery.java
 examples/jdk/test/langtools/tools/javac/patterns/PatternErrorRecovery.java
 examples/jdk/test/langtools/tools/javac/patterns/SwitchErrors.java
 examples/jdk/test/langtools/tools/javac/patterns/T8309054.java
-examples/jdk/test/langtools/tools/javac/patterns/T8314226.java
-examples/jdk/test/langtools/tools/javac/patterns/T8314632.java
 examples/jdk/test/langtools/tools/javac/patterns/T8317300.java
-examples/jdk/test/langtools/tools/javac/patterns/Unnamed.java
 examples/jdk/test/langtools/tools/javac/patterns/UnnamedErrors.java
 examples/jdk/test/langtools/tools/javac/policy/test3/A.java
 examples/jdk/test/langtools/tools/javac/processing/6994946/SyntaxErrorTest.java

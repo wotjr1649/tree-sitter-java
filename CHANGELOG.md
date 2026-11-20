@@ -4,6 +4,17 @@
 
 - Extend the Ubuntu CI examples to parse OpenJDK 25.0.5+8 sources and javac langtools tests at pinned commit
   `fda231468e56663992785ec199a6efb8eca3cc7a`. No grammar change.
+- Parse multiple type or record patterns in a single `case` label, with an optional trailing `when` guard (K11,
+  JLS 25 §14.11.1). The `switch_label` has a `pattern` child for each alternative, in source order. Empty record
+  pattern lists such as `case R(), S()` previously appeared as `method_invocation` children and now appear as
+  `pattern` children holding `record_pattern`, including the same syntax with lowercase names. The
+  `node-types.json` bytes and the node-kind and field names are unchanged. Type patterns with `var` as a type name,
+  `static` or `instanceof` read as a binding name, or duplicate `final` modifiers retain their single-pattern
+  tolerances in lists. Reserve the keywords and literals that the expression alternative previously disambiguated
+  in additional patterns and their record components. Named bindings and preview or invalid types can still be
+  parsed where javac's later phases reject them. Mixing a constant with a type pattern, as in `case 1, Integer i`,
+  still produces an error. The five OpenJDK example files fixed by K11 are removed from
+  `test/examples/failures.txt` (192 to 187 paths).
 
 ## 2.2.0
 

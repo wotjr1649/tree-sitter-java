@@ -1,0 +1,914 @@
+==================
+Multiple type patterns in a switch statement rule
+==================
+
+class C {
+  void f(Object x) {
+    switch (x) {
+      case String _, Integer _ -> {}
+      default -> {}
+    }
+  }
+}
+
+---
+
+(program
+  (class_declaration
+    (identifier)
+    (class_body
+      (method_declaration
+        (void_type)
+        (identifier)
+        (formal_parameters
+          (formal_parameter
+            (type_identifier)
+            (identifier)))
+        (block
+          (switch_expression
+            (parenthesized_expression
+              (identifier))
+            (switch_block
+              (switch_rule
+                (switch_label
+                  (pattern
+                    (type_pattern
+                      (type_identifier)
+                      (identifier)))
+                  (pattern
+                    (type_pattern
+                      (type_identifier)
+                      (identifier))))
+                (block))
+              (switch_rule
+                (switch_label)
+                (block)))))))))
+
+==================
+K11 record patterns in a switch expression rule
+==================
+
+class C { record R(int n) {} record S(int n) {} int f(Object x, boolean ok) { return switch (x) { case R(_), S(_) -> 1; default -> 0; }; } }
+
+---
+
+(program
+  (class_declaration
+    (identifier)
+    (class_body
+      (record_declaration
+        (identifier)
+        (formal_parameters
+          (formal_parameter
+            (integral_type)
+            (identifier)))
+        (class_body))
+      (record_declaration
+        (identifier)
+        (formal_parameters
+          (formal_parameter
+            (integral_type)
+            (identifier)))
+        (class_body))
+      (method_declaration
+        (integral_type)
+        (identifier)
+        (formal_parameters
+          (formal_parameter
+            (type_identifier)
+            (identifier))
+          (formal_parameter
+            (boolean_type)
+            (identifier)))
+        (block
+          (return_statement
+            (switch_expression
+              (parenthesized_expression
+                (identifier))
+              (switch_block
+                (switch_rule
+                  (switch_label
+                    (pattern
+                      (record_pattern
+                        (identifier)
+                        (record_pattern_body
+                          (record_pattern_component
+                            (underscore_pattern)))))
+                    (pattern
+                      (record_pattern
+                        (identifier)
+                        (record_pattern_body
+                          (record_pattern_component
+                            (underscore_pattern))))))
+                  (expression_statement
+                    (decimal_integer_literal)))
+                (switch_rule
+                  (switch_label)
+                  (expression_statement
+                    (decimal_integer_literal)))))))))))
+
+==================
+K11 mixed patterns with a guard in a switch statement group
+==================
+
+class C { record R(int n) {} record S(int n) {} void f(Object x, boolean ok) { switch (x) { case Integer _, R(_), String _ when ok: break; default: break; } } }
+
+---
+
+(program
+  (class_declaration
+    (identifier)
+    (class_body
+      (record_declaration
+        (identifier)
+        (formal_parameters
+          (formal_parameter
+            (integral_type)
+            (identifier)))
+        (class_body))
+      (record_declaration
+        (identifier)
+        (formal_parameters
+          (formal_parameter
+            (integral_type)
+            (identifier)))
+        (class_body))
+      (method_declaration
+        (void_type)
+        (identifier)
+        (formal_parameters
+          (formal_parameter
+            (type_identifier)
+            (identifier))
+          (formal_parameter
+            (boolean_type)
+            (identifier)))
+        (block
+          (switch_expression
+            (parenthesized_expression
+              (identifier))
+            (switch_block
+              (switch_block_statement_group
+                (switch_label
+                  (pattern
+                    (type_pattern
+                      (type_identifier)
+                      (identifier)))
+                  (pattern
+                    (record_pattern
+                      (identifier)
+                      (record_pattern_body
+                        (record_pattern_component
+                          (underscore_pattern)))))
+                  (pattern
+                    (type_pattern
+                      (type_identifier)
+                      (identifier)))
+                  (guard
+                    (identifier)))
+                (break_statement))
+              (switch_block_statement_group
+                (switch_label)
+                (break_statement)))))))))
+
+==================
+K11 type patterns in a switch expression group
+==================
+
+class C {  int f(Object x, boolean ok) { return switch (x) { case String _, Integer _: yield 1; default: yield 0; }; } }
+
+---
+
+(program
+  (class_declaration
+    (identifier)
+    (class_body
+      (method_declaration
+        (integral_type)
+        (identifier)
+        (formal_parameters
+          (formal_parameter
+            (type_identifier)
+            (identifier))
+          (formal_parameter
+            (boolean_type)
+            (identifier)))
+        (block
+          (return_statement
+            (switch_expression
+              (parenthesized_expression
+                (identifier))
+              (switch_block
+                (switch_block_statement_group
+                  (switch_label
+                    (pattern
+                      (type_pattern
+                        (type_identifier)
+                        (identifier)))
+                    (pattern
+                      (type_pattern
+                        (type_identifier)
+                        (identifier))))
+                  (yield_statement
+                    (decimal_integer_literal)))
+                (switch_block_statement_group
+                  (switch_label)
+                  (yield_statement
+                    (decimal_integer_literal)))))))))))
+
+==================
+K11 empty record patterns in a switch expression rule
+==================
+
+class C { record R() {} record S() {} int f(Object x, boolean ok) { return switch (x) { case R(), S() -> 1; default -> 0; }; } }
+
+---
+
+(program
+  (class_declaration
+    (identifier)
+    (class_body
+      (record_declaration
+        (identifier)
+        (formal_parameters)
+        (class_body))
+      (record_declaration
+        (identifier)
+        (formal_parameters)
+        (class_body))
+      (method_declaration
+        (integral_type)
+        (identifier)
+        (formal_parameters
+          (formal_parameter
+            (type_identifier)
+            (identifier))
+          (formal_parameter
+            (boolean_type)
+            (identifier)))
+        (block
+          (return_statement
+            (switch_expression
+              (parenthesized_expression
+                (identifier))
+              (switch_block
+                (switch_rule
+                  (switch_label
+                    (pattern
+                      (record_pattern
+                        (identifier)
+                        (record_pattern_body)))
+                    (pattern
+                      (record_pattern
+                        (identifier)
+                        (record_pattern_body))))
+                  (expression_statement
+                    (decimal_integer_literal)))
+                (switch_rule
+                  (switch_label)
+                  (expression_statement
+                    (decimal_integer_literal)))))))))))
+
+==================
+K11 an empty record pattern before a type pattern
+==================
+
+class C { record R() {} record S() {} int f(Object x, boolean ok) { return switch (x) { case R(), String _ -> 1; default -> 0; }; } }
+
+---
+
+(program
+  (class_declaration
+    (identifier)
+    (class_body
+      (record_declaration
+        (identifier)
+        (formal_parameters)
+        (class_body))
+      (record_declaration
+        (identifier)
+        (formal_parameters)
+        (class_body))
+      (method_declaration
+        (integral_type)
+        (identifier)
+        (formal_parameters
+          (formal_parameter
+            (type_identifier)
+            (identifier))
+          (formal_parameter
+            (boolean_type)
+            (identifier)))
+        (block
+          (return_statement
+            (switch_expression
+              (parenthesized_expression
+                (identifier))
+              (switch_block
+                (switch_rule
+                  (switch_label
+                    (pattern
+                      (record_pattern
+                        (identifier)
+                        (record_pattern_body)))
+                    (pattern
+                      (type_pattern
+                        (type_identifier)
+                        (identifier))))
+                  (expression_statement
+                    (decimal_integer_literal)))
+                (switch_rule
+                  (switch_label)
+                  (expression_statement
+                    (decimal_integer_literal)))))))))))
+
+==================
+K11 an empty record pattern after a type pattern
+==================
+
+class C { record R() {} record S() {} int f(Object x, boolean ok) { return switch (x) { case String _, R() -> 1; default -> 0; }; } }
+
+---
+
+(program
+  (class_declaration
+    (identifier)
+    (class_body
+      (record_declaration
+        (identifier)
+        (formal_parameters)
+        (class_body))
+      (record_declaration
+        (identifier)
+        (formal_parameters)
+        (class_body))
+      (method_declaration
+        (integral_type)
+        (identifier)
+        (formal_parameters
+          (formal_parameter
+            (type_identifier)
+            (identifier))
+          (formal_parameter
+            (boolean_type)
+            (identifier)))
+        (block
+          (return_statement
+            (switch_expression
+              (parenthesized_expression
+                (identifier))
+              (switch_block
+                (switch_rule
+                  (switch_label
+                    (pattern
+                      (type_pattern
+                        (type_identifier)
+                        (identifier)))
+                    (pattern
+                      (record_pattern
+                        (identifier)
+                        (record_pattern_body))))
+                  (expression_statement
+                    (decimal_integer_literal)))
+                (switch_rule
+                  (switch_label)
+                  (expression_statement
+                    (decimal_integer_literal)))))))))))
+
+==================
+K11 one guarded type pattern
+==================
+
+class C {  int f(Object x, boolean ok) { return switch (x) { case String s when ok -> 1; default -> 0; }; } }
+
+---
+
+(program
+  (class_declaration
+    (identifier)
+    (class_body
+      (method_declaration
+        (integral_type)
+        (identifier)
+        (formal_parameters
+          (formal_parameter
+            (type_identifier)
+            (identifier))
+          (formal_parameter
+            (boolean_type)
+            (identifier)))
+        (block
+          (return_statement
+            (switch_expression
+              (parenthesized_expression
+                (identifier))
+              (switch_block
+                (switch_rule
+                  (switch_label
+                    (pattern
+                      (type_pattern
+                        (type_identifier)
+                        (identifier)))
+                    (guard
+                      (identifier)))
+                  (expression_statement
+                    (decimal_integer_literal)))
+                (switch_rule
+                  (switch_label)
+                  (expression_statement
+                    (decimal_integer_literal)))))))))))
+
+==================
+K11 one empty record pattern
+==================
+
+class C { record R() {} record S() {} int f(Object x, boolean ok) { return switch (x) { case R() -> 1; default -> 0; }; } }
+
+---
+
+(program
+  (class_declaration
+    (identifier)
+    (class_body
+      (record_declaration
+        (identifier)
+        (formal_parameters)
+        (class_body))
+      (record_declaration
+        (identifier)
+        (formal_parameters)
+        (class_body))
+      (method_declaration
+        (integral_type)
+        (identifier)
+        (formal_parameters
+          (formal_parameter
+            (type_identifier)
+            (identifier))
+          (formal_parameter
+            (boolean_type)
+            (identifier)))
+        (block
+          (return_statement
+            (switch_expression
+              (parenthesized_expression
+                (identifier))
+              (switch_block
+                (switch_rule
+                  (switch_label
+                    (pattern
+                      (record_pattern
+                        (identifier)
+                        (record_pattern_body))))
+                  (expression_statement
+                    (decimal_integer_literal)))
+                (switch_rule
+                  (switch_label)
+                  (expression_statement
+                    (decimal_integer_literal)))))))))))
+
+==================
+K11 null and default in one label
+==================
+
+class C { int f(Object x) { return switch (x) { case null, default -> 0; }; } }
+
+---
+
+(program
+  (class_declaration
+    (identifier)
+    (class_body
+      (method_declaration
+        (integral_type)
+        (identifier)
+        (formal_parameters
+          (formal_parameter
+            (type_identifier)
+            (identifier)))
+        (block
+          (return_statement
+            (switch_expression
+              (parenthesized_expression
+                (identifier))
+              (switch_block
+                (switch_rule
+                  (switch_label
+                    (null_literal))
+                  (expression_statement
+                    (decimal_integer_literal)))))))))))
+
+==================
+K11 a constant list
+==================
+
+class C {  int f(int x, boolean ok) { return switch (x) { case 1, 2 -> 1; default -> 0; }; } }
+
+---
+
+(program
+  (class_declaration
+    (identifier)
+    (class_body
+      (method_declaration
+        (integral_type)
+        (identifier)
+        (formal_parameters
+          (formal_parameter
+            (integral_type)
+            (identifier))
+          (formal_parameter
+            (boolean_type)
+            (identifier)))
+        (block
+          (return_statement
+            (switch_expression
+              (parenthesized_expression
+                (identifier))
+              (switch_block
+                (switch_rule
+                  (switch_label
+                    (decimal_integer_literal)
+                    (decimal_integer_literal))
+                  (expression_statement
+                    (decimal_integer_literal)))
+                (switch_rule
+                  (switch_label)
+                  (expression_statement
+                    (decimal_integer_literal)))))))))))
+
+==================
+K11 constant then pattern
+:error
+==================
+
+class C {  int f(Integer x, boolean ok) { return switch (x) { case 1, Integer i -> 1; default -> 0; }; } }
+
+---
+
+==================
+K11 pattern then constant
+:error
+==================
+
+class C {  int f(Integer x, boolean ok) { return switch (x) { case Integer _, 1 -> 1; default -> 0; }; } }
+
+---
+
+==================
+K11 null then pattern
+:error
+==================
+
+class C {  int f(Object x, boolean ok) { return switch (x) { case null, Integer _ -> 1; default -> 0; }; } }
+
+---
+
+==================
+K11 pattern then default
+:error
+==================
+
+class C {  int f(Object x, boolean ok) { return switch (x) { case Integer _, default -> 1; default -> 0; }; } }
+
+---
+
+==================
+K11 missing comma
+:error
+==================
+
+class C {  int f(Object x, boolean ok) { return switch (x) { case String _ Integer _ -> 1; default -> 0; }; } }
+
+---
+
+==================
+K11 trailing comma
+:error
+==================
+
+class C {  int f(Object x, boolean ok) { return switch (x) { case String _, Integer _, -> 1; default -> 0; }; } }
+
+---
+
+==================
+K11 early guard
+:error
+==================
+
+class C {  int f(Object x, boolean ok) { return switch (x) { case String _ when ok, Integer _ -> 1; default -> 0; }; } }
+
+---
+
+==================
+K11 existing type pattern tolerances in a list
+==================
+
+class C {
+  int f(Object x) {
+    return switch (x) {
+      case String _, var _ -> 1;
+      case String _, Integer static -> 2;
+      case String _, final final Integer _ -> 3;
+      default -> 0;
+    };
+  }
+}
+
+---
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (integral_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (type_identifier)
+            name: (identifier)))
+        body: (block
+          (return_statement
+            (switch_expression
+              condition: (parenthesized_expression
+                (identifier))
+              body: (switch_block
+                (switch_rule
+                  (switch_label
+                    (pattern
+                      (type_pattern
+                        (type_identifier)
+                        (identifier)))
+                    (pattern
+                      (type_pattern
+                        (type_identifier)
+                        (identifier))))
+                  (expression_statement
+                    (decimal_integer_literal)))
+                (switch_rule
+                  (switch_label
+                    (pattern
+                      (type_pattern
+                        (type_identifier)
+                        (identifier)))
+                    (pattern
+                      (type_pattern
+                        (type_identifier)
+                        (identifier))))
+                  (expression_statement
+                    (decimal_integer_literal)))
+                (switch_rule
+                  (switch_label
+                    (pattern
+                      (type_pattern
+                        (type_identifier)
+                        (identifier)))
+                    (pattern
+                      (type_pattern
+                        (modifiers)
+                        (type_identifier)
+                        (identifier))))
+                  (expression_statement
+                    (decimal_integer_literal)))
+                (switch_rule
+                  (switch_label)
+                  (expression_statement
+                    (decimal_integer_literal)))))))))))
+
+==================
+K11 keyword is not a type in an additional pattern
+:error
+==================
+
+class C {  int f(Object x) { return switch (x) { case String _, default _ -> 1; default -> 0; }; } }
+
+---
+
+==================
+K11 keyword is not a binding name in an additional pattern
+:error
+==================
+
+class C {  int f(Object x) { return switch (x) { case String _, Integer instanceof -> 1; default -> 0; }; } }
+
+---
+
+==================
+K11 literal is not a type in an additional record pattern
+:error
+==================
+
+class C { record R(int n) {} int f(Object x) { return switch (x) { case String _, R(null _) -> 1; default -> 0; }; } }
+
+---
+
+==================
+K11 keyword is not a binding name in an additional record pattern
+:error
+==================
+
+class C { record R(T n) {} static class T {} int f(Object x) { return switch (x) { case String _, R(T instanceof) -> 1; default -> 0; }; } }
+
+---
+
+==================
+K11 contextual when as the type in an additional pattern
+==================
+
+class C { static class when {} int f(Object x) { return switch (x) { case String _, when _ -> 1; default -> 0; }; } }
+
+---
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (class_declaration
+        (modifiers)
+        name: (identifier)
+        body: (class_body))
+      (method_declaration
+        type: (integral_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (type_identifier)
+            name: (identifier)))
+        body: (block
+          (return_statement
+            (switch_expression
+              condition: (parenthesized_expression
+                (identifier))
+              body: (switch_block
+                (switch_rule
+                  (switch_label
+                    (pattern
+                      (type_pattern
+                        (type_identifier)
+                        (identifier)))
+                    (pattern
+                      (type_pattern
+                        (type_identifier)
+                        (identifier))))
+                  (expression_statement
+                    (decimal_integer_literal)))
+                (switch_rule
+                  (switch_label)
+                  (expression_statement
+                    (decimal_integer_literal)))))))))))
+
+==================
+K11 nested record patterns in an additional pattern
+==================
+
+class C { record R(S value) {} record S(int n) {} int f(Object x) { return switch (x) { case String _, R(S(_)) -> 1; default -> 0; }; } }
+
+---
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (record_declaration
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (type_identifier)
+            name: (identifier)))
+        body: (class_body))
+      (record_declaration
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (integral_type)
+            name: (identifier)))
+        body: (class_body))
+      (method_declaration
+        type: (integral_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (type_identifier)
+            name: (identifier)))
+        body: (block
+          (return_statement
+            (switch_expression
+              condition: (parenthesized_expression
+                (identifier))
+              body: (switch_block
+                (switch_rule
+                  (switch_label
+                    (pattern
+                      (type_pattern
+                        (type_identifier)
+                        (identifier)))
+                    (pattern
+                      (record_pattern
+                        (identifier)
+                        (record_pattern_body
+                          (record_pattern
+                            (identifier)
+                            (record_pattern_body
+                              (record_pattern_component
+                                (underscore_pattern))))))))
+                  (expression_statement
+                    (decimal_integer_literal)))
+                (switch_rule
+                  (switch_label)
+                  (expression_statement
+                    (decimal_integer_literal)))))))))))
+
+==================
+K11 existing keyword binding tolerance after a primitive type
+==================
+
+class C {  int f(Object x) { return switch (x) { case String _, int instanceof -> 1; default -> 0; }; } }
+
+---
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (integral_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (type_identifier)
+            name: (identifier)))
+        body: (block
+          (return_statement
+            (switch_expression
+              condition: (parenthesized_expression
+                (identifier))
+              body: (switch_block
+                (switch_rule
+                  (switch_label
+                    (pattern
+                      (type_pattern
+                        (type_identifier)
+                        (identifier)))
+                    (pattern
+                      (type_pattern
+                        (integral_type)
+                        (identifier))))
+                  (expression_statement
+                    (decimal_integer_literal)))
+                (switch_rule
+                  (switch_label)
+                  (expression_statement
+                    (decimal_integer_literal)))))))))))
+
+==================
+K11 existing keyword binding tolerance in a primitive record component
+==================
+
+class C { record R(int n) {} int f(Object x) { return switch (x) { case String _, R(int instanceof) -> 1; default -> 0; }; } }
+
+---
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (record_declaration
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (integral_type)
+            name: (identifier)))
+        body: (class_body))
+      (method_declaration
+        type: (integral_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (type_identifier)
+            name: (identifier)))
+        body: (block
+          (return_statement
+            (switch_expression
+              condition: (parenthesized_expression
+                (identifier))
+              body: (switch_block
+                (switch_rule
+                  (switch_label
+                    (pattern
+                      (type_pattern
+                        (type_identifier)
+                        (identifier)))
+                    (pattern
+                      (record_pattern
+                        (identifier)
+                        (record_pattern_body
+                          (record_pattern_component
+                            (integral_type)
+                            (identifier))))))
+                  (expression_statement
+                    (decimal_integer_literal)))
+                (switch_rule
+                  (switch_label)
+                  (expression_statement
+                    (decimal_integer_literal)))))))))))
