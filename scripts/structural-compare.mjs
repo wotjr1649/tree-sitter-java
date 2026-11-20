@@ -460,6 +460,13 @@ async function selfTest(config) {
   assert.ok(rows[0].counts.matched >= 3);
   assert.deepEqual(rows[0].mismatches, []);
   const parser = makeParser(config.binding, config.runtime);
+  // qualifiedSuper is false for unqualified super, type and package qualifiers, and the 2.3.0 shape (super inside the qualifier).
+  const refs = 'class T { Object a = super::m, b = T::m, c = a.b.C::m, d = C<String>.super::m; }';
+  const refNodes = [...preorder(parser.parse(refs))].filter((node) => node.type === 'method_reference');
+  assert.deepEqual(refNodes.map((node) => node.text), ['super::m', 'T::m', 'a.b.C::m', 'C<String>.super::m']);
+  assert.equal(refNodes[3].firstNamedChild.lastChild.type, 'type_identifier');
+  for (const node of refNodes)
+    assert.equal(describe(node, { qualifiedSuper: true }, {}, refs, (i) => i).qualifiedSuper, false, node.text);
   const wrongOperator = { ...config.mapping, PLUS: config.mapping.PLUS.map((rule) => ({ ...rule, operator: '-' })) };
   const absent = { ...cast, start: cast.start + 1 };
   const probe = compareCase(parser, source, { ...accept, nodes: [plus, absent] }, wrongOperator);

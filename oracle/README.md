@@ -40,7 +40,8 @@ identifier tolerances), `k13` (typed and bare underscores in record patterns, ot
 and adjacent invalid patterns), `k16` (parenthesized names before additive operators, with cast and lambda controls
 and adjacent invalid inputs), `k18` (comment-like text in text blocks, escape and delimiter boundaries, CRLF and raw
 NUL, controls for comments outside literals and in interpolation expressions, and adjacent invalid inputs), `k20`
-(qualified `super` method references, with explicit type arguments, control references, and adjacent invalid inputs),
+(qualified `super` method references, with explicit type arguments, `open`, `module` and `with` as qualifiers,
+control references, and adjacent invalid inputs),
 `k26` (guarded empty record patterns in colon labels and arrow rules, with adjacent invalid inputs and unchanged
 controls), and `structural` (Phase 3 ambiguity probes and independently written reproducers). Every case names its
 origin in `provenance`: the bundle path with its `SHA256SUMS` hash, the PR, or "written in this task" (the task that

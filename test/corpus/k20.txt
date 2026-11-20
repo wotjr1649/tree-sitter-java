@@ -299,3 +299,117 @@ class T {
             (array_type
               element: (type_identifier)
               dimensions: (dimensions))))))))
+
+======================
+K20 contextual keywords as qualified super qualifiers
+======================
+
+import java.util.function.*;
+interface open { default String m() { return ""; } }
+interface module { default <X> X id(X x) { return x; } }
+interface with { default int size() { return 0; } }
+class C implements open, module, with {
+  Supplier<String> a = open.super::m;
+  UnaryOperator<String> b = module.super::<String>id;
+  IntSupplier c = with.super::size;
+  String d = open.super.m();
+}
+
+----------------------
+
+(program
+  (import_declaration
+    (scoped_identifier
+      scope: (scoped_identifier
+        scope: (identifier)
+        name: (identifier))
+      name: (identifier))
+    (asterisk))
+  (interface_declaration
+    name: (identifier)
+    body: (interface_body
+      (method_declaration
+        (modifiers)
+        type: (type_identifier)
+        name: (identifier)
+        parameters: (formal_parameters)
+        body: (block
+          (return_statement
+            (string_literal))))))
+  (interface_declaration
+    name: (identifier)
+    body: (interface_body
+      (method_declaration
+        (modifiers)
+        type_parameters: (type_parameters
+          (type_parameter
+            (type_identifier)))
+        type: (type_identifier)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (type_identifier)
+            name: (identifier)))
+        body: (block
+          (return_statement
+            (identifier))))))
+  (interface_declaration
+    name: (identifier)
+    body: (interface_body
+      (method_declaration
+        (modifiers)
+        type: (integral_type)
+        name: (identifier)
+        parameters: (formal_parameters)
+        body: (block
+          (return_statement
+            (decimal_integer_literal))))))
+  (class_declaration
+    name: (identifier)
+    interfaces: (super_interfaces
+      (type_list
+        (type_identifier)
+        (type_identifier)
+        (type_identifier)))
+    body: (class_body
+      (field_declaration
+        type: (generic_type
+          (type_identifier)
+          (type_arguments
+            (type_identifier)))
+        declarator: (variable_declarator
+          name: (identifier)
+          value: (method_reference
+            (identifier)
+            (super)
+            (identifier))))
+      (field_declaration
+        type: (generic_type
+          (type_identifier)
+          (type_arguments
+            (type_identifier)))
+        declarator: (variable_declarator
+          name: (identifier)
+          value: (method_reference
+            (identifier)
+            (super)
+            (type_arguments
+              (type_identifier))
+            (identifier))))
+      (field_declaration
+        type: (type_identifier)
+        declarator: (variable_declarator
+          name: (identifier)
+          value: (method_reference
+            (identifier)
+            (super)
+            (identifier))))
+      (field_declaration
+        type: (type_identifier)
+        declarator: (variable_declarator
+          name: (identifier)
+          value: (method_invocation
+            object: (identifier)
+            (super)
+            name: (identifier)
+            arguments: (argument_list)))))))

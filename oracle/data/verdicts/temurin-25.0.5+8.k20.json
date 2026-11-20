@@ -1,8 +1,8 @@
 {
   "meta": {
     "api": "com.sun.source.util.JavacTask.parse()",
-    "case_count": 19,
-    "cases_sha256": "24fe34610fcaf930241299921f3631bda93f69bc27d42bd8ff900cf74ee1b0a3",
+    "case_count": 33,
+    "cases_sha256": "d8d04bd2698efe5720a63574586d8daa2075f27d4e936f04fd3c61fb87b0d0e2",
     "java.runtime.version": "25.0.5+8-LTS",
     "java.vendor": "Eclipse Adoptium",
     "options": ["--release", "25", "-proc:none"],
@@ -30,6 +30,20 @@
     "k20/negative-explicit-constructor": [],
     "k20/negative-double-super": ["compiler.err.expected", "compiler.err.expected"],
     "k20/negative-keyword-identifier": ["compiler.err.this.as.identifier"],
-    "k20/negative-plain-empty-type-arguments": ["compiler.err.illegal.start.of.type"]
+    "k20/negative-plain-empty-type-arguments": ["compiler.err.illegal.start.of.type"],
+    "k20/contextual-qualifiers": [],
+    "k20/contextual-controls": [],
+    "k20/negative-open-constructor": [],
+    "k20/negative-module-explicit-constructor": [],
+    "k20/negative-open-empty-type-arguments": ["compiler.err.illegal.start.of.type"],
+    "k20/negative-open-generic-qualifier": ["compiler.err.expected", "compiler.err.expected"],
+    "k20/negative-open-double-super": ["compiler.err.expected", "compiler.err.expected"],
+    "k20/negative-open-missing-dot": ["compiler.err.expected", "compiler.err.expected"],
+    "k20/negative-open-missing-member": ["compiler.err.expected"],
+    "k20/negative-with-this-constructor": [],
+    "k20/negative-permits-qualifier": [],
+    "k20/negative-var-qualifier": [],
+    "k20/negative-local-super-type": ["compiler.err.expected", "compiler.err.not.stmt"],
+    "k20/negative-super-array-constructor": ["compiler.err.expected", "compiler.err.illegal.start.of.expr"]
   }
 }

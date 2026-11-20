@@ -3631,6 +3631,28 @@
                       "name": "identifier"
                     },
                     {
+                      "type": "ALIAS",
+                      "content": {
+                        "type": "CHOICE",
+                        "members": [
+                          {
+                            "type": "STRING",
+                            "value": "open"
+                          },
+                          {
+                            "type": "STRING",
+                            "value": "module"
+                          },
+                          {
+                            "type": "STRING",
+                            "value": "with"
+                          }
+                        ]
+                      },
+                      "named": true,
+                      "value": "identifier"
+                    },
+                    {
                       "type": "SYMBOL",
                       "name": "scoped_type_identifier"
                     }
@@ -8613,6 +8635,11 @@
     [
       "_unannotated_type",
       "scoped_type_identifier",
+      "method_reference"
+    ],
+    [
+      "_unannotated_type",
+      "_reserved_identifier",
       "method_reference"
     ],
     [

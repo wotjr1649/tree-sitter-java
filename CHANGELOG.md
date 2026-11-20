@@ -31,7 +31,14 @@
   The qualifier is a separate `identifier` or `scoped_type_identifier`. The qualifier, `super`, optional
   `type_arguments`, and member `identifier` have no fields on `method_reference`. `node-types.json` adds
   `scoped_type_identifier` to the allowed children of `method_reference`. The adjacent invalid probes retain their
-  baseline parse verdicts.
+  baseline parse verdicts. The contextual keywords `open`, `module` and `with`, valid type names since K9, also work
+  as the qualifier: `open.super::m` and `module.super::<String>id` now parse with an `identifier` qualifier and a
+  named `super` instead of an `ERROR`. A qualifier that starts with one of them, such as `open.a.super::m`, still
+  errs, as `open.a x = null;` does at 2.3.0. As for `C.super`, `open.super::new` (javac's parser accepts it, a full
+  compile rejects it) and `open.super::<>m` (javac's parser rejects it) now parse too. Six inputs that javac's parser
+  rejects and that parsed without errors at 2.3.0 now produce errors: `C.super x;`, `C.super x = null;` and
+  `Names.J.super x = null;` as local declarations, the cast `(C.super) f`, `C.super[]::new` and
+  `C.super<String>::bm`.
 
 ## 2.3.0
 
