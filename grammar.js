@@ -300,12 +300,13 @@ module.exports = grammar({
     ),
 
     cast_expression: $ => prec(PREC.CAST, choice(
-      seq(
+      // JLS 25 §15.16: (Name) + x and (Name) - x are additive expressions.
+      prec.dynamic(-1, seq(
         '(',
         field('type', $._type),
         ')',
         field('value', $.expression),
-      ),
+      )),
       seq(
         '(',
         sep1(field('type', $._type), '&'),
