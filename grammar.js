@@ -597,7 +597,8 @@ module.exports = grammar({
 
     pattern: $ => choice(
       $.type_pattern,
-      $.record_pattern,
+      // A case label can also read an empty record pattern as a method call.
+      prec.dynamic(1, $.record_pattern),
     ),
     // Public aliases keep the same tree for the patterns that follow a comma.
     _additional_case_pattern: $ => choice(
