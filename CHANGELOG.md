@@ -11,6 +11,21 @@
   After `yield`, `yield (n) + k * 3;` still reads `yield(n)` as a method call (as at 2.3.0); that is tracked as K27.
   [JLS 25 §§15.15–15.18](https://docs.oracle.com/javase/specs/jls/se25/html/jls-15.html#jls-15.15),
   [grammar-orchard issue #45](https://codeberg.org/grammar-orchard/tree-sitter-java-orchard/issues/45).
+- Parse guarded empty record patterns as `switch_label` children of kind `pattern` holding a `record_pattern`,
+  alongside a `guard`, in colon groups and arrow rules (K26, JLS 25 §14.11.1 and §14.30.1, Phase 3 examples
+  report's `EmptyRecordGuard` reproducer). This also covers nested and qualified empty patterns and guarded pattern lists
+  that start with an empty pattern, such as `case R(), S(), Box(_) when b:`. Unguarded empty patterns, constant labels and ordinary calls retain their trees.
+  `node-types.json` and the accepted syntax are unchanged.
+- Keep comment-like text inside text blocks in `multiline_string_fragment` nodes and preserve `escape_sequence`
+  nodes (K18, JLS 25 §§3.7 and 3.10.6, grammar-orchard PR #41 and the Phase 3 `text-block-comments` report).
+  A closing delimiter on the same line as `//` now closes the block. Comments outside the delimiters and within
+  template interpolation expressions retain their roles. The node schema is unchanged. The existing text block
+  tolerances also apply when `//` or `/*` text precedes the closing delimiter on the same line: a missing opening
+  line terminator, illegal escapes such as `\q`, `\x41` and `\8`, illegal Unicode escapes such as `\u`, `\uuu041`
+  and `\u{41}`, and template interpolation `\{x}` with or without a processor such as `RAW.`. Corpus and oracle
+  cases record each form with a counterpart that writes the first slash as `\057` and parses at 2.3.0. Inputs that
+  javac rejects and that parsed at 2.3.0 only because a comment swallowed a delimiter now produce errors, as in
+  `"""<LF>/* x """ */ """` and `"""<LF>// a """ """<LF>"""`.
 - Bind postfix `++` and `--` inside casts and unary expressions (K21, JLS 25 §§15.14–15.16, Phase 3
   operator and cast probes and grammar-orchard PR #23). A cast such as `(int) n++` now has an
   `update_expression` as its `value`, including for reference and intersection casts. A unary
