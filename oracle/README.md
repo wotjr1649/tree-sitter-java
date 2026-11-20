@@ -42,7 +42,8 @@ and adjacent invalid inputs), `k18` (comment-like text in text blocks, escape an
 NUL, controls for comments outside literals and in interpolation expressions, and adjacent invalid inputs), `k19`
 (text-block line continuations with LF, CRLF and CR, with adjacent escape controls and invalid inputs), `k23` (CR,
 CRLF, LF and EOF line comments, with literal and block-comment controls), `k24` (documented intersection-cast operand
-limits, single-type cast and binary-expression controls, and adjacent invalid inputs), `k26` (guarded empty record
+limits, single-type cast and binary-expression controls, and adjacent invalid inputs), `k25` (`when` as the name of a
+type pattern in switch labels and `instanceof`, with guard and invalid-input controls), `k26` (guarded empty record
 patterns in colon labels and arrow rules, with adjacent invalid inputs and unchanged controls), `k27` (parenthesized
 yield values, qualified calls, identifier controls and adjacent invalid inputs), `k28` (contextual statement labels
 and their break/continue targets, switch controls and adjacent invalid inputs), and `structural` (Phase 3 ambiguity
@@ -166,7 +167,9 @@ cases and their assertions stay as passing cases). K4 deleted the last two entri
 empty. K5 adds two cases it does not fix, `k5/v04-after-dimensions` and `k5/v05-many-dimensions`: an annotation right
 after an array dimension and before `...` (`int @A [] @B ... xs`) still starts a dimension and errs.
 A new input that the grammar fails but javac accepts is never added silently: it is a new defect, so it needs its own
-fix, or a recorded entry with its javac verdict and evidence.
+fix, or a recorded entry with its javac verdict and evidence. K25 records the documented limit on type-pattern
+bindings named `when`. Its dedicated cases record the trees from `f1e4257`, and the existing structural probes
+retain their recorded trees. See [known limits](../docs/tolerances.md#known-limits).
 
 ## Node kinds and parser cost
 

@@ -66,6 +66,10 @@
   nodes. The limits also record the direct prefix updates and signed operand that javac accepts outside the JLS grammar.
   See [known limits](docs/tolerances.md#known-limits) and
   [JLS 25 §15.16](https://docs.oracle.com/javase/specs/jls/se25/html/jls-15.html#jls-15.16).
+- Document type-pattern bindings named `when` in switch labels and `instanceof` as a known limit (K25).
+  Javac accepts these bindings, and the existing grammar can report an error. The smallest tested candidate
+  that passed the corpus added 6.74% to `parser.c` and 84 parser states. The pinned examples contain no occurrence.
+  The grammar and parser are unchanged. See [known limits](docs/tolerances.md#known-limits).
 
 ## 2.3.0
 
