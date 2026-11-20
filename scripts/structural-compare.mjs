@@ -190,6 +190,8 @@ function compareCase(parser, source, row, mapping) {
   for (const { javac, rule } of wanted) {
     assert.ok(rule || !mapping[javac.kind].every(({ when }) => when),
       `${row.id}: ${javac.kind} at ${javac.start} has no row for its when attributes`);
+    assert.ok(!javac.context || !rule || rule.when || rule.context === javac.context,
+      `${row.id}: ${javac.kind} at ${javac.start} has no row for runner context ${javac.context}`);
     if (rule?.action === 'skip') {
       result.counts.skipped_by_mapping++;
       continue;
@@ -319,7 +321,8 @@ const runnerContexts = {
   PARAMETERIZED_TYPE: ['annotated-varargs-element'],
   NEW_CLASS: ['enum-constant-initializer'],
   CLASS: ['implicit-class', 'anonymous-class'],
-  INTERFACE: ['anonymous-class'], ENUM: ['anonymous-class'], RECORD: ['anonymous-class'], ANNOTATION_TYPE: ['anonymous-class'],
+  // An anonymous class body is always a CLASS tree; ENUM keeps its existing row.
+  ENUM: ['anonymous-class'],
   INT_LITERAL: ['absorbed-decimal-minus'],
   LONG_LITERAL: ['absorbed-decimal-minus'],
   STRING_LITERAL: ['folded-string-concatenation'],
@@ -349,6 +352,9 @@ function loadMapping(path) {
       assert.ok(!seen.has(`${kind}:${rule.context}`), `duplicate mapping row ${kind} ${rule.context}`);
       seen.add(`${kind}:${rule.context}`);
     }
+    // Every context the runner emits for this kind needs its own row; otherwise its nodes fall to the default row.
+    for (const context of runnerContexts[kind] ?? [])
+      assert.ok(seen.has(`${kind}:${context}`), `mapping ${kind} has no row for runner context ${context}`);
     return entry.variants;
   });
   assert.ok(rows.length, 'mapping has no rows');
@@ -475,7 +481,8 @@ async function selfTest(config) {
   const mappingFile = join(config.out, 'self-mapping.json');
   const variable = base.VARIABLE.variants;
   for (const [variants, message] of [[[...variable, { ...variable[0], context: 'enum-konstant' }], /never emits/],
-    [[...variable, variable[0]], /duplicate/], [[...variable, { ...variable[0], when: [] }], /invalid mapping row/]]) {
+    [[...variable, variable[0]], /duplicate/], [[...variable, { ...variable[0], when: [] }], /invalid mapping row/],
+    [variable.filter(({ context }) => context !== 'single-local-declaration'), /no row for runner context/]]) {
     writeFileSync(mappingFile, JSON.stringify({ ...base, VARIABLE: { variants } }));
     assert.throws(() => loadMapping(mappingFile), message);
   }
@@ -531,8 +538,11 @@ async function main() {
   if (expected) {
     const changes = baselineChanges(expected, differences);
     for (const change of changes) console.error(change);
-    console.log(changes.length ? `FAIL: ${changes.length} baseline change(s)` : 'OK: structural differences equal the baseline');
-    process.exitCode = changes.length ? 1 : 0;
+    for (const key of summary.uncompared_rows) console.error(`uncompared: ${key}`);
+    const failures = changes.length + summary.uncompared_row_count;
+    console.log(failures ? `FAIL: ${changes.length} baseline change(s), ${summary.uncompared_row_count} uncompared row(s)`
+      : 'OK: structural differences equal the baseline');
+    process.exitCode = failures ? 1 : 0;
   } else {
     process.exitCode = mismatches ? 1 : 0;
   }
