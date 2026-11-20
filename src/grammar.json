@@ -1475,6 +1475,18 @@
       "type": "CHOICE",
       "members": [
         {
+          "type": "ALIAS",
+          "content": {
+            "type": "IMMEDIATE_TOKEN",
+            "content": {
+              "type": "PATTERN",
+              "value": "\\\\(\\r\\n?|\\n)"
+            }
+          },
+          "named": true,
+          "value": "escape_sequence"
+        },
+        {
           "type": "PREC",
           "value": 2,
           "content": {
@@ -1488,7 +1500,7 @@
                 },
                 {
                   "type": "PATTERN",
-                  "value": "[^bfnrtsu'\\\"\\\\]"
+                  "value": "[^bfnrtsu'\\\"\\\\\\r\\n]"
                 }
               ]
             }
@@ -1588,7 +1600,7 @@
                 "members": [
                   {
                     "type": "PATTERN",
-                    "value": "[^xu0-7]"
+                    "value": "[^xu0-7\\r\\n]"
                   },
                   {
                     "type": "PATTERN",
@@ -4876,21 +4888,25 @@
       ]
     },
     "yield_statement": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "STRING",
-          "value": "yield"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "expression"
-        },
-        {
-          "type": "STRING",
-          "value": ";"
-        }
-      ]
+      "type": "PREC_DYNAMIC",
+      "value": 1,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "STRING",
+            "value": "yield"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "expression"
+          },
+          {
+            "type": "STRING",
+            "value": ";"
+          }
+        ]
+      }
     },
     "synchronized_statement": {
       "type": "SEQ",
@@ -8534,7 +8550,7 @@
             },
             {
               "type": "PATTERN",
-              "value": "[^\\n]*"
+              "value": "[^\\r\\n]*"
             }
           ]
         }

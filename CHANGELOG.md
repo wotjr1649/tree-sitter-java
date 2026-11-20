@@ -8,7 +8,6 @@
   Phase 3 cast/additive probes). In `(n) + k * 3`, the multiplication is the right operand of the addition. Primitive
   casts such as `(int) -b`, ordinary reference casts and parenthesized lambda parameters keep their trees.
   `node-types.json` is unchanged; `docs/tolerances.md` gains a row for the existing `(@A Integer) -k` tolerance.
-  After `yield`, `yield (n) + k * 3;` still reads `yield(n)` as a method call (as at 2.3.0); that is tracked as K27.
   [JLS 25 §§15.15–15.18](https://docs.oracle.com/javase/specs/jls/se25/html/jls-15.html#jls-15.15),
   [grammar-orchard issue #45](https://codeberg.org/grammar-orchard/tree-sitter-java-orchard/issues/45).
 - Parse guarded empty record patterns as `switch_label` children of kind `pattern` holding a `record_pattern`,
@@ -26,6 +25,30 @@
   cases record each form with a counterpart that writes the first slash as `\057` and parses at 2.3.0. Inputs that
   javac rejects and that parsed at 2.3.0 only because a comment swallowed a delimiter now produce errors, as in
   `"""<LF>/* x """ */ """` and `"""<LF>// a """ """<LF>"""`.
+- Preserve a text-block line continuation as an `escape_sequence` spanning a raw backslash and the complete LF,
+  CRLF, or CR terminator (K19, JLS 25 §§3.4 and 3.10.7).
+  A paired backslash escape still leaves the following line terminator in the text block's content.
+  Ordinary string literals now report a parse error for a raw backslash immediately followed by a line terminator.
+  A backslash written as `\u005c` before a line terminator keeps its 2.3.0 tree in both kinds of literal.
+  The generated public schema is byte-identical to 2.3.0.
+  [grammar-orchard PR #9](https://codeberg.org/grammar-orchard/tree-sitter-java-orchard/pulls/9)
+- Parse a statement that starts with `yield (`, such as `yield (n) + k * 3;` or `yield (n) - k;`, as a
+  `yield_statement` whose value is the whole expression instead of an expression using the call `yield(n)` (K27,
+  JLS 25 §14.21; an unqualified method named `yield` cannot be invoked, §3.8, REVIEW-33). As in javac, this also
+  applies outside a switch, where javac then reports `no.switch.expression`. `yield ()`, `yield (x, n)`, qualified
+  calls and the K12 unqualified-call tolerance keep their trees. The node schema is unchanged.
+- End a `line_comment` before CR, LF or CRLF (K23). Code after a lone CR now gets its own nodes, and a CRLF
+  comment's range ends before the CR, consistent with LF: in files with CRLF line ends every line comment is one
+  byte shorter and its text has no trailing CR. Code after a lone CR that was hidden in a comment now parses, so
+  javac-rejected code there now errs, and existing tolerances such as an illegal string escape apply to it as after
+  an LF (pinned with an LF control). `node-types.json` and the documented tolerances are unchanged.
+  [JLS 25 §§3.4 and 3.7](https://docs.oracle.com/javase/specs/jls/se25/html/jls-3.html#jls-3.4),
+  [grammar-orchard issue #42](https://codeberg.org/grammar-orchard/tree-sitter-java-orchard/issues/42).
+- Document intersection casts followed by logical or bitwise complements, nested casts, postfix updates, or a
+  switch expression as a known limit (K24). The oracle records the existing errors and misplaced postfix update
+  nodes. The limits also record the direct prefix updates and signed operand that javac accepts outside the JLS grammar.
+  See [known limits](docs/tolerances.md#known-limits) and
+  [JLS 25 §15.16](https://docs.oracle.com/javase/specs/jls/se25/html/jls-15.html#jls-15.16).
 - Bind postfix `++` and `--` inside casts and unary expressions (K21, JLS 25 §§15.14–15.16, Phase 3
   operator and cast probes and grammar-orchard PR #23). A cast such as `(int) n++` now has an
   `update_expression` as its `value`, including for reference and intersection casts. A unary

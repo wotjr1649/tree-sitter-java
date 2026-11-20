@@ -1,0 +1,160 @@
+======
+K19 lf
+======
+
+class Probe { String value = """
+a\
+b"""; }
+
+---
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (field_declaration
+        type: (type_identifier)
+        declarator: (variable_declarator
+          name: (identifier)
+          value: (string_literal
+            (multiline_string_fragment)
+            (escape_sequence)
+            (multiline_string_fragment)))))))
+
+======
+K19 cr
+======
+
+class Probe { String value = """
+a\b"""; }
+
+---
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (field_declaration
+        type: (type_identifier)
+        declarator: (variable_declarator
+          name: (identifier)
+          value: (string_literal
+            (multiline_string_fragment)
+            (escape_sequence)
+            (multiline_string_fragment)))))))
+
+==================
+K19 before-closing
+==================
+
+class Probe { String value = """
+a\
+"""; }
+
+---
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (field_declaration
+        type: (type_identifier)
+        declarator: (variable_declarator
+          name: (identifier)
+          value: (string_literal
+            (multiline_string_fragment)
+            (escape_sequence)))))))
+
+===================
+K19 next-to-escapes
+===================
+
+class Probe { String value = """
+a\s\
+\nb"""; }
+
+---
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (field_declaration
+        type: (type_identifier)
+        declarator: (variable_declarator
+          name: (identifier)
+          value: (string_literal
+            (multiline_string_fragment)
+            (escape_sequence)
+            (escape_sequence)
+            (escape_sequence)
+            (multiline_string_fragment)))))))
+
+====================
+K19 double-backslash
+====================
+
+class Probe { String value = """
+a\\
+b"""; }
+
+---
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (field_declaration
+        type: (type_identifier)
+        declarator: (variable_declarator
+          name: (identifier)
+          value: (string_literal
+            (multiline_string_fragment)
+            (escape_sequence)
+            (multiline_string_fragment)))))))
+
+====================
+K19 triple-backslash
+====================
+
+class Probe { String value = """
+a\\\
+b"""; }
+
+---
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (field_declaration
+        type: (type_identifier)
+        declarator: (variable_declarator
+          name: (identifier)
+          value: (string_literal
+            (multiline_string_fragment)
+            (escape_sequence)
+            (escape_sequence)
+            (multiline_string_fragment)))))))
+
+====================
+K19 ordinary-escapes
+====================
+
+class Probe { String value = "a\s\nb"; }
+
+---
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (field_declaration
+        type: (type_identifier)
+        declarator: (variable_declarator
+          name: (identifier)
+          value: (string_literal
+            (string_fragment)
+            (escape_sequence)
+            (escape_sequence)
+            (string_fragment)))))))

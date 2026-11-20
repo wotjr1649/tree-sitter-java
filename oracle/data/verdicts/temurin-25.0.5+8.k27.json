@@ -1,0 +1,43 @@
+{
+  "meta": {
+    "api": "com.sun.source.util.JavacTask.parse()",
+    "case_count": 27,
+    "cases_sha256": "95ce1ddfcb9f27de688a30678e8741446f5735a790d649af72cc5dfb57a5341c",
+    "java.runtime.version": "25.0.5+8-LTS",
+    "java.vendor": "Eclipse Adoptium",
+    "options": ["--release", "25", "-proc:none"],
+    "preview": false,
+    "release": "25",
+    "runner_sha256": "c45e32e314b98ccb46481c4db18aa25173ca9b2fe46e45888f0a743ceb6c70ee",
+    "source_encoding": "UTF-8"
+  },
+  "verdicts": {
+    "k27/add-multiply": [],
+    "k27/subtract-multiply": [],
+    "k27/parenthesized-receiver": [],
+    "k27/parenthesized-condition": [],
+    "k27/parenthesized-value": [],
+    "k27/add-literal": [],
+    "k27/primitive-cast": [],
+    "k27/negative-grouped": [],
+    "k27/plus-multiply": [],
+    "k27/postfix-grouped": [],
+    "k27/parenthesized-index": [],
+    "k27/missing-product": ["compiler.err.illegal.start.of.expr"],
+    "k27/missing-operand": ["compiler.err.illegal.start.of.expr"],
+    "k27/missing-paren": ["compiler.err.expected"],
+    "k27/empty-call": ["compiler.err.invalid.yield"],
+    "k27/multiple-arguments": ["compiler.err.invalid.yield"],
+    "k27/missing-value": ["compiler.err.illegal.start.of.expr"],
+    "k27/colon-add-multiply": [],
+    "k27/qualified-instance": [],
+    "k27/qualified-static": [],
+    "k27/identifier": [],
+    "k27/identifier-assignment": [],
+    "k27/switch-no-space": [],
+    "k27/unqualified-statement": [],
+    "k27/unqualified-return": ["compiler.err.invalid.yield"],
+    "k27/assignment-tolerance": ["compiler.err.invalid.yield"],
+    "k27/assignment-tolerance-control": ["compiler.err.invalid.yield"]
+  }
+}
