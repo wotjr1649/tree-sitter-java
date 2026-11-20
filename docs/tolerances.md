@@ -142,8 +142,9 @@ parse error at the PR base must keep producing an error if its `C` counterpart a
 
 The following javac-rejected forms now produce parse errors. All 14 corpus fixtures affected by the withdrawal
 are listed in the [changelog](../CHANGELOG.md#unreleased) and are pinned in the
-[Phase 5 oracle cases](../oracle/data/cases/phase5.jsonl). The global reserved set also covers the former
-K11 `additional_case_pattern` set. Typed unnamed patterns and unnamed lambda parameters continue to parse.
+[Phase 5 oracle cases](../oracle/data/cases/phase5.jsonl). Additional standalone oracle probes pin withdrawn
+forms from K11, K12, K20 and K25. The global reserved set also covers the former K11 `additional_case_pattern` set.
+Typed unnamed patterns and unnamed lambda parameters continue to parse.
 
 | Java form | javac diagnostic code(s) | Oracle or corpus case | Earlier release |
 | --- | --- | --- | --- |
@@ -155,18 +156,19 @@ K11 `additional_case_pattern` set. Typed unnamed patterns and unnamed lambda par
 | `0x1__F .class`<br>`0x1__F .if`<br>`0b1__0 .class`<br>`0__7 .class`<br>`1__0 .class`<br>`10 .class`<br>`0x1_F .if` | `expected` | k6/x39–x40, x42–x47, x49–x54 | 2.2.0 (K6) |
 | `catch (T1 \| @A static e) {}` | `illegal.start.of.type`, `expected`, `class.method.or.field.expected` | k7/cx6-annotated-static-type, k7/cx7-static-type-control | 2.2.0 (K7) |
 | `o instanceof @A final T static` | `mod.not.allowed.here`, `expected`, `illegal.start.of.expr`, `illegal.start.of.type`, `class.method.or.field.expected` | k7/ix7-final-static-name, k7/ix8-static-name-control | 2.2.0 (K7) |
-| `(_) = x`<br>`(x) = _`<br>`b ? (x) = _ : 1`<br>`m((x) = _)`<br>`(x._) = 1`<br>`(_.field) = 1`<br>`(_[0]) = 1`<br>`(a[_]) = 1` | `use.of.underscore.not.allowed.non.variable` | k12/just-underscore, restricted-rhs, underscore-middle, underscore-call-argument, underscore-field, underscore-receiver, underscore-array-receiver, underscore-array-index | 2.3.0 (K12) |
-| `(x.default) = 1`<br>`(obj.if) = 1` | `expected`, `not.stmt`, `expected2`, `illegal.start.of.expr` | k12/keyword-field, reserved-if-field<br>keyword-field-base-tolerance, reserved-if-field-base-tolerance | 2.3.0 (K12) |
+| `(_) = x`<br>`(x) = _`<br>`b ? (x) = _ : 1`<br>`m((x) = _)`<br>`get().m(x = _)`<br>`(x._) = 1`<br>`(_.field) = 1`<br>`(_[0]) = 1`<br>`(a[_]) = 1` | `use.of.underscore.not.allowed.non.variable` | k12/just-underscore, restricted-rhs, underscore-middle, underscore-call-argument, underscore-call-argument-base-tolerance, underscore-field, underscore-receiver, underscore-array-receiver, underscore-array-index | 2.3.0 (K12) |
+| `(x.default) = 1`<br>`(obj.if) = 1`<br>`obj.if = 1` | `expected`, `not.stmt`, `expected2`, `illegal.start.of.expr` | k12/keyword-field, reserved-if-field<br>keyword-field-base-tolerance, reserved-if-field-base-tolerance | 2.3.0 (K12) |
 | `case _ -> 1`<br>`o instanceof _`<br>`o instanceof final _`<br>`o instanceof @A _` | `use.of.underscore.not.allowed.non.variable` | Independent K13 and K14 review probes<br>k13/other-contexts holds typed controls | 2.3.0 (K13, K14) review |
 | `case _ _`<br>`case String _, _ _` | `expected2`, `not.stmt` | k11-underscore-type-{single,list} | 2.3.0 (K11) |
 | `case String _, @A new _`<br>`case String _, Outer.new _`<br>`case String _, List<null> _` | `illegal.start.of.type`, `use.of.underscore.not.allowed.non.variable`, `expected2`, `expected` | k11-annotated-keyword-{single,list}, k11-qualified-keyword-{single,list}, k11-keyword-type-argument-{single,list} | 2.3.0 (K11) |
 | `case String _, Integer static`<br>`case String _, int instanceof`<br>`case String _, R(int instanceof)`<br>`case String _, R(int new)` | `expected2`, `illegal.start.of.expr`, `expected3`, `dot.class.expected`, `illegal.start.of.type`, `expected` | k11-bad-keyword-name[-single], k11-primitive-keyword-name[-single], k11-primitive-keyword-record-component[-single], k11-primitive-keyword-binding-{single,list} | 2.3.0 (K11) |
 | `case String _, abstract _`<br>`case String _, abstract(_)`<br>`case String _, abstract.Inner _`<br>`case String _, abstract<String> _`<br>`case String _, abstract[] _` | `mod.not.allowed.here`, `expected`, `illegal.start.of.expr`, `not.stmt` | k11-tolerances.txt, “K11 tolerance: keywords in pattern types and names” | 2.3.0 (K11) |
 | `case String _, R(abstract _)`<br>`case String _, R(S(abstract _))`<br>`case String _, R(T abstract)`<br>`case Integer new` | `illegal.start.of.expr`, `use.of.underscore.not.allowed.non.variable`, `expected2`, `class.method.or.field.expected`, `expected` | k11-tolerances.txt, “K11 tolerance: keywords in pattern types and names” | 2.3.0 (K11) |
-| `C<String>.super::m`<br>`C.@Deprecated super::m`<br>`C.super.super::m` | `expected`, `illegal.start.of.type` | [K20 cases](../oracle/data/cases/k20.jsonl), generic, annotated and double-super qualifiers | 2.4.0 (K20) |
+| `C<String>.super::m`<br>`C.@Deprecated super::m`<br>`C.super.super::m`<br>`open<String>.super::m`<br>`open.super.super::m` | `expected`, `illegal.start.of.type` | [K20 cases](../oracle/data/cases/k20.jsonl), generic, annotated and double-super qualifiers | 2.4.0 (K20) |
 | `open.super::super` and `C.super::super` | `expected` | [K20 cases](../oracle/data/cases/k20.jsonl), bad-member pair | 2.4.0 (K20) |
 | `open.super::_`<br>`open.super::int`<br>`open.super::true`<br>`open.super::class` | `use.of.underscore.not.allowed.non.variable` (`_`), `expected` (`int`, `true`, `class`) | [K20 cases](../oracle/data/cases/k20.jsonl), underscore, int, true and class member pairs | 2.4.0 (K20) |
 | `open.super::false`<br>`open.super::null`<br>`open.super::return` | `expected` | [K20 cases](../oracle/data/cases/k20.jsonl), false, null and return member pairs | 2.4.0 (K20) |
+| `o instanceof super value` | `illegal.start.of.type`, `expected`, `not.stmt` | [k25/instanceof-super-control](../oracle/data/cases/k25.jsonl#L40) | 2.4.0 (recorded by K25) |
 
 ## Stricter than javac's parser
 

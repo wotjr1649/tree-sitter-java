@@ -1,6 +1,6 @@
 # Java oracle
 
-The reference for valid Java syntax is the parse phase of `javac` ([ADR-0001](../docs/decisions/ADR-0001-continue-from-upstream.md)):
+The reference for valid Java syntax is the parse phase of `javac` ([ADR-0001](../docs/decisions/ADR-0001-continue-from-upstream.md), [ADR-0002](../docs/decisions/ADR-0002-independent-repository.md)):
 `com.sun.source.util.JavacTask.parse()`, Eclipse Temurin **25.0.5+8**, `--release 25`, **preview off**. This is the
 only verdict level. javac's later phases (enter, attribute, flow) are out of scope, so a type error or an undefined
 name is not a syntax rejection; the runner's self-test shows one.
@@ -49,8 +49,8 @@ results, cast and conditional labels, guarded patterns, colon and arrow controls
 `k23` (CR, CRLF, LF and EOF line comments, with literal and
 block-comment controls), `k24` (documented intersection-cast operand limits, single-type cast and binary-expression
 controls, and adjacent invalid inputs), `k25` (`when` as the name of a type pattern in switch labels and
-`instanceof`, with guard and invalid-input controls), `k26` (guarded empty record patterns in colon labels and arrow
-rules, with adjacent invalid inputs and unchanged controls), `k27` (parenthesized yield values, qualified calls,
+`instanceof`, with guard and invalid-input controls, including the withdrawn `instanceof super value` tolerance),
+`k26` (guarded empty record patterns in colon labels and arrow rules, with adjacent invalid inputs and unchanged controls), `k27` (parenthesized yield values, qualified calls,
 identifier controls and adjacent invalid inputs), `k28` (contextual statement labels and their break/continue
 targets, switch controls and adjacent invalid inputs), `k29` (qualified type names starting with `open`, `module`, or
 `with`, qualified `super` method references, ordinary name controls, and adjacent invalid inputs), `k31` (`sealed` as an enum constant name, with
