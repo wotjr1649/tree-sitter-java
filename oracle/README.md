@@ -1,6 +1,6 @@
 # Java oracle
 
-The reference for valid Java syntax is the parse phase of `javac` ([ADR-0001](../docs/decisions/ADR-0001-continue-from-upstream.md)):
+The reference for valid Java syntax is the parse phase of `javac` ([ADR-0001](../docs/decisions/ADR-0001-continue-from-upstream.md), [ADR-0002](../docs/decisions/ADR-0002-independent-repository.md)):
 `com.sun.source.util.JavacTask.parse()`, Eclipse Temurin **25.0.5+8**, `--release 25`, **preview off**. This is the
 only verdict level. javac's later phases (enter, attribute, flow) are out of scope, so a type error or an undefined
 name is not a syntax rejection; the runner's self-test shows one.

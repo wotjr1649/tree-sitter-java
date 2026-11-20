@@ -10,6 +10,8 @@
   `children` entry is removed from `provides_module_directive`.
   [JLS 25 §7.7.4](https://docs.oracle.com/javase/specs/jls/se25/html/jls-7.html#jls-7.7.4) ·
   [grammar-orchard PR #20](https://codeberg.org/grammar-orchard/tree-sitter-java-orchard/pulls/20)
+- Record the repository as independent (ADR-0002): tree-sitter/tree-sitter-java v0.23.5 is the original grammar it
+  started from, not an upstream. Its later changes are not tracked or merged. Documentation only; no grammar change.
 - **Breaking change (Phase 5).** Reserve all 51 Java keywords and the spellings `true`, `false` and `null`
   in identifier positions. Contextual keywords remain usable as identifiers. Unnamed lambda parameters
   keep their `identifier` nodes. The public node schema is unchanged by this change.
