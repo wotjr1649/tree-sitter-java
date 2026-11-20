@@ -68,33 +68,12 @@
     {"kind": "PATTERN_CASE_LABEL", "start": 183, "end": 194, "status": "no_node_at_range", "reason": "limit"},
     {"kind": "BINDING_PATTERN", "start": 183, "end": 194, "status": "no_node_at_range", "reason": "limit"}
   ],
-  "structural/p8/switch/lambda-arm-constant": [
-    {"kind": "CONSTANT_CASE_LABEL", "start": 187, "end": 190, "status": "mismatched_kind", "reason": "K22"},
-    {"kind": "LAMBDA_EXPRESSION", "start": 194, "end": 208, "status": "no_node_at_range", "reason": "K22"}
-  ],
-  "structural/p8/switch/lambda-arm-guard-name": [
-    {"kind": "LAMBDA_EXPRESSION", "start": 212, "end": 235, "status": "no_node_at_range", "reason": "K22"}
-  ],
-  "structural/p8/switch/lambda-arm-guard-parens": [
-    {"kind": "PARENTHESIZED", "start": 201, "end": 210, "status": "mismatched_kind", "reason": "K22"},
-    {"kind": "LAMBDA_EXPRESSION", "start": 214, "end": 237, "status": "no_node_at_range", "reason": "K22"}
-  ],
-  "structural/p8/switch/lambda-arm-guard-record": [
-    {"kind": "LAMBDA_EXPRESSION", "start": 215, "end": 229, "status": "no_node_at_range", "reason": "K22"}
-  ],
   "structural/p8/switch/unguarded-when-binding": [
     {"kind": "PATTERN_CASE_LABEL", "start": 183, "end": 194, "status": "no_node_at_range", "reason": "limit"},
     {"kind": "BINDING_PATTERN", "start": 183, "end": 194, "status": "no_node_at_range", "reason": "limit"}
   ],
   "structural/p9/provides": [
     {"kind": "PROVIDES", "start": 25, "end": 86, "status": "mismatched_kind", "reason": "K17"}
-  ],
-  "structural/p9/switch-lambda": [
-    {"kind": "CONSTANT_CASE_LABEL", "start": 115, "end": 120, "status": "mismatched_kind", "reason": "K22"},
-    {"kind": "LAMBDA_EXPRESSION", "start": 124, "end": 134, "status": "no_node_at_range", "reason": "K22"}
-  ],
-  "structural/p9/switch-lambda-guard": [
-    {"kind": "LAMBDA_EXPRESSION", "start": 110, "end": 120, "status": "no_node_at_range", "reason": "K22"}
   ],
   "corpus/k24.txt/K24 intersection annotated": [
     {"kind": "LOGICAL_COMPLEMENT", "start": 172, "end": 177, "status": "no_node_at_range", "reason": "limit"}

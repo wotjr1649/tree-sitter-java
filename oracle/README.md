@@ -42,7 +42,10 @@ and adjacent invalid inputs), `k18` (comment-like text in text blocks, escape an
 NUL, controls for comments outside literals and in interpolation expressions, and adjacent invalid inputs), `k19`
 (text-block line continuations with LF, CRLF and CR, with adjacent escape controls and invalid inputs), `k20`
 (qualified `super` method references, with explicit type arguments, `open`, `module` and `with` as qualifiers,
-control references, and adjacent invalid inputs), `k23` (CR, CRLF, LF and EOF line comments, with literal and
+control references, and adjacent invalid inputs), `k21` (postfix precedence under casts and unary expressions,
+intersection-cast postfix operands, controls and adjacent invalid inputs), `k22` (switch rules with lambda
+results, cast and conditional labels, guarded patterns, colon and arrow controls, and adjacent invalid inputs),
+`k23` (CR, CRLF, LF and EOF line comments, with literal and
 block-comment controls), `k24` (documented intersection-cast operand limits, single-type cast and binary-expression
 controls, and adjacent invalid inputs), `k25` (`when` as the name of a type pattern in switch labels and
 `instanceof`, with guard and invalid-input controls), `k26` (guarded empty record patterns in colon labels and arrow

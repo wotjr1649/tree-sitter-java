@@ -51,6 +51,26 @@ const PREC = {
 
 /* eslint-enable no-multi-spaces */
 
+// Share operator precedence and fields between ordinary expressions and arrow labels.
+function expressionRule(name, production) {
+  return {
+    [name]: $ => production($, $.expression, true),
+    [`_switch_${name}`]: $ => production($, $._switch_label_expression, false),
+  };
+}
+
+// Share label syntax while keeping both delimiters available for error recovery.
+function switchLabelRules(label) {
+  return {
+    switch_label: $ => choice(
+      label($, $.expression, $.guard),
+      // Prefer the label that leaves the rule arrow outside a lambda.
+      prec.dynamic(1, $._arrow_switch_label),
+    ),
+    _arrow_switch_label: $ => label($, $._switch_label_expression, alias($._arrow_guard, $.guard)),
+  };
+}
+
 module.exports = grammar({
   name: 'java',
 
@@ -81,11 +101,16 @@ module.exports = grammar({
   ],
 
   conflicts: $ => [
+    // Both label interpretations can start with the same expression.
+    [$.cast_expression, $._switch_cast_expression],
+    [$.switch_label, $._arrow_switch_label],
+    [$.expression, $._switch_label_expression],
     [$.modifiers, $.annotated_type, $.receiver_parameter],
     [$.modifiers, $.annotated_type, $.module_declaration, $.package_declaration],
     [$.module_declaration, $._unannotated_type],
     // A closing parenthesis can end a target, a value, a cast type, or lambda parameters.
     [$._parenthesized_assignment_target, $.inferred_parameters, $.primary_expression, $._unannotated_type],
+    [$._parenthesized_assignment_target, $.primary_expression, $._unannotated_type],
     [$._parenthesized_assignment_target, $.primary_expression],
     [$._parenthesized_assignment_target, $.inferred_parameters, $.primary_expression],
     [$._unannotated_type, $.primary_expression],
@@ -303,13 +328,13 @@ module.exports = grammar({
       $.switch_expression,
     ),
 
-    cast_expression: $ => prec(PREC.CAST, choice(
+    ...expressionRule('cast_expression', ($, expression, allowLambda) => prec(PREC.CAST, choice(
       // JLS 25 §15.16: (Name) + x and (Name) - x are additive expressions.
       prec.dynamic(-1, seq(
         '(',
         field('type', $._type),
         ')',
-        field('value', $.expression),
+        field('value', expression),
       )),
       seq(
         '(',
@@ -318,17 +343,17 @@ module.exports = grammar({
         ')',
         field('value', choice(
           $.primary_expression,
-          $.lambda_expression,
+          ...(allowLambda ? [$.lambda_expression] : []),
           alias($._postfix_update_expression, $.update_expression),
         )),
       ),
-    )),
+    ))),
 
-    assignment_expression: $ => prec.right(PREC.ASSIGN, seq(
+    ...expressionRule('assignment_expression', ($, expression) => prec.right(PREC.ASSIGN, seq(
       field('left', $._assignment_target),
       field('operator', choice('=', '+=', '-=', '*=', '/=', '&=', '|=', '^=', '%=', '<<=', '>>=', '>>>=')),
-      field('right', $.expression),
-    )),
+      field('right', expression),
+    ))),
 
     _assignment_target: $ => choice(
       $.identifier,
@@ -340,7 +365,7 @@ module.exports = grammar({
 
     _parenthesized_assignment_target: $ => seq('(', $._assignment_target, ')'),
 
-    binary_expression: $ => choice(
+    ...expressionRule('binary_expression', ($, expression) => choice(
       ...[
         ['>', PREC.REL],
         ['<', PREC.REL],
@@ -363,15 +388,15 @@ module.exports = grammar({
         ['>>>', PREC.SHIFT],
       ].map(([operator, precedence]) =>
         prec.left(precedence, seq(
-          field('left', $.expression),
+          field('left', expression),
           // @ts-ignore
           field('operator', operator),
-          field('right', $.expression),
+          field('right', expression),
         )),
-      )),
+      ))),
 
-    instanceof_expression: $ => prec(PREC.REL, seq(
-      field('left', $.expression),
+    ...expressionRule('instanceof_expression', ($, expression) => prec(PREC.REL, seq(
+      field('left', expression),
       'instanceof',
       choice(
         seq(
@@ -392,7 +417,7 @@ module.exports = grammar({
           field('name', choice($.identifier, $._reserved_identifier, alias($.underscore_pattern, $.identifier))),
         ),
       ),
-    )),
+    ))),
 
     _instanceof_modifiers: $ => seq(repeat1($._annotation), 'final', repeat($._annotation)),
 
@@ -410,15 +435,15 @@ module.exports = grammar({
       ')',
     ),
 
-    ternary_expression: $ => prec.right(PREC.TERNARY, seq(
-      field('condition', $.expression),
+    ...expressionRule('ternary_expression', ($, expression) => prec.right(PREC.TERNARY, seq(
+      field('condition', expression),
       '?',
-      field('consequence', $.expression),
+      field('consequence', expression),
       ':',
-      field('alternative', $.expression),
-    )),
+      field('alternative', expression),
+    ))),
 
-    unary_expression: $ => choice(...[
+    ...expressionRule('unary_expression', ($, expression) => choice(...[
       ['+', PREC.UNARY],
       ['-', PREC.UNARY],
       ['!', PREC.UNARY],
@@ -427,14 +452,14 @@ module.exports = grammar({
       prec.left(precedence, seq(
         // @ts-ignore
         field('operator', operator),
-        field('operand', $.expression),
+        field('operand', expression),
       )),
-    )),
+    ))),
 
-    update_expression: $ => choice(
-      prec.left(PREC.POSTFIX, seq($.expression, choice('++', '--'))),
-      prec.left(PREC.UNARY, seq(choice('++', '--'), $.expression)),
-    ),
+    ...expressionRule('update_expression', ($, expression) => choice(
+      prec.left(PREC.POSTFIX, seq(expression, choice('++', '--'))),
+      prec.left(PREC.UNARY, seq(choice('++', '--'), expression)),
+    )),
 
     _postfix_update_expression: $ => prec.left(PREC.POSTFIX, seq(
       // Shift the postfix operator before reducing a cast with a primary operand.
@@ -596,17 +621,31 @@ module.exports = grammar({
       choice($.expression_statement, $.throw_statement, $.block),
     ),
 
-    switch_label: $ => choice(
+    // The first free arrow belongs to the switch rule (JLS 25 §14.11.1).
+    // Delimited subexpressions, such as method arguments, still use expression.
+    _switch_label_expression: $ => choice(
+      $.primary_expression,
+      $.switch_expression,
+      alias($._switch_assignment_expression, $.assignment_expression),
+      alias($._switch_binary_expression, $.binary_expression),
+      alias($._switch_cast_expression, $.cast_expression),
+      alias($._switch_instanceof_expression, $.instanceof_expression),
+      alias($._switch_ternary_expression, $.ternary_expression),
+      alias($._switch_unary_expression, $.unary_expression),
+      alias($._switch_update_expression, $.update_expression),
+    ),
+
+    ...switchLabelRules(($, expression, guard) => choice(
       seq('case',
         choice(
           seq($.pattern, repeat(seq(',', alias($._additional_case_pattern, $.pattern)))),
           // `case null, default` (JLS 25 §14.11.1); javac's parser also takes labels after it, so any position is allowed
-          commaSep1(choice($.expression, 'default')),
+          commaSep1(choice(expression, 'default')),
         ),
-        optional($.guard),
+        optional(guard),
       ),
       'default',
-    ),
+    )),
 
     pattern: $ => choice(
       $.type_pattern,
@@ -675,6 +714,7 @@ module.exports = grammar({
     underscore_pattern: _ => '_',
 
     guard: $ => seq('when', $.expression),
+    _arrow_guard: $ => seq('when', $._switch_label_expression),
 
     // Statements
 

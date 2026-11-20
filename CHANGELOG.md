@@ -120,6 +120,14 @@
   [§6.5](https://docs.oracle.com/javase/specs/jls/se25/html/jls-6.html#jls-6.5),
   [§15.8.2](https://docs.oracle.com/javase/specs/jls/se25/html/jls-15.html#jls-15.8.2),
   [§15.13](https://docs.oracle.com/javase/specs/jls/se25/html/jls-15.html#jls-15.13).
+- Keep the switch rule arrow outside the lambda result (K22). In
+  `case KEY -> arg -> arg - 2`, the label holds `KEY` and the body holds the full lambda.
+  A separate expression path for labels and guards also handles cast and conditional labels while
+  preserving lambdas in delimited subexpressions such as method arguments. A sole named annotation
+  argument such as `@A(x = n -> n)` retains the 2.3.0 `element_value_pair` tree. The public node
+  schema is unchanged. `parser.c` grows by 210,109 bytes (+7.66%) and 110 states relative to `54e0d5a`.
+  [JLS 25 §14.11.1](https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html#jls-14.11.1) ·
+  [grammar-orchard PR #21](https://codeberg.org/grammar-orchard/tree-sitter-java-orchard/pulls/21).
 
 ## 2.3.0
 

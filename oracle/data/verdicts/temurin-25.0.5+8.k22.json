@@ -1,0 +1,40 @@
+{
+  "meta": {
+    "api": "com.sun.source.util.JavacTask.parse()",
+    "case_count": 24,
+    "cases_sha256": "1c9e40277ed76c3439429ee58e4605e915622b50a7dd6b2b0d131cfff9e66f2b",
+    "java.runtime.version": "25.0.5+8-LTS",
+    "java.vendor": "Eclipse Adoptium",
+    "options": ["--release", "25", "-proc:none"],
+    "preview": false,
+    "release": "25",
+    "runner_sha256": "c45e32e314b98ccb46481c4db18aa25173ca9b2fe46e45888f0a743ceb6c70ee",
+    "source_encoding": "UTF-8"
+  },
+  "verdicts": {
+    "k22/constant": [],
+    "k22/guard-name": [],
+    "k22/guard-parens": [],
+    "k22/guard-record": [],
+    "k22/guard-operator": [],
+    "k22/guard-call-lambda": [],
+    "k22/colon-guard": [],
+    "k22/qualified-and-enum": [],
+    "k22/nested-result": [],
+    "k22/conditional-constant": [],
+    "k22/conditional-guard": [],
+    "k22/cast-guard": [],
+    "k22/multi-pattern": [],
+    "k22/lambda-conditional-arm": [],
+    "k22/missing-arrow": ["compiler.err.expected2", "compiler.err.not.stmt"],
+    "k22/missing-lambda-body": ["compiler.err.illegal.start.of.expr"],
+    "k22/missing-guard": ["compiler.err.illegal.start.of.expr"],
+    "k22/lambda-constant-colon": ["compiler.err.expected", "compiler.err.expected3", "compiler.err.expected3", "compiler.err.expected3"],
+    "k22/lambda-constant": ["compiler.err.expected", "compiler.err.expected", "compiler.err.expected3", "compiler.err.expected3", "compiler.err.expected3"],
+    "k22/lambda-guard-colon": ["compiler.err.expected", "compiler.err.expected3", "compiler.err.expected3", "compiler.err.expected3"],
+    "k22/unbound-names": [],
+    "k22/lambda-statement": ["compiler.err.not.stmt"],
+    "k22/limit-cast-label": [],
+    "k22/limit-conditional-label": []
+  }
+}
