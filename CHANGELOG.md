@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Record the pinned javac parse verdict, diagnostic codes and original file hash for each example baseline failure.
+  CI checks the verdict file against the failure list and the pinned checkouts.
+
 - Parse parenthesized assignment targets (K12, JLS 25 §§15.8.5 and 15.26), including `(x) = 1`, `((x)) += 7`,
   `(this.field) = x` and `(a[0]) <<= 1` in statements, `for` clauses and lambda bodies. The
   `assignment_expression.left` field holds a `parenthesized_expression` for each pair of parentheses. In
