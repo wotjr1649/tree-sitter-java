@@ -110,6 +110,8 @@ module.exports = grammar({
   // was read as an identifier, so `@A final e` parsed with `final` as a type name.
   reserved: {
     global: _ => ['final', 'this'],
+    // An unambiguous first pattern drops the expression branch and its keyword lookahead.
+    additional_case_pattern: $ => ['final', 'this', 'default', 'instanceof', 'new', $.super, 'switch', $.null_literal, $.true, $.false],
   },
 
   rules: {
@@ -366,7 +368,7 @@ module.exports = grammar({
           choice(
             seq(
               field('right', $._type),
-              optional(field('name', choice($.identifier, $._reserved_identifier))),
+              optional(field('name', choice($.identifier, $._reserved_identifier, alias($.underscore_pattern, $.identifier)))),
             ),
             field('pattern', $.record_pattern),
           ),
@@ -376,7 +378,7 @@ module.exports = grammar({
         seq(
           alias($._instanceof_modifiers, $.modifiers),
           field('right', $._unannotated_type),
-          field('name', choice($.identifier, $._reserved_identifier)),
+          field('name', choice($.identifier, $._reserved_identifier, alias($.underscore_pattern, $.identifier))),
         ),
       ),
     )),
@@ -583,7 +585,7 @@ module.exports = grammar({
     switch_label: $ => choice(
       seq('case',
         choice(
-          $.pattern,
+          seq($.pattern, repeat(seq(',', alias($._additional_case_pattern, $.pattern)))),
           // `case null, default` (JLS 25 §14.11.1); javac's parser also takes labels after it, so any position is allowed
           commaSep1(choice($.expression, 'default')),
         ),
@@ -596,8 +598,49 @@ module.exports = grammar({
       $.type_pattern,
       $.record_pattern,
     ),
+    // Public aliases keep the same tree for the patterns that follow a comma.
+    _additional_case_pattern: $ => choice(
+      alias($._additional_case_type_pattern, $.type_pattern),
+      alias($._additional_case_record_pattern, $.record_pattern),
+    ),
+
+    _additional_case_type_pattern: $ => seq(
+      optional(alias($._pattern_modifiers, $.modifiers)),
+      choice(
+        $.void_type,
+        $.integral_type,
+        $.floating_point_type,
+        $.boolean_type,
+        alias(reserved('additional_case_pattern', $.identifier), $.type_identifier),
+        $.scoped_type_identifier,
+        $.generic_type,
+        $.array_type,
+      ),
+      choice(reserved('additional_case_pattern', $.identifier), $._reserved_identifier, alias($.underscore_pattern, $.identifier)),
+    ),
+
+    _additional_case_record_pattern: $ => seq(
+      choice(reserved('additional_case_pattern', $.identifier), $._reserved_identifier, $.scoped_type_identifier, $.generic_type),
+      alias($._additional_case_record_pattern_body, $.record_pattern_body),
+    ),
+
+    _additional_case_record_pattern_body: $ => seq('(', commaSep(choice(
+      alias($._additional_case_record_pattern_component, $.record_pattern_component),
+      alias($._additional_case_record_pattern, $.record_pattern),
+    )), ')'),
+
+    _additional_case_record_pattern_component: $ => choice(
+      $.underscore_pattern,
+      $._additional_case_type_pattern,
+    ),
+
     // TypePattern is a LocalVariableDeclaration (JLS 25 §14.30.1), so it takes final and annotations as modifiers
-    type_pattern: $ => seq(optional(alias($._pattern_modifiers, $.modifiers)), $._unannotated_type, choice($.identifier, $._reserved_identifier)),
+    type_pattern: $ => seq(
+      optional(alias($._pattern_modifiers, $.modifiers)),
+      $._unannotated_type,
+      // Share the unnamed-variable token while keeping the public identifier node.
+      choice($.identifier, $._reserved_identifier, alias($.underscore_pattern, $.identifier)),
+    ),
     // Only VariableModifier (JLS 25 §4.12.4): other modifier keywords such as `non-sealed` would split `case non-sealed ->`
     _pattern_modifiers: $ => repeat1(choice('final', $._annotation)),
     // RecordPattern: ReferenceType ( ... ), so the type may be qualified (JLS 25 §14.30.1)
@@ -608,8 +651,9 @@ module.exports = grammar({
       seq(
         optional(alias($._pattern_modifiers, $.modifiers)),
         $._unannotated_type,
-        // Share the bare pattern's token so incremental parsing can reuse it.
-        choice($.identifier, $._reserved_identifier, alias($.underscore_pattern, $.identifier)),
+        // `when` may name a component binding even when the label has a guard; a typed `_` shares the bare
+        // pattern's token so incremental parsing can reuse it.
+        choice($.identifier, $._reserved_identifier, alias('when', $.identifier), alias($.underscore_pattern, $.identifier)),
       ),
     ),
 

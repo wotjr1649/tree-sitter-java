@@ -1,0 +1,198 @@
+================================================================================
+K14 switch-annotated-final-colon
+================================================================================
+
+class C { @interface A {} void m(Object o) { switch (o) { case @A final Integer _: break; default: break; } } }
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (annotation_type_declaration
+        name: (identifier)
+        body: (annotation_type_body))
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (type_identifier)
+            name: (identifier)))
+        body: (block
+          (switch_expression
+            condition: (parenthesized_expression
+              (identifier))
+            body: (switch_block
+              (switch_block_statement_group
+                (switch_label
+                  (pattern
+                    (type_pattern
+                      (modifiers
+                        (marker_annotation
+                          name: (identifier)))
+                      (type_identifier)
+                      (identifier))))
+                (break_statement))
+              (switch_block_statement_group
+                (switch_label)
+                (break_statement)))))))))
+
+================================================================================
+K14 switch-final-colon
+================================================================================
+
+class C { void m(Object o) { switch (o) { case final Integer _: break; default: break; } } }
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (type_identifier)
+            name: (identifier)))
+        body: (block
+          (switch_expression
+            condition: (parenthesized_expression
+              (identifier))
+            body: (switch_block
+              (switch_block_statement_group
+                (switch_label
+                  (pattern
+                    (type_pattern
+                      (modifiers)
+                      (type_identifier)
+                      (identifier))))
+                (break_statement))
+              (switch_block_statement_group
+                (switch_label)
+                (break_statement)))))))))
+
+================================================================================
+K14 switch-arrow
+================================================================================
+
+class C { int m(Object o) { return switch (o) { case Integer _ -> 1; default -> 0; }; } }
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (integral_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (type_identifier)
+            name: (identifier)))
+        body: (block
+          (return_statement
+            (switch_expression
+              condition: (parenthesized_expression
+                (identifier))
+              body: (switch_block
+                (switch_rule
+                  (switch_label
+                    (pattern
+                      (type_pattern
+                        (type_identifier)
+                        (identifier))))
+                  (expression_statement
+                    (decimal_integer_literal)))
+                (switch_rule
+                  (switch_label)
+                  (expression_statement
+                    (decimal_integer_literal)))))))))))
+
+================================================================================
+K14 instanceof
+================================================================================
+
+class C { boolean m(Object o) { return o instanceof Integer _; } }
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (boolean_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (type_identifier)
+            name: (identifier)))
+        body: (block
+          (return_statement
+            (instanceof_expression
+              left: (identifier)
+              right: (type_identifier)
+              name: (identifier))))))))
+
+================================================================================
+K14 instanceof-final
+================================================================================
+
+class C { boolean m(Object o) { return o instanceof final Integer _; } }
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (boolean_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (type_identifier)
+            name: (identifier)))
+        body: (block
+          (return_statement
+            (instanceof_expression
+              left: (identifier)
+              right: (type_identifier)
+              name: (identifier))))))))
+
+================================================================================
+K14 instanceof-annotated-final
+================================================================================
+
+class C { @interface A {} boolean m(Object o) { return o instanceof @A final Integer _; } }
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (annotation_type_declaration
+        name: (identifier)
+        body: (annotation_type_body))
+      (method_declaration
+        type: (boolean_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (type_identifier)
+            name: (identifier)))
+        body: (block
+          (return_statement
+            (instanceof_expression
+              left: (identifier)
+              (modifiers
+                (marker_annotation
+                  name: (identifier)))
+              right: (type_identifier)
+              name: (identifier))))))))

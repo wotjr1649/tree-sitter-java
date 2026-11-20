@@ -1,0 +1,821 @@
+==================
+K11 tolerance: annotations in record pattern types in arrow labels
+==================
+
+class C {
+  void f(Object x, boolean ok) {
+    switch (x) {
+      case G<@A ?> (_), Integer _ -> {}
+      case Integer _, G<@A ?> (_) -> {}
+      case G<@A ?> (_), Integer _ when ok -> {}
+      case Integer _, G<@A ?> (_) when ok -> {}
+      case O.@A Inner<?> (_), Integer _ -> {}
+      case Integer _, O.@A Inner<?> (_) -> {}
+      case O.@A Inner<?> (_), Integer _ when ok -> {}
+      case Integer _, O.@A Inner<?> (_) when ok -> {}
+      case G<?> (_) -> {}
+      case O.Inner<?> (_) -> {}
+    }
+  }
+}
+
+---
+
+(program
+  (class_declaration
+    (identifier)
+    (class_body
+      (method_declaration
+        (void_type)
+        (identifier)
+        (formal_parameters
+          (formal_parameter
+            (type_identifier)
+            (identifier))
+          (formal_parameter
+            (boolean_type)
+            (identifier)))
+        (block
+          (switch_expression
+            (parenthesized_expression
+              (identifier))
+            (switch_block
+              (switch_rule
+                (switch_label
+                  (pattern
+                    (record_pattern
+                      (generic_type
+                        (type_identifier)
+                        (type_arguments
+                          (wildcard
+                            (marker_annotation
+                              (identifier)))))
+                      (record_pattern_body
+                        (record_pattern_component
+                          (underscore_pattern)))))
+                  (pattern
+                    (type_pattern
+                      (type_identifier)
+                      (identifier))))
+                (block))
+              (switch_rule
+                (switch_label
+                  (pattern
+                    (type_pattern
+                      (type_identifier)
+                      (identifier)))
+                  (pattern
+                    (record_pattern
+                      (generic_type
+                        (type_identifier)
+                        (type_arguments
+                          (wildcard
+                            (marker_annotation
+                              (identifier)))))
+                      (record_pattern_body
+                        (record_pattern_component
+                          (underscore_pattern))))))
+                (block))
+              (switch_rule
+                (switch_label
+                  (pattern
+                    (record_pattern
+                      (generic_type
+                        (type_identifier)
+                        (type_arguments
+                          (wildcard
+                            (marker_annotation
+                              (identifier)))))
+                      (record_pattern_body
+                        (record_pattern_component
+                          (underscore_pattern)))))
+                  (pattern
+                    (type_pattern
+                      (type_identifier)
+                      (identifier)))
+                  (guard
+                    (identifier)))
+                (block))
+              (switch_rule
+                (switch_label
+                  (pattern
+                    (type_pattern
+                      (type_identifier)
+                      (identifier)))
+                  (pattern
+                    (record_pattern
+                      (generic_type
+                        (type_identifier)
+                        (type_arguments
+                          (wildcard
+                            (marker_annotation
+                              (identifier)))))
+                      (record_pattern_body
+                        (record_pattern_component
+                          (underscore_pattern)))))
+                  (guard
+                    (identifier)))
+                (block))
+              (switch_rule
+                (switch_label
+                  (pattern
+                    (record_pattern
+                      (generic_type
+                        (scoped_type_identifier
+                          (type_identifier)
+                          (marker_annotation
+                            (identifier))
+                          (type_identifier))
+                        (type_arguments
+                          (wildcard)))
+                      (record_pattern_body
+                        (record_pattern_component
+                          (underscore_pattern)))))
+                  (pattern
+                    (type_pattern
+                      (type_identifier)
+                      (identifier))))
+                (block))
+              (switch_rule
+                (switch_label
+                  (pattern
+                    (type_pattern
+                      (type_identifier)
+                      (identifier)))
+                  (pattern
+                    (record_pattern
+                      (generic_type
+                        (scoped_type_identifier
+                          (type_identifier)
+                          (marker_annotation
+                            (identifier))
+                          (type_identifier))
+                        (type_arguments
+                          (wildcard)))
+                      (record_pattern_body
+                        (record_pattern_component
+                          (underscore_pattern))))))
+                (block))
+              (switch_rule
+                (switch_label
+                  (pattern
+                    (record_pattern
+                      (generic_type
+                        (scoped_type_identifier
+                          (type_identifier)
+                          (marker_annotation
+                            (identifier))
+                          (type_identifier))
+                        (type_arguments
+                          (wildcard)))
+                      (record_pattern_body
+                        (record_pattern_component
+                          (underscore_pattern)))))
+                  (pattern
+                    (type_pattern
+                      (type_identifier)
+                      (identifier)))
+                  (guard
+                    (identifier)))
+                (block))
+              (switch_rule
+                (switch_label
+                  (pattern
+                    (type_pattern
+                      (type_identifier)
+                      (identifier)))
+                  (pattern
+                    (record_pattern
+                      (generic_type
+                        (scoped_type_identifier
+                          (type_identifier)
+                          (marker_annotation
+                            (identifier))
+                          (type_identifier))
+                        (type_arguments
+                          (wildcard)))
+                      (record_pattern_body
+                        (record_pattern_component
+                          (underscore_pattern)))))
+                  (guard
+                    (identifier)))
+                (block))
+              (switch_rule
+                (switch_label
+                  (pattern
+                    (record_pattern
+                      (generic_type
+                        (type_identifier)
+                        (type_arguments
+                          (wildcard)))
+                      (record_pattern_body
+                        (record_pattern_component
+                          (underscore_pattern))))))
+                (block))
+              (switch_rule
+                (switch_label
+                  (pattern
+                    (record_pattern
+                      (generic_type
+                        (scoped_type_identifier
+                          (type_identifier)
+                          (type_identifier))
+                        (type_arguments
+                          (wildcard)))
+                      (record_pattern_body
+                        (record_pattern_component
+                          (underscore_pattern))))))
+                (block)))))))))
+
+==================
+K11 tolerance: annotations in record pattern types in colon labels
+==================
+
+class C {
+  void f(Object x, boolean ok) {
+    switch (x) {
+      case G<@A ?> (_), Integer _: break;
+      case Integer _, G<@A ?> (_): break;
+      case G<@A ?> (_), Integer _ when ok: break;
+      case Integer _, G<@A ?> (_) when ok: break;
+      case O.@A Inner<?> (_), Integer _: break;
+      case Integer _, O.@A Inner<?> (_): break;
+      case O.@A Inner<?> (_), Integer _ when ok: break;
+      case Integer _, O.@A Inner<?> (_) when ok: break;
+      case G<?> (_): break;
+      case O.Inner<?> (_): break;
+    }
+  }
+}
+
+---
+
+(program
+  (class_declaration
+    (identifier)
+    (class_body
+      (method_declaration
+        (void_type)
+        (identifier)
+        (formal_parameters
+          (formal_parameter
+            (type_identifier)
+            (identifier))
+          (formal_parameter
+            (boolean_type)
+            (identifier)))
+        (block
+          (switch_expression
+            (parenthesized_expression
+              (identifier))
+            (switch_block
+              (switch_block_statement_group
+                (switch_label
+                  (pattern
+                    (record_pattern
+                      (generic_type
+                        (type_identifier)
+                        (type_arguments
+                          (wildcard
+                            (marker_annotation
+                              (identifier)))))
+                      (record_pattern_body
+                        (record_pattern_component
+                          (underscore_pattern)))))
+                  (pattern
+                    (type_pattern
+                      (type_identifier)
+                      (identifier))))
+                (break_statement))
+              (switch_block_statement_group
+                (switch_label
+                  (pattern
+                    (type_pattern
+                      (type_identifier)
+                      (identifier)))
+                  (pattern
+                    (record_pattern
+                      (generic_type
+                        (type_identifier)
+                        (type_arguments
+                          (wildcard
+                            (marker_annotation
+                              (identifier)))))
+                      (record_pattern_body
+                        (record_pattern_component
+                          (underscore_pattern))))))
+                (break_statement))
+              (switch_block_statement_group
+                (switch_label
+                  (pattern
+                    (record_pattern
+                      (generic_type
+                        (type_identifier)
+                        (type_arguments
+                          (wildcard
+                            (marker_annotation
+                              (identifier)))))
+                      (record_pattern_body
+                        (record_pattern_component
+                          (underscore_pattern)))))
+                  (pattern
+                    (type_pattern
+                      (type_identifier)
+                      (identifier)))
+                  (guard
+                    (identifier)))
+                (break_statement))
+              (switch_block_statement_group
+                (switch_label
+                  (pattern
+                    (type_pattern
+                      (type_identifier)
+                      (identifier)))
+                  (pattern
+                    (record_pattern
+                      (generic_type
+                        (type_identifier)
+                        (type_arguments
+                          (wildcard
+                            (marker_annotation
+                              (identifier)))))
+                      (record_pattern_body
+                        (record_pattern_component
+                          (underscore_pattern)))))
+                  (guard
+                    (identifier)))
+                (break_statement))
+              (switch_block_statement_group
+                (switch_label
+                  (pattern
+                    (record_pattern
+                      (generic_type
+                        (scoped_type_identifier
+                          (type_identifier)
+                          (marker_annotation
+                            (identifier))
+                          (type_identifier))
+                        (type_arguments
+                          (wildcard)))
+                      (record_pattern_body
+                        (record_pattern_component
+                          (underscore_pattern)))))
+                  (pattern
+                    (type_pattern
+                      (type_identifier)
+                      (identifier))))
+                (break_statement))
+              (switch_block_statement_group
+                (switch_label
+                  (pattern
+                    (type_pattern
+                      (type_identifier)
+                      (identifier)))
+                  (pattern
+                    (record_pattern
+                      (generic_type
+                        (scoped_type_identifier
+                          (type_identifier)
+                          (marker_annotation
+                            (identifier))
+                          (type_identifier))
+                        (type_arguments
+                          (wildcard)))
+                      (record_pattern_body
+                        (record_pattern_component
+                          (underscore_pattern))))))
+                (break_statement))
+              (switch_block_statement_group
+                (switch_label
+                  (pattern
+                    (record_pattern
+                      (generic_type
+                        (scoped_type_identifier
+                          (type_identifier)
+                          (marker_annotation
+                            (identifier))
+                          (type_identifier))
+                        (type_arguments
+                          (wildcard)))
+                      (record_pattern_body
+                        (record_pattern_component
+                          (underscore_pattern)))))
+                  (pattern
+                    (type_pattern
+                      (type_identifier)
+                      (identifier)))
+                  (guard
+                    (identifier)))
+                (break_statement))
+              (switch_block_statement_group
+                (switch_label
+                  (pattern
+                    (type_pattern
+                      (type_identifier)
+                      (identifier)))
+                  (pattern
+                    (record_pattern
+                      (generic_type
+                        (scoped_type_identifier
+                          (type_identifier)
+                          (marker_annotation
+                            (identifier))
+                          (type_identifier))
+                        (type_arguments
+                          (wildcard)))
+                      (record_pattern_body
+                        (record_pattern_component
+                          (underscore_pattern)))))
+                  (guard
+                    (identifier)))
+                (break_statement))
+              (switch_block_statement_group
+                (switch_label
+                  (pattern
+                    (record_pattern
+                      (generic_type
+                        (type_identifier)
+                        (type_arguments
+                          (wildcard)))
+                      (record_pattern_body
+                        (record_pattern_component
+                          (underscore_pattern))))))
+                (break_statement))
+              (switch_block_statement_group
+                (switch_label
+                  (pattern
+                    (record_pattern
+                      (generic_type
+                        (scoped_type_identifier
+                          (type_identifier)
+                          (type_identifier))
+                        (type_arguments
+                          (wildcard)))
+                      (record_pattern_body
+                        (record_pattern_component
+                          (underscore_pattern))))))
+                (break_statement)))))))))
+
+==================
+K11 tolerance: keywords in pattern types and names in arrow labels
+==================
+
+class C {
+  void f(Object x, boolean ok) {
+    switch (x) {
+      case String _, abstract _ -> {}
+      case String _, abstract.Inner _ -> {}
+      case String _, abstract<String> _ -> {}
+      case String _, abstract[] _ -> {}
+      case String _, abstract() -> {}
+      case String _, abstract(_) -> {}
+      case String _, R(abstract _) -> {}
+      case String _, R(T abstract) -> {}
+      case String _, R(S(abstract _)) -> {}
+      case String _, @A final final Integer _ -> {}
+      case Integer _ -> {}
+      case O.Inner _ -> {}
+      case G<String> _ -> {}
+      case String[] _ -> {}
+      case E() -> {}
+      case R(_) -> {}
+      case R(String _) -> {}
+      case R(T name) -> {}
+      case R(S(String _)) -> {}
+      case @A final Integer _ -> {}
+    }
+  }
+}
+
+---
+
+(program
+  (class_declaration
+    (identifier)
+    (class_body
+      (method_declaration
+        (void_type)
+        (identifier)
+        (formal_parameters
+          (formal_parameter
+            (type_identifier)
+            (identifier))
+          (formal_parameter
+            (boolean_type)
+            (identifier)))
+        (block
+          (switch_expression
+            (parenthesized_expression
+              (identifier))
+            (switch_block
+              (switch_rule
+                (switch_label
+                  (pattern
+                    (type_pattern
+                      (type_identifier)
+                      (identifier)))
+                  (pattern
+                    (type_pattern
+                      (type_identifier)
+                      (identifier))))
+                (block))
+              (switch_rule
+                (switch_label
+                  (pattern
+                    (type_pattern
+                      (type_identifier)
+                      (identifier)))
+                  (pattern
+                    (type_pattern
+                      (scoped_type_identifier
+                        (type_identifier)
+                        (type_identifier))
+                      (identifier))))
+                (block))
+              (switch_rule
+                (switch_label
+                  (pattern
+                    (type_pattern
+                      (type_identifier)
+                      (identifier)))
+                  (pattern
+                    (type_pattern
+                      (generic_type
+                        (type_identifier)
+                        (type_arguments
+                          (type_identifier)))
+                      (identifier))))
+                (block))
+              (switch_rule
+                (switch_label
+                  (pattern
+                    (type_pattern
+                      (type_identifier)
+                      (identifier)))
+                  (pattern
+                    (type_pattern
+                      (array_type
+                        (type_identifier)
+                        (dimensions))
+                      (identifier))))
+                (block))
+              (switch_rule
+                (switch_label
+                  (pattern
+                    (type_pattern
+                      (type_identifier)
+                      (identifier)))
+                  (pattern
+                    (record_pattern
+                      (identifier)
+                      (record_pattern_body))))
+                (block))
+              (switch_rule
+                (switch_label
+                  (pattern
+                    (type_pattern
+                      (type_identifier)
+                      (identifier)))
+                  (pattern
+                    (record_pattern
+                      (identifier)
+                      (record_pattern_body
+                        (record_pattern_component
+                          (underscore_pattern))))))
+                (block))
+              (switch_rule
+                (switch_label
+                  (pattern
+                    (type_pattern
+                      (type_identifier)
+                      (identifier)))
+                  (pattern
+                    (record_pattern
+                      (identifier)
+                      (record_pattern_body
+                        (record_pattern_component
+                          (type_identifier)
+                          (identifier))))))
+                (block))
+              (switch_rule
+                (switch_label
+                  (pattern
+                    (type_pattern
+                      (type_identifier)
+                      (identifier)))
+                  (pattern
+                    (record_pattern
+                      (identifier)
+                      (record_pattern_body
+                        (record_pattern_component
+                          (type_identifier)
+                          (identifier))))))
+                (block))
+              (switch_rule
+                (switch_label
+                  (pattern
+                    (type_pattern
+                      (type_identifier)
+                      (identifier)))
+                  (pattern
+                    (record_pattern
+                      (identifier)
+                      (record_pattern_body
+                        (record_pattern
+                          (identifier)
+                          (record_pattern_body
+                            (record_pattern_component
+                              (type_identifier)
+                              (identifier))))))))
+                (block))
+              (switch_rule
+                (switch_label
+                  (pattern
+                    (type_pattern
+                      (type_identifier)
+                      (identifier)))
+                  (pattern
+                    (type_pattern
+                      (modifiers
+                        (marker_annotation
+                          (identifier)))
+                      (type_identifier)
+                      (identifier))))
+                (block))
+              (switch_rule
+                (switch_label
+                  (pattern
+                    (type_pattern
+                      (type_identifier)
+                      (identifier))))
+                (block))
+              (switch_rule
+                (switch_label
+                  (pattern
+                    (type_pattern
+                      (scoped_type_identifier
+                        (type_identifier)
+                        (type_identifier))
+                      (identifier))))
+                (block))
+              (switch_rule
+                (switch_label
+                  (pattern
+                    (type_pattern
+                      (generic_type
+                        (type_identifier)
+                        (type_arguments
+                          (type_identifier)))
+                      (identifier))))
+                (block))
+              (switch_rule
+                (switch_label
+                  (pattern
+                    (type_pattern
+                      (array_type
+                        (type_identifier)
+                        (dimensions))
+                      (identifier))))
+                (block))
+              (switch_rule
+                (switch_label
+                  (pattern
+                    (record_pattern
+                      (identifier)
+                      (record_pattern_body))))
+                (block))
+              (switch_rule
+                (switch_label
+                  (pattern
+                    (record_pattern
+                      (identifier)
+                      (record_pattern_body
+                        (record_pattern_component
+                          (underscore_pattern))))))
+                (block))
+              (switch_rule
+                (switch_label
+                  (pattern
+                    (record_pattern
+                      (identifier)
+                      (record_pattern_body
+                        (record_pattern_component
+                          (type_identifier)
+                          (identifier))))))
+                (block))
+              (switch_rule
+                (switch_label
+                  (pattern
+                    (record_pattern
+                      (identifier)
+                      (record_pattern_body
+                        (record_pattern_component
+                          (type_identifier)
+                          (identifier))))))
+                (block))
+              (switch_rule
+                (switch_label
+                  (pattern
+                    (record_pattern
+                      (identifier)
+                      (record_pattern_body
+                        (record_pattern
+                          (identifier)
+                          (record_pattern_body
+                            (record_pattern_component
+                              (type_identifier)
+                              (identifier))))))))
+                (block))
+              (switch_rule
+                (switch_label
+                  (pattern
+                    (type_pattern
+                      (modifiers
+                        (marker_annotation
+                          (identifier)))
+                      (type_identifier)
+                      (identifier))))
+                (block)))))))))
+
+==================
+K11 tolerance: keywords in pattern types and names in colon labels
+==================
+
+class C {
+  void f(Object x, boolean ok) {
+    switch (x) {
+      case Integer new, String _: break;
+      case String _, @A final final Integer _: break;
+      case Integer name: break;
+      case String _, @A final Integer _: break;
+    }
+  }
+}
+
+---
+
+(program
+  (class_declaration
+    (identifier)
+    (class_body
+      (method_declaration
+        (void_type)
+        (identifier)
+        (formal_parameters
+          (formal_parameter
+            (type_identifier)
+            (identifier))
+          (formal_parameter
+            (boolean_type)
+            (identifier)))
+        (block
+          (switch_expression
+            (parenthesized_expression
+              (identifier))
+            (switch_block
+              (switch_block_statement_group
+                (switch_label
+                  (pattern
+                    (type_pattern
+                      (type_identifier)
+                      (identifier)))
+                  (pattern
+                    (type_pattern
+                      (type_identifier)
+                      (identifier))))
+                (break_statement))
+              (switch_block_statement_group
+                (switch_label
+                  (pattern
+                    (type_pattern
+                      (type_identifier)
+                      (identifier)))
+                  (pattern
+                    (type_pattern
+                      (modifiers
+                        (marker_annotation
+                          (identifier)))
+                      (type_identifier)
+                      (identifier))))
+                (break_statement))
+              (switch_block_statement_group
+                (switch_label
+                  (pattern
+                    (type_pattern
+                      (type_identifier)
+                      (identifier))))
+                (break_statement))
+              (switch_block_statement_group
+                (switch_label
+                  (pattern
+                    (type_pattern
+                      (type_identifier)
+                      (identifier)))
+                  (pattern
+                    (type_pattern
+                      (modifiers
+                        (marker_annotation
+                          (identifier)))
+                      (type_identifier)
+                      (identifier))))
+                (break_statement)))))))))
