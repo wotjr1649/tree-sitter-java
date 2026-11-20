@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Document the [grammar tolerances and known limits](docs/tolerances.md), including forms accepted by
+  javac's parser and rejected during full compilation.
+
 - Parse parenthesized assignment targets (K12, JLS 25 §§15.8.5 and 15.26), including `(x) = 1`, `((x)) += 7`,
   `(this.field) = x` and `(a[0]) <<= 1` in statements, `for` clauses and lambda bodies. The
   `assignment_expression.left` field holds a `parenthesized_expression` for each pair of parentheses. In

@@ -1,0 +1,167 @@
+# Java grammar tolerances and known limits
+
+Main at `912d6e0` includes K11 and K14. Tree-sitter results use the `cfd7977` baseline and were rechecked
+at `8ffd7d0` and `912d6e0`. Javac verdicts use Eclipse Temurin 25.0.5+8 with `--release 25` and preview disabled.
+An error-free tree has no `ERROR` or `MISSING` nodes. Javac diagnostics come from `JavacTask.parse()` unless a
+row calls out full compilation. The diagnostic column omits the common `compiler.err.` prefix and lists the
+distinct codes across the examples in a row.
+
+`<NUL>`, `<CR>` and `<LF>` stand for the corresponding raw characters. Backslashes in other examples are literal.
+Oracle IDs refer to the [oracle cases](../oracle/data/cases). Corpus filenames refer to [the grammar corpus](../test/corpus).
+OpenJDK paths are relative to the [pinned langtools corpus][openjdk]. The examples shown here are independently written.
+
+The release column names the release that introduced or recorded the behavior. “Phase 2 (2.2.0)” marks
+forms recorded during the OpenJDK survey against the 2.2.0 parser. Phase 5 is expected to withdraw tolerances
+that read reserved words as identifiers, and will also review the restricted-type and underscore uses marked below.
+
+[openjdk]: https://github.com/openjdk/jdk25u/tree/fda231468e56663992785ec199a6efb8eca3cc7a/test/langtools/tools/javac
+
+## Accepted although javac rejects
+
+K fixes retain a newly clean variant when replacing the newly supported part with an ordinary valid value
+already gave a clean tree. For example, K6 extends `0x1F .class` to `0x1__F .class`.
+
+The OpenJDK survey found 67 rejected-but-clean files with 41 different javac error codes. The table groups
+their 55 independent reproductions with the cases from the grammar and oracle. “(K11, pending)” is relative
+to the `cfd7977` baseline. The list extensions were checked at PR head `ef2115e` and merged as `912d6e0`.
+The listed single-pattern controls already parse at the baseline.
+[PR #25](https://github.com/wotjr1649/tree-sitter-java/pull/25) · [K11 oracle][k11-oracle] · [K11 tolerances corpus][k11-corpus]
+
+K13 and K14 fixed incremental parsing. “(K14, pending)” was the status at the `cfd7977` baseline.
+K14 merged as `8ffd7d0`.
+The rows citing those reviews record existing fresh-parse behavior.
+[PR #27](https://github.com/wotjr1649/tree-sitter-java/pull/27) · [PR #29](https://github.com/wotjr1649/tree-sitter-java/pull/29) · [K14 corpus][k14-corpus]
+
+[k11-oracle]: https://github.com/wotjr1649/tree-sitter-java/blob/ef2115eb59f55c0c16fcfa5d2e825693fbc8d79d/oracle/data/cases/k11.jsonl
+[k11-corpus]: https://github.com/wotjr1649/tree-sitter-java/blob/ef2115eb59f55c0c16fcfa5d2e825693fbc8d79d/test/corpus/k11-tolerances.txt
+[k14-corpus]: https://github.com/wotjr1649/tree-sitter-java/blob/8ffd7d05569d63180a66c9e0d001d377fc708609/test/corpus/k14-unnamed-type-patterns.txt
+
+| Java form | javac diagnostic code(s) | Oracle or corpus case | Release | Note |
+| --- | --- | --- | --- | --- |
+| `import Item;` | `expected` | OpenJDK `ImportUnnamed/foo/A.java` | Phase 2 (2.2.0) | The import target needs a qualified name. |
+| `interface I { int first = 1, second; }` | `expected` | OpenJDK `InterfaceFieldParsing_1.java` | Phase 2 (2.2.0) | An interface field requires an initializer. |
+| `owner.new Outer.Inner()` | `expected` | OpenJDK `QualifiedAccess/QualifiedAccess_4.java` | Phase 2 (2.2.0) | A qualified class instance creation takes a simple inner type name. |
+| `void[] field;`<br>`void[] m(void[][] x)` | `expected`, `invalid.meth.decl.ret.type.req`, `expected3` | OpenJDK `VoidArray.java` | Phase 2 (2.2.0) | The grammar treats void like the other types here. |
+| `import a.B;; <LF> import c.D;` | `extraneous.semicolon` | OpenJDK `diags/examples/ExtraImportSemicolonError.java` | Phase 2 (2.2.0) | Older javac source levels accepted this with a warning. |
+| `package p; <LF> void main() {}` | `implicit.class.should.not.have.package.declaration` | OpenJDK `diags/examples/ImplicitClassHasPackage.java` | Phase 2 (2.2.0) | An implicitly declared class cannot declare a package. |
+| `class C permits Child {}` | `invalid.permits.clause` | OpenJDK `diags/examples/PermitsInNoSealedClass.java` | Phase 2 (2.2.0) | The grammar accepts the clause on a class without sealed. |
+| `class C { Other() {} }` | `invalid.meth.decl.ret.type.req` | OpenJDK `diags/examples/InvalidMethodDecl.java` | Phase 2 (2.2.0) | The grammar recognizes a constructor without checking its name against the class. |
+| `class C { return value; }` | `statement.not.expected` | OpenJDK `diags/examples/StatementNotExpected.java` | Phase 2 (2.2.0) | A statement in a class body can parse cleanly. |
+| `static class C {}`<br>`sealed class C {} (in a method)` | `illegal.start.of.expr`, `class.method.or.field.expected`, `sealed.or.non.sealed.local.classes.not.allowed` | OpenJDK `generics/typevars/5060485/Compatibility02.java`, `diags/examples/SealedNotAllowedInLocalClass.java` | Phase 2 (2.2.0) | The grammar accepts these modifiers on local classes. |
+| `public public void m() {}` | `repeated.modifier` | OpenJDK `defaultMethods/private/Private09.java` | Phase 2 (2.2.0) | Repeated modifiers can parse cleanly. |
+| `record R() { int n = 1; }`<br>`record R() { { m(); } }` | `record.cannot.declare.instance.fields`, `instance.initializer.not.allowed.in.records` | OpenJDK `diags/examples/RecordsCanNotDeclareInstanceFields.java`, `diags/examples/InstanceInitializersNotAllowedInRecords.java` | Phase 2 (2.2.0) | Both record bodies parse cleanly. |
+| `record R(final int n) {}`<br>`record R(int a[]) {}` | `record.cant.declare.field.modifiers`, `record.component.and.old.array.syntax` | OpenJDK `diags/examples/RecordsCantDeclareComponentModifiers.java`, `diags/examples/RecordsComponentsCanNotDeclareCStyleArrays.java` | Phase 2 (2.2.0) | The grammar shares parameter syntax with record components. |
+| `void m(long... values[]) {}` | `varargs.and.old.array.syntax` | OpenJDK `diags/examples/VarargsAndOldArraySyntax.java` | Phase 2 (2.2.0) | Array brackets follow the varargs parameter name. |
+| `void m(long... a, long b) {}` | `varargs.must.be.last` | OpenJDK `diags/examples/VarargsMustBeLast.java` | 2.1.0 (K5) for the annotated variant | Also accepts Object @A ... a, int b (k5/x04-not-last). |
+| `if (b) class C {}` | `class.not.allowed` | OpenJDK `diags/examples/NotAllowedClass.java` | Phase 2 (2.2.0) | A class declaration parses as the single body. |
+| `label: int n = 0;`<br>`if (b) int n = 1;` | `variable.not.allowed` | OpenJDK `LabeledDeclaration.java`, `diags/examples/NotAllowedVariable.java` | Unreleased (K9) for contextual types | K9 also records if (b) module x = null; and while (b) module x = null;. |
+| `n + 3;`<br>`() -> { 4; }`<br>`(n = 1);` | `not.stmt` | OpenJDK `diags/examples/NotAStatement.java`, `lambda/BadStatementInLambda.java`, `Parens2.java` | Unreleased (K12) for parenthesized targets | The grammar accepts general expressions in statement positions. |
+| `case 2 -> if (b);` | `switch.case.unexpected.statement` | OpenJDK `diags/examples/SwitchCaseUnexpectedStatement.java` | Phase 2 (2.2.0) | An unbraced if parses as the body of a switch statement rule. |
+| `case 2 when flag -> {}` | `guard.not.allowed` | OpenJDK `diags/examples/GuardNotAllowed.java` | Phase 2 (2.2.0) | The grammar accepts a guard on a constant label. |
+| `case default -> {}` | `default.label.not.allowed` | OpenJDK `diags/examples/DefaultLabelNotAllowed.java` | 2.0.0 (K3) | See the K3 alternatives below. |
+| `yield(0, 3);`<br>`case 2: yield;` | `invalid.yield`, `illegal.start.of.expr` | OpenJDK `T8326204b.java`, `switchexpr/WrongBreakTest.java` | Unreleased (K12) for the call variant | An unqualified call and a yield without a value both parse. |
+| `long assert = 4;`<br>`long enum = 4;` | `assert.as.identifier`, `enum.as.identifier` | OpenJDK `diags/examples/AssertAsIdentifier2.java`, `diags/examples/EnumAsIdentifier2.java` | Phase 2 (2.2.0) | Phase 5. These names also occur in tests for older source levels. |
+| `class var {}`<br>`class C<var> { interface var {} }`<br>`class yield {}` | `restricted.type.not.allowed` | OpenJDK `diags/examples/FutureVarNotAllowed.java`, `lvti/ParserTest.java`, `diags/examples/IllegalRefToRestrictedType.java` | Phase 2 (2.2.0) | Phase 5. Restricted type names in Java 25. |
+| `var n = 4; (field)`<br>`yield m() { return null; }` | `restricted.type.not.allowed.here` | OpenJDK `diags/examples/VarNotAllowedHere.java`, `diags/examples/IllegalRefToRestrictedType.java` | Phase 2 (2.2.0) | Phase 5. Restricted names in field or return types. |
+| `o instanceof var(int n)`<br>`o instanceof var n` | `restricted.type.not.allowed.here` | OpenJDK `T8305582.java`, `patterns/VarErrors.java` | 2.2.0 (K7) for the annotated variant | Phase 5. This use of var differs from a binding in a record component or an inferred local. |
+| `var[] a = null;`<br>`(var a[]) -> a` | `restricted.type.not.allowed.array` | OpenJDK `diags/examples/VarNotAllowedArray.java`, `diags/examples/BracketsNotAllowedImplicitLambda.java` | Phase 2 (2.2.0) | Brackets on a var declaration type or lambda parameter. |
+| `var a = 3, b = 4;` | `restricted.type.not.allowed.compound` | OpenJDK `diags/examples/VarNotAllowedCompound.java` | Phase 2 (2.2.0) | Multiple declarators in an inferred local declaration. |
+| `(long n, var m) -> n` | `invalid.lambda.parameter.declaration` | OpenJDK `diags/examples/VarExplicitLambda.java` | Phase 2 (2.2.0) | Explicit and inferred parameter types in the same lambda. |
+| `int _ = 4; (field)`<br>`long n = 2, _ = 3; (field)`<br>`return _ + 3;`<br>`byte _[] = null; (local)` | `use.of.underscore.not.allowed.non.variable`, `use.of.underscore.not.allowed`, `use.of.underscore.not.allowed.with.brackets` | OpenJDK `diags/examples/UnderscoreAsIdentifierError.java`, `diags/examples/UseOfUnderscoreNotAllowed.java`, `diags/examples/UseOfUnderscoreNotAllowedNonVar.java`, `diags/examples/UseOfUnderscoreNotAllowedWithBrackets.java` | Unreleased (K12) for assignment variants | Phase 5. Legal unnamed bindings still use _. |
+| `new Item<>[2]` | `cannot.create.array.with.diamond` | OpenJDK `diags/examples/CannotCreateArrayWithDiamond.java` | Phase 2 (2.2.0) | A diamond is accepted on an array creation. |
+| `9 .class` | `expected` | OpenJDK `parser/8081769/T8081769.java` | 2.2.0 (K6) for new numeric spellings | Phase 5 candidate. The suffix is a member access. |
+| `2147483648`<br>`1e400`<br>`1e-400` | `int.number.too.large`, `fp.number.too.large`, `fp.number.too.small` | OpenJDK `UncaughtOverflow.java`, `diags/examples/FloatNumberTooLarge.java`, `diags/examples/FloatNumberTooSmall.java` | Phase 2 (2.2.0) | The parser reads the literal without checking its range. |
+| `"\q"`<br>`"""<LF>\q<LF>"""` | `illegal.esc.char` | OpenJDK `diags/examples/IllegalEscapeChar.java`, `TextBlockIllegalEscape.java` | 2.2.0 (K8) | The same invalid escape parses in a text block or an ordinary string. |
+| `"""first<LF>second<LF>"""` | `illegal.text.block.open` | OpenJDK `diags/examples/TextBlockOpenDelimiter.java` | 2.2.0 (K8) | Characters follow the opening delimiter before the newline. |
+| `'\uD840\uDC00'` | `illegal.char.literal.multiple.surrogates` | OpenJDK `diags/examples/IllegalCharLiteralMultipleSurrogates.java` | 2.2.0 (K8) for a raw supplementary character | A character literal holds a supplementary code point. |
+| `import module;` | `expected` | k1/x01-import-module-no-name | 2.0.0 (K1) | The grammar can read it as an ordinary import with module as the name. |
+| `C() { super(); super(); }` | `redundant.superclass.init` | k2/n07-two-invocations | 2.0.0 (K2) | Full compile. Both parsers accept the constructor body. |
+| `case 1, default`<br>`case default, null`<br>`case null, default, default` | `default.label.not.allowed` | k3/x01-constant-then-default, k3/x04-default-twice, probes/k3-case-default-null-order | 2.0.0 (K3) | The grammar lets default appear anywhere in the label list. |
+| `case null, default when true` | `guard.not.allowed` | k3/x02-default-with-guard | 2.0.0 (K3) | The grammar accepts the guard. |
+| `case null, default, 1` | `invalid.case.label.combination` | k3/n07-label-after-null-default | 2.0.0 (K3) | Full compile. Both parsers accept the label. |
+| `void m(int... @Foo x) {}`<br>`void m(Object @N ... @M x) {}` | `expected`, `illegal.start.of.type`, `expected3` | k5/x05-both-sides, k5/x06-after-only<br>expressions.txt, “Annotations before a spread parameter's ellipsis” | 2.1.0 (K5) | The inherited form permits annotations after the ellipsis, including when another annotation precedes it. |
+| `0o17`<br>`0O1_7` | `expected` | literals.txt, “octal integer literals” | 2.2.0 (K6) | Inherited non-Java octal prefixes. A run of underscores under this prefix still gives ERROR. |
+| `0x5.4`<br>`0x1_F.8`<br>`0x1__F.8`<br>`0x.8__8`<br>`0x1__F.`<br>`0x1__F.f` | `malformed.fp.lit` | k6/x29, x30, x32, x34, x37, x38 | 2.2.0 (K6) | A hex float can omit its p exponent. K6 extends that tolerance to runs of underscores. |
+| `0x1__F .class`<br>`0x1__F .if`<br>`0b1__0 .class`<br>`0__7 .class`<br>`1__0 .class` | `expected` | k6/x39–x40, x42–x47, x49–x54 | 2.2.0 (K6) | Phase 5. Ordinary digit spellings already allowed the keyword as a field name. |
+| `0x1__F .this` | `this.as.identifier` | k6/x41, x48 | 2.2.0 (K6) | The parser can recognize the special this member syntax on a number. |
+| `(@A T this) -> 0`<br>`(T this) -> 0` | `illegal.start.of.expr`, `expected` | k7/lx1-lambda-receiver<br>CHANGELOG 2.2.0 | 2.2.0 (K7) | Shared formal parameters admit a receiver in a lambda. |
+| `record R(@A T this) {}` | `this.as.identifier` | CHANGELOG 2.2.0 (K7) receiver parameter example | 2.2.0 (K7) | Shared formal parameters also admit a receiver in a record header. |
+| `o instanceof @A final var s` | `restricted.type.not.allowed.here` | k7/ix5-final-var, k7/ix9-final-var-control | 2.2.0 (K7) | Phase 5. var can be read as a type name. |
+| `catch (T1 \| @A static e) {}` | `illegal.start.of.type`, `expected`, `class.method.or.field.expected` | k7/cx6-annotated-static-type, k7/cx7-static-type-control | 2.2.0 (K7) | Phase 5. static can be read as a type name. |
+| `o instanceof @A final T static` | `mod.not.allowed.here`, `expected`, `illegal.start.of.expr`, `illegal.start.of.type`, `class.method.or.field.expected` | k7/ix7-final-static-name, k7/ix8-static-name-control | 2.2.0 (K7) | Phase 5. static can be read as a binding. |
+| `"\a"`<br>`"\v"`<br>`"\?"`<br>`"<NUL>\q"`<br>`"""<LF><NUL>\q<LF>"""` | `illegal.esc.char` | literals.txt, “escape sequences”<br>k8/probe-escape-string-raw-invalid, k8/probe-escape-text-block-raw-invalid | 2.2.0 (K8) | Inherited escapes also work with a raw NUL in strings and text blocks. |
+| `"a<LF>b"`<br>`"a<NUL><CR>b"`<br>`"a<NUL>\<LF>b"` | `unclosed.str.lit`, `premature.eof`, `illegal.esc.char` | k8/probe-string-raw-cr, probe-string-raw-lf, probe-string-plain-lf, probe-string-plain-line-continuation, probe-string-nul-line-continuation | 2.2.0 (K8) | The backslash form adds illegal.esc.char. A raw NUL does not change the line-break tolerance. |
+| `"""a<NUL>b"""` | `illegal.text.block.open` | k8/probe-text-block-missing-opening-newline-raw, probe-text-block-missing-opening-newline-plain | 2.2.0 (K8) | The opening-line tolerance extends to text blocks containing NUL. |
+| `'ab'`<br>`'<CR>'`<br>`'\<LF>'`<br>`'😀'` | `unclosed.char.lit`, `illegal.line.end.in.char.lit`, `illegal.esc.char`, `illegal.char.literal.multiple.surrogates` | k8/probe-char-multi, probe-char-cr, probe-char-plain-line-continuation, probe-char-surrogate-pair | 2.2.0 (K8) | These inherited forms parse as character literals. |
+| `STR."a\{x}b"`<br>`STR."a<NUL>\{x}b"`<br>`STR."a\{"<NUL>"}b"`<br>`STR."a\\{x}b"`<br>`STR."""<LF>a<NUL>\{x}<NUL><LF>"""` | `illegal.esc.char`, `illegal.char`, `expected` | k8/probe-template-*<br>expressions.txt, “string interpolation” | 2.2.0 (K8) | Java 25 rejects the retained template syntax. The NUL inside an interpolation adds illegal.char. The escaped backslash variant emits expected. |
+| `open x;`<br>`@A module module;`<br>`open module = null;`<br>`open[] module;`<br>`with module[];`<br>`open module();`<br>`module module(module x) { return x; }`<br>`open module with {} with module;` | `expected.module`, `expected`, `class.method.or.field.expected` | k9/top-level-local, top-level-method, open-top-*, module-top-*, with-top-* | Unreleased (K9) | Covers top-level variables and methods with annotations, initializers, arrays or parameters, and declarations after a module. open, module and with are valid contextual type names. |
+| `module<> x;`<br>`module<>::new`<br>`module<A>.class` | `illegal.start.of.type`, `expected` | k9/module-generic-broken-suite, module-type-ref-angle, module-generic-class-literal | Unreleased (K9) | The empty type arguments and generic class literal also parse with open, with and ordinary type names. |
+| `v instanceof final module` | `mod.not.allowed.here` | k9/module-missing-type-pattern-name, missing-type-pattern-name-control | Unreleased (K9) | The type pattern has no binding. The same holds for open and with. |
+| `(permits) v`<br>`(var) v`<br>`class permits {}` | `restricted.type.not.allowed.here`, `restricted.type.not.allowed` | k9/permits-cast, k9/var-cast<br>TRIAGE probe | Unreleased (K9) records the cast controls | Phase 5. The restricted type names already parsed before K9. |
+| `"\uuu0022"`<br>`"\uuu000A"`<br>`"\uuu0041<LF>"` | `illegal.text.block.open`, `unclosed.str.lit`, `premature.eof` | k10/string-many-u-encoded-double, string-many-u-encoded-linefeed, string-raw-newline-after-many-u | Unreleased (K10) | Repeated u inherits ordinary string behavior for encoded quotes and both encoded and raw line breaks. |
+| `"\uuu005Cu0041"`<br>`"\uuu005Cq"`<br>`"""<LF>\u005cu0041<LF>"""`<br>`'\u005cu0041'`<br>`"\u005c\uu0041"` | `illegal.esc.char` | k10/string-many-u-no-recursion, string-many-u-adjacent-invalid-tail, text-no-recursion, char-no-recursion, string-many-u-after-encoded-backslash | Unreleased (K10) | The grammar can accept an invalid escape tail after an encoded backslash. |
+| `STR."\uuu0041\{1}"` | `illegal.esc.char` | k10/string-preview-template-many-u, string-preview-template-one-u | Unreleased (K10) | Template tolerance extends to the repeated-u spelling. |
+| `"""<LF>\uuu041<LF>"""`<br>`'\uuu041'` | `illegal.unicode.esc`, `empty.char.lit` | k10/text-short-many-u, char-short-many-u | Unreleased (K10) oracle | A short Unicode escape in a text block or char literal can parse cleanly. |
+| `'\u0027'`<br>`'\u005c'` | `empty.char.lit`, `premature.eof`, `unclosed.char.lit` | k10/char-encoded-single, char-encoded-slash | Unreleased (K10) oracle | The tree-sitter token keeps the original literal boundaries. |
+| `((x) = 1);`<br>`for (((x) = 1); ; ) {}`<br>`for (; ; ((x) = 1)) {}`<br>`default -> ((x) = 1);` | `not.stmt` | k12/parenthesized-statement, parenthesized-for-init, parenthesized-for-update, switch-statement-parenthesized-arm | Unreleased (K12) | The entire assignment is parenthesized in a statement, a for clause or a switch statement rule. |
+| `((x) = 1) + 1;`<br>`-((x) = 1);`<br>`b ? (x) = 1 : 2;`<br>`(int) ((x) = 1);`<br>`((o) = get()).field;`<br>`((a) = new int[1][1])[0];`<br>`((o) = get())::run;` | `not.stmt` | k12/binary-statement, unary-statement, ternary-statement, cast-statement, field-access-statement, array-access-statement, method-reference-statement<br>unary-for-init, ternary-for-update, switch-statement-binary-arm, unary-switch-arrow, ternary-switch-arrow | Unreleased (K12) | The surrounding expression can parse as a statement. Some wrappers also parse in for clauses and switch statement rules. |
+| `@A((x) = 1)`<br>`@A(value = (x) = 1)`<br>`@A(@B((x) = 1))`<br>`@A({(x) = 1})`<br>`@A({0, (x) = 1})`<br>`int value() default (x) = 1;` | `expected`, `class.method.or.field.expected`, `annotation.missing.element.value` | k12/annotation-unkeyed, annotation-keyed, nested-annotation-value, annotation-array, mixed-annotation-array-value, annotation-default | Unreleased (K12) | The arrays give annotation.missing.element.value. The default value gives expected alone. |
+| `(_) = x`<br>`(x) = _`<br>`b ? (x) = _ : 1`<br>`m((x) = _)`<br>`(x._) = 1`<br>`(_.field) = 1`<br>`(_[0]) = 1`<br>`(a[_]) = 1` | `use.of.underscore.not.allowed.non.variable` | k12/just-underscore, restricted-rhs, underscore-middle, underscore-call-argument, underscore-field, underscore-receiver, underscore-array-receiver, underscore-array-index | Unreleased (K12) | Phase 5. _ parses as a name in the assignment target or value. |
+| `(x.default) = 1`<br>`(obj.if) = 1` | `expected`, `not.stmt`, `expected2`, `illegal.start.of.expr` | k12/keyword-field, reserved-if-field | Unreleased (K12) | Phase 5. default and if parse as field names. |
+| `default -> { (yield()).field = 1; yield (x) = 2; }` | `invalid.yield` | k12/switch-yield-call | Unreleased (K12) | An unqualified yield call parses alongside a yield statement. |
+| `case _ -> 1`<br>`o instanceof _`<br>`o instanceof final _`<br>`o instanceof @A _` | `use.of.underscore.not.allowed.non.variable` | Independent K13 and K14 review probes<br>k13/other-contexts holds typed controls | Unreleased (K13, K14) review | Phase 5. These bare-underscore forms already parsed in a fresh tree. Typed unnamed patterns such as case Integer _ and o instanceof Integer _ remain valid. |
+| `o instanceof List<> _`<br>`o instanceof var _`<br>`o instanceof final var _` | `illegal.start.of.type`, `restricted.type.not.allowed.here` | Independent K14 review probes<br>patterns/VarErrors.java for the restricted type | Unreleased (K14) review | Existing empty-type-argument and restricted-type tolerances were retained. Phase 5 applies to var as a type. |
+| `o instanceof int _` | `preview.feature.disabled.plural` | Independent K14 review probe | Unreleased (K14) review | Full compile with preview off. Both parsers accept the pattern. |
+| `case var _`<br>`case _ _`<br>`case String _, var _`<br>`case String _, _ _` | `restricted.type.not.allowed.here`, `expected2`, `not.stmt` | k11-var-type-pattern[-single], k11-underscore-type-{single,list} | Unreleased (K11, pending) | Phase 5. The invalid type names var and _ are accepted in the single pattern and extended to lists. |
+| `case final final Integer _`<br>`case String _, @A final final Integer _` | `repeated.modifier` | k11-repeated-modifier[-single]<br>k11-tolerances.txt, keyword cases | Unreleased (K11, pending) | Repeated final works with or without a preceding annotation. |
+| `case List<> _`<br>`case String _, List<> _` | `illegal.start.of.type` | k11-empty-type-argument-{single,list} | Unreleased (K11, pending) | The empty type arguments already parsed in a single pattern. |
+| `case String _, @A new _`<br>`case String _, Outer.new _`<br>`case String _, List<null> _` | `illegal.start.of.type`, `use.of.underscore.not.allowed.non.variable`, `expected2`, `expected` | k11-annotated-keyword-{single,list}, k11-qualified-keyword-{single,list}, k11-keyword-type-argument-{single,list} | Unreleased (K11, pending) | Phase 5. Keywords or literals can be read as parts of a type name. |
+| `case String _, Integer static`<br>`case String _, int instanceof`<br>`case String _, R(int instanceof)`<br>`case String _, R(int new)` | `expected2`, `illegal.start.of.expr`, `expected3`, `dot.class.expected`, `illegal.start.of.type`, `expected` | k11-bad-keyword-name[-single], k11-primitive-keyword-name[-single], k11-primitive-keyword-record-component[-single], k11-primitive-keyword-binding-{single,list} | Unreleased (K11, pending) | Phase 5. The keywords can be binding names, including in later record components. |
+| `case String _, abstract _`<br>`case String _, abstract(_)`<br>`case String _, abstract.Inner _`<br>`case String _, abstract<String> _`<br>`case String _, abstract[] _` | `mod.not.allowed.here`, `expected`, `illegal.start.of.expr`, `not.stmt` | k11-tolerances.txt, “K11 tolerance: keywords in pattern types and names” | Unreleased (K11, pending) | Phase 5. A keyword can stand in for simple, qualified, generic or array types. |
+| `case String _, R(abstract _)`<br>`case String _, R(S(abstract _))`<br>`case String _, R(T abstract)`<br>`case Integer new` | `illegal.start.of.expr`, `use.of.underscore.not.allowed.non.variable`, `expected2`, `class.method.or.field.expected`, `expected` | k11-tolerances.txt, “K11 tolerance: keywords in pattern types and names” | Unreleased (K11, pending) | Phase 5. These record components can use a keyword as a type or binding. The simple new binding is an existing single-pattern tolerance. |
+| `case G<@A ?> (_)`<br>`case String _, O.@A Inner<?> (_)` | `record.patterns.annotations.not.allowed` | k11-tolerances.txt, “K11 tolerance: annotations in record pattern types” | Unreleased (K11, pending) | The annotations parse inside the type of a single or later record pattern. |
+| `case String s, Integer i`<br>`case R(int n), S(_)`<br>`case String _, Integer when` | `flows.through.from.pattern` | k11-named-type-patterns, k11-named-record-component, k11-contextual-when-name | Unreleased (K11, pending) | Full compile. Javac rejects named bindings in multi-pattern lists here. |
+| `case int _, String _`<br>`case String _, void _`<br>`case void _` | `preview.feature.disabled.plural`, `void.not.allowed.here` | k11-primitive-type-pattern, k11-void-type-pattern, k11-void-type-pattern-single | Unreleased (K11, pending) | Full compile. Primitive type patterns require preview. A void pattern is rejected independently of preview. |
+
+## Stricter than javac's parser
+
+Javac's parse phase accepts the following examples. Full javac compilation rejects them with the listed
+diagnostics, and tree-sitter gives `ERROR` or `MISSING`. The examples stay in the
+[pinned failure list](../test/examples/failures.txt).
+
+| Java form | javac diagnostic code(s) | Oracle or corpus case | Release | Note |
+| --- | --- | --- | --- | --- |
+| `@interface A extends I {}` | `cant.extend.intf.annotation` | OpenJDK `annotations/neg/Z5.java` | Phase 2 (2.2.0) | An annotation interface has no extends clause. |
+| `@interface A<T> {}` | `intf.annotation.cant.have.type.params` | OpenJDK `annotations/neg/Z14.java` | Phase 2 (2.2.0) | An annotation interface cannot declare type parameters. |
+| `@interface A { int m(int n); }` | `intf.annotation.members.cant.have.params` | OpenJDK `BadAnnotation.java` | Phase 2 (2.2.0) | An annotation element requires an empty parameter list. |
+| `@interface A { int m(A this); }` | `intf.annotation.members.cant.have.params` | OpenJDK `T8175198/AnnotationsAndFormalParamsTest.java` | Phase 2 (2.2.0) | An annotation element cannot declare a receiver. |
+| `@interface A { int m() { return 7; } }` | `intf.meth.cant.have.body` | OpenJDK `annotations/neg/NoDefault.java` | Phase 2 (2.2.0) | An annotation element cannot have a block body. |
+| `@interface A { int m() throws Exception; }` | `throws.not.allowed.in.intf.annotation` | OpenJDK `annotations/neg/Z13.java` | Phase 2 (2.2.0) | An annotation element cannot have a throws clause. |
+| `@interface A { <T> int m(); }` | `intf.annotation.members.cant.have.type.params` | OpenJDK `annotations/neg/Z9.java` | Phase 2 (2.2.0) | An annotation element cannot declare type parameters. |
+| `class C { int m() default 7; }` | `default.allowed.in.intf.annotation.member` | OpenJDK `annotations/neg/Z2.java` | Phase 2 (2.2.0) | An element default value belongs in an annotation interface. |
+| `@A(1 == 2, n = 5)` | `annotation.value.must.be.name.value`, `annotation.missing.default.value` | OpenJDK `diags/examples/AnnotationMustBeNameValue.java` | Phase 2 (2.2.0) | An unnamed argument cannot share the list with named arguments. |
+| `@A(3, 9)` | `annotation.value.must.be.name.value`, `annotation.missing.default.value` | OpenJDK `annotations/neg/Syntax1.java` | Phase 2 (2.2.0) | The positional shorthand takes one argument. |
+| `short.class = null;` | `cant.assign.val.to.var` | OpenJDK `StoreClass.java` | Phase 2 (2.2.0) | A class literal cannot be assigned. |
+| `this = null;` | `cant.assign.val.to.this` | OpenJDK `diags/examples/CantAssignToThis.java` | Phase 2 (2.2.0) | A this expression cannot be assigned. |
+| `class C { { this(8); } C(int n) {} }` | `call.must.only.appear.in.ctor` | OpenJDK `SuperInit/SuperInitFails.java` | Phase 2 (2.2.0) | An instance initializer cannot explicitly invoke a constructor. |
+| `() -> { super(); }`<br>`() -> super()` | `call.must.only.appear.in.ctor` | OpenJDK `SuperInit/SuperInitFails.java` | Phase 2 (2.2.0) | Both block and expression lambda bodies reject the explicit constructor call in full compilation. |
+| `C() { if (true) { super(); } }` | `ctor.calls.not.allowed.here` | OpenJDK `diags/examples/CallsNotAllowedHere.java` | Phase 2 (2.2.0) | The call is nested in a statement in the constructor. |
+| `void m() { super(); }` | `call.must.only.appear.in.ctor` | OpenJDK `diags/examples/CallOnlyInConstructor.java` | Phase 2 (2.2.0) | The call is in an ordinary method. |
+| `Inner(final Outer Outer.this) {}` | `mod.not.allowed.here` | OpenJDK `annotations/FinalReceiverTest.java` | Phase 2 (2.2.0) | A receiver parameter cannot have final. |
+| `switch (n) { case 8: break; default -> {} }` | `switch.mixing.case.types` | OpenJDK `diags/examples/SwitchMixingCaseTypes.java` | Phase 2 (2.2.0) | One switch block mixes colon groups and arrow rules. |
+| `case Kind.A, Integer _ -> {}` | `invalid.case.label.combination` | OpenJDK `T8314216.java` | Phase 2 (2.2.0) | One label mixes a constant and a type pattern. K11 retains the grammar error. |
+
+## Known limits
+
+These forms pass full javac compilation. The full K5 examples declare their annotations with `@Target(ElementType.TYPE_USE)`.
+Tree-sitter can give `ERROR` or `MISSING` or tokenize the source differently, as shown in the Unicode row.
+The two K5 cases are in the [oracle's expected-failure set](../oracle/data/expected-failures.json).
+
+| Java form | javac diagnostic code(s) | Oracle or corpus case | Release | Note |
+| --- | --- | --- | --- | --- |
+| `void m(int @A [] @B ... xs) {}` | None | k5/v04-after-dimensions | 2.1.0 (K5), 2.2.0 | The annotation after an array dimension starts another dimension in the grammar. |
+| `void m(int @A [] @B @C [] [] @D @E ... r) {}` | None | k5/v05-many-dimensions | 2.1.0 (K5), 2.2.0 | The same limit applies with several dimensions and annotations. |
+| `int x<NUL>y;` | None | raw-nul.txt, “review probe outside/identifier” and “review probe outside/final” | 2.2.0 (K8) | Javac treats the NUL as ignorable within the identifier. The grammar still errs outside a literal in this position. |
+| `int \u0061lpha;`<br>`int f\u003b`<br>`// \u000A int f;` | None | OpenJDK `MethodParameters/UncommonParamNames.java`, `unicode/UnicodeAtEOL.java`, `unicode/UnicodeCommentDelimiter.java`<br>CHANGELOG Unreleased (orchard #51) | Unreleased | Javac translates escapes before tokenization. Outside literals, the grammar can give ERROR or keep a different token boundary. In the comment example, int f; remains part of one line_comment. |
+| `java.util.@A Arrays.sort(a)` | None | REVIEW-22 independent `SelectorPackage.java` probe | Unreleased | Full javac compilation accepts this form and emits a `ClassWriter: Position UNKNOWN` note. The static-call qualifier is a `TypeName`, whose syntax excludes annotations. The grammar continues to report an error by owner decision on 2026-11-20. [JLS 25 §15.12](https://docs.oracle.com/javase/specs/jls/se25/html/jls-15.html#jls-15.12) · [JLS 25 §6.5](https://docs.oracle.com/javase/specs/jls/se25/html/jls-6.html#jls-6.5) |
+| `o instanceof R(final _, int _)` | None | K13 independent `modified-bare.java` probe | Unreleased (K15, being fixed) | Full javac compilation accepts the modified unnamed component `final _`. Tree-sitter reports `MISSING identifier` at that component. |
