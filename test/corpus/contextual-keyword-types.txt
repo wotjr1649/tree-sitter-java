@@ -440,3 +440,195 @@ open module() { return null; }
     body: (block
       (return_statement
         (null_literal)))))
+
+====================
+K9 reviewed top-level declaration forms
+====================
+
+open x;
+@A open module;
+module module = null;
+with module[];
+open[] module;
+module module() { return null; }
+@A open module(open x) { return x; }
+
+---
+
+(program
+  (local_variable_declaration
+    type: (type_identifier)
+    declarator: (variable_declarator
+      name: (identifier)))
+  (local_variable_declaration
+    (modifiers
+      (marker_annotation
+        name: (identifier)))
+    type: (type_identifier)
+    declarator: (variable_declarator
+      name: (identifier)))
+  (local_variable_declaration
+    type: (type_identifier)
+    declarator: (variable_declarator
+      name: (identifier)
+      value: (null_literal)))
+  (local_variable_declaration
+    type: (type_identifier)
+    declarator: (variable_declarator
+      name: (identifier)
+      dimensions: (dimensions)))
+  (local_variable_declaration
+    type: (array_type
+      element: (type_identifier)
+      dimensions: (dimensions))
+    declarator: (variable_declarator
+      name: (identifier)))
+  (method_declaration
+    type: (type_identifier)
+    name: (identifier)
+    parameters: (formal_parameters)
+    body: (block
+      (return_statement
+        (null_literal))))
+  (method_declaration
+    (modifiers
+      (marker_annotation
+        name: (identifier)))
+    type: (type_identifier)
+    name: (identifier)
+    parameters: (formal_parameters
+      (formal_parameter
+        type: (type_identifier)
+        name: (identifier)))
+    body: (block
+      (return_statement
+        (identifier)))))
+
+====================
+K9 reviewed declaration after a module declaration
+====================
+
+open module module {} module module;
+
+---
+
+(program
+  (module_declaration
+    name: (identifier)
+    body: (module_body))
+  (local_variable_declaration
+    type: (type_identifier)
+    declarator: (variable_declarator
+      name: (identifier))))
+
+====================
+K9 reviewed declarations as statement bodies
+====================
+
+class C {
+  void f() {
+    label: with x = null;
+    if (true) open x = null;
+    while (true) module x = null;
+  }
+}
+
+---
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters)
+        body: (block
+          (labeled_statement
+            (identifier)
+            (local_variable_declaration
+              type: (type_identifier)
+              declarator: (variable_declarator
+                name: (identifier)
+                value: (null_literal))))
+          (if_statement
+            condition: (parenthesized_expression
+              (true))
+            consequence: (local_variable_declaration
+              type: (type_identifier)
+              declarator: (variable_declarator
+                name: (identifier)
+                value: (null_literal))))
+          (while_statement
+            condition: (parenthesized_expression
+              (true))
+            body: (local_variable_declaration
+              type: (type_identifier)
+              declarator: (variable_declarator
+                name: (identifier)
+                value: (null_literal)))))))))
+
+====================
+K9 reviewed type arguments and unnamed instanceof
+====================
+
+class C {
+  void a() { with<> x; }
+  Object b() { return with<> :: new; }
+  Class<?> c() { return module<A>.class; }
+  boolean d(Object v) { return v instanceof final open; }
+}
+
+---
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters)
+        body: (block
+          (local_variable_declaration
+            type: (generic_type
+              (type_identifier)
+              (type_arguments))
+            declarator: (variable_declarator
+              name: (identifier)))))
+      (method_declaration
+        type: (type_identifier)
+        name: (identifier)
+        parameters: (formal_parameters)
+        body: (block
+          (return_statement
+            (method_reference
+              (generic_type
+                (type_identifier)
+                (type_arguments))))))
+      (method_declaration
+        type: (generic_type
+          (type_identifier)
+          (type_arguments
+            (wildcard)))
+        name: (identifier)
+        parameters: (formal_parameters)
+        body: (block
+          (return_statement
+            (class_literal
+              (generic_type
+                (type_identifier)
+                (type_arguments
+                  (type_identifier)))))))
+      (method_declaration
+        type: (boolean_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (type_identifier)
+            name: (identifier)))
+        body: (block
+          (return_statement
+            (instanceof_expression
+              left: (identifier)
+              right: (type_identifier))))))))
