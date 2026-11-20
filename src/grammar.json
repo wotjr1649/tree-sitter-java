@@ -1758,25 +1758,8 @@
             "type": "FIELD",
             "name": "left",
             "content": {
-              "type": "CHOICE",
-              "members": [
-                {
-                  "type": "SYMBOL",
-                  "name": "identifier"
-                },
-                {
-                  "type": "SYMBOL",
-                  "name": "_reserved_identifier"
-                },
-                {
-                  "type": "SYMBOL",
-                  "name": "field_access"
-                },
-                {
-                  "type": "SYMBOL",
-                  "name": "array_access"
-                }
-              ]
+              "type": "SYMBOL",
+              "name": "_assignment_target"
             }
           },
           {
@@ -1846,6 +1829,53 @@
           }
         ]
       }
+    },
+    "_assignment_target": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "identifier"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_reserved_identifier"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "field_access"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "array_access"
+        },
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_parenthesized_assignment_target"
+          },
+          "named": true,
+          "value": "parenthesized_expression"
+        }
+      ]
+    },
+    "_parenthesized_assignment_target": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "("
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_assignment_target"
+        },
+        {
+          "type": "STRING",
+          "value": ")"
+        }
+      ]
     },
     "binary_expression": {
       "type": "CHOICE",
@@ -8196,9 +8226,19 @@
       "_unannotated_type"
     ],
     [
-      "_unannotated_type",
+      "_parenthesized_assignment_target",
+      "inferred_parameters",
       "primary_expression",
-      "inferred_parameters"
+      "_unannotated_type"
+    ],
+    [
+      "_parenthesized_assignment_target",
+      "primary_expression"
+    ],
+    [
+      "_parenthesized_assignment_target",
+      "inferred_parameters",
+      "primary_expression"
     ],
     [
       "_unannotated_type",
@@ -8257,6 +8297,7 @@
   "precedences": [],
   "externals": [],
   "inline": [
+    "_assignment_target",
     "_name",
     "_simple_type",
     "_class_body_declaration",
