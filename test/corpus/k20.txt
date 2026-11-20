@@ -413,3 +413,95 @@ class C implements open, module, with {
             (super)
             name: (identifier)
             arguments: (argument_list)))))))
+
+======================
+K20 tolerances for contextual qualified super references
+======================
+
+class Q {
+  void g() {
+    open.super::m;
+    C.super::m;
+  }
+
+  Object wildcard = open.super::<?>m;
+  Object wildcardControl = C.super::<?>m;
+  Object empty = open.super::<>new;
+  Object emptyControl = C.super::<>new;
+  Object member = open.super::super;
+  Object memberControl = C.super::super;
+}
+
+----------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters)
+        body: (block
+          (expression_statement
+            (method_reference
+              (identifier)
+              (super)
+              (identifier)))
+          (expression_statement
+            (method_reference
+              (identifier)
+              (super)
+              (identifier)))))
+      (field_declaration
+        type: (type_identifier)
+        declarator: (variable_declarator
+          name: (identifier)
+          value: (method_reference
+            (identifier)
+            (super)
+            (type_arguments
+              (wildcard))
+            (identifier))))
+      (field_declaration
+        type: (type_identifier)
+        declarator: (variable_declarator
+          name: (identifier)
+          value: (method_reference
+            (identifier)
+            (super)
+            (type_arguments
+              (wildcard))
+            (identifier))))
+      (field_declaration
+        type: (type_identifier)
+        declarator: (variable_declarator
+          name: (identifier)
+          value: (method_reference
+            (identifier)
+            (super)
+            (type_arguments))))
+      (field_declaration
+        type: (type_identifier)
+        declarator: (variable_declarator
+          name: (identifier)
+          value: (method_reference
+            (identifier)
+            (super)
+            (type_arguments))))
+      (field_declaration
+        type: (type_identifier)
+        declarator: (variable_declarator
+          name: (identifier)
+          value: (method_reference
+            (identifier)
+            (super)
+            (identifier))))
+      (field_declaration
+        type: (type_identifier)
+        declarator: (variable_declarator
+          name: (identifier)
+          value: (method_reference
+            (identifier)
+            (super)
+            (identifier)))))))

@@ -48,15 +48,20 @@
   JLS 25 §15.13, [grammar-orchard issue #50](https://codeberg.org/grammar-orchard/tree-sitter-java-orchard/issues/50)).
   The qualifier is a separate `identifier` or `scoped_type_identifier`. The qualifier, `super`, optional
   `type_arguments`, and member `identifier` have no fields on `method_reference`. `node-types.json` adds
-  `scoped_type_identifier` to the allowed children of `method_reference`. The adjacent invalid probes retain their
-  baseline parse verdicts. The contextual keywords `open`, `module` and `with`, valid type names since K9, also work
+  `scoped_type_identifier` to the allowed children of `method_reference`.
+  The contextual keywords `open`, `module` and `with`, valid type names since K9, also work
   as the qualifier: `open.super::m` and `module.super::<String>id` now parse with an `identifier` qualifier and a
-  named `super` instead of an `ERROR`. A qualifier that starts with one of them, such as `open.a.super::m`, still
-  errs, as `open.a x = null;` does at 2.3.0. As for `C.super`, `open.super::new` (javac's parser accepts it, a full
-  compile rejects it) and `open.super::<>m` (javac's parser rejects it) now parse too. Six inputs that javac's parser
-  rejects and that parsed without errors at 2.3.0 now produce errors: `C.super x;`, `C.super x = null;` and
-  `Names.J.super x = null;` as local declarations, the cast `(C.super) f`, `C.super[]::new` and
-  `C.super<String>::bm`.
+  named `super` instead of an `ERROR`. Dotted type names that start with one of these keywords still produce errors
+  in `open.a.super::m` and `open.a x = null;`. The existing `C.super` tolerances also extend to
+  `open.super::new` (rejected during full compilation) and `open.super::<>m` (rejected by javac's parser).
+  REVIEW-39b pins four more
+  forms that javac's parser rejects: the standalone statement `open.super::m;`, the wildcard `open.super::<?>m`,
+  the constructor reference `open.super::<>new` and the member token in `open.super::super`. It also pins
+  `open.super::m.f` and `open.super::m++`, which javac rejects during full compilation. Each counterpart with
+  `C` already parsed without errors at `f1e4257`. Six inputs that javac's parser rejects and that parsed without
+  errors at 2.3.0 now produce errors: `C.super x;`, `C.super x = null;` and `Names.J.super x = null;` as local
+  declarations, the cast `(C.super) f`, `C.super[]::new` and `C.super<String>::bm`.
+  [Documented tolerances](docs/tolerances.md)
 
 ## 2.3.0
 

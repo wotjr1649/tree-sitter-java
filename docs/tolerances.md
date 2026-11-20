@@ -125,6 +125,8 @@ The rows citing those reviews record existing fresh-parse behavior.
 | `case G<@A ?> (_)`<br>`case String _, O.@A Inner<?> (_)` | `record.patterns.annotations.not.allowed` | k11-tolerances.txt, “K11 tolerance: annotations in record pattern types” | 2.3.0 (K11) | The annotations parse inside the type of a single or later record pattern. |
 | `case String s, Integer i`<br>`case R(int n), S(_)`<br>`case String _, Integer when` | `flows.through.from.pattern` | k11-named-type-patterns, k11-named-record-component, k11-contextual-when-name | 2.3.0 (K11) | Full compile. Javac rejects named bindings in multi-pattern lists here. |
 | `case int _, String _`<br>`case String _, void _`<br>`case void _` | `preview.feature.disabled.plural`, `void.not.allowed.here` | k11-primitive-type-pattern, k11-void-type-pattern, k11-void-type-pattern-single | 2.3.0 (K11) | Full compile. Primitive type patterns require preview. A void pattern is rejected independently of preview. |
+| `open.super::m;` (statement)<br>`open.super::<?>m`<br>`open.super::<>new`<br>`open.super::super` | `not.stmt`, `illegal.start.of.type`, `illegal.start.of.expr`, `expected` | [K20 cases](../oracle/data/cases/k20.jsonl), statement, wildcard, empty-constructor and bad-member pairs | Unreleased (K20) | REVIEW-39b. The parser extends existing qualified-super tolerances to contextual qualifiers. The paired `C` forms already parsed without errors at `f1e4257`. |
+| `open.super::m.f`<br>`open.super::m++` | `unexpected.mref` | [K20 cases](../oracle/data/cases/k20.jsonl), select and postfix pairs | Unreleased (K20) | Full compile. Javac's parser accepts both forms. Their `C` counterparts already parsed without errors at `f1e4257`. |
 
 ## Stricter than javac's parser
 
