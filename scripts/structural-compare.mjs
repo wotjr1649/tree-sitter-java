@@ -143,9 +143,10 @@ function describe(node, javac, rule, source, byteAt) {
   if (javac.explicitTypeArguments !== undefined)
     candidate.explicitTypeArguments = !!node.childForFieldName('type_arguments');
   if (javac.qualifiedSuper !== undefined) {
-    const qualifier = sourceChildren(node).find((child) => child.isNamed);
-    const last = qualifier && sourceChildren(qualifier).at(-1);
-    candidate.qualifiedSuper = last?.type === 'super' && last.isNamed;
+    // TypeName.super::m: the qualifier and a named super node are the named children before '::' (K20).
+    const children = sourceChildren(node);
+    const before = children.slice(0, children.findIndex((child) => child.type === '::')).filter((child) => child.isNamed);
+    candidate.qualifiedSuper = before.length === 2 && before[1].type === 'super';
   }
   if (javac.providerRanges !== undefined)
     candidate.providerRanges = node.childrenForFieldName('provider').map((child) =>
