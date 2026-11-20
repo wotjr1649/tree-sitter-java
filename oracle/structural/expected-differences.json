@@ -234,4 +234,22 @@
     {"kind": "PATTERN_CASE_LABEL", "start": 88, "end": 97, "status": "no_node_at_range", "reason": "limit"},
     {"kind": "BINDING_PATTERN", "start": 88, "end": 97, "status": "no_node_at_range", "reason": "limit"}
   ]
-}
+,
+  "k32/enhanced-for": [
+    {"kind": "ENHANCED_FOR_LOOP", "start": 43, "end": 68, "status": "no_node_at_range", "reason": "limit"}
+  ],
+  "k32/enhanced-for-var": [
+    {"kind": "ENHANCED_FOR_LOOP", "start": 43, "end": 65, "status": "no_node_at_range", "reason": "limit"}
+  ],
+  "k32/enhanced-for-array": [
+    {"kind": "ENHANCED_FOR_LOOP", "start": 43, "end": 89, "status": "no_node_at_range", "reason": "limit"}
+  ],
+  "k32/enhanced-for-use": [
+    {"kind": "ENHANCED_FOR_LOOP", "start": 43, "end": 79, "status": "no_node_at_range", "reason": "limit"}
+  ],
+  "k32/switch": [
+    {"kind": "ENHANCED_FOR_LOOP", "start": 71, "end": 96, "status": "no_node_at_range", "reason": "limit"}
+  ],
+  "k32/lambda": [
+    {"kind": "ENHANCED_FOR_LOOP", "start": 64, "end": 89, "status": "no_node_at_range", "reason": "limit"}
+  ]}

@@ -181,7 +181,7 @@ after an array dimension and before `...` (`int @A [] @B ... xs`) still starts a
 A new input that the grammar fails but javac accepts is never added silently: it is a new defect, so it needs its own
 fix, or a recorded entry with its javac verdict and evidence. K25 records the documented limit on type-pattern
 bindings named `when`. Its dedicated cases record the trees from `f1e4257`, and the existing structural probes
-retain their recorded trees. See [known limits](../docs/tolerances.md#known-limits).
+retain their recorded trees. K32 records `when` as a `for` variable name; its trees are those of `b8e1950`. See [known limits](../docs/tolerances.md#known-limits).
 
 ## Node kinds and parser cost
 

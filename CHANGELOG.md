@@ -73,6 +73,13 @@
   [JLS 25 §§3.8–3.9](https://docs.oracle.com/javase/specs/jls/se25/html/jls-3.html#jls-3.8) ·
   [§8.8](https://docs.oracle.com/javase/specs/jls/se25/html/jls-8.html#jls-8.8) ·
   [§8.10.4.2](https://docs.oracle.com/javase/specs/jls/se25/html/jls-8.html#jls-8.10.4.2)
+- Document `when` as the name of a `for` variable (K32) as a known limit: `for (String when : a)`, `for (var when : a)`,
+  `for (String when[] : a)` and `for (String when = "", x = ""; ;)`. Javac accepts these, and the grammar can report an
+  error. The smallest correct candidate added 10.9% to `parser.c`. The cause it shares with K25: where the guard keyword
+  `when` has any action, tree-sitter's keyword extraction picks the keyword over `identifier`, and reserved sets and
+  lexical precedence cannot change that. The tested alternatives that fixed
+  these forms added 6.7% to 22.9%; cheaper experiments did not fix them or failed the corpus. The grammar and
+  parser are unchanged. See [known limits](docs/tolerances.md#known-limits).
 
 ## 2.4.0
 

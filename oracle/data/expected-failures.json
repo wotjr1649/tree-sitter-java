@@ -215,6 +215,55 @@
       "base_failure": "root hasError; 1 ERROR",
       "base_tree": "(program (class_declaration name: (identifier) body: (class_body (method_declaration type: (integral_type) name: (identifier) parameters: (formal_parameters (formal_parameter type: (type_identifier) name: (identifier)) (formal_parameter type: (type_identifier) name: (identifier))) body: (block (return_statement (switch_expression condition: (parenthesized_expression (identifier)) body: (switch_block (switch_rule (switch_label (pattern (type_pattern (type_identifier) (identifier))) (guard (binary_expression left: (instanceof_expression left: (identifier) right: (type_identifier)) (ERROR) right: (method_invocation object: (identifier) name: (identifier) arguments: (argument_list))))) (expression_statement (decimal_integer_literal))) (switch_rule (switch_label) (expression_statement (decimal_integer_literal)))))))))))",
       "note": "documented limit (owner 2026-11-20)"
+    },
+    "k32/enhanced-for": {
+      "k": "K32",
+      "sha256": "33e8f327033cb0805f7d513a7e40445c4935c0cc39f4bd4a00c29dc13b2c257d",
+      "base_failure": "root hasError; 1 ERROR",
+      "base_tree": "(program (class_declaration name: (identifier) body: (class_body (method_declaration type: (void_type) name: (identifier) parameters: (formal_parameters (formal_parameter type: (array_type element: (type_identifier) dimensions: (dimensions)) name: (identifier)) (formal_parameter type: (array_type element: (integral_type) dimensions: (dimensions)) name: (identifier))) body: (block (ERROR (identifier) (identifier)) (block))))))",
+      "note": "documented limit (owner 2026-11-21)"
+    },
+    "k32/enhanced-for-var": {
+      "k": "K32",
+      "sha256": "a30a4253f7f0386a63ff4c3e532c78c02cf9db6b02f23fe633004574048c7262",
+      "base_failure": "root hasError; 1 ERROR",
+      "base_tree": "(program (class_declaration name: (identifier) body: (class_body (method_declaration type: (void_type) name: (identifier) parameters: (formal_parameters (formal_parameter type: (array_type element: (type_identifier) dimensions: (dimensions)) name: (identifier)) (formal_parameter type: (array_type element: (integral_type) dimensions: (dimensions)) name: (identifier))) body: (block (ERROR (identifier) (identifier)) (block))))))",
+      "note": "documented limit (owner 2026-11-21)"
+    },
+    "k32/enhanced-for-array": {
+      "k": "K32",
+      "sha256": "6849db909562f703d166c83190482106ef64dda1e01e045322af7942fca5f8d4",
+      "base_failure": "root hasError; 2 ERROR",
+      "base_tree": "(program (class_declaration name: (identifier) body: (class_body (method_declaration type: (void_type) name: (identifier) parameters: (formal_parameters (formal_parameter type: (array_type element: (type_identifier) dimensions: (dimensions)) name: (identifier)) (formal_parameter type: (array_type element: (integral_type) dimensions: (dimensions)) name: (identifier))) body: (block (ERROR (ERROR (identifier)) (array_creation_expression type: (type_identifier) dimensions: (dimensions) value: (array_initializer (identifier)))) (block))))))",
+      "note": "documented limit (owner 2026-11-21)"
+    },
+    "k32/enhanced-for-use": {
+      "k": "K32",
+      "sha256": "2dcac9f3024550c2fb027c00a3211e6981eb23869cb4f30aee93b99914c48ce4",
+      "base_failure": "root hasError; 1 ERROR",
+      "base_tree": "(program (class_declaration name: (identifier) body: (class_body (method_declaration type: (void_type) name: (identifier) parameters: (formal_parameters (formal_parameter type: (array_type element: (type_identifier) dimensions: (dimensions)) name: (identifier)) (formal_parameter type: (array_type element: (integral_type) dimensions: (dimensions)) name: (identifier))) body: (block (ERROR (identifier) (identifier)) (block (expression_statement (assignment_expression left: (identifier) right: (string_literal)))))))))",
+      "note": "documented limit (owner 2026-11-21)"
+    },
+    "k32/for-init": {
+      "k": "K32",
+      "sha256": "f94360ee46f6573fd44d17b52b332deaeee857fe9baa7e0ca92c7ea8b19aaef3",
+      "base_failure": "root hasError; 1 ERROR",
+      "base_tree": "(program (class_declaration name: (identifier) body: (class_body (method_declaration type: (void_type) name: (identifier) parameters: (formal_parameters (formal_parameter type: (array_type element: (type_identifier) dimensions: (dimensions)) name: (identifier)) (formal_parameter type: (array_type element: (integral_type) dimensions: (dimensions)) name: (identifier))) body: (block (for_statement (ERROR (identifier)) init: (string_literal) init: (assignment_expression left: (identifier) right: (string_literal)) body: (block (break_statement))))))))",
+      "note": "documented limit (owner 2026-11-21)"
+    },
+    "k32/switch": {
+      "k": "K32",
+      "sha256": "f64c41ff977bc380d6f32fef30476eb8f986e10c8802866486a9dcb60b380324",
+      "base_failure": "root hasError; 1 ERROR",
+      "base_tree": "(program (class_declaration name: (identifier) body: (class_body (method_declaration type: (void_type) name: (identifier) parameters: (formal_parameters (formal_parameter type: (array_type element: (type_identifier) dimensions: (dimensions)) name: (identifier)) (formal_parameter type: (array_type element: (integral_type) dimensions: (dimensions)) name: (identifier))) body: (block (switch_expression condition: (parenthesized_expression (field_access object: (identifier) field: (identifier))) body: (switch_block (switch_block_statement_group (switch_label (decimal_integer_literal)) (ERROR (identifier) (identifier)) (block) (break_statement)) (switch_block_statement_group (switch_label)))))))))",
+      "note": "documented limit (owner 2026-11-21)"
+    },
+    "k32/lambda": {
+      "k": "K32",
+      "sha256": "b7edffb443111be064f72891895cc26532d637adc03d89416020ccf17c898064",
+      "base_failure": "root hasError; 1 ERROR",
+      "base_tree": "(program (class_declaration name: (identifier) body: (class_body (method_declaration type: (void_type) name: (identifier) parameters: (formal_parameters (formal_parameter type: (array_type element: (type_identifier) dimensions: (dimensions)) name: (identifier)) (formal_parameter type: (array_type element: (integral_type) dimensions: (dimensions)) name: (identifier))) body: (block (local_variable_declaration type: (type_identifier) declarator: (variable_declarator name: (identifier) value: (lambda_expression parameters: (formal_parameters) body: (block (ERROR (identifier) (identifier)) (block))))))))))",
+      "note": "documented limit (owner 2026-11-21)"
     }
   }
 }
