@@ -7910,8 +7910,22 @@
           "type": "FIELD",
           "name": "name",
           "content": {
-            "type": "SYMBOL",
-            "name": "identifier"
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "identifier"
+              },
+              {
+                "type": "ALIAS",
+                "content": {
+                  "type": "STRING",
+                  "value": "sealed"
+                },
+                "named": true,
+                "value": "identifier"
+              }
+            ]
           }
         },
         {
@@ -10187,6 +10201,9 @@
     [
       "module_declaration",
       "_unannotated_type"
+    ],
+    [
+      "modifiers"
     ],
     [
       "_parenthesized_assignment_target",

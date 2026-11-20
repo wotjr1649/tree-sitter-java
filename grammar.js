@@ -108,6 +108,8 @@ module.exports = grammar({
     [$.modifiers, $.annotated_type, $.receiver_parameter],
     [$.modifiers, $.annotated_type, $.module_declaration, $.package_declaration],
     [$.module_declaration, $._unannotated_type],
+    // `enum E { @A sealed }`: `sealed` after annotations is a modifier or the constant name.
+    [$.modifiers],
     // A closing parenthesis can end a target, a value, a cast type, or lambda parameters.
     [$._parenthesized_assignment_target, $.inferred_parameters, $.primary_expression, $._unannotated_type],
     [$._parenthesized_assignment_target, $.primary_expression, $._unannotated_type],
@@ -1080,7 +1082,8 @@ module.exports = grammar({
 
     enum_constant: $ => (seq(
       optional($.modifiers),
-      field('name', $.identifier),
+      // `sealed` is also a modifier token here, so the name needs its own alternative.
+      field('name', choice($.identifier, alias('sealed', $.identifier))),
       field('arguments', optional($.argument_list)),
       field('body', optional($.class_body)),
     )),

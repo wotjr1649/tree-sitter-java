@@ -1,0 +1,207 @@
+========================================
+K31 enum constant named sealed
+========================================
+
+enum E { sealed }
+
+---
+
+(program
+  (enum_declaration
+    name: (identifier)
+    body: (enum_body
+      (enum_constant
+        name: (identifier)))))
+
+========================================
+K31 sealed first in the constant list
+========================================
+
+enum E { sealed, A }
+
+---
+
+(program
+  (enum_declaration
+    name: (identifier)
+    body: (enum_body
+      (enum_constant
+        name: (identifier))
+      (enum_constant
+        name: (identifier)))))
+
+========================================
+K31 sealed last in the constant list
+========================================
+
+enum E { A, sealed }
+
+---
+
+(program
+  (enum_declaration
+    name: (identifier)
+    body: (enum_body
+      (enum_constant
+        name: (identifier))
+      (enum_constant
+        name: (identifier)))))
+
+========================================
+K31 sealed with arguments and a class body
+========================================
+
+enum E { sealed(1) { }, A(2); E(int n) {} }
+
+---
+
+(program
+  (enum_declaration
+    name: (identifier)
+    body: (enum_body
+      (enum_constant
+        name: (identifier)
+        arguments: (argument_list
+          (decimal_integer_literal))
+        body: (class_body))
+      (enum_constant
+        name: (identifier)
+        arguments: (argument_list
+          (decimal_integer_literal)))
+      (enum_body_declarations
+        (constructor_declaration
+          name: (identifier)
+          parameters: (formal_parameters
+            (formal_parameter
+              type: (integral_type)
+              name: (identifier)))
+          body: (constructor_body))))))
+
+========================================
+K31 annotated sealed constant
+========================================
+
+enum E { @Deprecated sealed, @Deprecated A }
+
+---
+
+(program
+  (enum_declaration
+    name: (identifier)
+    body: (enum_body
+      (enum_constant
+        (modifiers
+          (marker_annotation
+            name: (identifier)))
+        name: (identifier))
+      (enum_constant
+        (modifiers
+          (marker_annotation
+            name: (identifier)))
+        name: (identifier)))))
+
+========================================
+K31 every contextual keyword as an enum constant
+========================================
+
+enum E { exports, module, open, opens, permits, provides, record, requires, sealed, to, transitive, uses, var, when, with, yield }
+
+---
+
+(program
+  (enum_declaration
+    name: (identifier)
+    body: (enum_body
+      (enum_constant
+        name: (identifier))
+      (enum_constant
+        name: (identifier))
+      (enum_constant
+        name: (identifier))
+      (enum_constant
+        name: (identifier))
+      (enum_constant
+        name: (identifier))
+      (enum_constant
+        name: (identifier))
+      (enum_constant
+        name: (identifier))
+      (enum_constant
+        name: (identifier))
+      (enum_constant
+        name: (identifier))
+      (enum_constant
+        name: (identifier))
+      (enum_constant
+        name: (identifier))
+      (enum_constant
+        name: (identifier))
+      (enum_constant
+        name: (identifier))
+      (enum_constant
+        name: (identifier))
+      (enum_constant
+        name: (identifier))
+      (enum_constant
+        name: (identifier)))))
+
+========================================
+K31 sealed constant next to sealed types
+========================================
+
+enum E { sealed } sealed interface I permits J {} final class J implements I {}
+
+---
+
+(program
+  (enum_declaration
+    name: (identifier)
+    body: (enum_body
+      (enum_constant
+        name: (identifier))))
+  (interface_declaration
+    (modifiers)
+    name: (identifier)
+    permits: (permits
+      (type_list
+        (type_identifier)))
+    body: (interface_body))
+  (class_declaration
+    (modifiers)
+    name: (identifier)
+    interfaces: (super_interfaces
+      (type_list
+        (type_identifier)))
+    body: (class_body)))
+
+========================================
+K31 tolerance: modifier before a sealed constant
+========================================
+
+enum E { sealed sealed }
+
+---
+
+(program
+  (enum_declaration
+    name: (identifier)
+    body: (enum_body
+      (enum_constant
+        (modifiers)
+        name: (identifier)))))
+
+========================================
+K31 tolerance: public before a sealed constant
+========================================
+
+enum E { public sealed }
+
+---
+
+(program
+  (enum_declaration
+    name: (identifier)
+    body: (enum_body
+      (enum_constant
+        (modifiers)
+        name: (identifier)))))
