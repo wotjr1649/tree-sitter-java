@@ -53,6 +53,32 @@
   Javac accepts these bindings, and the existing grammar can report an error. The smallest tested candidate
   that passed the corpus added 6.74% to `parser.c` and 84 parser states. The pinned examples contain no occurrence.
   The grammar and parser are unchanged. See [known limits](docs/tolerances.md#known-limits).
+- Represent `TypeName.super::m` and `TypeName.super::<T>m` with a named `super` child of `method_reference` (K20,
+  JLS 25 §15.13, [grammar-orchard issue #50](https://codeberg.org/grammar-orchard/tree-sitter-java-orchard/issues/50)).
+  The qualifier is a separate `identifier` or `scoped_type_identifier`. The qualifier, `super`, optional
+  `type_arguments`, and member `identifier` have no fields on `method_reference`. `node-types.json` adds
+  `scoped_type_identifier` to the allowed children of `method_reference`.
+  The contextual keywords `open`, `module` and `with`, valid type names since K9, also work
+  as the qualifier: `open.super::m` and `module.super::<String>id` now parse with an `identifier` qualifier and a
+  named `super` instead of an `ERROR`. Dotted type names that start with one of these keywords still produce errors
+  in `open.a.super::m` and `open.a x = null;`. The existing `C.super` tolerances also extend to
+  `open.super::new` (rejected during full compilation) and `open.super::<>m` (rejected by javac's parser).
+  REVIEW-39b pins four more
+  forms that javac's parser rejects: the standalone statement `open.super::m;`, the wildcard `open.super::<?>m`,
+  the constructor reference `open.super::<>new` and the member token in `open.super::super`. It also pins
+  `open.super::m.f` and `open.super::m++`, which javac rejects during full compilation. Each counterpart with
+  `C` already parsed without errors at `f1e4257`. REVIEW-39c pins six more forms that javac's parser rejects.
+  The forms are `open.super::_`, `open.super::int`, `open.super::true`, `open.super::class`,
+  `open.super::<? extends String>m` and the standalone statement `open.super::<String>m;`. The paired `C` forms
+  already parsed without errors at `b28fed5` and `4a3678b`.
+  As qualifiers of `super::`, `open`, `module` and `with` inherit every tolerance of the ordinary qualifier `C`
+  at the same position. REVIEW-39d pins `open.super::false`, `open.super::null`, `open.super::return`,
+  `open.super::<? super String>m`, `open.super::<String, ?>m` and the standalone statement `open.super::<String>new;`.
+  All six paired forms with `C` parsed without errors at the PR base, `08c9b11`.
+  Six inputs that javac's parser rejects and that parsed without errors at 2.3.0 now produce errors:
+  `C.super x;`, `C.super x = null;` and `Names.J.super x = null;` as local declarations, the cast `(C.super) f`,
+  `C.super[]::new` and `C.super<String>::bm`.
+  [Documented tolerances](docs/tolerances.md)
 - Keep the switch rule arrow outside the lambda result (K22). In
   `case KEY -> arg -> arg - 2`, the label holds `KEY` and the body holds the full lambda.
   A separate expression path for labels and guards also handles cast and conditional labels while
