@@ -8,14 +8,16 @@
   `src/node-types.json`, `left` gains that type, and `parenthesized_expression.children` explicitly lists
   `array_access`, `field_access`, `identifier` and `parenthesized_expression` alongside the existing `expression`
   supertype. The compared error-free trees retain their structure and the OpenJDK examples list drops four paths
-  (192 to 188). Existing expression tolerances extend to the new assignments: javac rejects a whole parenthesized
-  assignment as a statement, as a `for` initializer or update, and as a switch statement's arrow body. Binary
-  expressions using such an assignment as an operand are also tolerated as statements and switch statement arrow
-  bodies. Annotation values tolerate the assignment in `@A((x) = 1)`, `@A(value = (x) = 1)`, `@A({(x) = 1})` and an
-  annotation element's `default (x) = 1`. Existing identifier tolerances cover `(_) = x`, `(x) = _`, a bare
-  assignment with a parenthesized target and `_` on the right in a conditional expression's middle arm, and the field
-  and array targets `(obj.default)`, `(obj._)`, `(_.field)`, `(_[0])` and `(a[_])`. Corpus and oracle cases record these
-  tolerances with controls that already parse at base.
+  (192 to 188). Several forms that javac rejects now parse with parenthesized assignment targets, as with ordinary
+  values at 2.2.0. These include whole parenthesized assignments as statements, `for` initializers or updates, and
+  switch statement arrow bodies. Statement expressions can also wrap the assignment in binary, unary, ternary or
+  cast expressions, field or array accesses, or method references. The same applies to unary `for` initializers,
+  ternary `for` updates, and binary, unary or ternary switch statement arrow bodies. Annotation values include
+  unkeyed, keyed, nested, array (including mixed entries) and element `default` values. Identifier tolerances cover
+  right-hand `_`, including in a conditional expression's middle arm and in call arguments, and the targets `(_)`,
+  `(obj.default)`, `(obj.if)`, `(obj._)`, `(_.field)`, `(_[0])` and `(a[_])`. A switch block can also contain an
+  unqualified `yield()` call alongside a `yield` of the assignment. Corpus and oracle cases record these forms with
+  controls that already parse at 2.2.0.
 
 - Extend the Ubuntu CI examples to parse OpenJDK 25.0.5+8 sources and javac langtools tests at pinned commit
   `fda231468e56663992785ec199a6efb8eca3cc7a`. No grammar change.
