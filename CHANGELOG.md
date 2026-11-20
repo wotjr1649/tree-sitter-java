@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- **K33.** Parse `transitive` as the dependency name in `requires transitive;` and
+  `requires static transitive;`, and as the first segment of a qualified dependency name.
+  These forms use the existing `module` field with an `identifier` or `scoped_identifier`.
+  Modifier positions and the public node schema are unchanged. Repeated modifiers retain the
+  ordinary module-name tolerance, including `requires static static transitive;`.
+  Reproduced in REVIEW-49. [JLS 25 §3.9](https://docs.oracle.com/javase/specs/jls/se25/html/jls-3.html#jls-3.9) ·
+  [§7.7.1](https://docs.oracle.com/javase/specs/jls/se25/html/jls-7.html#jls-7.7.1)
 - **Breaking change (Go).** For v3, the module path is `github.com/wotjr1649/tree-sitter-java/v3`. Update Go imports
   to `github.com/wotjr1649/tree-sitter-java/v3/bindings/go`.
 - **Breaking change (K17)**. In a module directive such as `provides S with A, B;`, every service implementation
@@ -48,7 +55,6 @@
   Among 83,367 pinned Java files the new parser reports errors in seven more OpenJDK files, all rejected
   by javac's parser. The example failure baseline rises from 183 to 190. See
   [withdrawn and retained tolerances](docs/tolerances.md#withdrawn-in-300).
-
 - **K31.** `sealed` as an enum constant name no longer produces errors: `enum E { sealed }`, `sealed(1)`,
   `sealed { }` and `@Deprecated sealed`, with the same `enum_constant` tree as any other name (a `name: (identifier)`).
   Every other contextual keyword already parsed as an enum constant. javac accepts all of these (JLS 25

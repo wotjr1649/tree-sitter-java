@@ -976,8 +976,22 @@ module.exports = grammar({
     requires_module_directive: $ => seq(
       'requires',
       repeat(field('modifiers', $.requires_modifier)),
-      field('module', $._name),
+      field('module', choice(
+        $._name,
+        alias('transitive', $.identifier),
+        alias($._transitive_module_name, $.scoped_identifier),
+      )),
       ';',
+    ),
+
+    // Keep dotted names starting with transitive in the existing scoped_identifier shape.
+    _transitive_module_name: $ => seq(
+      field('scope', choice(
+        alias('transitive', $.identifier),
+        alias($._transitive_module_name, $.scoped_identifier),
+      )),
+      '.',
+      field('name', $.identifier),
     ),
 
     requires_modifier: _ => choice(

@@ -1,0 +1,35 @@
+{
+  "meta": {
+    "api": "com.sun.source.util.JavacTask.parse()",
+    "case_count": 19,
+    "cases_sha256": "35da1ce3fd12bce4ca7fb26a059e001b3841ca9329115f1cef6df3aaaa6387e4",
+    "java.runtime.version": "25.0.5+8-LTS",
+    "java.vendor": "Eclipse Adoptium",
+    "options": ["--release", "25", "-proc:none"],
+    "preview": false,
+    "release": "25",
+    "runner_sha256": "c45e32e314b98ccb46481c4db18aa25173ca9b2fe46e45888f0a743ceb6c70ee",
+    "source_encoding": "UTF-8"
+  },
+  "verdicts": {
+    "k33/both": [],
+    "k33/comment": [],
+    "k33/deep": [],
+    "k33/longer": [],
+    "k33/mixed": [],
+    "k33/modifier": [],
+    "k33/scoped": [],
+    "k33/segment": [],
+    "k33/single": [],
+    "k33/soft": [],
+    "k33/swapped": [],
+    "k33/duplicate-ordinary": ["compiler.err.repeated.modifier"],
+    "k33/duplicate-transitive-modifier": ["compiler.err.repeated.modifier"],
+    "k33/missing": ["compiler.err.expected"],
+    "k33/modifier-order-duplicate": ["compiler.err.repeated.modifier"],
+    "k33/only-static": ["compiler.err.expected"],
+    "k33/reserved-name": ["compiler.err.expected"],
+    "k33/trailing-dot": ["compiler.err.expected"],
+    "k33/duplicate-transitive-name": ["compiler.err.repeated.modifier"]
+  }
+}
