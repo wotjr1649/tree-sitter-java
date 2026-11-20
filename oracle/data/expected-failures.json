@@ -1,6 +1,6 @@
 {
   "rule": "a",
-  "note": "Expected-failure set (oracle/README.md, rule (a)): only cases javac accepts and the base grammar fails. A K pull request deletes its entries. K4 deleted the last two; K5 (simple variant) adds two cases it does not fix: an annotation right after an array dimension and before ... still starts a dimension.",
+  "note": "Expected-failure set (oracle/README.md, rule (a)): only cases javac accepts and the base grammar fails. A K pull request deletes its entries. K4 deleted the last two; K5 (simple variant) adds two cases it does not fix: an annotation right after an array dimension and before ... still starts a dimension. Phase 3 structural probe trees were recorded at v2.3.0.",
   "grammar_base": {
     "commit": "a241253570b20a5f83c9dde367a5a50f0116a978",
     "tag": "v1.0.0",
@@ -21,6 +21,60 @@
       "sha256": "81d87f53c80908ac2a8b90a1b33f1d04496525e795d0a8679ad3a7c5f0656972",
       "base_failure": "root hasError; 2 ERROR",
       "base_tree": "(program (class_declaration name: (identifier) body: (class_body (ERROR (void_type) (identifier) (integral_type) (marker_annotation name: (identifier)) (marker_annotation name: (identifier)) (marker_annotation name: (identifier)) (marker_annotation name: (identifier)) (marker_annotation name: (scoped_identifier scope: (identifier) (ERROR) name: (identifier)))))))"
+    },
+    "structural/p8/cast/intersection-not": {
+      "k": "K24",
+      "sha256": "11bc9b681d1b904703265226bf3b254a81282fae2c0cbe64e5ccc858f73bf2cd",
+      "base_failure": "root hasError; 1 ERROR",
+      "base_tree": "(program (class_declaration name: (identifier) body: (class_body (class_declaration (modifiers) name: (identifier) body: (class_body)) (class_declaration (modifiers) name: (identifier) body: (class_body)) (method_declaration type: (type_identifier) name: (identifier) parameters: (formal_parameters (formal_parameter type: (integral_type) name: (identifier)) (formal_parameter type: (type_identifier) name: (identifier)) (formal_parameter type: (boolean_type) name: (identifier)) (formal_parameter type: (array_type element: (integral_type) dimensions: (dimensions)) name: (identifier))) body: (block (return_statement (cast_expression type: (type_identifier) type: (scoped_type_identifier (scoped_type_identifier (type_identifier) (type_identifier)) (type_identifier)) (ERROR) value: (identifier))))))))"
+    },
+    "structural/p8/cast/intersection-complement": {
+      "k": "K24",
+      "sha256": "fc36fc912d00b9df372e7141dc47ca12cd4401536accd8a3482999920b9c1bec",
+      "base_failure": "root hasError; 1 ERROR",
+      "base_tree": "(program (class_declaration name: (identifier) body: (class_body (class_declaration (modifiers) name: (identifier) body: (class_body)) (class_declaration (modifiers) name: (identifier) body: (class_body)) (method_declaration type: (type_identifier) name: (identifier) parameters: (formal_parameters (formal_parameter type: (integral_type) name: (identifier)) (formal_parameter type: (type_identifier) name: (identifier)) (formal_parameter type: (boolean_type) name: (identifier)) (formal_parameter type: (array_type element: (integral_type) dimensions: (dimensions)) name: (identifier))) body: (block (return_statement (cast_expression type: (type_identifier) type: (scoped_type_identifier (scoped_type_identifier (type_identifier) (type_identifier)) (type_identifier)) (ERROR) value: (identifier))))))))"
+    },
+    "structural/p8/switch/guard-when-binding": {
+      "k": "K25",
+      "sha256": "7263307b08e70cfbbb3b41ca292facfaa4f96ea51184500684f55064dfeaa8ed",
+      "base_failure": "root hasError; 1 ERROR",
+      "base_tree": "(program (class_declaration name: (identifier) body: (class_body (field_declaration (modifiers) type: (integral_type) declarator: (variable_declarator name: (identifier) value: (decimal_integer_literal)) declarator: (variable_declarator name: (identifier) value: (decimal_integer_literal))) (record_declaration name: (identifier) parameters: (formal_parameters (formal_parameter type: (integral_type) name: (identifier))) body: (class_body)) (record_declaration name: (identifier) parameters: (formal_parameters (formal_parameter type: (type_identifier) name: (identifier))) body: (class_body)) (method_declaration (modifiers) type: (boolean_type) name: (identifier) parameters: (formal_parameters (formal_parameter type: (integral_type) name: (identifier))) body: (block (return_statement (binary_expression left: (identifier) right: (decimal_integer_literal))))) (method_declaration type: (integral_type) name: (identifier) parameters: (formal_parameters (formal_parameter type: (type_identifier) name: (identifier)) (formal_parameter type: (integral_type) name: (identifier))) body: (block (return_statement (switch_expression condition: (parenthesized_expression (identifier)) body: (switch_block (switch_rule (switch_label (identifier) (guard (ERROR (identifier)) (binary_expression left: (method_invocation name: (identifier) arguments: (argument_list)) right: (decimal_integer_literal)))) (expression_statement (decimal_integer_literal))) (switch_rule (switch_label) (expression_statement (decimal_integer_literal)))))))))))"
+    },
+    "structural/p8/switch/unguarded-when-binding": {
+      "k": "K25",
+      "sha256": "6e387feef39b0949bb33d06aaf41bd4d31d4cbaef759e61b0e9d2e22e63264b8",
+      "base_failure": "root hasError; 1 ERROR",
+      "base_tree": "(program (class_declaration name: (identifier) body: (class_body (field_declaration (modifiers) type: (integral_type) declarator: (variable_declarator name: (identifier) value: (decimal_integer_literal)) declarator: (variable_declarator name: (identifier) value: (decimal_integer_literal))) (record_declaration name: (identifier) parameters: (formal_parameters (formal_parameter type: (integral_type) name: (identifier))) body: (class_body)) (record_declaration name: (identifier) parameters: (formal_parameters (formal_parameter type: (type_identifier) name: (identifier))) body: (class_body)) (method_declaration (modifiers) type: (boolean_type) name: (identifier) parameters: (formal_parameters (formal_parameter type: (integral_type) name: (identifier))) body: (block (return_statement (binary_expression left: (identifier) right: (decimal_integer_literal))))) (method_declaration type: (integral_type) name: (identifier) parameters: (formal_parameters (formal_parameter type: (type_identifier) name: (identifier)) (formal_parameter type: (integral_type) name: (identifier))) body: (block (return_statement (switch_expression condition: (parenthesized_expression (identifier)) body: (switch_block (switch_rule (switch_label (identifier)) (ERROR) (expression_statement (method_invocation object: (identifier) name: (identifier) arguments: (argument_list)))) (switch_rule (switch_label) (expression_statement (decimal_integer_literal)))))))))))"
+    },
+    "structural/p8/switch/guard-when-binding-bool": {
+      "k": "K25",
+      "sha256": "a15d051ba2e592a98d41011d6483e014580f9bfa0c5f62ec46e7029403f53bc7",
+      "base_failure": "root hasError; 1 ERROR",
+      "base_tree": "(program (class_declaration name: (identifier) body: (class_body (field_declaration (modifiers) type: (integral_type) declarator: (variable_declarator name: (identifier) value: (decimal_integer_literal)) declarator: (variable_declarator name: (identifier) value: (decimal_integer_literal))) (record_declaration name: (identifier) parameters: (formal_parameters (formal_parameter type: (integral_type) name: (identifier))) body: (class_body)) (record_declaration name: (identifier) parameters: (formal_parameters (formal_parameter type: (type_identifier) name: (identifier))) body: (class_body)) (method_declaration (modifiers) type: (boolean_type) name: (identifier) parameters: (formal_parameters (formal_parameter type: (integral_type) name: (identifier))) body: (block (return_statement (binary_expression left: (identifier) right: (decimal_integer_literal))))) (method_declaration type: (integral_type) name: (identifier) parameters: (formal_parameters (formal_parameter type: (type_identifier) name: (identifier)) (formal_parameter type: (integral_type) name: (identifier))) body: (block (return_statement (switch_expression condition: (parenthesized_expression (identifier)) body: (switch_block (switch_rule (switch_label (identifier) (guard (ERROR (identifier)) (binary_expression left: (identifier) right: (decimal_integer_literal)))) (expression_statement (method_invocation object: (identifier) name: (identifier) arguments: (argument_list)))) (switch_rule (switch_label) (expression_statement (decimal_integer_literal)))))))))))"
+    },
+    "structural/p8/switch/colon-guard-when-binding": {
+      "k": "K25",
+      "sha256": "6ca4a7f96530c05d6bca40908e7d9d0b32886810aae30f6615364c8a94e5396b",
+      "base_failure": "root hasError; 1 ERROR",
+      "base_tree": "(program (class_declaration name: (identifier) body: (class_body (method_declaration type: (integral_type) name: (identifier) parameters: (formal_parameters (formal_parameter type: (type_identifier) name: (identifier))) body: (block (switch_expression condition: (parenthesized_expression (identifier)) body: (switch_block (switch_block_statement_group (switch_label (identifier) (guard (ERROR (identifier)) (method_invocation name: (identifier) arguments: (argument_list)))) (return_statement (decimal_integer_literal))) (switch_block_statement_group (switch_label) (return_statement (decimal_integer_literal))))))))))"
+    },
+    "structural/p8/annotation/type-use-varargs": {
+      "k": "K5",
+      "sha256": "d1faf0367bd4005c89dcfc85736542aa3330518e02ef976e268e2e19c48333c1",
+      "base_failure": "root hasError; 1 ERROR",
+      "base_tree": "(program (import_declaration (scoped_identifier scope: (scoped_identifier scope: (identifier) name: (identifier)) name: (identifier))) (import_declaration (scoped_identifier scope: (scoped_identifier scope: (identifier) name: (identifier)) name: (identifier)) (asterisk)) (annotation_type_declaration (modifiers (annotation name: (identifier) arguments: (annotation_argument_list (field_access object: (identifier) field: (identifier))))) name: (identifier) body: (annotation_type_body)) (annotation_type_declaration (modifiers (annotation name: (identifier) arguments: (annotation_argument_list (field_access object: (identifier) field: (identifier))))) name: (identifier) body: (annotation_type_body)) (class_declaration name: (identifier) type_parameters: (type_parameters (type_parameter (type_identifier))) body: (class_body (class_declaration (modifiers) name: (identifier) superclass: (superclass (type_identifier)) body: (class_body)) (method_declaration type: (void_type) name: (identifier) parameters: (formal_parameters (spread_parameter (array_type element: (integral_type) dimensions: (dimensions (marker_annotation name: (identifier)))) (ERROR (marker_annotation name: (identifier))) (variable_declarator name: (identifier)))) body: (block)))))"
+    },
+    "structural/p9/raw-cr-missing": {
+      "k": "K23",
+      "sha256": "0a5d018e963d0dd90771546a209ba6258db0e3b19bda0fbec7153f4c16cfc65c",
+      "base_failure": "root hasError; 1 MISSING",
+      "base_tree": "(program (class_declaration name: (identifier) body: (class_body (line_comment) (MISSING \"}\"))))"
+    },
+    "structural/p9/annotated-array-spread": {
+      "k": "K5",
+      "sha256": "710865672c01f2b2845b4d3b42a85c120cb9e4d29108784a4e4ce13b1db73ea5",
+      "base_failure": "root hasError; 1 ERROR",
+      "base_tree": "(program (import_declaration (scoped_identifier scope: (scoped_identifier scope: (identifier) name: (identifier)) name: (identifier)) (asterisk)) (annotation_type_declaration (modifiers (annotation name: (identifier) arguments: (annotation_argument_list (field_access object: (identifier) field: (identifier))))) name: (identifier) body: (annotation_type_body)) (class_declaration name: (identifier) body: (class_body (method_declaration type: (void_type) name: (identifier) parameters: (formal_parameters (spread_parameter (array_type element: (integral_type) dimensions: (dimensions (marker_annotation name: (identifier)))) (ERROR (marker_annotation name: (identifier))) (variable_declarator name: (identifier)))) body: (block)))))"
     }
   }
 }

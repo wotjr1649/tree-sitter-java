@@ -11,9 +11,8 @@
 // cases or by another oracle, an empty case set, a bad expected-failure entry.
 import { createHash } from 'node:crypto';
 import { readFileSync, readdirSync } from 'node:fs';
+import { createRequire } from 'node:module';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import Parser from 'tree-sitter';
-import Java from '../bindings/node/index.js';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const DATA = `${root}oracle/data/`;
@@ -207,8 +206,10 @@ export function judge(parser, c) {
 }
 
 export function judgeAll(sets) {
+  const require = createRequire(import.meta.url);
+  const Parser = require('tree-sitter');
   const parser = new Parser();
-  parser.setLanguage(Java);
+  parser.setLanguage(require('../bindings/node'));
   return Object.fromEntries(sets.flatMap((s) => s.cases.map((c) => [c.id, judge(parser, c)])));
 }
 
