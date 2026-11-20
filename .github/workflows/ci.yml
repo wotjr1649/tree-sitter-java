@@ -100,7 +100,7 @@ jobs:
         with:
           tree-sitter-ref: v0.27.2
       # Pinned heads of the default branches, taken 2026-11-19. To move a pin,
-      # change the SHA, run this job and update test/examples/failures.txt.
+      # change the SHA, run this job, update test/examples/failures.txt and regenerate the verdicts.
       - name: Set up examples
         shell: bash
         run: |
@@ -160,6 +160,12 @@ jobs:
         shell: bash
         # "<" is a baseline entry that now parses, ">" is a new failure.
         run: diff -u test/examples/failures.txt "$RUNNER_TEMP/failures.txt"
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: ${{ vars.NODE_VERSION || 'lts/*' }}
+      - name: Check example failure verdicts
+        run: node scripts/example-verdicts.mjs --check
       - uses: actions/upload-artifact@v7
         if: ${{ !cancelled() && steps.examples.outputs.failures != '' }}
         with:

@@ -78,6 +78,33 @@ inconsistent case file (bad hash, duplicate id, a case set with no cases, a bad 
 one, a class path that is not one empty directory. A fault is never recorded as a
 rejection. Only javac errors count as a rejection; warnings do not.
 
+## Example failure verdicts
+
+`test/examples/failure-verdicts.json` records the parse verdict, javac error codes and SHA-256 of the
+original bytes for each path in `test/examples/failures.txt`. Accepted entries name a reviewed
+`parse-only` group whose construct fails full compilation, or a documented `limit:k5` or
+`limit:unicode-escape` case. The file also records the runner hash, oracle settings and checkout commits.
+
+After updating the failure list or checkout pins, use the CI-pinned checkouts from `examples/` and the
+same Temurin JDK as above:
+
+```sh
+node scripts/example-verdicts.mjs --generate
+node scripts/example-verdicts.mjs --check
+```
+
+Use `--examples <directory>` for checkouts outside `examples/`, `--jdk <checkout>` for a separate
+OpenJDK checkout, and `--java <executable>` in generate mode to select the pinned JDK. The generator uses
+an empty JVM class path and up to 500 inputs per JVM. It reuses reviewed categories only for the same
+path and byte hash. It reports any unreviewed accepted path with its hash and leaves the verdict file
+in place. Resolve a grammar defect before removing its path from the failure list. For a reviewed
+exception, add an `accepted` entry with the reported hash, empty `codes`, its `category`, and for
+`parse-only` its group name, then regenerate.
+
+CI runs `--check` after comparing the failure list. The check uses the pinned checkout bytes and needs
+no JDK. Exit codes are **0** for success, **1** for a mismatch or unreviewed acceptance, and **2** for a
+tool or input fault. The full example oracle is rerun in release phase 6.
+
 ## Replay
 
 ```sh
