@@ -4,6 +4,11 @@
 
 - Extend the Ubuntu CI examples to parse OpenJDK 25.0.5+8 sources and javac langtools tests at pinned commit
   `fda231468e56663992785ec199a6efb8eca3cc7a`. No grammar change.
+  The CI artifact of failing examples now holds the list of paths instead of the source files.
+- Known limitation: javac translates unicode escapes (`\uXXXX`) before it splits the source into tokens, so an
+  escape outside a string or char literal can form an identifier, a keyword, a separator, a comment delimiter or a
+  line end (`int \u0061lpha;`). The grammar reads such escapes only inside literals; elsewhere they give ERROR
+  (grammar-orchard issue #51).
 
 ## 2.2.0
 
