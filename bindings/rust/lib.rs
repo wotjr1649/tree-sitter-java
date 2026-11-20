@@ -8,7 +8,7 @@
 //!
 //! let code = r#"
 //! class Test {
-//!     int double(int x) {
+//!     int twice(int x) {
 //!         return x * 2;
 //!     }
 //! }
