@@ -30,10 +30,12 @@ point exponents with leading zeros such as `0x1p03`), `k7` (valid and adjacent i
 alternatives, annotated receiver parameters and `instanceof` type patterns with annotations before `final` of the K7
 fix), `k8` (a raw NUL byte inside string literals, text blocks
 and char literals, with adjacent unterminated literals, of the K8 fix, plus the probes of the PR #19 review: raw NUL
-next to CR, LF, line continuations and text block delimiters, with NUL-free controls), and
-`k13` (typed and bare underscores in record patterns, other unnamed-variable contexts, and adjacent invalid
-patterns). Every case names its origin in `provenance`: the bundle path with its `SHA256SUMS` hash, the PR, or
-"written in this task". IDs are prefixed with the set name. To add a case, append a line, hash its `source` (SHA-256 of the UTF-8 bytes; the
+next to CR, LF, line continuations and text block delimiters, with NUL-free controls), `k9` (`open`, `module`,
+and `with` as type names, with module declarations, expression controls and adjacent invalid inputs), and `k13`
+(typed and bare underscores in record patterns, other unnamed-variable contexts, and adjacent invalid patterns).
+Every case names its origin in `provenance`: the bundle path with its `SHA256SUMS` hash, the PR, or "written in
+this task". IDs are prefixed with the set name. To add a case, append a line, hash its `source` (SHA-256 of the
+UTF-8 bytes; the
 replay prints the actual hash when it differs), then regenerate that set's verdicts.
 
 ## Verdicts

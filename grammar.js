@@ -79,12 +79,15 @@ module.exports = grammar({
   conflicts: $ => [
     [$.modifiers, $.annotated_type, $.receiver_parameter],
     [$.modifiers, $.annotated_type, $.module_declaration, $.package_declaration],
+    [$.module_declaration, $._unannotated_type],
     [$._unannotated_type, $.primary_expression, $.inferred_parameters],
     [$._unannotated_type, $.primary_expression],
+    [$._unannotated_type, $._reserved_identifier],
     [$._unannotated_type, $.primary_expression, $.scoped_type_identifier],
     [$._unannotated_type, $.scoped_type_identifier],
     [$._unannotated_type, $.generic_type],
     [$.generic_type, $.primary_expression],
+    [$.generic_type, $._reserved_identifier],
     [$.expression, $.statement],
     // Only conflicts in switch expressions
     [$.lambda_expression, $.primary_expression],
@@ -1195,6 +1198,8 @@ module.exports = grammar({
       $.floating_point_type,
       $.boolean_type,
       alias($.identifier, $.type_identifier),
+      // Keep the expression reading when both survive, for example `(with) + x`.
+      prec.dynamic(-1, alias(choice('open', 'module', 'with'), $.type_identifier)),
       $.scoped_type_identifier,
       $.generic_type,
     ),
@@ -1217,7 +1222,7 @@ module.exports = grammar({
 
     generic_type: $ => prec.dynamic(PREC.GENERIC, seq(
       choice(
-        alias($.identifier, $.type_identifier),
+        alias(choice($.identifier, 'open', 'module', 'with'), $.type_identifier),
         $.scoped_type_identifier,
       ),
       $.type_arguments,
@@ -1323,12 +1328,10 @@ module.exports = grammar({
     ),
 
     _reserved_identifier: $ => choice(
+      alias(choice('open', 'module', 'with'), $.identifier),
       prec(-3, alias(
         choice(
-          'open',
-          'module',
           'record',
-          'with',
           'sealed',
         ),
         $.identifier,
