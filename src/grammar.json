@@ -10046,12 +10046,6 @@
       "_switch_cast_expression"
     ],
     [
-      "expression",
-      "cast_expression",
-      "_switch_cast_expression",
-      "_switch_label_expression"
-    ],
-    [
       "switch_label",
       "_arrow_switch_label"
     ],
