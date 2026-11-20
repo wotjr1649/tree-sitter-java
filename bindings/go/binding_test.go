@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	tree_sitter "github.com/tree-sitter/go-tree-sitter"
-	tree_sitter_java "github.com/wotjr1649/tree-sitter-java/v2/bindings/go"
+	tree_sitter_java "github.com/wotjr1649/tree-sitter-java/v3/bindings/go"
 )
 
 func TestCanParseJava(t *testing.T) {

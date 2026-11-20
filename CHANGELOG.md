@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- **Breaking change (Go).** For v3, the module path is `github.com/wotjr1649/tree-sitter-java/v3`. Update Go imports
+  to `github.com/wotjr1649/tree-sitter-java/v3/bindings/go`.
 - **Breaking change (K17)**. In a module directive such as `provides S with A, B;`, every service implementation
   now has the `provider` field, including a sole implementation. The first `provider` lookup returns `A`, and
   iterating the field yields `A, B` in source order. In `node-types.json`, `provider` is required and the unnamed
@@ -33,7 +35,6 @@ limits.
 Compared with 2.3.0, `parser.c` grows from 2,727,716 to 2,960,978 bytes (+233,262, +8.55%)
 and the parser grows from 1,513 to 1,648 states (+135). The public node kinds and field names
 stay the same. K20 adds `scoped_type_identifier` to the allowed children of `method_reference`.
-
 - Add a CI-checked structural oracle for javac and tree-sitter ranges and node kinds, with Phase 3 probes and an
   exact baseline of known differences. This is a tooling change only.
 - Parse a parenthesized name followed by `+` or `-` as the left operand of a `binary_expression` (K16,
