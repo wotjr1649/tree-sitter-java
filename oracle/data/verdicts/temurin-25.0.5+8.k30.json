@@ -1,8 +1,8 @@
 {
   "meta": {
     "api": "com.sun.source.util.JavacTask.parse()",
-    "case_count": 27,
-    "cases_sha256": "54e71aae076e70c59291982360b19e457bb70e6b7f61568aa02891ed40b43466",
+    "case_count": 39,
+    "cases_sha256": "29a4615e86cb3e6f7ada478947661477495fcc7b75fbe0c37623b1c056a8ec95",
     "java.runtime.version": "25.0.5+8-LTS",
     "java.vendor": "Eclipse Adoptium",
     "options": ["--release", "25", "-proc:none"],
@@ -38,6 +38,18 @@
     "k30/missing-paren-ordinary": ["compiler.err.illegal.start.of.type"],
     "k30/reserved": ["compiler.err.illegal.start.of.expr"],
     "k30/regular-record": ["compiler.err.restricted.type.not.allowed", "compiler.err.restricted.type.not.allowed.here"],
-    "k30/compact-sealed": ["compiler.err.restricted.type.not.allowed", "compiler.err.restricted.type.not.allowed.here"]
+    "k30/compact-sealed": ["compiler.err.restricted.type.not.allowed", "compiler.err.restricted.type.not.allowed.here"],
+    "k30/local-class-module": [],
+    "k30/local-class-ordinary": [],
+    "k30/local-record-open": [],
+    "k30/local-record-ordinary": [],
+    "k30/record-canonical-with": [],
+    "k30/record-canonical-ordinary": [],
+    "k30/anonymous-module": ["compiler.err.invalid.meth.decl.ret.type.req"],
+    "k30/anonymous-ordinary": ["compiler.err.invalid.meth.decl.ret.type.req"],
+    "k30/enum-body-module": ["compiler.err.invalid.meth.decl.ret.type.req"],
+    "k30/enum-body-ordinary": ["compiler.err.invalid.meth.decl.ret.type.req"],
+    "k30/compact-modifier-open": [],
+    "k30/compact-modifier-ordinary": []
   }
 }
