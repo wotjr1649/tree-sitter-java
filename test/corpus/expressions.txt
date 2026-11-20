@@ -1855,6 +1855,33 @@ switch (c) {
         (block)))))
 
 ================================================================================
+nested record patterns with typed and bare underscores
+================================================================================
+
+o instanceof Box(Point(int _, var _, _));
+
+--------------------------------------------------------------------------------
+
+(program
+  (expression_statement
+    (instanceof_expression
+      (identifier)
+      (record_pattern
+        (identifier)
+        (record_pattern_body
+          (record_pattern
+            (identifier)
+            (record_pattern_body
+              (record_pattern_component
+                (integral_type)
+                (identifier))
+              (record_pattern_component
+                (type_identifier)
+                (identifier))
+              (record_pattern_component
+                (underscore_pattern)))))))))
+
+================================================================================
 switch rule with case null, default
 :cst
 ================================================================================

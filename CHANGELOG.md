@@ -10,6 +10,10 @@
   line end (`int \u0061lpha;`). The grammar reads such escapes only inside literals; elsewhere they give ERROR,
   or, inside a comment, a token boundary that differs from javac's (`// \u000A int f;` stays one `line_comment`)
   (grammar-orchard issue #51).
+- Fix an incremental parse failure in typed unnamed record components such as `Point(int _, var _, _)` (K13).
+  Typed `_` keeps its visible `identifier` node and uses `underscore_pattern` as its underlying grammar symbol.
+  Bare `_` still exposes `underscore_pattern`. `node-types.json` is byte-identical, and the pinned examples retain
+  all 192 baseline failure paths.
 
 ## 2.2.0
 
