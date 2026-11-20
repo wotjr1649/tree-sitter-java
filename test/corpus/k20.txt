@@ -493,18 +493,18 @@ class Q {
         type: (type_identifier)
         declarator: (variable_declarator
           name: (identifier)
-          value: (method_reference
-            (identifier)
-            (super)
-            (identifier))))
+          value: (identifier))
+        (ERROR
+          (super)
+          (super)))
       (field_declaration
         type: (type_identifier)
         declarator: (variable_declarator
           name: (identifier)
-          value: (method_reference
-            (identifier)
-            (super)
-            (identifier)))))))
+          value: (identifier))
+        (ERROR
+          (super)
+          (super))))))
 
 ======================
 K20 tolerances for member tokens and explicit type arguments
@@ -538,66 +538,62 @@ class Probe {
         type: (type_identifier)
         declarator: (variable_declarator
           name: (identifier)
-          value: (method_reference
-            (identifier)
-            (super)
-            (identifier))))
+          value: (identifier))
+        (ERROR
+          (super)
+          (underscore_pattern)))
       (field_declaration
         type: (type_identifier)
         declarator: (variable_declarator
           name: (identifier)
-          value: (method_reference
-            (identifier)
-            (super)
-            (identifier))))
+          value: (identifier))
+        (ERROR
+          (super)
+          (underscore_pattern)))
       (field_declaration
         type: (type_identifier)
         declarator: (variable_declarator
           name: (identifier)
-          value: (method_reference
-            (identifier)
-            (super)
-            (identifier))))
+          value: (identifier))
+        (ERROR
+          (super)))
       (field_declaration
         type: (type_identifier)
         declarator: (variable_declarator
           name: (identifier)
-          value: (method_reference
-            (identifier)
-            (super)
-            (identifier))))
+          value: (identifier))
+        (ERROR
+          (super)))
       (field_declaration
         type: (type_identifier)
         declarator: (variable_declarator
           name: (identifier)
-          value: (method_reference
-            (identifier)
-            (super)
-            (identifier))))
+          value: (identifier))
+        (ERROR
+          (super)
+          (true)))
       (field_declaration
         type: (type_identifier)
         declarator: (variable_declarator
           name: (identifier)
-          value: (method_reference
+          (ERROR
             (identifier)
-            (super)
-            (identifier))))
+            (super))
+          value: (true)))
       (field_declaration
         type: (type_identifier)
         declarator: (variable_declarator
           name: (identifier)
-          value: (method_reference
-            (identifier)
-            (super)
-            (identifier))))
+          value: (identifier))
+        (ERROR
+          (super)))
       (field_declaration
         type: (type_identifier)
         declarator: (variable_declarator
           name: (identifier)
-          value: (method_reference
-            (identifier)
-            (super)
-            (identifier))))
+          value: (identifier))
+        (ERROR
+          (super)))
       (field_declaration
         type: (type_identifier)
         declarator: (variable_declarator
@@ -678,50 +674,47 @@ class Probe {
         type: (type_identifier)
         declarator: (variable_declarator
           name: (identifier)
-          value: (method_reference
-            (identifier)
-            (super)
-            (identifier))))
+          (ERROR
+            (super))
+          value: (false)))
       (field_declaration
         type: (type_identifier)
         declarator: (variable_declarator
           name: (identifier)
-          value: (method_reference
+          (ERROR
             (identifier)
-            (super)
-            (identifier))))
+            (super))
+          value: (false)))
       (field_declaration
         type: (type_identifier)
         declarator: (variable_declarator
           name: (identifier)
-          value: (method_reference
-            (identifier)
-            (super)
-            (identifier))))
+          value: (identifier))
+        (ERROR
+          (super)
+          (null_literal)))
       (field_declaration
         type: (type_identifier)
         declarator: (variable_declarator
           name: (identifier)
-          value: (method_reference
+          (ERROR
             (identifier)
-            (super)
-            (identifier))))
+            (super))
+          value: (null_literal)))
       (field_declaration
         type: (type_identifier)
         declarator: (variable_declarator
           name: (identifier)
-          value: (method_reference
-            (identifier)
-            (super)
-            (identifier))))
+          value: (identifier))
+        (ERROR
+          (super)))
       (field_declaration
         type: (type_identifier)
         declarator: (variable_declarator
           name: (identifier)
-          value: (method_reference
-            (identifier)
-            (super)
-            (identifier))))
+          value: (identifier))
+        (ERROR
+          (super)))
       (field_declaration
         type: (type_identifier)
         declarator: (variable_declarator

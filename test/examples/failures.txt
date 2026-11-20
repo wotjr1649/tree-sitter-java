@@ -64,6 +64,7 @@ examples/jdk/test/langtools/tools/javac/diags/examples/AnnotationMissingElementV
 examples/jdk/test/langtools/tools/javac/diags/examples/AnnotationMustBeNameValue.java
 examples/jdk/test/langtools/tools/javac/diags/examples/ArrayAndReceiver.java
 examples/jdk/test/langtools/tools/javac/diags/examples/ArrayDimMissing.java
+examples/jdk/test/langtools/tools/javac/diags/examples/AssertAsIdentifier2.java
 examples/jdk/test/langtools/tools/javac/diags/examples/CallOnlyInConstructor.java
 examples/jdk/test/langtools/tools/javac/diags/examples/CallsNotAllowedHere.java
 examples/jdk/test/langtools/tools/javac/diags/examples/CannotCreateArrayWithTypeArgs.java
@@ -75,6 +76,7 @@ examples/jdk/test/langtools/tools/javac/diags/examples/DefaultAllowedInIntfAnnot
 examples/jdk/test/langtools/tools/javac/diags/examples/DotClassExpected.java
 examples/jdk/test/langtools/tools/javac/diags/examples/ElseWithoutIf.java
 examples/jdk/test/langtools/tools/javac/diags/examples/EmptyCharLiteral.java
+examples/jdk/test/langtools/tools/javac/diags/examples/EnumAsIdentifier2.java
 examples/jdk/test/langtools/tools/javac/diags/examples/EnumConstantExpected.java
 examples/jdk/test/langtools/tools/javac/diags/examples/EnumConstantNotExpected.java
 examples/jdk/test/langtools/tools/javac/diags/examples/EnumsCantBeGeneric.java
@@ -111,6 +113,8 @@ examples/jdk/test/langtools/tools/javac/diags/examples/Orphaned.java
 examples/jdk/test/langtools/tools/javac/diags/examples/PrematureEOF.java
 examples/jdk/test/langtools/tools/javac/diags/examples/ProcessorWrongType/ProcessorWrongType.java
 examples/jdk/test/langtools/tools/javac/diags/examples/RecordPatternsAnnotationsNotAllowed.java
+examples/jdk/test/langtools/tools/javac/diags/examples/StatementNotExpected.java
+examples/jdk/test/langtools/tools/javac/diags/examples/SwitchCaseUnexpectedStatement.java
 examples/jdk/test/langtools/tools/javac/diags/examples/SwitchMixingCaseTypes.java
 examples/jdk/test/langtools/tools/javac/diags/examples/TextBlockCloseDelimiter.java
 examples/jdk/test/langtools/tools/javac/diags/examples/ThisAsIdentifier.java
@@ -121,11 +125,13 @@ examples/jdk/test/langtools/tools/javac/diags/examples/UnclosedCharLiteral.java
 examples/jdk/test/langtools/tools/javac/diags/examples/UnclosedComment.java
 examples/jdk/test/langtools/tools/javac/diags/examples/UnclosedStringLiteral.java
 examples/jdk/test/langtools/tools/javac/diags/examples/UnexpectedTokenInModuleInfo/module-info.java
+examples/jdk/test/langtools/tools/javac/diags/examples/UseOfUnderscoreNotAllowedNonVar.java
 examples/jdk/test/langtools/tools/javac/diags/examples/VarAllOrNothing.java
 examples/jdk/test/langtools/tools/javac/diags/examples/VarInImplicitLambda.java
 examples/jdk/test/langtools/tools/javac/diags/examples/VarargsAndReceiver.java
 examples/jdk/test/langtools/tools/javac/diags/examples/WithExpected/module-info.java
 examples/jdk/test/langtools/tools/javac/diags/examples/WrongReceiver.java
+examples/jdk/test/langtools/tools/javac/enum/EnumAsIdentifier.java
 examples/jdk/test/langtools/tools/javac/enum/EnumMembersOrder.java
 examples/jdk/test/langtools/tools/javac/failover/FailOver01.java
 examples/jdk/test/langtools/tools/javac/failover/FailOver15.java
@@ -141,6 +147,7 @@ examples/jdk/test/langtools/tools/javac/literals/BadUnderscoreLiterals.java
 examples/jdk/test/langtools/tools/javac/literals/T6891079.java
 examples/jdk/test/langtools/tools/javac/modules/InvalidModuleDirective/module-info.java
 examples/jdk/test/langtools/tools/javac/parser/7157165/T7157165.java
+examples/jdk/test/langtools/tools/javac/parser/8081769/T8081769.java
 examples/jdk/test/langtools/tools/javac/parser/ErroneousParameters.java
 examples/jdk/test/langtools/tools/javac/parser/MissingClosingBrace.java
 examples/jdk/test/langtools/tools/javac/parser/SingleCommaAnnotationValueFail.java

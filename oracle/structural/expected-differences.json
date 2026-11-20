@@ -95,6 +95,8 @@
     {"kind": "TYPE_CAST", "start": 71, "end": 79, "status": "mismatched_kind", "reason": "limit"}
   ],
   "corpus/k24.txt/K24 intersection switch": [
+    {"kind": "CLASS", "start": 1, "end": 104, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "BLOCK", "start": 29, "end": 102, "status": "no_node_at_range", "reason": "limit"},
     {"kind": "RETURN", "start": 31, "end": 100, "status": "no_node_at_range", "reason": "limit"},
     {"kind": "TYPE_CAST", "start": 38, "end": 99, "status": "no_node_at_range", "reason": "limit"},
     {"kind": "SWITCH_EXPRESSION", "start": 71, "end": 99, "status": "no_node_at_range", "reason": "limit"},
@@ -124,6 +126,8 @@
     {"kind": "LOGICAL_COMPLEMENT", "start": 77, "end": 82, "status": "no_node_at_range", "reason": "limit"}
   ],
   "k24/intersection-switch": [
+    {"kind": "CLASS", "start": 0, "end": 103, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "BLOCK", "start": 28, "end": 101, "status": "no_node_at_range", "reason": "limit"},
     {"kind": "RETURN", "start": 30, "end": 99, "status": "no_node_at_range", "reason": "limit"},
     {"kind": "TYPE_CAST", "start": 37, "end": 98, "status": "no_node_at_range", "reason": "limit"},
     {"kind": "SWITCH_EXPRESSION", "start": 70, "end": 98, "status": "no_node_at_range", "reason": "limit"},
