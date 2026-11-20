@@ -26,6 +26,10 @@
   cases record each form with a counterpart that writes the first slash as `\057` and parses at 2.3.0. Inputs that
   javac rejects and that parsed at 2.3.0 only because a comment swallowed a delimiter now produce errors, as in
   `"""<LF>/* x """ */ """` and `"""<LF>// a """ """<LF>"""`.
+- Document type-pattern bindings named `when` in switch labels and `instanceof` as a known limit (K25).
+  Javac accepts these bindings, and the existing grammar can report an error. The smallest tested candidate
+  that passed the corpus added 6.74% to `parser.c` and 84 parser states. The pinned examples contain no occurrence.
+  The grammar and parser are unchanged. See [known limits](docs/tolerances.md#known-limits).
 
 ## 2.3.0
 
