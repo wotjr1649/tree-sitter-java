@@ -3,11 +3,13 @@
 // field-map entries (all, and the inherited ones consumers pay for in field lookups).
 //
 // Usage: node scripts/parser-cost.mjs [<tree> [<tree>]]
+//        node scripts/parser-cost.mjs --check
 // A tree is a repository root, a directory holding parser.c, or a parser.c file. With no argument it measures this
 // repository; with one it prints that tree; with two it prints base, head and the change (base first).
 import { readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { isDeepStrictEqual } from 'node:util';
 
 const DEFINES = ['STATE_COUNT', 'LARGE_STATE_COUNT', 'SYMBOL_COUNT', 'PRODUCTION_ID_COUNT'];
 
@@ -39,8 +41,23 @@ export function measure(tree) {
 }
 
 function main(args) {
+  const root = fileURLToPath(new URL('..', import.meta.url));
+  if (args[0] === '--check') {
+    if (args.length !== 1) throw new Error('usage: parser-cost.mjs --check');
+    const baseline = JSON.parse(readFileSync(join(root, 'test', 'parser-cost.json'), 'utf8'));
+    const { parser_c_bytes, state_count } = measure(root);
+    const current = { parser_c_bytes, state_count };
+    if (!isDeepStrictEqual(current, baseline)) {
+      console.error('Parser cost differs from test/parser-cost.json.');
+      console.error('Expected:', JSON.stringify(baseline));
+      console.error('Actual:', JSON.stringify(current));
+      console.error('For an intentional change, update the baseline and explain the change in the PR.');
+      process.exitCode = 1;
+    }
+    return;
+  }
   if (args.length > 2) throw new Error('usage: parser-cost.mjs [<tree> [<tree>]]');
-  const trees = args.length ? args : [fileURLToPath(new URL('..', import.meta.url))];
+  const trees = args.length ? args : [root];
   const costs = trees.map(measure);
   const metrics = Object.keys(costs[0]);
   if (costs.length === 1) {
