@@ -4,6 +4,12 @@
 
 - Extend the Ubuntu CI examples to parse OpenJDK 25.0.5+8 sources and javac langtools tests at pinned commit
   `fda231468e56663992785ec199a6efb8eca3cc7a`. No grammar change.
+  The CI artifact of failing examples now holds the list of paths instead of the source files.
+- Known limitation: javac translates unicode escapes (`\uXXXX`) before it splits the source into tokens, so an
+  escape outside a string or char literal can form an identifier, a keyword, a separator, a comment delimiter or a
+  line end (`int \u0061lpha;`). The grammar reads such escapes only inside literals; elsewhere they give ERROR,
+  or, inside a comment, a token boundary that differs from javac's (`// \u000A int f;` stays one `line_comment`)
+  (grammar-orchard issue #51).
 - Parse multiple type or record patterns in a single `case` label, with an optional trailing `when` guard (K11,
   JLS 25 §14.11.1). The `switch_label` has a `pattern` child for each alternative, in source order. Empty record
   pattern lists such as `case R(), S()` previously appeared as `method_invocation` children and now appear as

@@ -81,6 +81,14 @@ jobs:
           printf '%s\n' '/src/**/*.java' '/test/langtools/tools/javac/**/*.java' |
             git -C examples/jdk sparse-checkout set --no-cone --stdin
           git -C examples/jdk checkout -q --detach FETCH_HEAD
+          # A file lost from the checkout would drop out of the inputs and the failures alike, so compare the
+          # checked-out .java files with the pinned tree.
+          git -C examples/jdk ls-tree -r -z --name-only HEAD -- src test/langtools/tools/javac |
+            grep -z '\.java$' | LC_ALL=C sort -z > "$RUNNER_TEMP/jdk-tree.txt"
+          (cd examples/jdk && find src test/langtools/tools/javac -type f -name '*.java' -print0) |
+            LC_ALL=C sort -z > "$RUNNER_TEMP/jdk-disk.txt"
+          cmp -s "$RUNNER_TEMP/jdk-tree.txt" "$RUNNER_TEMP/jdk-disk.txt" ||
+            { echo "::error::The OpenJDK checkout does not hold exactly the pinned .java files"; exit 1; }
       # The CLI exits 1 for syntax errors and for read errors alike, so the exit code
       # cannot tell a complete run from an aborted one. Only a final summary that lists
       # exactly the inputs counts as complete; anything else fails the job here.
@@ -115,7 +123,8 @@ jobs:
         if: ${{ !cancelled() && steps.examples.outputs.failures != '' }}
         with:
           name: failures
-          path: ${{steps.examples.outputs.failures}}
+          # The list only: the example sources stay with their own licences (OpenJDK: GPLv2 + Classpath Exception).
+          path: ${{ runner.temp }}/failures.txt
 
   oracle-replay:
     name: Oracle replay
