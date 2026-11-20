@@ -90,7 +90,9 @@ module.exports = grammar({
     [$._parenthesized_assignment_target, $.inferred_parameters, $.primary_expression],
     [$._unannotated_type, $.primary_expression],
     [$._unannotated_type, $._reserved_identifier],
-    [$._unannotated_type, $.primary_expression, $.scoped_type_identifier],
+    [$._unannotated_type, $.primary_expression, $.scoped_type_identifier, $.method_reference],
+    [$._unannotated_type, $.scoped_type_identifier, $.method_reference],
+    [$._unannotated_type, $._reserved_identifier, $.method_reference],
     [$._unannotated_type, $.scoped_type_identifier],
     [$._unannotated_type, $.generic_type],
     [$.generic_type, $.primary_expression],
@@ -541,7 +543,7 @@ module.exports = grammar({
     argument_list: $ => seq('(', commaSep($.expression), ')'),
 
     method_reference: $ => seq(
-      choice($._type, $.primary_expression, $.super),
+      choice($._type, $.primary_expression, $.super, seq(choice($.identifier, alias(choice('open', 'module', 'with'), $.identifier), $.scoped_type_identifier), '.', $.super)),
       '::',
       optional($.type_arguments),
       choice('new', $.identifier),
