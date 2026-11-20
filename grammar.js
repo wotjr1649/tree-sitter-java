@@ -577,7 +577,7 @@ module.exports = grammar({
         $.generic_type,
         $.array_type,
       ),
-      choice(reserved('additional_case_pattern', $.identifier), $._reserved_identifier),
+      choice(reserved('additional_case_pattern', $.identifier), $._reserved_identifier, alias($.underscore_pattern, $.identifier)),
     ),
 
     _additional_case_record_pattern: $ => seq(

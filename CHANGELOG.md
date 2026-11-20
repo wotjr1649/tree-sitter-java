@@ -29,10 +29,15 @@
   pattern lists such as `case R(), S()` previously appeared as `method_invocation` children and now appear as
   `pattern` children holding `record_pattern`, including the same syntax with lowercase names. The
   `node-types.json` bytes and the node-kind and field names are unchanged. Single record patterns retain `when`
-  as a component binding name, including before a guard. Lists inherit existing single-pattern tolerances for
-  `var` or `_` as a type name, duplicate `final`, keywords after an annotation or inside qualified types and type
-  arguments, empty type arguments, and keyword bindings such as `static`, `instanceof` and `new` in `R(int new)`.
-  Additional patterns and their record components reserve keywords and literals in positions previously
+  as a component binding name, including before a guard. Typed `_` in later record patterns uses the same
+  incremental parsing fix as K13 and keeps its visible `identifier` node. Lists inherit existing single-pattern
+  tolerances for `var` or `_` as a type name, duplicate `final` even with an annotation, and empty type arguments.
+  Some keywords can be names, including `abstract` in `case String _, abstract _` and `case String _, abstract(_)`.
+  This includes simple, qualified, generic and array type names, type arguments, and bindings in type patterns
+  and record components, including nested components. Examples include `@A new _`, `Outer.new _`, `List<null> _`,
+  `Integer static`, `int instanceof` and `R(int new)`. Record patterns in either position also accept annotations
+  inside their types, such as `G<@A ?> (_)` and `O.@A Inner<?> (_)`. javac's parser rejects these forms.
+  Additional patterns and their record components reserve specific keywords and literals in positions previously
   disambiguated by the expression alternative. Named bindings and preview or invalid types can still be parsed
   where javac's later phases reject them. Mixing a constant with a type pattern, as in `case 1, Integer i`, still
   produces an error. The five OpenJDK example files fixed by K11 are removed from
