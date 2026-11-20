@@ -1,0 +1,217 @@
+==================
+K25 arrow
+:error
+==================
+
+class C { int f(Object o, boolean ok) {
+  return switch (o) { case String when -> when.length(); default -> 0; };
+} }
+
+---
+
+==================
+K25 guard
+:error
+==================
+
+class C { int f(Object o, boolean ok) {
+  return switch (o) { case String when when when.length() > 1 -> 1; default -> 0; };
+} }
+
+---
+
+==================
+K25 guard-bool
+:error
+==================
+
+class C { int f(Object o, boolean ok) {
+  return switch (o) { case String when when ok -> when.length(); default -> 0; };
+} }
+
+---
+
+==================
+K25 colon
+:error
+==================
+
+class C { int f(Object o) {
+  switch (o) { case String when when when.isEmpty(): return 1; default: return 0; }
+} }
+
+---
+
+==================
+K25 colon-plain
+:error
+==================
+
+class C { int f(Object o) {
+  switch (o) { case String when: return when.length(); default: return 0; }
+} }
+
+---
+
+==================
+K25 instanceof
+:error
+==================
+
+class C { boolean f(Object o) { return o instanceof String when; } }
+
+---
+
+==================
+K25 instanceof-and
+:error
+==================
+
+class C { boolean f(Object o) { return o instanceof String when && when.isEmpty(); } }
+
+---
+
+==================
+K25 when-type-and-name
+:error
+==================
+
+class C { static class when {} int f(Object o, boolean ok) {
+  return switch (o) { case when when when ok -> 1; default -> 0; };
+} }
+
+---
+
+==================
+K25 multi-first-binding
+:error
+==================
+
+class C { int f(Object o, boolean ok) {
+  return switch (o) { case String when, Integer _ -> 1; default -> 0; };
+} }
+
+---
+
+==================
+K25 bad-modifier
+:error
+==================
+
+class C { int f(Object o, boolean ok) {
+  return switch (o) { case volatile String when -> 1; default -> 0; };
+} }
+
+---
+
+==================
+K25 bad-pattern-type
+:error
+==================
+
+class C { int f(Object o, boolean ok) {
+  return switch (o) { case var when -> 1; default -> 0; };
+} }
+
+---
+
+==================
+K25 missing-guard-operand
+:error
+==================
+
+class C { int f(Object o, boolean ok) {
+  return switch (o) { case String when when ok && -> 1; default -> 0; };
+} }
+
+---
+
+==================
+K25 var-guard
+:error
+==================
+
+class C { int f(Object o, boolean b) { return switch(o) { case var when when b -> 1; default -> 0; }; } }
+
+---
+
+==================
+K25 var-colon
+:error
+==================
+
+class C { int f(Object o, boolean b) { switch(o) { case var when when b: return 1; default: return 0; } } }
+
+---
+
+==================
+K25 instanceof-var
+:error
+==================
+
+class C { boolean f(Object o) { return o instanceof var when; } }
+
+---
+
+==================
+K25 instanceof-super
+:error
+==================
+
+class C { boolean f(Object o) { return o instanceof super when; } }
+
+---
+
+==================
+K25 instanceof-var-array
+:error
+==================
+
+class C { boolean f(Object o) { return o instanceof var[] when; } }
+
+---
+
+==================
+K25 instanceof-diamond
+:error
+==================
+
+class C { boolean f(Object o) { return o instanceof java.util.List<> when; } }
+
+---
+
+==================
+K25 constant-instanceof-binding-guard
+:error
+==================
+
+class C { int f(Object o, boolean b) { return switch(o) { case o instanceof String when when b -> 1; default -> 0; }; } }
+
+---
+
+==================
+K25 constant-instanceof-binding
+:error
+==================
+
+class C { int f(Object o) { return switch(o) { case o instanceof String when -> 1; default -> 0; }; } }
+
+---
+
+==================
+K25 instanceof-final
+:error
+==================
+
+class C { boolean f(Object o) { return o instanceof final String when; } }
+
+---
+
+==================
+K25 instanceof-in-guard
+:error
+==================
+
+class C { int f(Object o, Object p) { return switch(o) { case String s when p instanceof String when && when.isEmpty() -> 1; default -> 0; }; } }
+
+---
