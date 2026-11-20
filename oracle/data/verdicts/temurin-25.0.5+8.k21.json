@@ -1,0 +1,40 @@
+{
+  "meta": {
+    "api": "com.sun.source.util.JavacTask.parse()",
+    "case_count": 24,
+    "cases_sha256": "08397399475ebb5ac39a29de37adc808cab788d45b6213d0563025fad24b73ea",
+    "java.runtime.version": "25.0.5+8-LTS",
+    "java.vendor": "Eclipse Adoptium",
+    "options": ["--release", "25", "-proc:none"],
+    "preview": false,
+    "release": "25",
+    "runner_sha256": "c45e32e314b98ccb46481c4db18aa25173ca9b2fe46e45888f0a743ceb6c70ee",
+    "source_encoding": "UTF-8"
+  },
+  "verdicts": {
+    "k21/primitive-casts": [],
+    "k21/reference-cast": [],
+    "k21/annotated-cast": [],
+    "k21/unary-identifiers": [],
+    "k21/unary-selectors": [],
+    "k21/prefix-and-grouped": [],
+    "k21/additive-boundaries": [],
+    "k21/parenthesized-target": [],
+    "k21/postfix-multiplicative": [],
+    "k21/nested-unary": [],
+    "k21/missing-cast-operand": ["compiler.err.illegal.start.of.expr"],
+    "k21/missing-unary-operand": ["compiler.err.illegal.start.of.expr"],
+    "k21/missing-postfix-right": ["compiler.err.illegal.start.of.expr"],
+    "k21/missing-array-index": ["compiler.err.dot.class.expected"],
+    "k21/missing-field": ["compiler.err.expected"],
+    "k21/split-increment": ["compiler.err.illegal.start.of.expr"],
+    "k21/trailing-identifier": ["compiler.err.expected", "compiler.err.not.stmt"],
+    "k21/incomplete-argument": ["compiler.err.illegal.start.of.expr"],
+    "k21/logical-postfix": [],
+    "k21/prefix-postfix": [],
+    "k21/grouped-unary-target": [],
+    "k21/double-postfix": [],
+    "k21/annotation-value": [],
+    "k21/intersection-cast": []
+  }
+}

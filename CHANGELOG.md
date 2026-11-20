@@ -4,6 +4,11 @@
 
 - Add a CI-checked structural oracle for javac and tree-sitter ranges and node kinds, with Phase 3 probes and an
   exact baseline of known differences. This is a tooling change only.
+- Bind postfix `++` and `--` inside casts and unary expressions (K21, JLS 25 §§15.14–15.16, Phase 3
+  operator and cast probes and grammar-orchard PR #23). A cast such as `(int) n++` now has an
+  `update_expression` as its `value`, including for reference and intersection casts. A unary
+  expression such as `-n++` now has an `update_expression` as its `operand`. Standalone prefix updates and
+  following additive operators keep their precedence. `node-types.json` is unchanged.
 
 ## 2.3.0
 

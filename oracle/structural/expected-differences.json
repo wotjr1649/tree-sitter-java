@@ -49,10 +49,6 @@
     {"kind": "ARRAY_TYPE", "start": 293, "end": 314, "status": "mismatched_kind", "reason": "limit"},
     {"kind": "ANNOTATED_TYPE", "start": 293, "end": 302, "status": "no_node_at_range", "reason": "limit"}
   ],
-  "structural/p8/annotation/cast-primitive-post-inc": [
-    {"kind": "TYPE_CAST", "start": 292, "end": 304, "status": "mismatched_kind", "reason": "K21"},
-    {"kind": "POSTFIX_INCREMENT", "start": 301, "end": 304, "status": "no_node_at_range", "reason": "K21"}
-  ],
   "structural/p8/annotation/explicit-type-argument-array": [
     {"kind": "ARRAY_TYPE", "start": 315, "end": 330, "status": "mismatched_kind", "reason": "limit"},
     {"kind": "ANNOTATED_TYPE", "start": 315, "end": 324, "status": "no_node_at_range", "reason": "limit"}
@@ -79,14 +75,6 @@
   "structural/p8/cast/intersection-not": [
     {"kind": "LOGICAL_COMPLEMENT", "start": 137, "end": 142, "status": "no_node_at_range", "reason": "K24"}
   ],
-  "structural/p8/cast/primitive-post-dec": [
-    {"kind": "TYPE_CAST", "start": 104, "end": 113, "status": "mismatched_kind", "reason": "K21"},
-    {"kind": "POSTFIX_DECREMENT", "start": 110, "end": 113, "status": "no_node_at_range", "reason": "K21"}
-  ],
-  "structural/p8/cast/primitive-post-inc": [
-    {"kind": "TYPE_CAST", "start": 104, "end": 113, "status": "mismatched_kind", "reason": "K21"},
-    {"kind": "POSTFIX_INCREMENT", "start": 110, "end": 113, "status": "no_node_at_range", "reason": "K21"}
-  ],
   "structural/p8/cast/qualified-additive-minus": [
     {"kind": "MINUS", "start": 51, "end": 60, "status": "mismatched_kind", "reason": "K16"},
     {"kind": "PARENTHESIZED", "start": 51, "end": 56, "status": "no_node_at_range", "reason": "K16"},
@@ -112,10 +100,6 @@
     {"kind": "IDENTIFIER", "start": 52, "end": 53, "status": "mismatched_kind", "reason": "K16"},
     {"kind": "MULTIPLY", "start": 59, "end": 64, "status": "no_node_at_range", "reason": "K16"}
   ],
-  "structural/p8/cast/reference-post-inc": [
-    {"kind": "TYPE_CAST", "start": 104, "end": 117, "status": "mismatched_kind", "reason": "K21"},
-    {"kind": "POSTFIX_INCREMENT", "start": 114, "end": 117, "status": "no_node_at_range", "reason": "K21"}
-  ],
   "structural/p8/cast/simple-additive-multiply": [
     {"kind": "PLUS", "start": 51, "end": 62, "status": "mismatched_kind", "reason": "K16"},
     {"kind": "PARENTHESIZED", "start": 51, "end": 54, "status": "no_node_at_range", "reason": "K16"},
@@ -127,22 +111,6 @@
     {"kind": "PARENTHESIZED", "start": 51, "end": 54, "status": "no_node_at_range", "reason": "K16"},
     {"kind": "IDENTIFIER", "start": 52, "end": 53, "status": "mismatched_kind", "reason": "K16"},
     {"kind": "MULTIPLY", "start": 57, "end": 62, "status": "no_node_at_range", "reason": "K16"}
-  ],
-  "structural/p8/operator/unary-postfix": [
-    {"kind": "UNARY_MINUS", "start": 150, "end": 154, "status": "mismatched_kind", "reason": "K21"},
-    {"kind": "POSTFIX_INCREMENT", "start": 151, "end": 154, "status": "no_node_at_range", "reason": "K21"}
-  ],
-  "structural/p8/operator/unary-postfix-array": [
-    {"kind": "BITWISE_COMPLEMENT", "start": 150, "end": 157, "status": "mismatched_kind", "reason": "K21"},
-    {"kind": "POSTFIX_INCREMENT", "start": 151, "end": 157, "status": "no_node_at_range", "reason": "K21"}
-  ],
-  "structural/p8/operator/unary-postfix-decrement": [
-    {"kind": "UNARY_MINUS", "start": 150, "end": 154, "status": "mismatched_kind", "reason": "K21"},
-    {"kind": "POSTFIX_DECREMENT", "start": 151, "end": 154, "status": "no_node_at_range", "reason": "K21"}
-  ],
-  "structural/p8/operator/unary-postfix-field": [
-    {"kind": "UNARY_PLUS", "start": 150, "end": 156, "status": "mismatched_kind", "reason": "K21"},
-    {"kind": "POSTFIX_INCREMENT", "start": 151, "end": 156, "status": "no_node_at_range", "reason": "K21"}
   ],
   "structural/p8/ref/qualified-super-class": [
     {"kind": "MEMBER_REFERENCE", "start": 519, "end": 529, "status": "mismatched_kind", "reason": "K20"}
@@ -216,12 +184,6 @@
     {"kind": "PARENTHESIZED", "start": 92, "end": 103, "status": "no_node_at_range", "reason": "K16"},
     {"kind": "MEMBER_SELECT", "start": 93, "end": 102, "status": "mismatched_kind", "reason": "K16"},
     {"kind": "IDENTIFIER", "start": 93, "end": 96, "status": "mismatched_kind", "reason": "K16"}
-  ],
-  "structural/p9/cast-update": [
-    {"kind": "TYPE_CAST", "start": 32, "end": 41, "status": "mismatched_kind", "reason": "K21"},
-    {"kind": "POSTFIX_INCREMENT", "start": 38, "end": 41, "status": "no_node_at_range", "reason": "K21"},
-    {"kind": "TYPE_CAST", "start": 67, "end": 78, "status": "mismatched_kind", "reason": "K21"},
-    {"kind": "POSTFIX_DECREMENT", "start": 73, "end": 78, "status": "no_node_at_range", "reason": "K21"}
   ],
   "structural/p9/provides": [
     {"kind": "PROVIDES", "start": 25, "end": 86, "status": "mismatched_kind", "reason": "K17"}

@@ -37,7 +37,8 @@ backslashes before literal content and closing delimiters, quote boundaries and 
 (multiple type and record patterns in a `case` label, with adjacent invalid inputs and single-pattern controls),
 `k12` (parenthesized assignment targets, adjacent invalid inputs, and base-clean controls for expression and
 identifier tolerances), `k13` (typed and bare underscores in record patterns, other unnamed-variable contexts,
-and adjacent invalid patterns), and `structural` (Phase 3 ambiguity probes and independently written reproducers).
+and adjacent invalid patterns), `k21` (postfix updates under casts and unary operators, precedence controls,
+and adjacent invalid inputs), and `structural` (Phase 3 ambiguity probes and independently written reproducers).
 Every case names its origin in `provenance`: the bundle path with its `SHA256SUMS`
 hash, the PR, or "written in this task" (the task that added the case; the 56 `structural/p9/` probes say
 "independently written for Phase 3"). IDs are prefixed with the set name. To add a case, append a line, hash its
