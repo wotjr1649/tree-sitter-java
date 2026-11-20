@@ -41,10 +41,11 @@ and adjacent invalid patterns), `k16` (parenthesized names before additive opera
 and adjacent invalid inputs), `k18` (comment-like text in text blocks, escape and delimiter boundaries, CRLF and raw
 NUL, controls for comments outside literals and in interpolation expressions, and adjacent invalid inputs), `k19`
 (text-block line continuations with LF, CRLF and CR, with adjacent escape controls and invalid inputs), `k23` (CR,
-CRLF, LF and EOF line comments, with literal and block-comment controls), `k26` (guarded empty record patterns in
-colon labels and arrow rules, with adjacent invalid inputs and unchanged controls), `k27` (parenthesized yield
-values, qualified calls, identifier controls and adjacent invalid inputs), and `structural` (Phase 3 ambiguity probes
-and independently written reproducers). Every case names its origin in `provenance`: the bundle path with its
+CRLF, LF and EOF line comments, with literal and block-comment controls), `k24` (documented intersection-cast operand
+limits, single-type cast and binary-expression controls, and adjacent invalid inputs), `k26` (guarded empty record
+patterns in colon labels and arrow rules, with adjacent invalid inputs and unchanged controls), `k27` (parenthesized
+yield values, qualified calls, identifier controls and adjacent invalid inputs), and `structural` (Phase 3 ambiguity
+probes and independently written reproducers). Every case names its origin in `provenance`: the bundle path with its
 `SHA256SUMS` hash, the PR, or "written in this task" (the task that added the case; the 56 `structural/p9/` probes
 say "independently written for Phase 3"). IDs are prefixed with the set name. To add a case, append a line, hash its
 `source` (SHA-256 of the UTF-8 bytes; the
@@ -152,8 +153,9 @@ tree).
 
 `data/expected-failures.json` lists only confirmed mismatches: the javac verdict is recorded and accepts the input,
 and the base grammar errs or fails an assertion. Each entry is bound to the case id, the SHA-256 of its input, the
-`K` it belongs to, and its base tree, all measured at grammar base `a241253` (v1.0.0). `6744e4a` (v1.0.0 plus three
-Dependabot workflow bumps) has identical `grammar.js` and `src/`. The replay fails on a mismatch that is not listed
+`K` it belongs to, and its recorded tree. The original cases use grammar base `a241253` (v1.0.0), and the K24
+additions use `472e763`. `6744e4a` (v1.0.0 plus three Dependabot workflow bumps) has the same `grammar.js`
+and `src/` as `a241253`. The replay fails on a mismatch that is not listed
 and on a listed case that no longer fails. `grammar_base` (commit `a241253…`, `parser.c` and `grammar.js` sha256) must equal the fixed evidence in the replay.
 While `src/parser.c` equals the base parser, every listed `base_tree` must equal the current tree (otherwise exit 2).
 After a fix PR changes the parser, a listed case that still fails but whose tree changed only prints a note.
@@ -201,7 +203,7 @@ heap at 1 GiB and javac's heap at 512 MiB, and stops if a worker exceeds 2 GiB R
 
 `--check` requires the exact multiset in [expected-differences.json](structural/expected-differences.json), using case
 ID, javac kind, half-open UTF-8 range and status. It reports every added and missing difference and exits 1 on any
-change (2 on a tool or input fault). The reasons identify a K fix, a known projection limit (`limit`), or a corpus
+change (2 on a tool or input fault). The reasons identify a K fix, a known grammar or projection limit (`limit`), or a corpus
 recovery case (`error-case`). When a K fix lands, delete the resolved entries for that K and rerun
 `--check`. Delete its entries in `data/expected-failures.json` as well if the fix removes an ERROR or MISSING from
 an oracle probe. Per-case comparison details are in the `*.results.jsonl` files. The summary lists every `compare` or
