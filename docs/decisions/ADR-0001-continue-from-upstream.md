@@ -36,3 +36,15 @@ Decided by the owner on 2026-11-19, following tree-sitter-mssql's ADR-0007:
 - From v2.0.0 the Go module path carries the major version suffix (`github.com/wotjr1649/tree-sitter-java/v2`), as Go
   modules require for v2 and later.
 - Tags and any GitHub Release remain separate owner approvals. Registry publishing stays disabled.
+
+## Amendment (2026-11-21) — Phase 5 release
+
+The owner chose v3.0.0 as the first major release after 2.x. K17 narrows the public
+schema of `provides_module_directive` by making `provider` required and removing
+the unnamed `children` entry. Phase 5 also withdraws reserved-word tolerances, so
+affected inputs that previously parsed cleanly now produce errors. Restricted type names used as declared type names
+(such as `class var {}` or `class yield {}`) and `_` in field declarations stay documented tolerances: javac rejects them,
+the pinned examples do not use them, and a position-specific grammar change would gain nothing.
+
+The Go module path for v3 is `github.com/wotjr1649/tree-sitter-java/v3`. The 2.x
+releases remain reachable through their existing tags.

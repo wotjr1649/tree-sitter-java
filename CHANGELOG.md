@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- **Breaking change (Go).** For v3, the module path is `github.com/wotjr1649/tree-sitter-java/v3`. Update Go imports
+  to `github.com/wotjr1649/tree-sitter-java/v3/bindings/go`.
+
 ## 2.4.0
 
 Phase 3 adds a structural oracle and CI check that compare javac ASTs and tree-sitter trees over the same
