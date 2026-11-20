@@ -42,7 +42,8 @@ and adjacent invalid inputs), `k18` (comment-like text in text blocks, escape an
 NUL, controls for comments outside literals and in interpolation expressions, and adjacent invalid inputs), `k19`
 (text-block line continuations with LF, CRLF and CR, with adjacent escape controls and invalid inputs), `k26`
 (guarded empty record patterns in colon labels and arrow rules, with adjacent invalid inputs and unchanged controls),
-and `structural` (Phase 3 ambiguity probes and independently written reproducers). Every case names its origin in
+`k27` (parenthesized yield values, qualified calls, identifier controls and adjacent invalid inputs), and
+`structural` (Phase 3 ambiguity probes and independently written reproducers). Every case names its origin in
 `provenance`: the bundle path with its `SHA256SUMS` hash, the PR, or "written in this task" (the task that added the
 case; the 56 `structural/p9/` probes say "independently written for Phase 3"). IDs are prefixed with the set name. To
 add a case, append a line, hash its
