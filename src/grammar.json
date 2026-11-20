@@ -2575,6 +2575,15 @@
                                     {
                                       "type": "SYMBOL",
                                       "name": "_reserved_identifier"
+                                    },
+                                    {
+                                      "type": "ALIAS",
+                                      "content": {
+                                        "type": "SYMBOL",
+                                        "name": "underscore_pattern"
+                                      },
+                                      "named": true,
+                                      "value": "identifier"
                                     }
                                   ]
                                 }
@@ -2631,6 +2640,15 @@
                         {
                           "type": "SYMBOL",
                           "name": "_reserved_identifier"
+                        },
+                        {
+                          "type": "ALIAS",
+                          "content": {
+                            "type": "SYMBOL",
+                            "name": "underscore_pattern"
+                          },
+                          "named": true,
+                          "value": "identifier"
                         }
                       ]
                     }
@@ -4022,6 +4040,15 @@
             {
               "type": "SYMBOL",
               "name": "_reserved_identifier"
+            },
+            {
+              "type": "ALIAS",
+              "content": {
+                "type": "SYMBOL",
+                "name": "underscore_pattern"
+              },
+              "named": true,
+              "value": "identifier"
             }
           ]
         }

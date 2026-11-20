@@ -366,7 +366,7 @@ module.exports = grammar({
           choice(
             seq(
               field('right', $._type),
-              optional(field('name', choice($.identifier, $._reserved_identifier))),
+              optional(field('name', choice($.identifier, $._reserved_identifier, alias($.underscore_pattern, $.identifier)))),
             ),
             field('pattern', $.record_pattern),
           ),
@@ -376,7 +376,7 @@ module.exports = grammar({
         seq(
           alias($._instanceof_modifiers, $.modifiers),
           field('right', $._unannotated_type),
-          field('name', choice($.identifier, $._reserved_identifier)),
+          field('name', choice($.identifier, $._reserved_identifier, alias($.underscore_pattern, $.identifier))),
         ),
       ),
     )),
@@ -597,7 +597,12 @@ module.exports = grammar({
       $.record_pattern,
     ),
     // TypePattern is a LocalVariableDeclaration (JLS 25 §14.30.1), so it takes final and annotations as modifiers
-    type_pattern: $ => seq(optional(alias($._pattern_modifiers, $.modifiers)), $._unannotated_type, choice($.identifier, $._reserved_identifier)),
+    type_pattern: $ => seq(
+      optional(alias($._pattern_modifiers, $.modifiers)),
+      $._unannotated_type,
+      // Share the unnamed-variable token while keeping the public identifier node.
+      choice($.identifier, $._reserved_identifier, alias($.underscore_pattern, $.identifier)),
+    ),
     // Only VariableModifier (JLS 25 §4.12.4): other modifier keywords such as `non-sealed` would split `case non-sealed ->`
     _pattern_modifiers: $ => repeat1(choice('final', $._annotation)),
     // RecordPattern: ReferenceType ( ... ), so the type may be qualified (JLS 25 §14.30.1)
