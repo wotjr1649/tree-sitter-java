@@ -2,7 +2,9 @@
 
 ## Unreleased
 
-- Add the CI jobs `fuzz` (`tree-sitter fuzz` over the corpus, 3 edits and 10 iterations per case, 120 s cap) and
+- Add the CI jobs `fuzz` (`tree-sitter fuzz` over the corpus, up to 3 random edits and 10 iterations per case, 120 s
+  cap; after the edits it checks the incremental tree's sizes and changed ranges, and after undoing them that the
+  incremental reparse equals the expected corpus tree) and
   `parser-cost` (`scripts/parser-cost.mjs --check`: `parser.c` bytes and `STATE_COUNT` must equal
   `test/parser-cost.json`). No grammar change.
 
