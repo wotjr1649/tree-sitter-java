@@ -1,0 +1,39 @@
+{
+  "meta": {
+    "api": "com.sun.source.util.JavacTask.parse()",
+    "case_count": 23,
+    "cases_sha256": "f6722d60fb077e927a99412e54feaac7016aab1a81563dff0e2e8fa3680ddc7e",
+    "java.runtime.version": "25.0.5+8-LTS",
+    "java.vendor": "Eclipse Adoptium",
+    "options": ["--release", "25", "-proc:none"],
+    "preview": false,
+    "release": "25",
+    "runner_sha256": "c45e32e314b98ccb46481c4db18aa25173ca9b2fe46e45888f0a743ceb6c70ee",
+    "source_encoding": "UTF-8"
+  },
+  "verdicts": {
+    "k24/intersection-not": [],
+    "k24/intersection-complement": [],
+    "k24/intersection-nested-cast": [],
+    "k24/intersection-postfix-increment": [],
+    "k24/intersection-postfix-decrement": [],
+    "k24/intersection-annotated": [],
+    "k24/intersection-switch": [],
+    "k24/intersection-complement-postfix": [],
+    "k24/intersection-nested-primitive-signed": [],
+    "k24/intersection-nested-reference": [],
+    "k24/intersection-primary": [],
+    "k24/intersection-lambda": [],
+    "k24/reference-not": [],
+    "k24/reference-complement": [],
+    "k24/intersection-plus": [],
+    "k24/intersection-minus": [],
+    "k24/intersection-generic-plus-missing-operand": ["compiler.err.illegal.start.of.expr"],
+    "k24/intersection-generic-minus-missing-operand": ["compiler.err.illegal.start.of.expr"],
+    "k24/intersection-nested-invalid-prefix": ["compiler.err.expected"],
+    "k24/bitwise-additive-control": [],
+    "k24/intersection-prefix-increment": ["compiler.err.expected"],
+    "k24/intersection-prefix-decrement": ["compiler.err.expected"],
+    "k24/intersection-missing-operand": ["compiler.err.illegal.start.of.expr"]
+  }
+}

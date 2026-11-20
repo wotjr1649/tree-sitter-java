@@ -12,6 +12,12 @@
   [JLS 25 §§15.15–15.18](https://docs.oracle.com/javase/specs/jls/se25/html/jls-15.html#jls-15.15),
   [grammar-orchard issue #45](https://codeberg.org/grammar-orchard/tree-sitter-java-orchard/issues/45).
 
+- Document intersection casts followed by logical or bitwise complements, nested casts, postfix updates, or a
+  switch expression as a known limit (K24). The oracle records the existing errors and misplaced postfix update
+  nodes. The limits also record the direct prefix updates and signed operand that javac accepts outside the JLS grammar.
+  See [known limits](docs/tolerances.md#known-limits) and
+  [JLS 25 §15.16](https://docs.oracle.com/javase/specs/jls/se25/html/jls-15.html#jls-15.16).
+
 ## 2.3.0
 
 Phase 2 of the final-release plan: OpenJDK 25.0.5+8 as a second pinned example set, the Java 25 syntax fixes that

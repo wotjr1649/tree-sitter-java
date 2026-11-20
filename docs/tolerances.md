@@ -158,12 +158,13 @@ diagnostics, and tree-sitter gives `ERROR` or `MISSING`. The examples stay in th
 The release counts a grammar defect when the same reproducer passes a full `javac --release 25` compile and is
 derivable from the JLS 25 grammar. The forms below meet both conditions. The full K5 examples declare their annotations with `@Target(ElementType.TYPE_USE)`.
 Tree-sitter can give `ERROR` or `MISSING` or tokenize the source differently, as shown in the Unicode row.
-The two K5 cases are in the [oracle's expected-failure set](../oracle/data/expected-failures.json).
+The K5 and K24 cases are in the [oracle's expected-failure set](../oracle/data/expected-failures.json).
 
 | Java form | javac diagnostic code(s) | Oracle or corpus case | Release | Note |
 | --- | --- | --- | --- | --- |
 | `void m(int @A [] @B ... xs) {}` | None | k5/v04-after-dimensions | 2.1.0 (K5), 2.2.0 | The annotation after an array dimension starts another dimension in the grammar. |
 | `void m(int @A [] @B @C [] [] @D @E ... r) {}` | None | k5/v05-many-dimensions | 2.1.0 (K5), 2.2.0 | The same limit applies with several dimensions and annotations. |
+| `(Boolean & Serializable) !flag`<br>`(Integer & Serializable) ~n`, `~n++`, `(int) n`, `(Integer) o`, `n++`, `n--` or a `switch` expression after the same cast | None in full compilation of the limit probes | `k24/intersection-{not,complement,annotated,nested-cast,nested-primitive-signed,nested-reference,postfix-increment,postfix-decrement,complement-postfix,switch}`<br>`structural/p8/cast/intersection-{not,complement}` | Unreleased (K24) | Tree-sitter reports errors or attaches a postfix update outside the cast. JLS 25 §15.16 admits these operands. The owner retained the parser after the smallest correct fix added about 77 KB and 33 states, and the scan found no affected casts in 83,367 pinned examples. Direct prefix updates are covered under [javac extensions](#javac-accepts-forms-outside-the-jls-25-grammar). [JLS 25 §15.16][jls-cast] |
 | `int x<NUL>y;` | None | raw-nul.txt, “review probe outside/identifier” and “review probe outside/final” | 2.2.0 (K8) | Javac treats the NUL as ignorable within the identifier. The grammar still errs outside a literal in this position. |
 | `int \u0061lpha;`<br>`int f\u003b`<br>`// \u000A int f;`<br>`\u002f\u002f comment`<br>`cl\u0061ss C {}`<br>`class\u0009C {}`<br>`int \uD801\uDC00;` | None | Pinned OpenJDK variants under [Unicode escapes outside literals](#unicode-escapes-outside-literals)<br>Independent separator probe (`\u003b`) | 2.3.0 | Javac translates escapes before tokenization. Outside literals, the grammar can give ERROR or keep a different token boundary. In the encoded line-end example, int f; remains part of one line_comment. |
 
@@ -199,9 +200,11 @@ reproducers and their verdicts against `912d6e0`.
 | `java.util.@A Arrays.sort(a)` | None in the TYPE_USE probe | REVIEW-22 independent `SelectorPackage.java` probe<br>[OpenJDK AnnotatedMethodSelectorTest.java][annotated-selector] | 2.3.0 | The probe declares @A with @Target(ElementType.TYPE_USE) and full compilation emits a ClassWriter: Position UNKNOWN note. The pinned OpenJDK case passes javac parsing and full compilation reports annotation.type.not.applicable.to.type. The static-call qualifier is a TypeName, whose grammar excludes annotations. [JLS 25 §15.12][jls-method-invocation] · [JLS 25 §6.5][jls-name] |
 | `o instanceof R(final _, int _)` | None | K15 report, `instanceof-final` | 2.3.0 (K15 cancelled) | A MatchAllPattern is a bare _ directly in a record component list. A TypePattern requires a LocalVariableType after any modifiers. Tree-sitter reports MISSING identifier. [JLS 25 §14.30.1][jls-patterns] |
 | `case final _ ->`<br>`case @A _ ->` | None without default | K15 report, `only-case-final` and `only-case-annotation` | 2.3.0 (K15 cancelled) | A top-level CasePattern derives Pattern. Both examples lack the LocalVariableType required by TypePattern. Tree-sitter reports MISSING identifier. Adding a default label gives unconditional.pattern.and.default in full javac compilation. [JLS 25 §14.11.1][jls-switch] · [JLS 25 §14.30.1][jls-patterns] |
+| `(Integer & Comparable<Integer>) ++x`<br>`(Integer & Comparable<Integer>) --x`<br>`(Integer & Comparable<Integer>) -x` | None | REVIEW-37 P3-3, `r37/w10`–`w12` and `w1b` | Unreleased (K24) | Temurin 25.0.5+8 parses and compiles these forms, including the spelling `++(x)`. Tree-sitter reports ERROR with the retained grammar. A reference cast with additional bounds takes a UnaryExpressionNotPlusMinus or a lambda. [JLS 25 §15.16][jls-cast] |
 
 [annotated-selector]: https://github.com/openjdk/jdk25u/blob/fda231468e56663992785ec199a6efb8eca3cc7a/test/langtools/tools/javac/annotations/typeAnnotations/failures/AnnotatedMethodSelectorTest.java
 [jls-name]: https://docs.oracle.com/javase/specs/jls/se25/html/jls-6.html#jls-6.5
 [jls-switch]: https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html#jls-14.11.1
 [jls-patterns]: https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html#jls-14.30.1
 [jls-method-invocation]: https://docs.oracle.com/javase/specs/jls/se25/html/jls-15.html#jls-15.12
+[jls-cast]: https://docs.oracle.com/javase/specs/jls/se25/html/jls-15.html#jls-15.16
