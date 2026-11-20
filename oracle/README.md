@@ -53,7 +53,8 @@ controls, and adjacent invalid inputs), `k25` (`when` as the name of a type patt
 `k26` (guarded empty record patterns in colon labels and arrow rules, with adjacent invalid inputs and unchanged controls), `k27` (parenthesized yield values, qualified calls,
 identifier controls and adjacent invalid inputs), `k28` (contextual statement labels and their break/continue
 targets, switch controls and adjacent invalid inputs), `k29` (qualified type names starting with `open`, `module`, or
-`with`, qualified `super` method references, ordinary name controls, and adjacent invalid inputs), `phase5`
+`with`, qualified `super` method references, ordinary name controls, and adjacent invalid inputs), `k32` (documented `when` as a `for` variable name in enhanced and basic `for`, a switch group and a lambda, with
+parsing controls), `phase5`
 (the 14 corpus inputs with withdrawn reserved-word tolerances), and `structural`
 (Phase 3 ambiguity probes and independently written reproducers). Every case names its origin in `provenance`: the
 bundle path with its `SHA256SUMS` hash, the PR, or "written in this task" (the task that added the case; the 56
@@ -180,7 +181,7 @@ after an array dimension and before `...` (`int @A [] @B ... xs`) still starts a
 A new input that the grammar fails but javac accepts is never added silently: it is a new defect, so it needs its own
 fix, or a recorded entry with its javac verdict and evidence. K25 records the documented limit on type-pattern
 bindings named `when`. Its dedicated cases record the trees from `f1e4257`, and the existing structural probes
-retain their recorded trees. See [known limits](../docs/tolerances.md#known-limits).
+retain their recorded trees. K32 records `when` as a `for` variable name; its trees are those of `b8e1950`. See [known limits](../docs/tolerances.md#known-limits).
 
 ## Node kinds and parser cost
 

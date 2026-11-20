@@ -49,6 +49,13 @@
   by javac's parser. The example failure baseline rises from 183 to 190. See
   [withdrawn and retained tolerances](docs/tolerances.md#withdrawn-in-300).
 
+- Document `when` as the name of a `for` variable (K32) as a known limit: `for (String when : a)`, `for (var when : a)`,
+  `for (String when[] : a)` and `for (String when = "", x = ""; ;)`. Javac accepts these, and the grammar can report an
+  error. The smallest correct candidate added 10.9% to `parser.c`. The cause it shares with K25: where the guard keyword
+  `when` has any action, tree-sitter's keyword extraction picks the keyword over `identifier`, and reserved sets and
+  lexical precedence cannot change that. The alternatives tested for K25 and K32 added 6.7% to 22.9%. The grammar and
+  parser are unchanged. See [known limits](docs/tolerances.md#known-limits).
+
 ## 2.4.0
 
 Phase 3 adds a structural oracle and CI check that compare javac ASTs and tree-sitter trees over the same
