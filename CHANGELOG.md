@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased
+
+- Keep comment-like text inside text blocks in `multiline_string_fragment` nodes and preserve `escape_sequence`
+  nodes (K18, JLS 25 §§3.7 and 3.10.6, grammar-orchard PR #41 and the Phase 3 `text-block-comments` report).
+  A closing delimiter on the same line as `//` now closes the block. Comments outside the delimiters and within
+  template interpolation expressions retain their roles. The node schema is unchanged. The existing tolerances for
+  a missing opening line terminator and an illegal escape also apply when `//` text precedes the closing delimiter on
+  the same line. Corpus and oracle cases record both forms along with valid counterparts that parse at 2.3.0.
+
 ## 2.3.0
 
 Phase 2 of the final-release plan: OpenJDK 25.0.5+8 as a second pinned example set, the Java 25 syntax fixes that

@@ -1,0 +1,32 @@
+{
+  "meta": {
+    "api": "com.sun.source.util.JavacTask.parse()",
+    "case_count": 16,
+    "cases_sha256": "aad95359dee94d8cddee18cecc57da9f1fab61cd559cbc4cbfb86ae95703fa14",
+    "java.runtime.version": "25.0.5+8-LTS",
+    "java.vendor": "Eclipse Adoptium",
+    "options": ["--release", "25", "-proc:none"],
+    "preview": false,
+    "release": "25",
+    "runner_sha256": "c45e32e314b98ccb46481c4db18aa25173ca9b2fe46e45888f0a743ceb6c70ee",
+    "source_encoding": "UTF-8"
+  },
+  "verdicts": {
+    "k18/block-comment-text": [],
+    "k18/line-comment-text": [],
+    "k18/delimiter-after-slashes": [],
+    "k18/unpaired-comment-marker": [],
+    "k18/crlf-nul": [],
+    "k18/outside-comments": [],
+    "k18/ordinary-crlf-nul": [],
+    "k18/text-template": ["compiler.err.illegal.esc.char"],
+    "k18/text-template-control": ["compiler.err.illegal.esc.char"],
+    "k18/ordinary-template": ["compiler.err.illegal.esc.char"],
+    "k18/invalid-opening": ["compiler.err.illegal.text.block.open"],
+    "k18/valid-opening": [],
+    "k18/invalid-escape": ["compiler.err.illegal.esc.char"],
+    "k18/valid-escape": [],
+    "k18/unterminated-block": ["compiler.err.unclosed.text.block"],
+    "k18/extra-quote": ["compiler.err.unclosed.str.lit", "compiler.err.premature.eof"]
+  }
+}
