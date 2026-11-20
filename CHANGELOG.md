@@ -108,6 +108,18 @@
   following additive operators keep their precedence. `node-types.json` is unchanged. `docs/tolerances.md` gains a row
   for the existing tolerances `(Integer) ++i`, `(Integer) --i`, `(n) ++ k;` and `(n) -- k;`, which javac rejects and
   K21 leaves unchanged.
+- Parse qualified types starting with `open`, `module`, or `with` (K29, K20 follow-up 3 report and
+  [K29 oracle cases](oracle/data/cases/k29.jsonl)). A declaration such as `open.A x = null` gets a
+  `scoped_type_identifier` in its `type` field. Qualified references such as `open.a.super::m` have a
+  `scoped_type_identifier` qualifier and a separate named `super` child from K20 (REVIEW-45).
+  Class literals such as `open.A.class` produce `class_literal` nodes. `node-types.json` is byte-identical.
+  Existing ordinary-name tolerances extend to these prefixes in top-level declarations, empty type arguments,
+  generic class literals, restricted type names, and type annotations with no applicable target.
+  [JLS 25 §3.9](https://docs.oracle.com/javase/specs/jls/se25/html/jls-3.html#jls-3.9),
+  [§4.3](https://docs.oracle.com/javase/specs/jls/se25/html/jls-4.html#jls-4.3),
+  [§6.5](https://docs.oracle.com/javase/specs/jls/se25/html/jls-6.html#jls-6.5),
+  [§15.8.2](https://docs.oracle.com/javase/specs/jls/se25/html/jls-15.html#jls-15.8.2),
+  [§15.13](https://docs.oracle.com/javase/specs/jls/se25/html/jls-15.html#jls-15.13).
 - Keep the switch rule arrow outside the lambda result (K22). In
   `case KEY -> arg -> arg - 2`, the label holds `KEY` and the body holds the full lambda.
   A separate expression path for labels and guards also handles cast and conditional labels while
