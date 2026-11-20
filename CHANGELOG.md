@@ -25,9 +25,11 @@
   cases record each form with a counterpart that writes the first slash as `\057` and parses at 2.3.0. Inputs that
   javac rejects and that parsed at 2.3.0 only because a comment swallowed a delimiter now produce errors, as in
   `"""<LF>/* x """ */ """` and `"""<LF>// a """ """<LF>"""`.
-- Parse `yield (n) + k * 3;` and the subtraction variant as `yield_statement` with the full binary value
-  (K27, JLS 25 §14.21 and §15.12, REVIEW-33 P2-1). Keep qualified calls and the K12 unqualified-call
-  tolerance. The node schema is unchanged.
+- Parse a statement that starts with `yield (`, such as `yield (n) + k * 3;` or `yield (n) - k;`, as a
+  `yield_statement` whose value is the whole expression instead of an expression using the call `yield(n)` (K27,
+  JLS 25 §14.21; an unqualified method named `yield` cannot be invoked, §3.8, REVIEW-33). As in javac, this also
+  applies outside a switch, where javac then reports `no.switch.expression`. `yield ()`, `yield (x, n)`, qualified
+  calls and the K12 unqualified-call tolerance keep their trees. The node schema is unchanged.
 
 ## 2.3.0
 
