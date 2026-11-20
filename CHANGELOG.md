@@ -6,8 +6,8 @@
   exact baseline of known differences. This is a tooling change only.
 - Parse guarded empty record patterns as `switch_label` children of kind `pattern` holding a `record_pattern`,
   alongside a `guard`, in colon groups and arrow rules (K26, JLS 25 §14.11.1 and §14.30.1, Phase 3 examples
-  report's `EmptyRecordGuard` reproducer). This also covers nested and qualified empty patterns and lists of empty
-  patterns with a guard. Unguarded empty patterns, constant labels and ordinary calls retain their trees.
+  report's `EmptyRecordGuard` reproducer). This also covers nested and qualified empty patterns and guarded pattern lists
+  that start with an empty pattern, such as `case R(), S(), Box(_) when b:`. Unguarded empty patterns, constant labels and ordinary calls retain their trees.
   `node-types.json` and the accepted syntax are unchanged.
 
 ## 2.3.0
