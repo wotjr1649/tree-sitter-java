@@ -173,3 +173,439 @@ class Case {
             (escape_sequence)
             (multiline_string_fragment)
             (escape_sequence)))))))
+
+==============================================
+K18 Unicode escape tolerances after comment-like text on the closing line
+==============================================
+
+class Case {
+  String badUnicode = """
+// a \u """;
+  String badUnicodeControl = """
+\057/ a \u """;
+  String shortUnicode = """
+// a \uuu041 """;
+  String shortUnicodeControl = """
+\057/ a \uuu041 """;
+  String braceUnicode = """
+// a \u{41} """;
+  String braceUnicodeControl = """
+\057/ a \u{41} """;
+  String openingUnicode = """ // \u""";
+  String openingUnicodeControl = """ \057/ \u""";
+}
+
+---
+
+(program
+  (class_declaration
+    (identifier)
+    (class_body
+      (field_declaration
+        (type_identifier)
+        (variable_declarator
+          (identifier)
+          (string_literal
+            (multiline_string_fragment)
+            (multiline_string_fragment))))
+      (field_declaration
+        (type_identifier)
+        (variable_declarator
+          (identifier)
+          (string_literal
+            (multiline_string_fragment)
+            (escape_sequence)
+            (multiline_string_fragment)
+            (multiline_string_fragment))))
+      (field_declaration
+        (type_identifier)
+        (variable_declarator
+          (identifier)
+          (string_literal
+            (multiline_string_fragment)
+            (multiline_string_fragment))))
+      (field_declaration
+        (type_identifier)
+        (variable_declarator
+          (identifier)
+          (string_literal
+            (multiline_string_fragment)
+            (escape_sequence)
+            (multiline_string_fragment)
+            (multiline_string_fragment))))
+      (field_declaration
+        (type_identifier)
+        (variable_declarator
+          (identifier)
+          (string_literal
+            (multiline_string_fragment)
+            (escape_sequence)
+            (multiline_string_fragment))))
+      (field_declaration
+        (type_identifier)
+        (variable_declarator
+          (identifier)
+          (string_literal
+            (multiline_string_fragment)
+            (escape_sequence)
+            (multiline_string_fragment)
+            (escape_sequence)
+            (multiline_string_fragment))))
+      (field_declaration
+        (type_identifier)
+        (variable_declarator
+          (identifier)
+          (string_literal
+            (multiline_string_fragment))))
+      (field_declaration
+        (type_identifier)
+        (variable_declarator
+          (identifier)
+          (string_literal
+            (multiline_string_fragment)
+            (escape_sequence)
+            (multiline_string_fragment)))))))
+
+==============================================
+K18 template interpolation tolerance after comment-like text on the closing line
+==============================================
+
+class Case {
+  String interp = """
+// a \{x} """;
+  String interpControl = """
+\057/ a \{x} """;
+  Object template = RAW."""
+// a \{x} """;
+  Object templateControl = RAW."""
+\057/ a \{x} """;
+}
+
+---
+
+(program
+  (class_declaration
+    (identifier)
+    (class_body
+      (field_declaration
+        (type_identifier)
+        (variable_declarator
+          (identifier)
+          (string_literal
+            (multiline_string_fragment)
+            (string_interpolation
+              (identifier))
+            (multiline_string_fragment))))
+      (field_declaration
+        (type_identifier)
+        (variable_declarator
+          (identifier)
+          (string_literal
+            (multiline_string_fragment)
+            (escape_sequence)
+            (multiline_string_fragment)
+            (string_interpolation
+              (identifier))
+            (multiline_string_fragment))))
+      (field_declaration
+        (type_identifier)
+        (variable_declarator
+          (identifier)
+          (template_expression
+            (identifier)
+            (string_literal
+              (multiline_string_fragment)
+              (string_interpolation
+                (identifier))
+              (multiline_string_fragment)))))
+      (field_declaration
+        (type_identifier)
+        (variable_declarator
+          (identifier)
+          (template_expression
+            (identifier)
+            (string_literal
+              (multiline_string_fragment)
+              (escape_sequence)
+              (multiline_string_fragment)
+              (string_interpolation
+                (identifier))
+              (multiline_string_fragment))))))))
+
+==============================================
+K18 illegal escape and opening tolerances after comment-like text on the closing line
+==============================================
+
+class Case {
+  String hex = """
+// a \x41 """;
+  String hexControl = """
+\057/ a \x41 """;
+  String octal8 = """
+// a \8 """;
+  String octal8Control = """
+\057/ a \8 """;
+  String openingControl = """\057/ no newline""";
+  String escapeControl = """
+\057/ text \q""";
+}
+
+---
+
+(program
+  (class_declaration
+    (identifier)
+    (class_body
+      (field_declaration
+        (type_identifier)
+        (variable_declarator
+          (identifier)
+          (string_literal
+            (multiline_string_fragment)
+            (escape_sequence)
+            (multiline_string_fragment))))
+      (field_declaration
+        (type_identifier)
+        (variable_declarator
+          (identifier)
+          (string_literal
+            (multiline_string_fragment)
+            (escape_sequence)
+            (multiline_string_fragment)
+            (escape_sequence)
+            (multiline_string_fragment))))
+      (field_declaration
+        (type_identifier)
+        (variable_declarator
+          (identifier)
+          (string_literal
+            (multiline_string_fragment)
+            (multiline_string_fragment))))
+      (field_declaration
+        (type_identifier)
+        (variable_declarator
+          (identifier)
+          (string_literal
+            (multiline_string_fragment)
+            (escape_sequence)
+            (multiline_string_fragment)
+            (multiline_string_fragment))))
+      (field_declaration
+        (type_identifier)
+        (variable_declarator
+          (identifier)
+          (string_literal
+            (escape_sequence)
+            (multiline_string_fragment))))
+      (field_declaration
+        (type_identifier)
+        (variable_declarator
+          (identifier)
+          (string_literal
+            (multiline_string_fragment)
+            (escape_sequence)
+            (multiline_string_fragment)))))))
+
+==============================================
+K18 tolerances after block-comment-like text on the closing line
+==============================================
+
+class Case {
+  String q = """
+/* a \q """ + "*/";
+  String qControl = """
+\057* a \q """ + "*/";
+  String hex = """
+/* a \x41 """ + "*/";
+  String hexControl = """
+\057* a \x41 """ + "*/";
+  String octal8 = """
+/* a \8 """ + "*/";
+  String octal8Control = """
+\057* a \8 """ + "*/";
+  String interp = """
+/* a \{x} """ + "*/";
+  String interpControl = """
+\057* a \{x} """ + "*/";
+  String badUnicode = """
+/* a \u """ + "*/";
+  String badUnicodeControl = """
+\057* a \u """ + "*/";
+  String shortUnicode = """
+/* a \uuu041 """ + "*/";
+  String shortUnicodeControl = """
+\057* a \uuu041 """ + "*/";
+  String braceUnicode = """
+/* a \u{41} """ + "*/";
+  String braceUnicodeControl = """
+\057* a \u{41} """ + "*/";
+}
+
+---
+
+(program
+  (class_declaration
+    (identifier)
+    (class_body
+      (field_declaration
+        (type_identifier)
+        (variable_declarator
+          (identifier)
+          (binary_expression
+            (string_literal
+              (multiline_string_fragment)
+              (multiline_string_fragment))
+            (string_literal
+              (string_fragment)))))
+      (field_declaration
+        (type_identifier)
+        (variable_declarator
+          (identifier)
+          (binary_expression
+            (string_literal
+              (multiline_string_fragment)
+              (escape_sequence)
+              (multiline_string_fragment)
+              (multiline_string_fragment))
+            (string_literal
+              (string_fragment)))))
+      (field_declaration
+        (type_identifier)
+        (variable_declarator
+          (identifier)
+          (binary_expression
+            (string_literal
+              (multiline_string_fragment)
+              (escape_sequence)
+              (multiline_string_fragment))
+            (string_literal
+              (string_fragment)))))
+      (field_declaration
+        (type_identifier)
+        (variable_declarator
+          (identifier)
+          (binary_expression
+            (string_literal
+              (multiline_string_fragment)
+              (escape_sequence)
+              (multiline_string_fragment)
+              (escape_sequence)
+              (multiline_string_fragment))
+            (string_literal
+              (string_fragment)))))
+      (field_declaration
+        (type_identifier)
+        (variable_declarator
+          (identifier)
+          (binary_expression
+            (string_literal
+              (multiline_string_fragment)
+              (multiline_string_fragment))
+            (string_literal
+              (string_fragment)))))
+      (field_declaration
+        (type_identifier)
+        (variable_declarator
+          (identifier)
+          (binary_expression
+            (string_literal
+              (multiline_string_fragment)
+              (escape_sequence)
+              (multiline_string_fragment)
+              (multiline_string_fragment))
+            (string_literal
+              (string_fragment)))))
+      (field_declaration
+        (type_identifier)
+        (variable_declarator
+          (identifier)
+          (binary_expression
+            (string_literal
+              (multiline_string_fragment)
+              (string_interpolation
+                (identifier))
+              (multiline_string_fragment))
+            (string_literal
+              (string_fragment)))))
+      (field_declaration
+        (type_identifier)
+        (variable_declarator
+          (identifier)
+          (binary_expression
+            (string_literal
+              (multiline_string_fragment)
+              (escape_sequence)
+              (multiline_string_fragment)
+              (string_interpolation
+                (identifier))
+              (multiline_string_fragment))
+            (string_literal
+              (string_fragment)))))
+      (field_declaration
+        (type_identifier)
+        (variable_declarator
+          (identifier)
+          (binary_expression
+            (string_literal
+              (multiline_string_fragment)
+              (multiline_string_fragment))
+            (string_literal
+              (string_fragment)))))
+      (field_declaration
+        (type_identifier)
+        (variable_declarator
+          (identifier)
+          (binary_expression
+            (string_literal
+              (multiline_string_fragment)
+              (escape_sequence)
+              (multiline_string_fragment)
+              (multiline_string_fragment))
+            (string_literal
+              (string_fragment)))))
+      (field_declaration
+        (type_identifier)
+        (variable_declarator
+          (identifier)
+          (binary_expression
+            (string_literal
+              (multiline_string_fragment)
+              (multiline_string_fragment))
+            (string_literal
+              (string_fragment)))))
+      (field_declaration
+        (type_identifier)
+        (variable_declarator
+          (identifier)
+          (binary_expression
+            (string_literal
+              (multiline_string_fragment)
+              (escape_sequence)
+              (multiline_string_fragment)
+              (multiline_string_fragment))
+            (string_literal
+              (string_fragment)))))
+      (field_declaration
+        (type_identifier)
+        (variable_declarator
+          (identifier)
+          (binary_expression
+            (string_literal
+              (multiline_string_fragment)
+              (escape_sequence)
+              (multiline_string_fragment))
+            (string_literal
+              (string_fragment)))))
+      (field_declaration
+        (type_identifier)
+        (variable_declarator
+          (identifier)
+          (binary_expression
+            (string_literal
+              (multiline_string_fragment)
+              (escape_sequence)
+              (multiline_string_fragment)
+              (escape_sequence)
+              (multiline_string_fragment))
+            (string_literal
+              (string_fragment))))))))

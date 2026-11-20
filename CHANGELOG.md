@@ -14,9 +14,13 @@
 - Keep comment-like text inside text blocks in `multiline_string_fragment` nodes and preserve `escape_sequence`
   nodes (K18, JLS 25 §§3.7 and 3.10.6, grammar-orchard PR #41 and the Phase 3 `text-block-comments` report).
   A closing delimiter on the same line as `//` now closes the block. Comments outside the delimiters and within
-  template interpolation expressions retain their roles. The node schema is unchanged. The existing tolerances for
-  a missing opening line terminator and an illegal escape also apply when `//` text precedes the closing delimiter on
-  the same line. Corpus and oracle cases record both forms along with valid counterparts that parse at 2.3.0.
+  template interpolation expressions retain their roles. The node schema is unchanged. The existing text block
+  tolerances also apply when `//` or `/*` text precedes the closing delimiter on the same line: a missing opening
+  line terminator, illegal escapes such as `\q`, `\x41` and `\8`, illegal Unicode escapes such as `\u`, `\uuu041`
+  and `\u{41}`, and template interpolation `\{x}` with or without a processor such as `RAW.`. Corpus and oracle
+  cases record each form with a counterpart that writes the first slash as `\057` and parses at 2.3.0. Inputs that
+  javac rejects and that parsed at 2.3.0 only because a comment swallowed a delimiter now produce errors, as in
+  `"""<LF>/* x """ */ """` and `"""<LF>// a """ """<LF>"""`.
 
 ## 2.3.0
 
