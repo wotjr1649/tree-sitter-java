@@ -1355,8 +1355,15 @@
       "type": "CHOICE",
       "members": [
         {
-          "type": "PATTERN",
-          "value": "([^\"\\\\]+|\\x00)+"
+          "type": "TOKEN",
+          "content": {
+            "type": "PREC",
+            "value": 1,
+            "content": {
+              "type": "PATTERN",
+              "value": "([^\"\\\\]+|\\x00)+"
+            }
+          }
         },
         {
           "type": "PATTERN",
@@ -1468,6 +1475,18 @@
       "type": "CHOICE",
       "members": [
         {
+          "type": "ALIAS",
+          "content": {
+            "type": "IMMEDIATE_TOKEN",
+            "content": {
+              "type": "PATTERN",
+              "value": "\\\\(\\r\\n?|\\n)"
+            }
+          },
+          "named": true,
+          "value": "escape_sequence"
+        },
+        {
           "type": "PREC",
           "value": 2,
           "content": {
@@ -1481,7 +1500,7 @@
                 },
                 {
                   "type": "PATTERN",
-                  "value": "[^bfnrtsu'\\\"\\\\]"
+                  "value": "[^bfnrtsu'\\\"\\\\\\r\\n]"
                 }
               ]
             }
@@ -1581,7 +1600,7 @@
                 "members": [
                   {
                     "type": "PATTERN",
-                    "value": "[^xu0-7]"
+                    "value": "[^xu0-7\\r\\n]"
                   },
                   {
                     "type": "PATTERN",
@@ -4031,8 +4050,12 @@
           "name": "type_pattern"
         },
         {
-          "type": "SYMBOL",
-          "name": "record_pattern"
+          "type": "PREC_DYNAMIC",
+          "value": 1,
+          "content": {
+            "type": "SYMBOL",
+            "name": "record_pattern"
+          }
         }
       ]
     },
@@ -4825,21 +4848,25 @@
       ]
     },
     "yield_statement": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "STRING",
-          "value": "yield"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "expression"
-        },
-        {
-          "type": "STRING",
-          "value": ";"
-        }
-      ]
+      "type": "PREC_DYNAMIC",
+      "value": 1,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "STRING",
+            "value": "yield"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "expression"
+          },
+          {
+            "type": "STRING",
+            "value": ";"
+          }
+        ]
+      }
     },
     "synchronized_statement": {
       "type": "SEQ",

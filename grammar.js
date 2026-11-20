@@ -236,7 +236,8 @@ module.exports = grammar({
     // so NUL needs its own transition: `([^"\\]+|\x00)`. The same holds for the multiline fragment and char literal.
     string_fragment: _ => token.immediate(prec(1, /([^"\\]+|\x00)+/)),
     _multiline_string_fragment: _ => choice(
-      /([^"\\]+|\x00)+/,
+      // Prefer text over comment extras while leaving the closing delimiter ahead of a single quote.
+      token(prec(PREC.COMMENT + 1, /([^"\\]+|\x00)+/)),
       /"([^"\\]+|\x00|\\")*/,
     ),
 
@@ -262,7 +263,8 @@ module.exports = grammar({
 
     _string_escape_sequence: $ => choice($.escape_sequence, alias($._encoded_backslash, $.escape_sequence)),
     _escape_sequence: $ => choice(
-      prec(2, token.immediate(seq('\\', /[^bfnrtsu'\"\\]/))),
+      alias(token.immediate(/\\(\r\n?|\n)/), $.escape_sequence),
+      prec(2, token.immediate(seq('\\', /[^bfnrtsu'\"\\\r\n]/))),
       // Keep the text block's existing fallback for malformed Unicode escapes.
       token.immediate(prec(2, /\\u/)),
       prec(1, $._string_escape_sequence),
@@ -274,7 +276,7 @@ module.exports = grammar({
       seq(
         '\\',
         choice(
-          /[^xu0-7]/,
+          /[^xu0-7\r\n]/,
           /[0-7]{1,3}/,
           /x[0-9a-fA-F]{2}/,
         ),
@@ -597,7 +599,8 @@ module.exports = grammar({
 
     pattern: $ => choice(
       $.type_pattern,
-      $.record_pattern,
+      // A case label can also read an empty record pattern as a method call.
+      prec.dynamic(1, $.record_pattern),
     ),
     // Public aliases keep the same tree for the patterns that follow a comma.
     _additional_case_pattern: $ => choice(
@@ -724,11 +727,12 @@ module.exports = grammar({
       ';',
     ),
 
-    yield_statement: $ => seq(
+    // Prefer a yield statement to an unqualified call when both parses succeed.
+    yield_statement: $ => prec.dynamic(1, seq(
       'yield',
       $.expression,
       ';',
-    ),
+    )),
 
     synchronized_statement: $ => seq(
       'synchronized',
