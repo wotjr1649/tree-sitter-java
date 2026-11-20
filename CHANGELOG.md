@@ -1,27 +1,30 @@
 # Changelog
 
-## Unreleased
+## 2.4.0
 
-- Parse the contextual keywords `module`, `open`, `record`, `sealed`, `with` and `yield` as `identifier`
-  children of `labeled_statement` (K28, REVIEW-38 and grammar-orchard PR #22). The same names already
-  parse as `identifier` targets of `break_statement` and `continue_statement`. Switch blocks can contain
-  labels such as `yield: yield 1;`. The generated node schema is unchanged. Contextual-keyword labels inherit
-  every tolerance of an ordinary label (`L:`) in the same position. In methods, javac rejects labeled variable
-  and type declarations, module, package and import declarations (such as `open: module m {}`),
-  non-statement expressions, and unqualified `yield` calls. A label at compilation-unit level can also prefix declarations (such as
-  `yield: class C {}`), loops and empty statements. REVIEW-41 pins these forms with ordinary-label controls that parsed cleanly at the base.
-  REVIEW-41b adds a labeled variable declaration in an `if` branch and a package declaration under nested labels
-  in a method. It also pins compilation-unit labels on `return`, `if`, `throw`, blocks, `switch`, `try`, assignments
-  and `assert`, including a labeled `return` after a package declaration. All eleven `ordinary:` controls parsed cleanly
-  at the K28 base. REVIEW-41c pins labeled variable declarations in `else` branches, `while` bodies and
-  `switch` colon groups, a package declaration under an inner `yield:` label, and compilation-unit labels
-  on `synchronized`, `break`, `do` and a binary expression. All eight `ordinary:` controls parsed cleanly
-  at the PR base.
-  [JLS 25 §7.3](https://docs.oracle.com/javase/specs/jls/se25/html/jls-7.html#jls-7.3) ·
-  [JLS 25 §3.9](https://docs.oracle.com/javase/specs/jls/se25/html/jls-3.html#jls-3.9) ·
-  [§14.7](https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html#jls-14.7) ·
-  [§14.15](https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html#jls-14.15) ·
-  [§14.16](https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html#jls-14.16)
+Phase 3 adds a structural oracle and CI check that compare javac ASTs and tree-sitter trees over the same
+UTF-8 byte ranges using the oracle cases, corpus and Phase 3 probes. This release includes grammar fixes
+K16, K18–K23 and K26–K29 and records K24 and K25 as known limits. It uses the full K22 switch-arrow fix,
+including cast and conditional labels with lambda results. K17, the `provides` provider field change, is
+held for Phase 5, the reserved-words phase, pending a public-schema decision.
+
+The review criterion adopted on 2026-11-19 allows a newly clean javac-rejected form when replacing the new
+part with a valid counterpart produces a clean tree at the base. Corpus and oracle cases pin that behavior.
+Under the owner's 2026-11-21 inheritance rule, a newly accepted name or keyword inherits every tolerance
+of an ordinary name in the same syntactic position. Representative contexts and forms found in review are
+pinned. If both the new form and its ordinary-name control errored at the base, the new form must keep
+producing an error.
+
+Known limits include K5 (annotations between array dimensions and the varargs ellipsis), NUL and Unicode
+escapes outside literals, javac forms outside the JLS 25 grammar, K24 (remaining intersection-cast operands)
+and K25 (pattern bindings named `when`). See [grammar tolerances and known limits](docs/tolerances.md).
+The pinned example baseline has 183 paths: 144 javac-rejected, 29 accepted only at parse time, and 10 documented
+limits.
+
+Compared with 2.3.0, `parser.c` grows from 2,727,716 to 2,960,978 bytes (+233,262, +8.55%)
+and the parser grows from 1,513 to 1,648 states (+135). The public node kinds and field names
+stay the same. K20 adds `scoped_type_identifier` to the allowed children of `method_reference`.
+
 - Add a CI-checked structural oracle for javac and tree-sitter ranges and node kinds, with Phase 3 probes and an
   exact baseline of known differences. This is a tooling change only.
 - Parse a parenthesized name followed by `+` or `-` as the left operand of a `binary_expression` (K16,
@@ -30,11 +33,6 @@
   `node-types.json` is unchanged; `docs/tolerances.md` gains a row for the existing `(@A Integer) -k` tolerance.
   [JLS 25 §§15.15–15.18](https://docs.oracle.com/javase/specs/jls/se25/html/jls-15.html#jls-15.15),
   [grammar-orchard issue #45](https://codeberg.org/grammar-orchard/tree-sitter-java-orchard/issues/45).
-- Parse guarded empty record patterns as `switch_label` children of kind `pattern` holding a `record_pattern`,
-  alongside a `guard`, in colon groups and arrow rules (K26, JLS 25 §14.11.1 and §14.30.1, Phase 3 examples
-  report's `EmptyRecordGuard` reproducer). This also covers nested and qualified empty patterns and guarded pattern lists
-  that start with an empty pattern, such as `case R(), S(), Box(_) when b:`. Unguarded empty patterns, constant labels and ordinary calls retain their trees.
-  `node-types.json` and the accepted syntax are unchanged.
 - Keep comment-like text inside text blocks in `multiline_string_fragment` nodes and preserve `escape_sequence`
   nodes (K18, JLS 25 §§3.7 and 3.10.6, grammar-orchard PR #41 and the Phase 3 `text-block-comments` report).
   A closing delimiter on the same line as `//` now closes the block. Comments outside the delimiters and within
@@ -50,29 +48,8 @@
   A paired backslash escape still leaves the following line terminator in the text block's content.
   Ordinary string literals now report a parse error for a raw backslash immediately followed by a line terminator.
   A backslash written as `\u005c` before a line terminator keeps its 2.3.0 tree in both kinds of literal.
-  The generated public schema is byte-identical to 2.3.0.
+  K19 leaves the generated public schema unchanged.
   [grammar-orchard PR #9](https://codeberg.org/grammar-orchard/tree-sitter-java-orchard/pulls/9)
-- Parse a statement that starts with `yield (`, such as `yield (n) + k * 3;` or `yield (n) - k;`, as a
-  `yield_statement` whose value is the whole expression instead of an expression using the call `yield(n)` (K27,
-  JLS 25 §14.21; an unqualified method named `yield` cannot be invoked, §3.8, REVIEW-33). As in javac, this also
-  applies outside a switch, where javac then reports `no.switch.expression`. `yield ()`, `yield (x, n)`, qualified
-  calls and the K12 unqualified-call tolerance keep their trees. The node schema is unchanged.
-- End a `line_comment` before CR, LF or CRLF (K23). Code after a lone CR now gets its own nodes, and a CRLF
-  comment's range ends before the CR, consistent with LF: in files with CRLF line ends every line comment is one
-  byte shorter and its text has no trailing CR. Code after a lone CR that was hidden in a comment now parses, so
-  javac-rejected code there now errs, and existing tolerances such as an illegal string escape apply to it as after
-  an LF (pinned with an LF control). `node-types.json` and the documented tolerances are unchanged.
-  [JLS 25 §§3.4 and 3.7](https://docs.oracle.com/javase/specs/jls/se25/html/jls-3.html#jls-3.4),
-  [grammar-orchard issue #42](https://codeberg.org/grammar-orchard/tree-sitter-java-orchard/issues/42).
-- Document intersection casts followed by logical or bitwise complements, nested casts, or a switch
-  expression as a known limit (K24). The oracle records the remaining errors, including a bitwise complement of a
-  postfix update. The limits also record the direct prefix updates and signed operand that javac accepts outside the JLS grammar.
-  See [known limits](docs/tolerances.md#known-limits) and
-  [JLS 25 §15.16](https://docs.oracle.com/javase/specs/jls/se25/html/jls-15.html#jls-15.16).
-- Document type-pattern bindings named `when` in switch labels and `instanceof` as a known limit (K25).
-  Javac accepts these bindings, and the existing grammar can report an error. The smallest tested candidate
-  that passed the corpus added 6.74% to `parser.c` and 84 parser states. The pinned examples contain no occurrence.
-  The grammar and parser are unchanged. See [known limits](docs/tolerances.md#known-limits).
 - Represent `TypeName.super::m` and `TypeName.super::<T>m` with a named `super` child of `method_reference` (K20,
   JLS 25 §15.13, [grammar-orchard issue #50](https://codeberg.org/grammar-orchard/tree-sitter-java-orchard/issues/50)).
   The qualifier is a separate `identifier` or `scoped_type_identifier`. The qualifier, `super`, optional
@@ -80,8 +57,8 @@
   `scoped_type_identifier` to the allowed children of `method_reference`.
   The contextual keywords `open`, `module` and `with`, valid type names since K9, also work
   as the qualifier: `open.super::m` and `module.super::<String>id` now parse with an `identifier` qualifier and a
-  named `super` instead of an `ERROR`. Dotted type names that start with one of these keywords still produce errors
-  in `open.a.super::m` and `open.a x = null;`. The existing `C.super` tolerances also extend to
+  named `super` instead of an `ERROR`. At the K20 merge, dotted types starting with these keywords
+  still errored in `open.a.super::m` and `open.a x = null;`. K29 resolves both forms. The existing `C.super` tolerances also extend to
   `open.super::new` (rejected during full compilation) and `open.super::<>m` (rejected by javac's parser).
   REVIEW-39b pins four more
   forms that javac's parser rejects: the standalone statement `open.super::m;`, the wildcard `open.super::<?>m`,
@@ -108,11 +85,65 @@
   following additive operators keep their precedence. `node-types.json` is unchanged. `docs/tolerances.md` gains a row
   for the existing tolerances `(Integer) ++i`, `(Integer) --i`, `(n) ++ k;` and `(n) -- k;`, which javac rejects and
   K21 leaves unchanged.
+- Keep the switch rule arrow outside the lambda result (K22). In
+  `case KEY -> arg -> arg - 2`, the label holds `KEY` and the body holds the full lambda.
+  A separate expression path for labels and guards also handles cast and conditional labels while
+  preserving lambdas in delimited subexpressions such as method arguments. A sole named annotation
+  argument such as `@A(x = n -> n)` retains the 2.3.0 `element_value_pair` tree. The public node
+  schema is unchanged.
+  [JLS 25 §14.11.1](https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html#jls-14.11.1) ·
+  [grammar-orchard PR #21](https://codeberg.org/grammar-orchard/tree-sitter-java-orchard/pulls/21).
+- End a `line_comment` before CR, LF or CRLF (K23). Code after a lone CR now gets its own nodes, and a CRLF
+  comment's range ends before the CR, consistent with LF: in files with CRLF line ends every line comment is one
+  byte shorter and its text has no trailing CR. Code after a lone CR that was hidden in a comment now parses, so
+  javac-rejected code there now errs, and existing tolerances such as an illegal string escape apply to it as after
+  an LF (pinned with an LF control). `node-types.json` and the documented tolerances are unchanged.
+  [JLS 25 §§3.4 and 3.7](https://docs.oracle.com/javase/specs/jls/se25/html/jls-3.html#jls-3.4),
+  [grammar-orchard issue #42](https://codeberg.org/grammar-orchard/tree-sitter-java-orchard/issues/42).
+- Document intersection casts followed by logical or bitwise complements, nested casts, or a switch
+  expression as a known limit (K24). The oracle records the remaining errors, including a bitwise complement of a
+  postfix update. The limits also record the direct prefix updates and signed operand that javac accepts outside the JLS grammar.
+  See [known limits](docs/tolerances.md#known-limits) and
+  [JLS 25 §15.16](https://docs.oracle.com/javase/specs/jls/se25/html/jls-15.html#jls-15.16).
+- Document type-pattern bindings named `when` in switch labels and `instanceof` as a known limit (K25).
+  Javac accepts these bindings, and the existing grammar can report an error. The smallest tested candidate
+  that passed the corpus added 6.74% to `parser.c` and 84 parser states. The pinned examples contain no occurrence.
+  The grammar and parser are unchanged. See [known limits](docs/tolerances.md#known-limits).
+- Parse guarded empty record patterns as `switch_label` children of kind `pattern` holding a `record_pattern`,
+  alongside a `guard`, in colon groups and arrow rules (K26, JLS 25 §14.11.1 and §14.30.1, Phase 3 examples
+  report's `EmptyRecordGuard` reproducer). This also covers nested and qualified empty patterns and guarded pattern lists
+  that start with an empty pattern, such as `case R(), S(), Box(_) when b:`. Unguarded empty patterns, constant labels and ordinary calls retain their trees.
+  `node-types.json` and the accepted syntax are unchanged.
+- Parse a statement that starts with `yield (`, such as `yield (n) + k * 3;` or `yield (n) - k;`, as a
+  `yield_statement` whose value is the whole expression instead of an expression using the call `yield(n)` (K27,
+  JLS 25 §14.21; an unqualified method named `yield` cannot be invoked, §3.8, REVIEW-33). As in javac, this also
+  applies outside a switch, where javac then reports `no.switch.expression`. `yield ()`, `yield (x, n)`, qualified
+  calls and the K12 unqualified-call tolerance keep their trees. The node schema is unchanged.
+- Parse the contextual keywords `module`, `open`, `record`, `sealed`, `with` and `yield` as `identifier`
+  children of `labeled_statement` (K28, REVIEW-38 and grammar-orchard PR #22). The same names already
+  parse as `identifier` targets of `break_statement` and `continue_statement`. Switch blocks can contain
+  labels such as `yield: yield 1;`. The generated node schema is unchanged. Contextual-keyword labels inherit
+  every tolerance of an ordinary label (`L:`) in the same position. In methods, javac rejects labeled variable
+  and type declarations, module, package and import declarations (such as `open: module m {}`),
+  non-statement expressions, and unqualified `yield` calls. A label at compilation-unit level can also prefix declarations (such as
+  `yield: class C {}`), loops and empty statements. REVIEW-41 pins these forms with ordinary-label controls that parsed cleanly at the base.
+  REVIEW-41b adds a labeled variable declaration in an `if` branch and a package declaration under nested labels
+  in a method. It also pins compilation-unit labels on `return`, `if`, `throw`, blocks, `switch`, `try`, assignments
+  and `assert`, including a labeled `return` after a package declaration. All eleven `ordinary:` controls parsed cleanly
+  at the K28 base. REVIEW-41c pins labeled variable declarations in `else` branches, `while` bodies and
+  `switch` colon groups, a package declaration under an inner `yield:` label, and compilation-unit labels
+  on `synchronized`, `break`, `do` and a binary expression. All eight `ordinary:` controls parsed cleanly
+  at the PR base.
+  [JLS 25 §7.3](https://docs.oracle.com/javase/specs/jls/se25/html/jls-7.html#jls-7.3) ·
+  [JLS 25 §3.9](https://docs.oracle.com/javase/specs/jls/se25/html/jls-3.html#jls-3.9) ·
+  [§14.7](https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html#jls-14.7) ·
+  [§14.15](https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html#jls-14.15) ·
+  [§14.16](https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html#jls-14.16)
 - Parse qualified types starting with `open`, `module`, or `with` (K29, K20 follow-up 3 report and
   [K29 oracle cases](oracle/data/cases/k29.jsonl)). A declaration such as `open.A x = null` gets a
   `scoped_type_identifier` in its `type` field. Qualified references such as `open.a.super::m` have a
   `scoped_type_identifier` qualifier and a separate named `super` child from K20 (REVIEW-45).
-  Class literals such as `open.A.class` produce `class_literal` nodes. `node-types.json` is byte-identical.
+  Class literals such as `open.A.class` produce `class_literal` nodes. K29 leaves `node-types.json` unchanged.
   Existing ordinary-name tolerances extend to these prefixes in top-level declarations, empty type arguments,
   generic class literals, restricted type names, and type annotations with no applicable target.
   [JLS 25 §3.9](https://docs.oracle.com/javase/specs/jls/se25/html/jls-3.html#jls-3.9),
@@ -120,14 +151,6 @@
   [§6.5](https://docs.oracle.com/javase/specs/jls/se25/html/jls-6.html#jls-6.5),
   [§15.8.2](https://docs.oracle.com/javase/specs/jls/se25/html/jls-15.html#jls-15.8.2),
   [§15.13](https://docs.oracle.com/javase/specs/jls/se25/html/jls-15.html#jls-15.13).
-- Keep the switch rule arrow outside the lambda result (K22). In
-  `case KEY -> arg -> arg - 2`, the label holds `KEY` and the body holds the full lambda.
-  A separate expression path for labels and guards also handles cast and conditional labels while
-  preserving lambdas in delimited subexpressions such as method arguments. A sole named annotation
-  argument such as `@A(x = n -> n)` retains the 2.3.0 `element_value_pair` tree. The public node
-  schema is unchanged. `parser.c` grows by 210,109 bytes (+7.66%) and 110 states relative to `54e0d5a`.
-  [JLS 25 §14.11.1](https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html#jls-14.11.1) ·
-  [grammar-orchard PR #21](https://codeberg.org/grammar-orchard/tree-sitter-java-orchard/pulls/21).
 
 ## 2.3.0
 
