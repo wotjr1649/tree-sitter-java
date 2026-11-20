@@ -83,24 +83,6 @@
     {"kind": "UNARY_PLUS", "start": 150, "end": 156, "status": "mismatched_kind", "reason": "K21"},
     {"kind": "POSTFIX_INCREMENT", "start": 151, "end": 156, "status": "no_node_at_range", "reason": "K21"}
   ],
-  "structural/p8/ref/qualified-super-class": [
-    {"kind": "MEMBER_REFERENCE", "start": 519, "end": 529, "status": "mismatched_kind", "reason": "K20"}
-  ],
-  "structural/p8/ref/qualified-super-class-explicit": [
-    {"kind": "MEMBER_REFERENCE", "start": 529, "end": 548, "status": "mismatched_kind", "reason": "K20"}
-  ],
-  "structural/p8/ref/super-in-invocation-arg": [
-    {"kind": "MEMBER_REFERENCE", "start": 470, "end": 480, "status": "mismatched_kind", "reason": "K20"}
-  ],
-  "structural/p8/ref/super-in-ternary": [
-    {"kind": "MEMBER_REFERENCE", "start": 455, "end": 465, "status": "mismatched_kind", "reason": "K20"}
-  ],
-  "structural/p8/ref/super-interface": [
-    {"kind": "MEMBER_REFERENCE", "start": 457, "end": 467, "status": "mismatched_kind", "reason": "K20"}
-  ],
-  "structural/p8/ref/super-interface-explicit": [
-    {"kind": "MEMBER_REFERENCE", "start": 467, "end": 486, "status": "mismatched_kind", "reason": "K20"}
-  ],
   "structural/p8/switch/colon-guard-when-binding": [
     {"kind": "PATTERN_CASE_LABEL", "start": 46, "end": 57, "status": "no_node_at_range", "reason": "limit"},
     {"kind": "BINDING_PATTERN", "start": 46, "end": 57, "status": "no_node_at_range", "reason": "limit"},
@@ -144,9 +126,6 @@
   ],
   "structural/p9/provides": [
     {"kind": "PROVIDES", "start": 25, "end": 86, "status": "mismatched_kind", "reason": "K17"}
-  ],
-  "structural/p9/ref-super": [
-    {"kind": "MEMBER_REFERENCE", "start": 115, "end": 131, "status": "mismatched_kind", "reason": "K20"}
   ],
   "structural/p9/switch-lambda": [
     {"kind": "CONSTANT_CASE_LABEL", "start": 115, "end": 120, "status": "mismatched_kind", "reason": "K22"},

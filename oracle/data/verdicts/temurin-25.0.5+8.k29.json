@@ -1,8 +1,8 @@
 {
   "meta": {
     "api": "com.sun.source.util.JavacTask.parse()",
-    "case_count": 43,
-    "cases_sha256": "6321c1a3508618ac2468daa314a47e7c5448a75de1dcf2bbbdc747e21d3b4479",
+    "case_count": 46,
+    "cases_sha256": "2d94173cb77ba41b06efe7e763fda69e633d07998404c1f7fb65c97818e975e8",
     "java.runtime.version": "25.0.5+8-LTS",
     "java.vendor": "Eclipse Adoptium",
     "options": ["--release", "25", "-proc:none"],
@@ -54,6 +54,9 @@
     "k29/plain-restricted-tail": [],
     "k29/plain-annotation-tail": [],
     "k29/open-class-literal": [],
-    "k29/module-class-literal": []
+    "k29/module-class-literal": [],
+    "k29/open-qualified-super": [],
+    "k29/module-qualified-super": [],
+    "k29/with-qualified-super": []
   }
 }

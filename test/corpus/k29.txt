@@ -956,3 +956,167 @@ class C { Class<?> k = module.A.class; }
             (scoped_type_identifier
               (type_identifier)
               (type_identifier))))))))
+
+===========================
+K29 open-qualified-super
+===========================
+
+interface open { interface a { default String m() { return ""; } } }
+class C implements open.a { java.util.function.Supplier<String> s = open.a.super::m; }
+
+---
+
+(program
+  (interface_declaration
+    name: (identifier)
+    body: (interface_body
+      (interface_declaration
+        name: (identifier)
+        body: (interface_body
+          (method_declaration
+            (modifiers)
+            type: (type_identifier)
+            name: (identifier)
+            parameters: (formal_parameters)
+            body: (block
+              (return_statement
+                (string_literal))))))))
+  (class_declaration
+    name: (identifier)
+    interfaces: (super_interfaces
+      (type_list
+        (scoped_type_identifier
+          (type_identifier)
+          (type_identifier))))
+    body: (class_body
+      (field_declaration
+        type: (generic_type
+          (scoped_type_identifier
+            (scoped_type_identifier
+              (scoped_type_identifier
+                (type_identifier)
+                (type_identifier))
+              (type_identifier))
+            (type_identifier))
+          (type_arguments
+            (type_identifier)))
+        declarator: (variable_declarator
+          name: (identifier)
+          value: (method_reference
+            (scoped_type_identifier
+              (type_identifier)
+              (type_identifier))
+            (super)
+            (identifier)))))))
+
+===========================
+K29 module-qualified-super
+===========================
+
+interface module { interface a { default String m() { return ""; } } }
+class C implements module.a { java.util.function.Supplier<String> s = module.a.super::m; }
+
+---
+
+(program
+  (interface_declaration
+    name: (identifier)
+    body: (interface_body
+      (interface_declaration
+        name: (identifier)
+        body: (interface_body
+          (method_declaration
+            (modifiers)
+            type: (type_identifier)
+            name: (identifier)
+            parameters: (formal_parameters)
+            body: (block
+              (return_statement
+                (string_literal))))))))
+  (class_declaration
+    name: (identifier)
+    interfaces: (super_interfaces
+      (type_list
+        (scoped_type_identifier
+          (type_identifier)
+          (type_identifier))))
+    body: (class_body
+      (field_declaration
+        type: (generic_type
+          (scoped_type_identifier
+            (scoped_type_identifier
+              (scoped_type_identifier
+                (type_identifier)
+                (type_identifier))
+              (type_identifier))
+            (type_identifier))
+          (type_arguments
+            (type_identifier)))
+        declarator: (variable_declarator
+          name: (identifier)
+          value: (method_reference
+            (scoped_type_identifier
+              (type_identifier)
+              (type_identifier))
+            (super)
+            (identifier)))))))
+
+===========================
+K29 with-qualified-super
+===========================
+
+interface with { interface a { default <X> X m() { return null; } } }
+class C<T> implements with.a { java.util.function.Supplier<T> s = with.a.super::<T>m; }
+
+---
+
+(program
+  (interface_declaration
+    name: (identifier)
+    body: (interface_body
+      (interface_declaration
+        name: (identifier)
+        body: (interface_body
+          (method_declaration
+            (modifiers)
+            type_parameters: (type_parameters
+              (type_parameter
+                (type_identifier)))
+            type: (type_identifier)
+            name: (identifier)
+            parameters: (formal_parameters)
+            body: (block
+              (return_statement
+                (null_literal))))))))
+  (class_declaration
+    name: (identifier)
+    type_parameters: (type_parameters
+      (type_parameter
+        (type_identifier)))
+    interfaces: (super_interfaces
+      (type_list
+        (scoped_type_identifier
+          (type_identifier)
+          (type_identifier))))
+    body: (class_body
+      (field_declaration
+        type: (generic_type
+          (scoped_type_identifier
+            (scoped_type_identifier
+              (scoped_type_identifier
+                (type_identifier)
+                (type_identifier))
+              (type_identifier))
+            (type_identifier))
+          (type_arguments
+            (type_identifier)))
+        declarator: (variable_declarator
+          name: (identifier)
+          value: (method_reference
+            (scoped_type_identifier
+              (type_identifier)
+              (type_identifier))
+            (super)
+            (type_arguments
+              (type_identifier))
+            (identifier)))))))
