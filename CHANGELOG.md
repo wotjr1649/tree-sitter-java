@@ -4,6 +4,8 @@
 
 - **Breaking change (Go).** For v3, the module path is `github.com/wotjr1649/tree-sitter-java/v3`. Update Go imports
   to `github.com/wotjr1649/tree-sitter-java/v3/bindings/go`.
+- Record the repository as independent (ADR-0002): tree-sitter/tree-sitter-java v0.23.5 is the original grammar it
+  started from, not an upstream. Its later changes are not tracked or merged. Documentation only; no grammar change.
 
 ## 2.4.0
 

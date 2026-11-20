@@ -2,7 +2,8 @@
 
 This owner-maintained Java grammar continues from tree-sitter/tree-sitter-java
 v0.23.5 (`94703d5`). The intended consumer is go-treesitter under ADR-0024 rule 7.
-See [ADR-0001](docs/decisions/ADR-0001-continue-from-upstream.md) for the baseline.
+See [ADR-0001](docs/decisions/ADR-0001-continue-from-upstream.md) for the baseline and
+[ADR-0002](docs/decisions/ADR-0002-independent-repository.md): the repository is independent, with no upstream.
 
 ## Rules
 
@@ -18,8 +19,9 @@ See [ADR-0001](docs/decisions/ADR-0001-continue-from-upstream.md) for the baseli
   requires a major version and a CHANGELOG entry. Keep the grammar name `java`
   and C symbol `tree_sitter_java` stable for consumers.
 - Preserve commit history so pinned commits remain reachable. Fetch origin tags
-  with `--no-tags` and an explicit destination under local `refs/upstream/`.
-- Keep every copyright line in `LICENSE` and the upstream attribution in
+  with `--no-tags` and an explicit destination under local `refs/upstream/` (the historical import ref of the original
+  grammar; later changes are not tracked).
+- Keep every copyright line in `LICENSE` and the original grammar's attribution in
   `NOTICE`.
 - Agents may prepare branches, commits and pull requests. The owner separately
   approves every merge, tag, release, publication, repository-setting change and

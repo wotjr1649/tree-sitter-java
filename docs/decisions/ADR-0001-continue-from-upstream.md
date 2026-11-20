@@ -1,6 +1,8 @@
 # ADR-0001 — Continue from tree-sitter-java v0.23.5
 
-- Status: accepted by the owner on 2026-11-18
+- Status: accepted by the owner on 2026-11-18. Partly superseded by
+  [ADR-0002](ADR-0002-independent-repository.md) (2026-11-21): the sentences "Adopting a later origin change requires a
+  decision in this repository. Synchronization is manual." no longer apply; there is no upstream. The rest stands.
 - Origin: `tree-sitter/tree-sitter-java` v0.23.5 at
   `94703d5a6bed02b98e438d7cad1136c01a60ba2c`
 
@@ -27,7 +29,7 @@ Oracle setup and compiler version selection are future work.
 
 Decided by the owner on 2026-11-19, following tree-sitter-mssql's ADR-0007:
 
-- The 1.x line is the upstream baseline. v1.0.0 is byte-identical in grammar and generated source to upstream v0.23.5
+- The 1.x line is the baseline from the original grammar. v1.0.0 is byte-identical in grammar and generated source to its v0.23.5
   regenerated with CLI 0.27.2.
 - Releases that carry this repository's own grammar fixes start at v2.0.0. Within 2.x, versions follow semantic
   versioning, and removing or renaming a node kind or field still needs a new major version (AGENTS.md).
