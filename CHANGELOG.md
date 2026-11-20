@@ -7,7 +7,8 @@
   The CI artifact of failing examples now holds the list of paths instead of the source files.
 - Known limitation: javac translates unicode escapes (`\uXXXX`) before it splits the source into tokens, so an
   escape outside a string or char literal can form an identifier, a keyword, a separator, a comment delimiter or a
-  line end (`int \u0061lpha;`). The grammar reads such escapes only inside literals; elsewhere they give ERROR
+  line end (`int \u0061lpha;`). The grammar reads such escapes only inside literals; elsewhere they give ERROR,
+  or, inside a comment, a token boundary that differs from javac's (`// \u000A int f;` stays one `line_comment`)
   (grammar-orchard issue #51).
 
 ## 2.2.0
