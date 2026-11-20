@@ -24,6 +24,9 @@
   Typed `_` keeps its visible `identifier` node and uses `underscore_pattern` as its underlying grammar symbol.
   Bare `_` still exposes `underscore_pattern`. `node-types.json` is byte-identical, and the pinned examples retain
   all 192 baseline failure paths.
+- Fix incremental parsing of typed unnamed bindings in switch and `instanceof` type patterns (K14).
+  The binding shares the `underscore_pattern` token and keeps its visible `identifier` node. The node schema is
+  unchanged. Parser cost is 2,668,960 bytes and 1,460 states (+4,484 bytes and +4 states).
 - Add the CI jobs `fuzz` (`tree-sitter fuzz` over the corpus, up to 3 random edits and 10 iterations per case, 120 s
   cap; after the edits it checks the incremental tree's sizes and changed ranges, and after undoing them that the
   incremental reparse equals the expected corpus tree) and
