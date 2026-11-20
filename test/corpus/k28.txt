@@ -2214,3 +2214,315 @@ yield: int x = 0;
     (local_variable_declaration
       type: (integral_type)
       declarator: (variable_declarator name: (identifier) value: (decimal_integer_literal)))))
+
+================================================================================
+K28 REVIEW-41b labeled variable in if consequence (yield)
+================================================================================
+
+class Probe { void m(int n, boolean b) { if (b) yield: int x = 0; else --n; } }
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter type: (integral_type) name: (identifier))
+          (formal_parameter type: (boolean_type) name: (identifier)))
+        body: (block
+          (if_statement
+            condition: (parenthesized_expression (identifier))
+            consequence: (labeled_statement
+              (identifier)
+              (local_variable_declaration
+                type: (integral_type)
+                declarator: (variable_declarator name: (identifier) value: (decimal_integer_literal))))
+            alternative: (expression_statement (update_expression (identifier)))))))))
+
+================================================================================
+K28 REVIEW-41b labeled variable in if consequence (ordinary)
+================================================================================
+
+class Probe { void m(int n, boolean b) { if (b) ordinary: int x = 0; else --n; } }
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter type: (integral_type) name: (identifier))
+          (formal_parameter type: (boolean_type) name: (identifier)))
+        body: (block
+          (if_statement
+            condition: (parenthesized_expression (identifier))
+            consequence: (labeled_statement
+              (identifier)
+              (local_variable_declaration
+                type: (integral_type)
+                declarator: (variable_declarator name: (identifier) value: (decimal_integer_literal))))
+            alternative: (expression_statement (update_expression (identifier)))))))))
+
+================================================================================
+K28 REVIEW-41b package declaration under nested labels (yield)
+================================================================================
+
+class Probe { void m(int n, boolean b) { yield: second: package p; } }
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter type: (integral_type) name: (identifier))
+          (formal_parameter type: (boolean_type) name: (identifier)))
+        body: (block
+          (labeled_statement
+            (identifier)
+            (labeled_statement (identifier) (package_declaration (identifier)))))))))
+
+================================================================================
+K28 REVIEW-41b package declaration under nested labels (ordinary)
+================================================================================
+
+class Probe { void m(int n, boolean b) { ordinary: second: package p; } }
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter type: (integral_type) name: (identifier))
+          (formal_parameter type: (boolean_type) name: (identifier)))
+        body: (block
+          (labeled_statement
+            (identifier)
+            (labeled_statement (identifier) (package_declaration (identifier)))))))))
+
+================================================================================
+K28 REVIEW-41b top-level labeled return (yield)
+================================================================================
+
+yield: return;
+
+--------------------------------------------------------------------------------
+
+(program (labeled_statement (identifier) (return_statement)))
+
+================================================================================
+K28 REVIEW-41b top-level labeled return (ordinary)
+================================================================================
+
+ordinary: return;
+
+--------------------------------------------------------------------------------
+
+(program (labeled_statement (identifier) (return_statement)))
+
+================================================================================
+K28 REVIEW-41b top-level labeled if (yield)
+================================================================================
+
+yield: if (true) {}
+
+--------------------------------------------------------------------------------
+
+(program
+  (labeled_statement
+    (identifier)
+    (if_statement condition: (parenthesized_expression (true)) consequence: (block))))
+
+================================================================================
+K28 REVIEW-41b top-level labeled if (ordinary)
+================================================================================
+
+ordinary: if (true) {}
+
+--------------------------------------------------------------------------------
+
+(program
+  (labeled_statement
+    (identifier)
+    (if_statement condition: (parenthesized_expression (true)) consequence: (block))))
+
+================================================================================
+K28 REVIEW-41b top-level labeled throw (yield)
+================================================================================
+
+yield: throw new RuntimeException();
+
+--------------------------------------------------------------------------------
+
+(program
+  (labeled_statement
+    (identifier)
+    (throw_statement (object_creation_expression type: (type_identifier) arguments: (argument_list)))))
+
+================================================================================
+K28 REVIEW-41b top-level labeled throw (ordinary)
+================================================================================
+
+ordinary: throw new RuntimeException();
+
+--------------------------------------------------------------------------------
+
+(program
+  (labeled_statement
+    (identifier)
+    (throw_statement (object_creation_expression type: (type_identifier) arguments: (argument_list)))))
+
+================================================================================
+K28 REVIEW-41b top-level labeled block (yield)
+================================================================================
+
+yield: {}
+
+--------------------------------------------------------------------------------
+
+(program (labeled_statement (identifier) (block)))
+
+================================================================================
+K28 REVIEW-41b top-level labeled block (ordinary)
+================================================================================
+
+ordinary: {}
+
+--------------------------------------------------------------------------------
+
+(program (labeled_statement (identifier) (block)))
+
+================================================================================
+K28 REVIEW-41b top-level labeled switch (yield)
+================================================================================
+
+yield: switch (1) { default: break; }
+
+--------------------------------------------------------------------------------
+
+(program
+  (labeled_statement
+    (identifier)
+    (switch_expression
+      condition: (parenthesized_expression (decimal_integer_literal))
+      body: (switch_block (switch_block_statement_group (switch_label) (break_statement))))))
+
+================================================================================
+K28 REVIEW-41b top-level labeled switch (ordinary)
+================================================================================
+
+ordinary: switch (1) { default: break; }
+
+--------------------------------------------------------------------------------
+
+(program
+  (labeled_statement
+    (identifier)
+    (switch_expression
+      condition: (parenthesized_expression (decimal_integer_literal))
+      body: (switch_block (switch_block_statement_group (switch_label) (break_statement))))))
+
+================================================================================
+K28 REVIEW-41b top-level labeled try (yield)
+================================================================================
+
+yield: try {} finally {}
+
+--------------------------------------------------------------------------------
+
+(program (labeled_statement (identifier) (try_statement body: (block) (finally_clause (block)))))
+
+================================================================================
+K28 REVIEW-41b top-level labeled try (ordinary)
+================================================================================
+
+ordinary: try {} finally {}
+
+--------------------------------------------------------------------------------
+
+(program (labeled_statement (identifier) (try_statement body: (block) (finally_clause (block)))))
+
+================================================================================
+K28 REVIEW-41b top-level labeled assignment (yield)
+================================================================================
+
+yield: n = 1;
+
+--------------------------------------------------------------------------------
+
+(program
+  (labeled_statement
+    (identifier)
+    (expression_statement (assignment_expression left: (identifier) right: (decimal_integer_literal)))))
+
+================================================================================
+K28 REVIEW-41b top-level labeled assignment (ordinary)
+================================================================================
+
+ordinary: n = 1;
+
+--------------------------------------------------------------------------------
+
+(program
+  (labeled_statement
+    (identifier)
+    (expression_statement (assignment_expression left: (identifier) right: (decimal_integer_literal)))))
+
+================================================================================
+K28 REVIEW-41b top-level labeled assert (yield)
+================================================================================
+
+yield: assert true;
+
+--------------------------------------------------------------------------------
+
+(program (labeled_statement (identifier) (assert_statement (true))))
+
+================================================================================
+K28 REVIEW-41b top-level labeled assert (ordinary)
+================================================================================
+
+ordinary: assert true;
+
+--------------------------------------------------------------------------------
+
+(program (labeled_statement (identifier) (assert_statement (true))))
+
+================================================================================
+K28 REVIEW-41b top-level labeled return after package declaration (yield)
+================================================================================
+
+package p;
+yield: return;
+
+--------------------------------------------------------------------------------
+
+(program (package_declaration (identifier)) (labeled_statement (identifier) (return_statement)))
+
+================================================================================
+K28 REVIEW-41b top-level labeled return after package declaration (ordinary)
+================================================================================
+
+package p;
+ordinary: return;
+
+--------------------------------------------------------------------------------
+
+(program (package_declaration (identifier)) (labeled_statement (identifier) (return_statement)))

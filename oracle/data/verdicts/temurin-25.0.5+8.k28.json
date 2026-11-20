@@ -1,8 +1,8 @@
 {
   "meta": {
     "api": "com.sun.source.util.JavacTask.parse()",
-    "case_count": 351,
-    "cases_sha256": "74fdc1c51653dfa6b084d3a7ffb6b5af321b510ee30c4f24c3e57b26dbbbd040",
+    "case_count": 373,
+    "cases_sha256": "502472fc3ce55573a26b318c55b14c972a344c89cba21b9bef35bdc27e745e1e",
     "java.runtime.version": "25.0.5+8-LTS",
     "java.vendor": "Eclipse Adoptium",
     "options": ["--release", "25", "-proc:none"],
@@ -362,6 +362,28 @@
     "k28/review-41-top-level-variable-record": ["compiler.err.class.method.or.field.expected"],
     "k28/review-41-top-level-variable-sealed": ["compiler.err.class.method.or.field.expected"],
     "k28/review-41-top-level-variable-with": ["compiler.err.class.method.or.field.expected"],
-    "k28/review-41-top-level-variable-yield": ["compiler.err.class.method.or.field.expected"]
+    "k28/review-41-top-level-variable-yield": ["compiler.err.class.method.or.field.expected"],
+    "k28/review-41b-invalid-labeled-declaration-branch-yield": ["compiler.err.variable.not.allowed"],
+    "k28/review-41b-invalid-labeled-declaration-branch-ordinary": ["compiler.err.variable.not.allowed"],
+    "k28/review-41b-invalid-nested-label-yield": ["compiler.err.illegal.start.of.expr", "compiler.err.not.stmt"],
+    "k28/review-41b-invalid-nested-label-ordinary": ["compiler.err.illegal.start.of.expr", "compiler.err.not.stmt"],
+    "k28/review-41b-top-return-yield": ["compiler.err.class.method.or.field.expected"],
+    "k28/review-41b-top-return-ordinary": ["compiler.err.class.method.or.field.expected"],
+    "k28/review-41b-top-if-yield": ["compiler.err.class.method.or.field.expected"],
+    "k28/review-41b-top-if-ordinary": ["compiler.err.class.method.or.field.expected"],
+    "k28/review-41b-top-throw-yield": ["compiler.err.class.method.or.field.expected"],
+    "k28/review-41b-top-throw-ordinary": ["compiler.err.class.method.or.field.expected"],
+    "k28/review-41b-top-block-yield": ["compiler.err.class.method.or.field.expected"],
+    "k28/review-41b-top-block-ordinary": ["compiler.err.class.method.or.field.expected"],
+    "k28/review-41b-top-switch-yield": ["compiler.err.class.method.or.field.expected", "compiler.err.class.method.or.field.expected"],
+    "k28/review-41b-top-switch-ordinary": ["compiler.err.class.method.or.field.expected", "compiler.err.class.method.or.field.expected"],
+    "k28/review-41b-top-try-yield": ["compiler.err.class.method.or.field.expected"],
+    "k28/review-41b-top-try-ordinary": ["compiler.err.class.method.or.field.expected"],
+    "k28/review-41b-top-assign-yield": ["compiler.err.class.method.or.field.expected"],
+    "k28/review-41b-top-assign-ordinary": ["compiler.err.class.method.or.field.expected"],
+    "k28/review-41b-top-assert-yield": ["compiler.err.class.method.or.field.expected"],
+    "k28/review-41b-top-assert-ordinary": ["compiler.err.class.method.or.field.expected"],
+    "k28/review-41b-top-package-then-label-yield": ["compiler.err.expected4"],
+    "k28/review-41b-top-package-then-label-ordinary": ["compiler.err.expected4"]
   }
 }

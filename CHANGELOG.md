@@ -10,6 +10,11 @@
   module, package and import declarations (such as `open: module m {}`), non-statement expressions, and
   unqualified `yield` calls. A label at compilation-unit level can also prefix declarations (such as
   `yield: class C {}`), loops and empty statements. REVIEW-41 pins these forms with ordinary-label controls that parsed cleanly at the base.
+  REVIEW-41b adds a labeled variable declaration in an `if` branch and a package declaration under nested labels
+  in a method. It also pins compilation-unit labels on `return`, `if`, `throw`, blocks, `switch`, `try`, assignments
+  and `assert`, including a labeled `return` after a package declaration. All eleven `ordinary:` controls parsed cleanly
+  at the K28 base.
+  [JLS 25 §7.3](https://docs.oracle.com/javase/specs/jls/se25/html/jls-7.html#jls-7.3) ·
   [JLS 25 §3.9](https://docs.oracle.com/javase/specs/jls/se25/html/jls-3.html#jls-3.9) ·
   [§14.7](https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html#jls-14.7) ·
   [§14.15](https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html#jls-14.15) ·
