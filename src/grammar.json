@@ -7828,6 +7828,32 @@
               "value": "type_identifier"
             },
             {
+              "type": "PREC_DYNAMIC",
+              "value": -1,
+              "content": {
+                "type": "ALIAS",
+                "content": {
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "STRING",
+                      "value": "open"
+                    },
+                    {
+                      "type": "STRING",
+                      "value": "module"
+                    },
+                    {
+                      "type": "STRING",
+                      "value": "with"
+                    }
+                  ]
+                },
+                "named": true,
+                "value": "type_identifier"
+              }
+            },
+            {
               "type": "SYMBOL",
               "name": "scoped_type_identifier"
             },
@@ -8593,6 +8619,11 @@
     [
       "_unannotated_type",
       "_reserved_identifier"
+    ],
+    [
+      "_unannotated_type",
+      "_reserved_identifier",
+      "scoped_type_identifier"
     ],
     [
       "_unannotated_type",

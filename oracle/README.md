@@ -44,7 +44,8 @@ NUL, controls for comments outside literals and in interpolation expressions, an
 CRLF, LF and EOF line comments, with literal and block-comment controls), `k24` (documented intersection-cast operand
 limits, single-type cast and binary-expression controls, and adjacent invalid inputs), `k26` (guarded empty record
 patterns in colon labels and arrow rules, with adjacent invalid inputs and unchanged controls), `k27` (parenthesized
-yield values, qualified calls, identifier controls and adjacent invalid inputs), and `structural` (Phase 3 ambiguity
+yield values, qualified calls, identifier controls and adjacent invalid inputs), `k29` (qualified type names starting
+with `open`, `module`, or `with`, ordinary name controls, and adjacent invalid inputs), and `structural` (Phase 3 ambiguity
 probes and independently written reproducers). Every case names its origin in `provenance`: the bundle path with its
 `SHA256SUMS` hash, the PR, or "written in this task" (the task that added the case; the 56 `structural/p9/` probes
 say "independently written for Phase 3"). IDs are prefixed with the set name. To add a case, append a line, hash its
