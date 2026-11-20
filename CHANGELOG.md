@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add a CI-checked structural oracle for javac and tree-sitter ranges and node kinds, with Phase 3 probes and an
+  exact baseline of known differences. This is a tooling change only.
 - Parse a parenthesized name followed by `+` or `-` as the left operand of a `binary_expression` (K16,
   Phase 3 cast/additive probes). In `(n) + k * 3`, the multiplication is the right operand of the addition. Primitive
   casts such as `(int) -b`, ordinary reference casts and parenthesized lambda parameters keep their trees.
