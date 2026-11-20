@@ -14,30 +14,6 @@
   "corpus/k11.txt/K11 pattern then constant": [
     {"kind": "CONSTANT_CASE_LABEL", "start": 79, "end": 80, "status": "mismatched_kind", "reason": "error-case"}
   ],
-  "corpus/raw-nul.txt/review probe text-block/crlf-line-continuation": [
-    {"kind": "STRING_LITERAL", "start": 30, "end": 51, "status": "mismatched_kind", "reason": "K19"}
-  ],
-  "corpus/raw-nul.txt/review probe text-block/crlf-raw-line-continuation": [
-    {"kind": "STRING_LITERAL", "start": 30, "end": 52, "status": "mismatched_kind", "reason": "K19"}
-  ],
-  "corpus/raw-nul.txt/review probe text-block/line-continuation": [
-    {"kind": "STRING_LITERAL", "start": 30, "end": 48, "status": "mismatched_kind", "reason": "K19"}
-  ],
-  "corpus/raw-nul.txt/review probe text-block/raw-line-continuation": [
-    {"kind": "STRING_LITERAL", "start": 30, "end": 49, "status": "mismatched_kind", "reason": "K19"}
-  ],
-  "k8/probe-text-block-crlf-line-continuation": [
-    {"kind": "STRING_LITERAL", "start": 29, "end": 50, "status": "mismatched_kind", "reason": "K19"}
-  ],
-  "k8/probe-text-block-crlf-raw-line-continuation": [
-    {"kind": "STRING_LITERAL", "start": 29, "end": 51, "status": "mismatched_kind", "reason": "K19"}
-  ],
-  "k8/probe-text-block-line-continuation": [
-    {"kind": "STRING_LITERAL", "start": 29, "end": 47, "status": "mismatched_kind", "reason": "K19"}
-  ],
-  "k8/probe-text-block-raw-line-continuation": [
-    {"kind": "STRING_LITERAL", "start": 29, "end": 48, "status": "mismatched_kind", "reason": "K19"}
-  ],
   "k9/module-declaration": [
     {"kind": "PROVIDES", "start": 39, "end": 57, "status": "mismatched_kind", "reason": "K17"}
   ],
@@ -178,8 +154,5 @@
   ],
   "structural/p9/switch-lambda-guard": [
     {"kind": "LAMBDA_EXPRESSION", "start": 110, "end": 120, "status": "no_node_at_range", "reason": "K22"}
-  ],
-  "structural/p9/text-continuation": [
-    {"kind": "STRING_LITERAL", "start": 24, "end": 55, "status": "mismatched_kind", "reason": "K19"}
   ]
 }

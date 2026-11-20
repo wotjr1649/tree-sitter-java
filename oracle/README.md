@@ -39,13 +39,14 @@ backslashes before literal content and closing delimiters, quote boundaries and 
 identifier tolerances), `k13` (typed and bare underscores in record patterns, other unnamed-variable contexts,
 and adjacent invalid patterns), `k16` (parenthesized names before additive operators, with cast and lambda controls
 and adjacent invalid inputs), `k18` (comment-like text in text blocks, escape and delimiter boundaries, CRLF and raw
-NUL, controls for comments outside literals and in interpolation expressions, and adjacent invalid inputs), `k23`
-(CR, CRLF, LF and EOF line comments, with literal and block-comment controls), `k26` (guarded empty record patterns
-in colon labels and arrow rules, with adjacent invalid inputs and unchanged controls), and `structural` (Phase 3
-ambiguity probes and independently written reproducers). Every case names its origin in `provenance`: the bundle path
-with its `SHA256SUMS` hash, the PR, or "written in this task" (the task that added the case; the 56 `structural/p9/`
-probes say "independently written for Phase 3"). IDs are prefixed with the set name. To add a case, append a line,
-hash its
+NUL, controls for comments outside literals and in interpolation expressions, and adjacent invalid inputs), `k19`
+(text-block line continuations with LF, CRLF and CR, with adjacent escape controls and invalid inputs), `k23` (CR,
+CRLF, LF and EOF line comments, with literal and block-comment controls), `k26` (guarded empty record patterns in
+colon labels and arrow rules, with adjacent invalid inputs and unchanged controls), `k27` (parenthesized yield
+values, qualified calls, identifier controls and adjacent invalid inputs), and `structural` (Phase 3 ambiguity probes
+and independently written reproducers). Every case names its origin in `provenance`: the bundle path with its
+`SHA256SUMS` hash, the PR, or "written in this task" (the task that added the case; the 56 `structural/p9/` probes
+say "independently written for Phase 3"). IDs are prefixed with the set name. To add a case, append a line, hash its
 `source` (SHA-256 of the UTF-8 bytes; the
 replay prints the actual hash when it differs), then regenerate that set's verdicts.
 
