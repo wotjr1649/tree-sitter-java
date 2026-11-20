@@ -2,6 +2,28 @@
 
 ## Unreleased
 
+- Extend the Ubuntu CI examples to parse OpenJDK 25.0.5+8 sources and javac langtools tests at pinned commit
+  `fda231468e56663992785ec199a6efb8eca3cc7a`. No grammar change.
+  The CI artifact of failing examples now holds the list of paths instead of the source files.
+- Known limitation: javac translates unicode escapes (`\uXXXX`) before it splits the source into tokens, so an
+  escape outside a string or char literal can form an identifier, a keyword, a separator, a comment delimiter or a
+  line end (`int \u0061lpha;`). The grammar reads such escapes only inside literals; elsewhere they give ERROR,
+  or, inside a comment, a token boundary that differs from javac's (`// \u000A int f;` stays one `line_comment`)
+  (grammar-orchard issue #51).
+- Parse `open`, `module`, and `with` as type names in local and array declarations, casts, and `instanceof` (JLS 25
+  §3.8, reported in grammar-orchard issue #43). Generic locals such as `module<String> x = null;` now form a
+  `local_variable_declaration` instead of an `expression_statement`, and `module.class` now forms a `class_literal`
+  instead of a `field_access`. Module declarations and ordinary identifier expressions keep their trees. The parser
+  accepts some forms that javac rejects, as with an ordinary type name at 2.2.0. At the top level this includes
+  variable and method declarations, including forms with initializers, arrays, parameters or annotations and
+  declarations after a module declaration. It also accepts variable declarations as a labeled statement or the
+  single-statement body of `if` or `while`, empty type arguments in local declarations and constructor references,
+  generic class literals such as `module<A>.class`, and `instanceof final T` without a variable name. In the tested
+  type positions, `permits`, `record`, `sealed`, `var`, and `yield` keep their previous acceptance.
+- Fix an incremental parse failure in typed unnamed record components such as `Point(int _, var _, _)` (K13).
+  Typed `_` keeps its visible `identifier` node and uses `underscore_pattern` as its underlying grammar symbol.
+  Bare `_` still exposes `underscore_pattern`. `node-types.json` is byte-identical, and the pinned examples retain
+  all 192 baseline failure paths.
 - Add the CI jobs `fuzz` (`tree-sitter fuzz` over the corpus, up to 3 random edits and 10 iterations per case, 120 s
   cap; after the edits it checks the incremental tree's sizes and changed ranges, and after undoing them that the
   incremental reparse equals the expected corpus tree) and

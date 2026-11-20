@@ -1,0 +1,634 @@
+====================
+K9 open as a type in locals, casts, and instanceof
+====================
+
+class open {}
+
+class C {
+  void f(Object v) {
+    open x = null;
+    open[] a = null;
+    Object c = (open) v;
+    boolean b = v instanceof open o;
+  }
+}
+
+---
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body))
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (type_identifier)
+            name: (identifier)))
+        body: (block
+          (local_variable_declaration
+            type: (type_identifier)
+            declarator: (variable_declarator
+              name: (identifier)
+              value: (null_literal)))
+          (local_variable_declaration
+            type: (array_type
+              element: (type_identifier)
+              dimensions: (dimensions))
+            declarator: (variable_declarator
+              name: (identifier)
+              value: (null_literal)))
+          (local_variable_declaration
+            type: (type_identifier)
+            declarator: (variable_declarator
+              name: (identifier)
+              value: (cast_expression
+                type: (type_identifier)
+                value: (identifier))))
+          (local_variable_declaration
+            type: (boolean_type)
+            declarator: (variable_declarator
+              name: (identifier)
+              value: (instanceof_expression
+                left: (identifier)
+                right: (type_identifier)
+                name: (identifier)))))))))
+
+====================
+K9 module as a type in locals, casts, and instanceof
+====================
+
+class module {}
+
+class C {
+  void f(Object v) {
+    module x = null;
+    module[] a = null;
+    Object c = (module) v;
+    boolean b = v instanceof module o;
+  }
+}
+
+---
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body))
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (type_identifier)
+            name: (identifier)))
+        body: (block
+          (local_variable_declaration
+            type: (type_identifier)
+            declarator: (variable_declarator
+              name: (identifier)
+              value: (null_literal)))
+          (local_variable_declaration
+            type: (array_type
+              element: (type_identifier)
+              dimensions: (dimensions))
+            declarator: (variable_declarator
+              name: (identifier)
+              value: (null_literal)))
+          (local_variable_declaration
+            type: (type_identifier)
+            declarator: (variable_declarator
+              name: (identifier)
+              value: (cast_expression
+                type: (type_identifier)
+                value: (identifier))))
+          (local_variable_declaration
+            type: (boolean_type)
+            declarator: (variable_declarator
+              name: (identifier)
+              value: (instanceof_expression
+                left: (identifier)
+                right: (type_identifier)
+                name: (identifier)))))))))
+
+====================
+K9 with as a type in locals, casts, and instanceof
+====================
+
+class with {}
+
+class C {
+  void f(Object v) {
+    with x = null;
+    with[] a = null;
+    Object c = (with) v;
+    boolean b = v instanceof with o;
+  }
+}
+
+---
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body))
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (type_identifier)
+            name: (identifier)))
+        body: (block
+          (local_variable_declaration
+            type: (type_identifier)
+            declarator: (variable_declarator
+              name: (identifier)
+              value: (null_literal)))
+          (local_variable_declaration
+            type: (array_type
+              element: (type_identifier)
+              dimensions: (dimensions))
+            declarator: (variable_declarator
+              name: (identifier)
+              value: (null_literal)))
+          (local_variable_declaration
+            type: (type_identifier)
+            declarator: (variable_declarator
+              name: (identifier)
+              value: (cast_expression
+                type: (type_identifier)
+                value: (identifier))))
+          (local_variable_declaration
+            type: (boolean_type)
+            declarator: (variable_declarator
+              name: (identifier)
+              value: (instanceof_expression
+                left: (identifier)
+                right: (type_identifier)
+                name: (identifier)))))))))
+
+====================
+K9 open module declaration and directives
+====================
+
+open module m { requires transitive a; provides x with y; }
+
+---
+
+(program
+  (module_declaration
+    name: (identifier)
+    body: (module_body
+      (requires_module_directive
+        modifiers: (requires_modifier)
+        module: (identifier))
+      (provides_module_directive
+        provided: (identifier)
+        (identifier)))))
+
+====================
+K9 contextual keywords as ordinary identifiers
+====================
+
+class C {
+  Object open, module, with;
+  Object with(Object module) {
+    with = module;
+    module = open;
+    Object sum = (with) + (module) - (open);
+    return with(module) == (module) ? with : open;
+  }
+}
+
+---
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (field_declaration
+        type: (type_identifier)
+        declarator: (variable_declarator
+          name: (identifier))
+        declarator: (variable_declarator
+          name: (identifier))
+        declarator: (variable_declarator
+          name: (identifier)))
+      (method_declaration
+        type: (type_identifier)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (type_identifier)
+            name: (identifier)))
+        body: (block
+          (expression_statement
+            (assignment_expression
+              left: (identifier)
+              right: (identifier)))
+          (expression_statement
+            (assignment_expression
+              left: (identifier)
+              right: (identifier)))
+          (local_variable_declaration
+            type: (type_identifier)
+            declarator: (variable_declarator
+              name: (identifier)
+              value: (binary_expression
+                left: (binary_expression
+                  left: (parenthesized_expression
+                    (identifier))
+                  right: (parenthesized_expression
+                    (identifier)))
+                right: (parenthesized_expression
+                  (identifier)))))
+          (return_statement
+            (ternary_expression
+              condition: (binary_expression
+                left: (method_invocation
+                  name: (identifier)
+                  arguments: (argument_list
+                    (identifier)))
+                right: (parenthesized_expression
+                  (identifier)))
+              consequence: (identifier)
+              alternative: (identifier))))))))
+
+====================
+K9 contextual keywords as generic types
+====================
+
+class open<T> {}
+class module<T> {}
+class with<T> {}
+
+class C {
+  void f(Object v) {
+    open<String> a = null;
+    module<String> b = null;
+    with<String> c = null;
+    boolean p = v instanceof open<?> x;
+    boolean q = v instanceof module<?> y;
+    boolean r = v instanceof with<?> z;
+  }
+}
+
+---
+
+(program
+  (class_declaration
+    name: (identifier)
+    type_parameters: (type_parameters
+      (type_parameter
+        (type_identifier)))
+    body: (class_body))
+  (class_declaration
+    name: (identifier)
+    type_parameters: (type_parameters
+      (type_parameter
+        (type_identifier)))
+    body: (class_body))
+  (class_declaration
+    name: (identifier)
+    type_parameters: (type_parameters
+      (type_parameter
+        (type_identifier)))
+    body: (class_body))
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (type_identifier)
+            name: (identifier)))
+        body: (block
+          (local_variable_declaration
+            type: (generic_type
+              (type_identifier)
+              (type_arguments
+                (type_identifier)))
+            declarator: (variable_declarator
+              name: (identifier)
+              value: (null_literal)))
+          (local_variable_declaration
+            type: (generic_type
+              (type_identifier)
+              (type_arguments
+                (type_identifier)))
+            declarator: (variable_declarator
+              name: (identifier)
+              value: (null_literal)))
+          (local_variable_declaration
+            type: (generic_type
+              (type_identifier)
+              (type_arguments
+                (type_identifier)))
+            declarator: (variable_declarator
+              name: (identifier)
+              value: (null_literal)))
+          (local_variable_declaration
+            type: (boolean_type)
+            declarator: (variable_declarator
+              name: (identifier)
+              value: (instanceof_expression
+                left: (identifier)
+                right: (generic_type
+                  (type_identifier)
+                  (type_arguments
+                    (wildcard)))
+                name: (identifier))))
+          (local_variable_declaration
+            type: (boolean_type)
+            declarator: (variable_declarator
+              name: (identifier)
+              value: (instanceof_expression
+                left: (identifier)
+                right: (generic_type
+                  (type_identifier)
+                  (type_arguments
+                    (wildcard)))
+                name: (identifier))))
+          (local_variable_declaration
+            type: (boolean_type)
+            declarator: (variable_declarator
+              name: (identifier)
+              value: (instanceof_expression
+                left: (identifier)
+                right: (generic_type
+                  (type_identifier)
+                  (type_arguments
+                    (wildcard)))
+                name: (identifier)))))))))
+
+====================
+K9 contextual keywords in class literals
+====================
+
+class open {}
+class module {}
+class with {}
+
+class C {
+  Class<?> a = open.class, b = module.class, c = with.class;
+}
+
+---
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body))
+  (class_declaration
+    name: (identifier)
+    body: (class_body))
+  (class_declaration
+    name: (identifier)
+    body: (class_body))
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (field_declaration
+        type: (generic_type
+          (type_identifier)
+          (type_arguments
+            (wildcard)))
+        declarator: (variable_declarator
+          name: (identifier)
+          value: (class_literal
+            (type_identifier)))
+        declarator: (variable_declarator
+          name: (identifier)
+          value: (class_literal
+            (type_identifier)))
+        declarator: (variable_declarator
+          name: (identifier)
+          value: (class_literal
+            (type_identifier)))))))
+
+====================
+K9 existing top-level declaration tolerance
+====================
+
+open module;
+open module() { return null; }
+
+---
+
+(program
+  (local_variable_declaration
+    type: (type_identifier)
+    declarator: (variable_declarator
+      name: (identifier)))
+  (method_declaration
+    type: (type_identifier)
+    name: (identifier)
+    parameters: (formal_parameters)
+    body: (block
+      (return_statement
+        (null_literal)))))
+
+====================
+K9 reviewed top-level declaration forms
+====================
+
+open x;
+@A open module;
+module module = null;
+with module[];
+open[] module;
+module module() { return null; }
+@A open module(open x) { return x; }
+
+---
+
+(program
+  (local_variable_declaration
+    type: (type_identifier)
+    declarator: (variable_declarator
+      name: (identifier)))
+  (local_variable_declaration
+    (modifiers
+      (marker_annotation
+        name: (identifier)))
+    type: (type_identifier)
+    declarator: (variable_declarator
+      name: (identifier)))
+  (local_variable_declaration
+    type: (type_identifier)
+    declarator: (variable_declarator
+      name: (identifier)
+      value: (null_literal)))
+  (local_variable_declaration
+    type: (type_identifier)
+    declarator: (variable_declarator
+      name: (identifier)
+      dimensions: (dimensions)))
+  (local_variable_declaration
+    type: (array_type
+      element: (type_identifier)
+      dimensions: (dimensions))
+    declarator: (variable_declarator
+      name: (identifier)))
+  (method_declaration
+    type: (type_identifier)
+    name: (identifier)
+    parameters: (formal_parameters)
+    body: (block
+      (return_statement
+        (null_literal))))
+  (method_declaration
+    (modifiers
+      (marker_annotation
+        name: (identifier)))
+    type: (type_identifier)
+    name: (identifier)
+    parameters: (formal_parameters
+      (formal_parameter
+        type: (type_identifier)
+        name: (identifier)))
+    body: (block
+      (return_statement
+        (identifier)))))
+
+====================
+K9 reviewed declaration after a module declaration
+====================
+
+open module module {} module module;
+
+---
+
+(program
+  (module_declaration
+    name: (identifier)
+    body: (module_body))
+  (local_variable_declaration
+    type: (type_identifier)
+    declarator: (variable_declarator
+      name: (identifier))))
+
+====================
+K9 reviewed declarations as statement bodies
+====================
+
+class C {
+  void f() {
+    label: with x = null;
+    if (true) open x = null;
+    while (true) module x = null;
+  }
+}
+
+---
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters)
+        body: (block
+          (labeled_statement
+            (identifier)
+            (local_variable_declaration
+              type: (type_identifier)
+              declarator: (variable_declarator
+                name: (identifier)
+                value: (null_literal))))
+          (if_statement
+            condition: (parenthesized_expression
+              (true))
+            consequence: (local_variable_declaration
+              type: (type_identifier)
+              declarator: (variable_declarator
+                name: (identifier)
+                value: (null_literal))))
+          (while_statement
+            condition: (parenthesized_expression
+              (true))
+            body: (local_variable_declaration
+              type: (type_identifier)
+              declarator: (variable_declarator
+                name: (identifier)
+                value: (null_literal)))))))))
+
+====================
+K9 reviewed type arguments and unnamed instanceof
+====================
+
+class C {
+  void a() { with<> x; }
+  Object b() { return with<> :: new; }
+  Class<?> c() { return module<A>.class; }
+  boolean d(Object v) { return v instanceof final open; }
+}
+
+---
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters)
+        body: (block
+          (local_variable_declaration
+            type: (generic_type
+              (type_identifier)
+              (type_arguments))
+            declarator: (variable_declarator
+              name: (identifier)))))
+      (method_declaration
+        type: (type_identifier)
+        name: (identifier)
+        parameters: (formal_parameters)
+        body: (block
+          (return_statement
+            (method_reference
+              (generic_type
+                (type_identifier)
+                (type_arguments))))))
+      (method_declaration
+        type: (generic_type
+          (type_identifier)
+          (type_arguments
+            (wildcard)))
+        name: (identifier)
+        parameters: (formal_parameters)
+        body: (block
+          (return_statement
+            (class_literal
+              (generic_type
+                (type_identifier)
+                (type_arguments
+                  (type_identifier)))))))
+      (method_declaration
+        type: (boolean_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (type_identifier)
+            name: (identifier)))
+        body: (block
+          (return_statement
+            (instanceof_expression
+              left: (identifier)
+              right: (type_identifier))))))))
