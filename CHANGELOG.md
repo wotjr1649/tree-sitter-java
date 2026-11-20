@@ -11,10 +11,11 @@
   After `yield`, `yield (n) + k * 3;` still reads `yield(n)` as a method call (as at 2.3.0); that is tracked as K27.
   [JLS 25 §§15.15–15.18](https://docs.oracle.com/javase/specs/jls/se25/html/jls-15.html#jls-15.15),
   [grammar-orchard issue #45](https://codeberg.org/grammar-orchard/tree-sitter-java-orchard/issues/45).
-- Preserve a text-block line continuation as an `escape_sequence` spanning the backslash and the complete LF,
+- Preserve a text-block line continuation as an `escape_sequence` spanning a raw backslash and the complete LF,
   CRLF, or CR terminator (K19, JLS 25 §§3.4 and 3.10.7).
   A paired backslash escape still leaves the following line terminator in the text block's content.
-  Ordinary string literals now report a parse error for a backslash immediately followed by a line terminator.
+  Ordinary string literals now report a parse error for a raw backslash immediately followed by a line terminator.
+  A backslash written as `\` before a line terminator keeps its 2.3.0 tree in both kinds of literal.
   The generated public schema is byte-identical to 2.3.0.
   [grammar-orchard PR #9](https://codeberg.org/grammar-orchard/tree-sitter-java-orchard/pulls/9)
 
