@@ -187,7 +187,7 @@ reproducer. See also [the Unreleased changelog](../CHANGELOG.md#unreleased).
 The Maven archetype templates were rejected by javac and tree-sitter.
 [Changelog 2.1.0](../CHANGELOG.md#210) · [Changelog 2.2.0](../CHANGELOG.md#220)
 
-### Javac accepts forms outside the JLS 25 grammar
+## Javac accepts forms outside the JLS 25 grammar
 
 These independent examples pass full compilation with Temurin 25.0.5+8. Tree-sitter reports errors, as the owner
 decided on 2026-11-20. The K15 worktree report (`build/k15/REPORT.md`, “입력별 전체 판정”) records the pattern
