@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Extend the Ubuntu CI examples to parse OpenJDK 25.0.5+8 sources and javac langtools tests at pinned commit
+  `fda231468e56663992785ec199a6efb8eca3cc7a`. No grammar change.
+
 ## 2.2.0
 
 More Java 25 syntax fixes found through the javac oracle and the pinned examples: numeric literals (K6), annotation

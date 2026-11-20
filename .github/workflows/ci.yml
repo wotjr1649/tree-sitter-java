@@ -74,6 +74,13 @@ jobs:
           fetch flink apache/flink cc91df476a0b39ae7d6eb50eb8cf96f1dbad2b47
           fetch log4j2 apache/logging-log4j2 572cd83040450763a673ea749ad0c960563eeec9
           fetch cassandra apache/cassandra 53c3561e9db3fa0b1ed8e29ce462fde6ce566ff0
+          # OpenJDK sources (GPLv2 + Classpath Exception) are fetched at run time and never committed.
+          git init -q examples/jdk
+          git -C examples/jdk remote add origin https://github.com/openjdk/jdk25u
+          git -C examples/jdk fetch -q --no-tags --depth=1 --filter=blob:none origin fda231468e56663992785ec199a6efb8eca3cc7a
+          printf '%s\n' '/src/**/*.java' '/test/langtools/tools/javac/**/*.java' |
+            git -C examples/jdk sparse-checkout set --no-cone --stdin
+          git -C examples/jdk checkout -q --detach FETCH_HEAD
       # The CLI exits 1 for syntax errors and for read errors alike, so the exit code
       # cannot tell a complete run from an aborted one. Only a final summary that lists
       # exactly the inputs counts as complete; anything else fails the job here.
