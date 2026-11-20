@@ -103,7 +103,6 @@ module.exports = grammar({
   conflicts: $ => [
     // Both label interpretations can start with the same expression.
     [$.cast_expression, $._switch_cast_expression],
-    [$.expression, $.cast_expression, $._switch_cast_expression, $._switch_label_expression],
     [$.switch_label, $._arrow_switch_label],
     [$.expression, $._switch_label_expression],
     [$.modifiers, $.annotated_type, $.receiver_parameter],
