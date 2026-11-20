@@ -108,6 +108,8 @@ module.exports = grammar({
     [$.modifiers, $.annotated_type, $.receiver_parameter],
     [$.modifiers, $.annotated_type, $.module_declaration, $.package_declaration],
     [$.module_declaration, $._unannotated_type],
+    // `enum E { @A sealed }`: `sealed` after annotations is a modifier or the constant name.
+    [$.modifiers],
     // A closing parenthesis can end a target, a value, a cast type, or lambda parameters.
     [$._parenthesized_assignment_target, $.inferred_parameters, $.primary_expression, $._unannotated_type],
     [$._parenthesized_assignment_target, $.primary_expression, $._unannotated_type],
@@ -974,8 +976,22 @@ module.exports = grammar({
     requires_module_directive: $ => seq(
       'requires',
       repeat(field('modifiers', $.requires_modifier)),
-      field('module', $._name),
+      field('module', choice(
+        $._name,
+        alias('transitive', $.identifier),
+        alias($._transitive_module_name, $.scoped_identifier),
+      )),
       ';',
+    ),
+
+    // Keep dotted names starting with transitive in the existing scoped_identifier shape.
+    _transitive_module_name: $ => seq(
+      field('scope', choice(
+        alias('transitive', $.identifier),
+        alias($._transitive_module_name, $.scoped_identifier),
+      )),
+      '.',
+      field('name', $.identifier),
     ),
 
     requires_modifier: _ => choice(
@@ -1066,7 +1082,8 @@ module.exports = grammar({
 
     enum_constant: $ => (seq(
       optional($.modifiers),
-      field('name', $.identifier),
+      // `sealed` is also a modifier token here, so the name needs its own alternative.
+      field('name', choice($.identifier, alias('sealed', $.identifier))),
       field('arguments', optional($.argument_list)),
       field('body', optional($.class_body)),
     )),
@@ -1167,7 +1184,7 @@ module.exports = grammar({
 
     _constructor_declarator: $ => seq(
       field('type_parameters', optional($.type_parameters)),
-      field('name', $.identifier),
+      field('name', choice($.identifier, alias(choice('open', 'module', 'with'), $.identifier))),
       field('parameters', $.formal_parameters),
     ),
 
@@ -1468,7 +1485,7 @@ module.exports = grammar({
 
     compact_constructor_declaration: $ => seq(
       optional($.modifiers),
-      field('name', $.identifier),
+      field('name', choice($.identifier, alias(choice('open', 'module', 'with'), $.identifier))),
       field('body', $.block),
     ),
 

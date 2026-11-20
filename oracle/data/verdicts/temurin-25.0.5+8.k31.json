@@ -1,0 +1,42 @@
+{
+  "meta": {
+    "api": "com.sun.source.util.JavacTask.parse()",
+    "case_count": 26,
+    "cases_sha256": "51a0ac0e8c0365d8b830e0b6589e4f5dc059629f6fd10157633a0e8a52368100",
+    "java.runtime.version": "25.0.5+8-LTS",
+    "java.vendor": "Eclipse Adoptium",
+    "options": ["--release", "25", "-proc:none"],
+    "preview": false,
+    "release": "25",
+    "runner_sha256": "c45e32e314b98ccb46481c4db18aa25173ca9b2fe46e45888f0a743ceb6c70ee",
+    "source_encoding": "UTF-8"
+  },
+  "verdicts": {
+    "k31/single": [],
+    "k31/first-in-list": [],
+    "k31/last-in-list": [],
+    "k31/trailing-comma": [],
+    "k31/with-members": [],
+    "k31/arguments": [],
+    "k31/empty-arguments": [],
+    "k31/class-body": [],
+    "k31/arguments-and-body": [],
+    "k31/annotated": [],
+    "k31/nested-implements": [],
+    "k31/all-contextual-keywords": [],
+    "k31/with-sealed-types": [],
+    "k31/qualified-use": [],
+    "k31/switch-label": [],
+    "k31/modifier-after-members": [],
+    "k31/modifier-then-name-control": ["compiler.err.expected3"],
+    "k31/modifier-then-sealed": ["compiler.err.expected3"],
+    "k31/public-then-name-control": ["compiler.err.enum.constant.expected", "compiler.err.expected"],
+    "k31/public-then-sealed": ["compiler.err.enum.constant.expected", "compiler.err.restricted.type.not.allowed.here", "compiler.err.expected"],
+    "k31/annotation-then-sealed-args": [],
+    "k31/qualified-name": ["compiler.err.expected3"],
+    "k31/name-after-name": ["compiler.err.expected3"],
+    "k31/non-sealed-name": ["compiler.err.expected3"],
+    "k31/two-names": ["compiler.err.expected3", "compiler.err.expected3", "compiler.err.expected3"],
+    "k31/missing-name": ["compiler.err.expected"]
+  }
+}
