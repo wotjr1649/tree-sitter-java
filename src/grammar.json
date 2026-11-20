@@ -4209,6 +4209,15 @@
                   },
                   "named": true,
                   "value": "identifier"
+                },
+                {
+                  "type": "ALIAS",
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "underscore_pattern"
+                  },
+                  "named": true,
+                  "value": "identifier"
                 }
               ]
             }
@@ -7437,6 +7446,32 @@
           "value": "type_identifier"
         },
         {
+          "type": "PREC_DYNAMIC",
+          "value": -1,
+          "content": {
+            "type": "ALIAS",
+            "content": {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": "open"
+                },
+                {
+                  "type": "STRING",
+                  "value": "module"
+                },
+                {
+                  "type": "STRING",
+                  "value": "with"
+                }
+              ]
+            },
+            "named": true,
+            "value": "type_identifier"
+          }
+        },
+        {
           "type": "SYMBOL",
           "name": "scoped_type_identifier"
         },
@@ -7521,8 +7556,25 @@
               {
                 "type": "ALIAS",
                 "content": {
-                  "type": "SYMBOL",
-                  "name": "identifier"
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "SYMBOL",
+                      "name": "identifier"
+                    },
+                    {
+                      "type": "STRING",
+                      "value": "open"
+                    },
+                    {
+                      "type": "STRING",
+                      "value": "module"
+                    },
+                    {
+                      "type": "STRING",
+                      "value": "with"
+                    }
+                  ]
                 },
                 "named": true,
                 "value": "type_identifier"
@@ -8063,6 +8115,28 @@
       "type": "CHOICE",
       "members": [
         {
+          "type": "ALIAS",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "STRING",
+                "value": "open"
+              },
+              {
+                "type": "STRING",
+                "value": "module"
+              },
+              {
+                "type": "STRING",
+                "value": "with"
+              }
+            ]
+          },
+          "named": true,
+          "value": "identifier"
+        },
+        {
           "type": "PREC",
           "value": -3,
           "content": {
@@ -8072,19 +8146,7 @@
               "members": [
                 {
                   "type": "STRING",
-                  "value": "open"
-                },
-                {
-                  "type": "STRING",
-                  "value": "module"
-                },
-                {
-                  "type": "STRING",
                   "value": "record"
-                },
-                {
-                  "type": "STRING",
-                  "value": "with"
                 },
                 {
                   "type": "STRING",
@@ -8191,6 +8253,10 @@
       "package_declaration"
     ],
     [
+      "module_declaration",
+      "_unannotated_type"
+    ],
+    [
       "_unannotated_type",
       "primary_expression",
       "inferred_parameters"
@@ -8198,6 +8264,10 @@
     [
       "_unannotated_type",
       "primary_expression"
+    ],
+    [
+      "_unannotated_type",
+      "_reserved_identifier"
     ],
     [
       "_unannotated_type",
@@ -8215,6 +8285,10 @@
     [
       "generic_type",
       "primary_expression"
+    ],
+    [
+      "generic_type",
+      "_reserved_identifier"
     ],
     [
       "expression",
