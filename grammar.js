@@ -263,7 +263,8 @@ module.exports = grammar({
 
     _string_escape_sequence: $ => choice($.escape_sequence, alias($._encoded_backslash, $.escape_sequence)),
     _escape_sequence: $ => choice(
-      prec(2, token.immediate(seq('\\', /[^bfnrtsu'\"\\]/))),
+      alias(token.immediate(/\\(\r\n?|\n)/), $.escape_sequence),
+      prec(2, token.immediate(seq('\\', /[^bfnrtsu'\"\\\r\n]/))),
       // Keep the text block's existing fallback for malformed Unicode escapes.
       token.immediate(prec(2, /\\u/)),
       prec(1, $._string_escape_sequence),
@@ -275,7 +276,7 @@ module.exports = grammar({
       seq(
         '\\',
         choice(
-          /[^xu0-7]/,
+          /[^xu0-7\r\n]/,
           /[0-7]{1,3}/,
           /x[0-9a-fA-F]{2}/,
         ),
@@ -726,11 +727,12 @@ module.exports = grammar({
       ';',
     ),
 
-    yield_statement: $ => seq(
+    // Prefer a yield statement to an unqualified call when both parses succeed.
+    yield_statement: $ => prec.dynamic(1, seq(
       'yield',
       $.expression,
       ';',
-    ),
+    )),
 
     synchronized_statement: $ => seq(
       'synchronized',
@@ -1432,7 +1434,7 @@ module.exports = grammar({
     // https://docs.oracle.com/javase/specs/jls/se8/html/jls-3.html#jls-IdentifierChars
     identifier: _ => /[\p{XID_Start}_$][\p{XID_Continue}\u00A2_$]*/,
 
-    line_comment: _ => token(prec(PREC.COMMENT, seq('//', /[^\n]*/))),
+    line_comment: _ => token(prec(PREC.COMMENT, seq('//', /[^\r\n]*/))),
 
     // http://stackoverflow.com/questions/13014947/regex-to-match-a-c-style-multiline-comment/36328890#36328890
     block_comment: _ => token(prec(PREC.COMMENT,
