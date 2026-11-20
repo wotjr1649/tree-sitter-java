@@ -912,3 +912,269 @@ class C { record R(int n) {} int f(Object x) { return switch (x) { case String _
                   (switch_label)
                   (expression_statement
                     (decimal_integer_literal)))))))))))
+
+==================
+K11 when binding in a record pattern rule
+==================
+
+class C { record R(Object o) {} int f(Object x) { return switch (x) { case R(String when) -> when.length(); default -> 0; }; } }
+
+---
+
+(program
+  (class_declaration
+    (identifier)
+    (class_body
+      (record_declaration
+        (identifier)
+        (formal_parameters
+          (formal_parameter
+            (type_identifier)
+            (identifier)))
+        (class_body))
+      (method_declaration
+        (integral_type)
+        (identifier)
+        (formal_parameters
+          (formal_parameter
+            (type_identifier)
+            (identifier)))
+        (block
+          (return_statement
+            (switch_expression
+              (parenthesized_expression
+                (identifier))
+              (switch_block
+                (switch_rule
+                  (switch_label
+                    (pattern
+                      (record_pattern
+                        (identifier)
+                        (record_pattern_body
+                          (record_pattern_component
+                            (type_identifier)
+                            (identifier))))))
+                  (expression_statement
+                    (method_invocation
+                      (identifier)
+                      (identifier)
+                      (argument_list))))
+                (switch_rule
+                  (switch_label)
+                  (expression_statement
+                    (decimal_integer_literal)))))))))))
+
+==================
+K11 when binding in a record pattern group
+==================
+
+class C { record R(Object o) {} int f(Object x) { switch (x) { case R(String when): return when.length(); default: return 0; } } }
+
+---
+
+(program
+  (class_declaration
+    (identifier)
+    (class_body
+      (record_declaration
+        (identifier)
+        (formal_parameters
+          (formal_parameter
+            (type_identifier)
+            (identifier)))
+        (class_body))
+      (method_declaration
+        (integral_type)
+        (identifier)
+        (formal_parameters
+          (formal_parameter
+            (type_identifier)
+            (identifier)))
+        (block
+          (switch_expression
+            (parenthesized_expression
+              (identifier))
+            (switch_block
+              (switch_block_statement_group
+                (switch_label
+                  (pattern
+                    (record_pattern
+                      (identifier)
+                      (record_pattern_body
+                        (record_pattern_component
+                          (type_identifier)
+                          (identifier))))))
+                (return_statement
+                  (method_invocation
+                    (identifier)
+                    (identifier)
+                    (argument_list))))
+              (switch_block_statement_group
+                (switch_label)
+                (return_statement
+                  (decimal_integer_literal))))))))))
+
+==================
+K11 when binding in a nested record pattern
+==================
+
+class C { record R(Object o) {} record S(Object o) {} int f(Object x) { return switch (x) { case R(S(String when)) -> when.length(); default -> 0; }; } }
+
+---
+
+(program
+  (class_declaration
+    (identifier)
+    (class_body
+      (record_declaration
+        (identifier)
+        (formal_parameters
+          (formal_parameter
+            (type_identifier)
+            (identifier)))
+        (class_body))
+      (record_declaration
+        (identifier)
+        (formal_parameters
+          (formal_parameter
+            (type_identifier)
+            (identifier)))
+        (class_body))
+      (method_declaration
+        (integral_type)
+        (identifier)
+        (formal_parameters
+          (formal_parameter
+            (type_identifier)
+            (identifier)))
+        (block
+          (return_statement
+            (switch_expression
+              (parenthesized_expression
+                (identifier))
+              (switch_block
+                (switch_rule
+                  (switch_label
+                    (pattern
+                      (record_pattern
+                        (identifier)
+                        (record_pattern_body
+                          (record_pattern
+                            (identifier)
+                            (record_pattern_body
+                              (record_pattern_component
+                                (type_identifier)
+                                (identifier))))))))
+                  (expression_statement
+                    (method_invocation
+                      (identifier)
+                      (identifier)
+                      (argument_list))))
+                (switch_rule
+                  (switch_label)
+                  (expression_statement
+                    (decimal_integer_literal)))))))))))
+
+==================
+K11 when binding with var in a record pattern
+==================
+
+class C { record R(String o) {} int f(Object x) { return switch (x) { case R(var when) -> when.length(); default -> 0; }; } }
+
+---
+
+(program
+  (class_declaration
+    (identifier)
+    (class_body
+      (record_declaration
+        (identifier)
+        (formal_parameters
+          (formal_parameter
+            (type_identifier)
+            (identifier)))
+        (class_body))
+      (method_declaration
+        (integral_type)
+        (identifier)
+        (formal_parameters
+          (formal_parameter
+            (type_identifier)
+            (identifier)))
+        (block
+          (return_statement
+            (switch_expression
+              (parenthesized_expression
+                (identifier))
+              (switch_block
+                (switch_rule
+                  (switch_label
+                    (pattern
+                      (record_pattern
+                        (identifier)
+                        (record_pattern_body
+                          (record_pattern_component
+                            (type_identifier)
+                            (identifier))))))
+                  (expression_statement
+                    (method_invocation
+                      (identifier)
+                      (identifier)
+                      (argument_list))))
+                (switch_rule
+                  (switch_label)
+                  (expression_statement
+                    (decimal_integer_literal)))))))))))
+
+==================
+K11 when binding and guard in one record pattern rule
+==================
+
+class C { record R(Object o) {} int f(Object x) { return switch (x) { case R(String when) when when.isEmpty() -> 1; default -> 0; }; } }
+
+---
+
+(program
+  (class_declaration
+    (identifier)
+    (class_body
+      (record_declaration
+        (identifier)
+        (formal_parameters
+          (formal_parameter
+            (type_identifier)
+            (identifier)))
+        (class_body))
+      (method_declaration
+        (integral_type)
+        (identifier)
+        (formal_parameters
+          (formal_parameter
+            (type_identifier)
+            (identifier)))
+        (block
+          (return_statement
+            (switch_expression
+              (parenthesized_expression
+                (identifier))
+              (switch_block
+                (switch_rule
+                  (switch_label
+                    (pattern
+                      (record_pattern
+                        (identifier)
+                        (record_pattern_body
+                          (record_pattern_component
+                            (type_identifier)
+                            (identifier)))))
+                    (guard
+                      (method_invocation
+                        (identifier)
+                        (identifier)
+                        (argument_list))))
+                  (expression_statement
+                    (decimal_integer_literal)))
+                (switch_rule
+                  (switch_label)
+                  (expression_statement
+                    (decimal_integer_literal)))))))))))

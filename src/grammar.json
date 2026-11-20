@@ -4200,6 +4200,15 @@
                 {
                   "type": "SYMBOL",
                   "name": "_reserved_identifier"
+                },
+                {
+                  "type": "ALIAS",
+                  "content": {
+                    "type": "STRING",
+                    "value": "when"
+                  },
+                  "named": true,
+                  "value": "identifier"
                 }
               ]
             }

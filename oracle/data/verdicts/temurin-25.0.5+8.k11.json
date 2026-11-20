@@ -1,8 +1,8 @@
 {
   "meta": {
     "api": "com.sun.source.util.JavacTask.parse()",
-    "case_count": 55,
-    "cases_sha256": "3c3c384add973436b81ca74156dc755e44104c923f792b29c4daeee82d2211cb",
+    "case_count": 73,
+    "cases_sha256": "042004362eefc9ae534235d0ef19ae2b6e1d7c8a127d376f16400d0901546cd0",
     "java.runtime.version": "25.0.5+8-LTS",
     "java.vendor": "Eclipse Adoptium",
     "options": ["--release", "25", "-proc:none"],
@@ -66,6 +66,24 @@
     "k11-primitive-keyword-record-component-single": ["compiler.err.dot.class.expected", "compiler.err.illegal.start.of.type"],
     "k11-contextual-when-name": [],
     "k11-contextual-when-type": [],
-    "k11-nested-record-pattern": []
+    "k11-nested-record-pattern": [],
+    "k11-underscore-type-list": ["compiler.err.expected2", "compiler.err.not.stmt"],
+    "k11-underscore-type-single": ["compiler.err.expected2", "compiler.err.not.stmt"],
+    "k11-underscore-type-control": [],
+    "k11-annotated-keyword-list": ["compiler.err.illegal.start.of.type", "compiler.err.use.of.underscore.not.allowed.non.variable", "compiler.err.expected2"],
+    "k11-annotated-keyword-single": ["compiler.err.illegal.start.of.type", "compiler.err.use.of.underscore.not.allowed.non.variable", "compiler.err.expected2"],
+    "k11-annotated-keyword-control": [],
+    "k11-qualified-keyword-list": ["compiler.err.use.of.underscore.not.allowed.non.variable", "compiler.err.expected"],
+    "k11-qualified-keyword-single": ["compiler.err.use.of.underscore.not.allowed.non.variable", "compiler.err.expected"],
+    "k11-qualified-keyword-control": [],
+    "k11-keyword-type-argument-list": ["compiler.err.use.of.underscore.not.allowed.non.variable"],
+    "k11-keyword-type-argument-single": ["compiler.err.use.of.underscore.not.allowed.non.variable"],
+    "k11-keyword-type-argument-control": [],
+    "k11-empty-type-argument-list": ["compiler.err.illegal.start.of.type"],
+    "k11-empty-type-argument-single": ["compiler.err.illegal.start.of.type"],
+    "k11-empty-type-argument-control": [],
+    "k11-primitive-keyword-binding-list": ["compiler.err.dot.class.expected", "compiler.err.expected"],
+    "k11-primitive-keyword-binding-single": ["compiler.err.dot.class.expected", "compiler.err.expected"],
+    "k11-primitive-keyword-binding-control": []
   }
 }

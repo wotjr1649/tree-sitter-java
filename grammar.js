@@ -604,7 +604,8 @@ module.exports = grammar({
       seq(
         optional(alias($._pattern_modifiers, $.modifiers)),
         $._unannotated_type,
-        choice($.identifier, $._reserved_identifier),
+        // A component binding can be named `when` even when the label has a guard.
+        choice($.identifier, $._reserved_identifier, alias('when', $.identifier)),
       ),
     ),
 
