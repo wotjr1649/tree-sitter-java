@@ -160,11 +160,5 @@
   ],
   "structural/p9/switch-lambda-guard": [
     {"kind": "LAMBDA_EXPRESSION", "start": 110, "end": 120, "status": "no_node_at_range", "reason": "K22"}
-  ],
-  "structural/p9/text-comments": [
-    {"kind": "STRING_LITERAL", "start": 25, "end": 76, "status": "mismatched_kind", "reason": "K18"},
-    {"kind": "STRING_LITERAL", "start": 93, "end": 135, "status": "mismatched_kind", "reason": "K18"},
-    {"kind": "STRING_LITERAL", "start": 152, "end": 198, "status": "mismatched_kind", "reason": "K18"},
-    {"kind": "STRING_LITERAL", "start": 215, "end": 259, "status": "mismatched_kind", "reason": "K18"}
   ]
 }
