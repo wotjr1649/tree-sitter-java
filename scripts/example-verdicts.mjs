@@ -2,7 +2,7 @@ import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import { mkdirSync, mkdtempSync, readFileSync, realpathSync, renameSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { basename, dirname, isAbsolute, join, relative, resolve, sep } from 'node:path';
+import { basename, dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { isDeepStrictEqual, parseArgs } from 'node:util';
 
@@ -19,6 +19,7 @@ const oracle = {
   source_encoding: 'UTF-8',
 };
 const limits = ['limit:k5', 'limit:unicode-escape'];
+const entryKeys = ['path', 'sha256', 'verdict', 'codes', 'category', 'group'];
 const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
 const decode = bytes => new TextDecoder('utf-8', { fatal: true, ignoreBOM: true }).decode(bytes);
 const readJson = file => JSON.parse(decode(readFileSync(file)));
@@ -45,14 +46,11 @@ function pathParts(path) {
   return [repo, ...parts];
 }
 
-function sourceBytes(path, checkouts) {
+function sourceBytes(path, checkouts, pins) {
   const [repo, ...parts] = pathParts(path);
-  const file = realpathSync(join(checkouts[repo], ...parts));
-  const within = relative(checkouts[repo], file);
-  if (within === '..' || within.startsWith(`..${sep}`) || isAbsolute(within) || !statSync(file).isFile()) {
-    throw new Difference(`not a file within the example checkout: ${path}`);
-  }
-  return readFileSync(file);
+  const object = `${pins[repo]}:${parts.join('/')}`;
+  return run('git', ['--no-replace-objects', '-C', checkouts[repo], 'cat-file', 'blob', object],
+    { encoding: null, maxBuffer: 16 * 1024 * 1024 });
 }
 
 function reviewed(entry) {
@@ -61,35 +59,65 @@ function reviewed(entry) {
     category === 'parse-only' && typeof group === 'string' && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(group);
 }
 
-function byPath(entries) {
-  if (!Array.isArray(entries)) throw new Error('invalid verdict entries');
+function byPath(entries, report = error => { throw error; }) {
+  if (!Array.isArray(entries)) {
+    report(new Error('invalid verdict entries'));
+    return null;
+  }
   const index = new Map();
   for (const entry of entries) {
-    if (!entry || typeof entry !== 'object') throw new Error('invalid verdict entry');
-    pathParts(entry.path);
-    if (index.has(entry.path)) throw new Difference(`duplicate verdict: ${entry.path}`);
-    index.set(entry.path, entry);
+    try {
+      if (!entry || typeof entry !== 'object') throw new Error('invalid verdict entry');
+      pathParts(entry.path);
+      if (index.has(entry.path)) throw new Difference(`duplicate verdict: ${entry.path}`);
+      index.set(entry.path, entry);
+    } catch (error) {
+      report(error);
+    }
   }
   return index;
 }
 
 function check(paths, checkouts, meta, file) {
   const saved = readJson(file);
-  if (!isDeepStrictEqual(saved.meta, meta)) throw new Difference('verdict metadata differs from the current inputs');
-  const entries = byPath(saved.entries);
-  for (const path of paths) {
-    const entry = entries.get(path);
-    if (!entry) throw new Difference(`missing verdict: ${path}`);
-    if (entry.sha256 !== sha256(sourceBytes(path, checkouts))) throw new Difference(`SHA-256 differs: ${path}`);
+  const errors = [];
+  const report = error => errors.push(error);
+  const mismatch = message => report(new Difference(message));
+  if (Object.keys(saved).some(key => key !== 'meta' && key !== 'entries')) {
+    mismatch('unexpected top-level verdict fields');
+  }
+  if (!isDeepStrictEqual(saved.meta, meta)) mismatch('verdict metadata differs from the current inputs');
+  const hasEntries = Object.hasOwn(saved, 'entries');
+  if (!hasEntries) mismatch('missing verdict entries');
+
+  const entries = hasEntries ? byPath(saved.entries, report) : null;
+  const missing = new Set(entries ? paths : []);
+  for (const [path, entry] of entries ?? []) {
+    if (!missing.delete(path)) {
+      mismatch(`extra verdict: ${path}`);
+    } else {
+      try {
+        if (entry.sha256 !== sha256(sourceBytes(path, checkouts, meta.example_pins))) {
+          mismatch(`SHA-256 differs: ${path}`);
+        }
+      } catch (error) {
+        report(error);
+      }
+    }
+    if (Object.keys(entry).some(key => !entryKeys.includes(key))) mismatch(`unexpected verdict fields: ${path}`);
     const { verdict, codes, category, group } = entry;
     if (!Array.isArray(codes) || !codes.every(isCode) ||
         !(verdict === 'rejected' && codes.length && category === undefined && group === undefined ||
           verdict === 'accepted' && !codes.length && reviewed(entry))) {
-      throw new Difference(`invalid verdict or unreviewed javac acceptance: ${path}`);
+      mismatch(`invalid verdict or unreviewed javac acceptance: ${path}`);
     }
-    entries.delete(path);
   }
-  if (entries.size) throw new Difference(`extra verdict: ${entries.keys().next().value}`);
+  for (const path of missing) mismatch(`missing verdict: ${path}`);
+
+  if (errors.length) {
+    const Failure = errors.every(error => error instanceof Difference) ? Difference : Error;
+    throw new Failure(errors.map(error => error.message).join('\nexample-verdicts: '));
+  }
   console.log(`Verified ${paths.length} example verdicts.`);
 }
 
@@ -112,7 +140,7 @@ function generate(paths, checkouts, meta, file, java) {
     invoke(['--self-test']);
     for (let start = 0; start < paths.length; start += 500) {
       const cases = paths.slice(start, start + 500).map(path => {
-        const bytes = sourceBytes(path, checkouts);
+        const bytes = sourceBytes(path, checkouts, meta.example_pins);
         const name = basename(path);
         const item = { id: path, sha256: sha256(bytes), source: decode(bytes) };
         if (name === 'module-info.java' || name === 'package-info.java') item.file = name;

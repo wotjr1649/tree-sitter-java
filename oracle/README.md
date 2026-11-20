@@ -82,7 +82,7 @@ rejection. Only javac errors count as a rejection; warnings do not.
 ## Example failure verdicts
 
 `test/examples/failure-verdicts.json` records the parse verdict, javac error codes and SHA-256 of the
-original bytes for each path in `test/examples/failures.txt`. Accepted entries name a reviewed
+committed blob bytes for each path in `test/examples/failures.txt`. Accepted entries name a reviewed
 `parse-only` group whose construct fails full compilation, or a documented `limit:k5` or
 `limit:unicode-escape` case. The file also records the runner hash, oracle settings and checkout commits.
 
@@ -102,9 +102,10 @@ in place. Resolve a grammar defect before removing its path from the failure lis
 exception, add an `accepted` entry with the reported hash, empty `codes`, its `category`, and for
 `parse-only` its group name, then regenerate.
 
-CI runs `--check` after comparing the failure list. The check uses the pinned checkout bytes and needs
-no JDK. Exit codes are **0** for success, **1** for a mismatch or unreviewed acceptance, and **2** for a
-tool or input fault. The full example oracle is rerun in release phase 6.
+CI runs `--check` after comparing the failure list. It verifies the file format and consistency with
+the failure list and pinned Git blobs. It uses the verdicts recorded by `--generate` and needs no JDK.
+Exit codes are **0** for success, **1** for a mismatch or unreviewed acceptance, and **2** for a tool
+or input fault. The full example oracle is rerun in release phase 6.
 
 ## Replay
 

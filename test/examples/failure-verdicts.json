@@ -27,7 +27,7 @@
   "entries": [
     {
       "path": "examples/flink/flink-quickstart/flink-quickstart-java/src/main/resources/archetype-resources/src/main/java/DataStreamJob.java",
-      "sha256": "a1e94dca6a6e6cacc8d6b295b54488cf3e2e2c57185cbc9f5c175541e00b3027",
+      "sha256": "5c305d1fc4ce0c51f6b8ec33a4ac4006f4201a485c562ff45981b474b23c1bf7",
       "verdict": "rejected",
       "codes": [
         "compiler.err.expected"
@@ -35,7 +35,7 @@
     },
     {
       "path": "examples/flink/flink-walkthroughs/flink-walkthrough-datastream-java/src/main/resources/archetype-resources/src/main/java/FraudDetectionJob.java",
-      "sha256": "f29634939a58fc648ee774bf80bd5a8ccbe05389068e2231cb39b54aeaae498d",
+      "sha256": "f069df8f3af39ecceacd3b7e0e5ecd74dd9674e29b54809eff6b9353491f1825",
       "verdict": "rejected",
       "codes": [
         "compiler.err.expected"
@@ -43,7 +43,7 @@
     },
     {
       "path": "examples/flink/flink-walkthroughs/flink-walkthrough-datastream-java/src/main/resources/archetype-resources/src/main/java/FraudDetector.java",
-      "sha256": "22d6885cd7376240ea20684ea49ac1abe3a530148f7c4e6b9d1dcf72774b2ab2",
+      "sha256": "bf3b21e552f9484622c17cab4a89838d2573f2a70b3570aa2a9474dc764d0a2a",
       "verdict": "rejected",
       "codes": [
         "compiler.err.expected"
@@ -51,7 +51,7 @@
     },
     {
       "path": "examples/flink/flink-walkthroughs/flink-walkthrough-table-java/src/main/resources/archetype-resources/src/main/java/MyFloor.java",
-      "sha256": "d97107f05cd5b197ad982d335b39e9413655c01721a0cfdd81c050032daa30cb",
+      "sha256": "bc629da04df44d5a1c418027ae2cbd2c5189b36c7338bd4659bf907c7cfdc858",
       "verdict": "rejected",
       "codes": [
         "compiler.err.expected"
@@ -59,7 +59,7 @@
     },
     {
       "path": "examples/flink/flink-walkthroughs/flink-walkthrough-table-java/src/main/resources/archetype-resources/src/main/java/SpendReport.java",
-      "sha256": "6457785e4535c74c5607f9e9c9f247a6c1d87fe36690126b4c63f3c934f39f67",
+      "sha256": "54757e49c0d96296ef97039d9ee400a58856134322499af44d2136b28efc7077",
       "verdict": "rejected",
       "codes": [
         "compiler.err.expected"
@@ -67,7 +67,7 @@
     },
     {
       "path": "examples/flink/flink-walkthroughs/flink-walkthrough-table-java/src/main/resources/archetype-resources/src/test/java/SpendReportTest.java",
-      "sha256": "46ab815481c015b44712496db362e9edf2fab5519668db7e0593008a78ece2c7",
+      "sha256": "188e15dbeedf3c550c94a9bebabefa86461e3c3d62fdd3873c747214cfd47810",
       "verdict": "rejected",
       "codes": [
         "compiler.err.expected"
