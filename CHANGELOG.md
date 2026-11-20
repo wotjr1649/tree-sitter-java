@@ -4,6 +4,12 @@
 
 - Add a CI-checked structural oracle for javac and tree-sitter ranges and node kinds, with Phase 3 probes and an
   exact baseline of known differences. This is a tooling change only.
+- Preserve a text-block line continuation as an `escape_sequence` spanning the backslash and the complete LF,
+  CRLF, or CR terminator (K19, JLS 25 §§3.4 and 3.10.7).
+  A paired backslash escape still leaves the following line terminator in the text block's content.
+  Ordinary string literals now report a parse error for a backslash immediately followed by a line terminator.
+  The generated public schema is byte-identical to 2.3.0.
+  [grammar-orchard PR #9](https://codeberg.org/grammar-orchard/tree-sitter-java-orchard/pulls/9)
 
 ## 2.3.0
 

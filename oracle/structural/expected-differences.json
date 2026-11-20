@@ -14,30 +14,6 @@
   "corpus/k11.txt/K11 pattern then constant": [
     {"kind": "CONSTANT_CASE_LABEL", "start": 79, "end": 80, "status": "mismatched_kind", "reason": "error-case"}
   ],
-  "corpus/raw-nul.txt/review probe text-block/crlf-line-continuation": [
-    {"kind": "STRING_LITERAL", "start": 30, "end": 51, "status": "mismatched_kind", "reason": "K19"}
-  ],
-  "corpus/raw-nul.txt/review probe text-block/crlf-raw-line-continuation": [
-    {"kind": "STRING_LITERAL", "start": 30, "end": 52, "status": "mismatched_kind", "reason": "K19"}
-  ],
-  "corpus/raw-nul.txt/review probe text-block/line-continuation": [
-    {"kind": "STRING_LITERAL", "start": 30, "end": 48, "status": "mismatched_kind", "reason": "K19"}
-  ],
-  "corpus/raw-nul.txt/review probe text-block/raw-line-continuation": [
-    {"kind": "STRING_LITERAL", "start": 30, "end": 49, "status": "mismatched_kind", "reason": "K19"}
-  ],
-  "k8/probe-text-block-crlf-line-continuation": [
-    {"kind": "STRING_LITERAL", "start": 29, "end": 50, "status": "mismatched_kind", "reason": "K19"}
-  ],
-  "k8/probe-text-block-crlf-raw-line-continuation": [
-    {"kind": "STRING_LITERAL", "start": 29, "end": 51, "status": "mismatched_kind", "reason": "K19"}
-  ],
-  "k8/probe-text-block-line-continuation": [
-    {"kind": "STRING_LITERAL", "start": 29, "end": 47, "status": "mismatched_kind", "reason": "K19"}
-  ],
-  "k8/probe-text-block-raw-line-continuation": [
-    {"kind": "STRING_LITERAL", "start": 29, "end": 48, "status": "mismatched_kind", "reason": "K19"}
-  ],
   "k9/module-declaration": [
     {"kind": "PROVIDES", "start": 39, "end": 57, "status": "mismatched_kind", "reason": "K17"}
   ],
@@ -247,8 +223,5 @@
     {"kind": "STRING_LITERAL", "start": 93, "end": 135, "status": "mismatched_kind", "reason": "K18"},
     {"kind": "STRING_LITERAL", "start": 152, "end": 198, "status": "mismatched_kind", "reason": "K18"},
     {"kind": "STRING_LITERAL", "start": 215, "end": 259, "status": "mismatched_kind", "reason": "K18"}
-  ],
-  "structural/p9/text-continuation": [
-    {"kind": "STRING_LITERAL", "start": 24, "end": 55, "status": "mismatched_kind", "reason": "K19"}
   ]
 }

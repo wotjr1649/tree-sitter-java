@@ -262,7 +262,8 @@ module.exports = grammar({
 
     _string_escape_sequence: $ => choice($.escape_sequence, alias($._encoded_backslash, $.escape_sequence)),
     _escape_sequence: $ => choice(
-      prec(2, token.immediate(seq('\\', /[^bfnrtsu'\"\\]/))),
+      alias(token.immediate(/\\(\r\n?|\n)/), $.escape_sequence),
+      prec(2, token.immediate(seq('\\', /[^bfnrtsu'\"\\\r\n]/))),
       // Keep the text block's existing fallback for malformed Unicode escapes.
       token.immediate(prec(2, /\\u/)),
       prec(1, $._string_escape_sequence),
@@ -274,7 +275,7 @@ module.exports = grammar({
       seq(
         '\\',
         choice(
-          /[^xu0-7]/,
+          /[^xu0-7\r\n]/,
           /[0-7]{1,3}/,
           /x[0-9a-fA-F]{2}/,
         ),
