@@ -1,8 +1,8 @@
 {
   "meta": {
     "api": "com.sun.source.util.JavacTask.parse()",
-    "case_count": 463,
-    "cases_sha256": "03dc9c0665a2a647e77b52489eaab44ef617617eae7c3d71237d4c0fda21390a",
+    "case_count": 464,
+    "cases_sha256": "e79a780ed309a41adf62ad92c9b4e8648de797af88f27f353bc3fa305c2087f2",
     "java.runtime.version": "25.0.5+8-LTS",
     "java.vendor": "Eclipse Adoptium",
     "options": ["--release", "25", "-proc:none"],
@@ -474,6 +474,7 @@
     "structural/fix1/super-wildcard": [],
     "structural/fix1/long-minus": [],
     "structural/fix1/enum-constants": [],
-    "structural/p2/guarded-empty-record-pattern": []
+    "structural/p2/guarded-empty-record-pattern": [],
+    "structural/p2/yield-parenthesized-add-multiply": []
   }
 }
