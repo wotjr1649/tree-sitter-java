@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased
+
+- Parse `open`, `module`, and `with` as type names in local and array declarations, casts, and `instanceof`
+  (JLS 25 §3.8, reported in grammar-orchard issue #43). Generic locals such as `module<String> x = null;` now
+  form a `local_variable_declaration` instead of an `expression_statement`, and `module.class` now forms a
+  `class_literal` instead of a `field_access`. Module declarations and ordinary identifier expressions keep their
+  trees. The top-level declaration forms already allowed with an ordinary type name also accept `open module;` and
+  `open module() { return null; }`, which javac's parser rejects. In the tested type positions, `permits`, `record`,
+  `sealed`, `var`, and `yield` keep their previous acceptance.
+
 ## 2.2.0
 
 More Java 25 syntax fixes found through the javac oracle and the pinned examples: numeric literals (K6), annotation

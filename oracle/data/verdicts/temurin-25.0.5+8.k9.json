@@ -1,0 +1,34 @@
+{
+  "meta": {
+    "api": "com.sun.source.util.JavacTask.parse()",
+    "case_count": 18,
+    "cases_sha256": "5b9cd304fd6061f3e483c6c5496494895ea984a0f7b1e4748b03fc6d73cc271d",
+    "java.runtime.version": "25.0.5+8-LTS",
+    "java.vendor": "Eclipse Adoptium",
+    "options": ["--release", "25", "-proc:none"],
+    "preview": false,
+    "release": "25",
+    "runner_sha256": "c45e32e314b98ccb46481c4db18aa25173ca9b2fe46e45888f0a743ceb6c70ee",
+    "source_encoding": "UTF-8"
+  },
+  "verdicts": {
+    "k9/open-type-positions": [],
+    "k9/module-type-positions": [],
+    "k9/with-type-positions": [],
+    "k9/module-declaration": [],
+    "k9/ordinary-identifiers": [],
+    "k9/generic-types": [],
+    "k9/class-literals": [],
+    "k9/record-local": ["compiler.err.expected", "compiler.err.illegal.start.of.type"],
+    "k9/sealed-array": ["compiler.err.restricted.type.not.allowed.here"],
+    "k9/yield-instanceof": ["compiler.err.restricted.type.not.allowed.here"],
+    "k9/permits-cast": ["compiler.err.restricted.type.not.allowed.here"],
+    "k9/var-cast": ["compiler.err.restricted.type.not.allowed.here"],
+    "k9/missing-initializer": ["compiler.err.illegal.start.of.expr"],
+    "k9/missing-with": ["compiler.err.expected.str", "compiler.err.expected"],
+    "k9/top-level-local": ["compiler.err.expected"],
+    "k9/top-level-local-control": [],
+    "k9/top-level-method": ["compiler.err.expected"],
+    "k9/top-level-method-control": []
+  }
+}
