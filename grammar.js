@@ -569,7 +569,8 @@ module.exports = grammar({
       seq(
         optional(alias($._pattern_modifiers, $.modifiers)),
         $._unannotated_type,
-        choice($.identifier, $._reserved_identifier),
+        // Share the bare pattern's token so incremental parsing can reuse it.
+        choice($.identifier, $._reserved_identifier, alias($.underscore_pattern, $.identifier)),
       ),
     ),
 

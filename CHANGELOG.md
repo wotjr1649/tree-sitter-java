@@ -20,6 +20,10 @@
   single-statement body of `if` or `while`, empty type arguments in local declarations and constructor references,
   generic class literals such as `module<A>.class`, and `instanceof final T` without a variable name. In the tested
   type positions, `permits`, `record`, `sealed`, `var`, and `yield` keep their previous acceptance.
+- Fix an incremental parse failure in typed unnamed record components such as `Point(int _, var _, _)` (K13).
+  Typed `_` keeps its visible `identifier` node and uses `underscore_pattern` as its underlying grammar symbol.
+  Bare `_` still exposes `underscore_pattern`. `node-types.json` is byte-identical, and the pinned examples retain
+  all 192 baseline failure paths.
 
 ## 2.2.0
 
