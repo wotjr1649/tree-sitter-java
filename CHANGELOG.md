@@ -1,37 +1,26 @@
 # Changelog
 
-## Unreleased
+## 2.3.0
 
-- Record the pinned javac parse verdict, diagnostic codes and original file hash for each example baseline failure.
-  CI checks the verdict file against the failure list and the pinned checkouts.
-- Document the [grammar tolerances and known limits](docs/tolerances.md), including forms accepted by
-  javac's parser and rejected during full compilation.
-
-- Parse parenthesized assignment targets (K12, JLS 25 §§15.8.5 and 15.26), including `(x) = 1`, `((x)) += 7`,
-  `(this.field) = x` and `(a[0]) <<= 1` in statements, `for` clauses and lambda bodies. The
-  `assignment_expression.left` field holds a `parenthesized_expression` for each pair of parentheses. In
-  `src/node-types.json`, `left` gains that type, and `parenthesized_expression.children` explicitly lists
-  `array_access`, `field_access`, `identifier` and `parenthesized_expression` alongside the existing `expression`
-  supertype. The compared error-free trees retain their structure and the OpenJDK examples list drops four paths
-  (192 to 188). Several forms that javac rejects now parse with parenthesized assignment targets, as with ordinary
-  values at 2.2.0. These include whole parenthesized assignments as statements, `for` initializers or updates, and
-  switch statement arrow bodies. Statement expressions can also wrap the assignment in binary, unary, ternary or
-  cast expressions, field or array accesses, or method references. The same applies to unary `for` initializers,
-  ternary `for` updates, and binary, unary or ternary switch statement arrow bodies. Annotation values include
-  unkeyed, keyed, nested, array (including mixed entries) and element `default` values. Identifier tolerances cover
-  right-hand `_`, including in a conditional expression's middle arm and in call arguments, and the targets `(_)`,
-  `(obj.default)`, `(obj.if)`, `(obj._)`, `(_.field)`, `(_[0])` and `(a[_])`. A switch block can also contain an
-  unqualified `yield()` call alongside a `yield` of the assignment. Corpus and oracle cases record these forms with
-  controls that already parse at 2.2.0.
+Phase 2 of the final-release plan: OpenJDK 25.0.5+8 as a second pinned example set, the Java 25 syntax fixes that
+it and the backlog triage found (K9-K14), and CI guards for incremental parsing and parser size. No node kind or
+field name is removed or renamed; `node-types.json` only widens (K12). With the OpenJDK set the examples baseline
+first held 192 paths; it now holds 183, and each has a committed javac verdict: 144 files javac's parser rejects, 29
+forms only javac's parser accepts (a full compile rejects them), and 10 documented limits. None is a defect.
+[docs/tolerances.md](docs/tolerances.md) lists every form where the grammar and javac 25 disagree.
 
 - Extend the Ubuntu CI examples to parse OpenJDK 25.0.5+8 sources and javac langtools tests at pinned commit
   `fda231468e56663992785ec199a6efb8eca3cc7a`. No grammar change.
   The CI artifact of failing examples now holds the list of paths instead of the source files.
-- Known limitation: javac translates unicode escapes (`\uXXXX`) before it splits the source into tokens, so an
-  escape outside a string or char literal can form an identifier, a keyword, a separator, a comment delimiter or a
-  line end (`int \u0061lpha;`). The grammar reads such escapes only inside literals; elsewhere they give ERROR,
-  or, inside a comment, a token boundary that differs from javac's (`// \u000A int f;` stays one `line_comment`)
-  (grammar-orchard issue #51). See the [pinned Unicode cases](docs/tolerances.md#unicode-escapes-outside-literals).
+- Record the pinned javac parse verdict, diagnostic codes and original file hash for each example baseline failure.
+  CI checks the verdict file against the failure list and the pinned checkouts.
+- Add the CI jobs `fuzz` (`tree-sitter fuzz` over the corpus, up to 3 random edits and 10 iterations per case, 120 s
+  cap; after the edits it checks the incremental tree's sizes and changed ranges, and after undoing them that the
+  incremental reparse equals the expected corpus tree) and
+  `parser-cost` (`scripts/parser-cost.mjs --check`: `parser.c` bytes and `STATE_COUNT` must equal
+  `test/parser-cost.json`). No grammar change.
+- Document the [grammar tolerances and known limits](docs/tolerances.md), including forms accepted by
+  javac's parser and rejected during full compilation.
 - Parse `open`, `module`, and `with` as type names in local and array declarations, casts, and `instanceof` (JLS 25
   §3.8, reported in grammar-orchard issue #43). Generic locals such as `module<String> x = null;` now form a
   `local_variable_declaration` instead of an `expression_statement`, and `module.class` now forms a `class_literal`
@@ -42,18 +31,6 @@
   single-statement body of `if` or `while`, empty type arguments in local declarations and constructor references,
   generic class literals such as `module<A>.class`, and `instanceof final T` without a variable name. In the tested
   type positions, `permits`, `record`, `sealed`, `var`, and `yield` keep their previous acceptance.
-- Fix an incremental parse failure in typed unnamed record components such as `Point(int _, var _, _)` (K13).
-  Typed `_` keeps its visible `identifier` node and uses `underscore_pattern` as its underlying grammar symbol.
-  Bare `_` still exposes `underscore_pattern`. `node-types.json` is byte-identical, and the pinned examples retain
-  all 192 baseline failure paths.
-- Fix incremental parsing of typed unnamed bindings in switch and `instanceof` type patterns (K14).
-  The binding shares the `underscore_pattern` token and keeps its visible `identifier` node. The node schema is
-  unchanged. The parser grows by 4,484 bytes and 4 states.
-- Add the CI jobs `fuzz` (`tree-sitter fuzz` over the corpus, up to 3 random edits and 10 iterations per case, 120 s
-  cap; after the edits it checks the incremental tree's sizes and changed ranges, and after undoing them that the
-  incremental reparse equals the expected corpus tree) and
-  `parser-cost` (`scripts/parser-cost.mjs --check`: `parser.c` bytes and `STATE_COUNT` must equal
-  `test/parser-cost.json`). No grammar change.
 - Parse Unicode escapes with repeated `u` in string literals and text blocks and escapes where `\u005c` supplies the
   backslash before a matching quote, as in `"\u005c""` and `'\u005c''` (JLS 25 §3.3 and §3.10.7,
   tree-sitter-java issues #207 and #209, based on PR #210 by theawless). String and text block escape nodes now span
@@ -82,8 +59,52 @@
   Additional patterns and their record components reserve specific keywords and literals in positions previously
   disambiguated by the expression alternative. Named bindings and preview or invalid types can still be parsed
   where javac's later phases reject them. Mixing a constant with a type pattern, as in `case 1, Integer i`, still
-  produces an error. The five OpenJDK example files fixed by K11 are removed from
-  `test/examples/failures.txt` (192 to 187 paths).
+  produces an error. The five OpenJDK example files fixed by K11 leave `test/examples/failures.txt`.
+- Parse parenthesized assignment targets (K12, JLS 25 §§15.8.5 and 15.26), including `(x) = 1`, `((x)) += 7`,
+  `(this.field) = x` and `(a[0]) <<= 1` in statements, `for` clauses and lambda bodies. The
+  `assignment_expression.left` field holds a `parenthesized_expression` for each pair of parentheses. In
+  `src/node-types.json`, `left` gains that type, and `parenthesized_expression.children` explicitly lists
+  `array_access`, `field_access`, `identifier` and `parenthesized_expression` alongside the existing `expression`
+  supertype. The compared error-free trees retain their structure and the OpenJDK examples list drops four
+  paths. Several forms that javac rejects now parse with parenthesized assignment targets, as with ordinary
+  values at 2.2.0. These include whole parenthesized assignments as statements, `for` initializers or updates, and
+  switch statement arrow bodies. Statement expressions can also wrap the assignment in binary, unary, ternary or
+  cast expressions, field or array accesses, or method references. The same applies to unary `for` initializers,
+  ternary `for` updates, and binary, unary or ternary switch statement arrow bodies. Annotation values include
+  unkeyed, keyed, nested, array (including mixed entries) and element `default` values. Identifier tolerances cover
+  right-hand `_`, including in a conditional expression's middle arm and in call arguments, and the targets `(_)`,
+  `(obj.default)`, `(obj.if)`, `(obj._)`, `(_.field)`, `(_[0])` and `(a[_])`. A switch block can also contain an
+  unqualified `yield()` call alongside a `yield` of the assignment. Corpus and oracle cases record these forms with
+  controls that already parse at 2.2.0.
+- Fix an incremental parse failure in typed unnamed record components such as `Point(int _, var _, _)` (K13).
+  Typed `_` keeps its visible `identifier` node and uses `underscore_pattern` as its underlying grammar symbol.
+  Bare `_` still exposes `underscore_pattern`. `node-types.json` is byte-identical, and the pinned example trees are
+  unchanged.
+- Fix incremental parsing of typed unnamed bindings in switch and `instanceof` type patterns (K14).
+  The binding shares the `underscore_pattern` token and keeps its visible `identifier` node. The node schema is
+  unchanged.
+
+- Set `tree-sitter.json` `metadata.version` and the package manifests to 2.3.0 (the generated `parser.c` embeds it).
+- Review criterion used in this release: a javac-rejected input that newly parses cleanly is kept, and pinned by
+  corpus and oracle cases, when the same shape with the newly accepted part replaced by a valid value already parsed
+  cleanly at 2.2.0 (existing tolerance). The entries above name each such case. Any other javac-rejected input that
+  erred at 2.2.0 keeps erring; keywords read as identifiers are left for the reserved-words release. A defect is a
+  construct whose own reproducer passes a full `javac --release 25` compile and is derivable from the JLS 25
+  grammar (owner decision 2026-11-20): forms that javac's parser accepts but a full compile rejects are not defects
+  and the grammar may stay stricter, and forms javac accepts outside the JLS 25 grammar are documented limits.
+- Known limitations:
+  - The two K5 forms with annotated dimensions before an annotated `...` (`int @A [] @B ... xs`) still contain ERROR
+    and remain the oracle's expected failures.
+  - A raw NUL outside any literal (`int x<NUL>y`) still errs, although javac accepts it.
+  - Unicode escapes outside literals: javac translates unicode escapes (`\uXXXX`) before it splits the source into
+    tokens, so an escape outside a string or char literal can form an identifier, a keyword, a separator, a comment
+    delimiter or a line end (`int \u0061lpha;`). The grammar reads such escapes only inside literals; elsewhere
+    they give ERROR, or, inside a comment, a token boundary that differs from javac's (`// \u000A int f;` stays one
+    `line_comment`) (grammar-orchard issue #51). See the
+    [pinned Unicode cases](docs/tolerances.md#unicode-escapes-outside-literals).
+  - javac 25 accepts some forms that the JLS 25 grammar does not derive, and the grammar keeps erring on them:
+    `o instanceof R(final _, int _)`, `case final _ ->` and `case @A _ ->` (JLS 25 §14.30.1: the match-all pattern
+    is a bare `_`), and `java.util.@A Arrays.sort(a)` (§15.12 writes the qualifier as a TypeName).
 
 ## 2.2.0
 

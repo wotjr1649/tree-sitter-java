@@ -81674,7 +81674,7 @@ TS_PUBLIC const TSLanguage *tree_sitter_java(void) {
     .max_reserved_word_set_size = 10,
     .metadata = {
       .major_version = 2,
-      .minor_version = 2,
+      .minor_version = 3,
       .patch_version = 0,
     },
   };
