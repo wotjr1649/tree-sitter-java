@@ -5,16 +5,13 @@ examples/flink/flink-walkthroughs/flink-walkthrough-table-java/src/main/resource
 examples/flink/flink-walkthroughs/flink-walkthrough-table-java/src/main/resources/archetype-resources/src/main/java/SpendReport.java
 examples/flink/flink-walkthroughs/flink-walkthrough-table-java/src/main/resources/archetype-resources/src/test/java/SpendReportTest.java
 examples/jdk/test/langtools/tools/javac/6440583/A.java
-examples/jdk/test/langtools/tools/javac/7167125/DiffResultAfterSameOperationInnerClasses.java
 examples/jdk/test/langtools/tools/javac/8245153/T8245153.java
-examples/jdk/test/langtools/tools/javac/AccessMethods/ChainedAssignment.java
 examples/jdk/test/langtools/tools/javac/BadAnnotation.java
 examples/jdk/test/langtools/tools/javac/BadHexConstant.java
 examples/jdk/test/langtools/tools/javac/DefiniteAssignment/ConstantInfiniteWhile.java
 examples/jdk/test/langtools/tools/javac/Digits.java
 examples/jdk/test/langtools/tools/javac/EOI.java
 examples/jdk/test/langtools/tools/javac/ExtraneousEquals.java
-examples/jdk/test/langtools/tools/javac/ForwardReference/UseBeforeDeclaration.java
 examples/jdk/test/langtools/tools/javac/ImplicitClass/ImplicitClassRecovery.java
 examples/jdk/test/langtools/tools/javac/MethodParameters/UncommonParamNames.java
 examples/jdk/test/langtools/tools/javac/Parens3.java
@@ -133,7 +130,6 @@ examples/jdk/test/langtools/tools/javac/enum/EnumMembersOrder.java
 examples/jdk/test/langtools/tools/javac/failover/FailOver01.java
 examples/jdk/test/langtools/tools/javac/failover/FailOver15.java
 examples/jdk/test/langtools/tools/javac/generics/6413682/T6413682.java
-examples/jdk/test/langtools/tools/javac/generics/T6751514.java
 examples/jdk/test/langtools/tools/javac/incompleteStatements/T8000484.java
 examples/jdk/test/langtools/tools/javac/lambda/8131742/T8131742.java
 examples/jdk/test/langtools/tools/javac/lambda/IdentifierTest.java

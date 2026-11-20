@@ -2,6 +2,23 @@
 
 ## Unreleased
 
+- Parse parenthesized assignment targets (K12, JLS 25 §§15.8.5 and 15.26), including `(x) = 1`, `((x)) += 7`,
+  `(this.field) = x` and `(a[0]) <<= 1` in statements, `for` clauses and lambda bodies. The
+  `assignment_expression.left` field holds a `parenthesized_expression` for each pair of parentheses. In
+  `src/node-types.json`, `left` gains that type, and `parenthesized_expression.children` explicitly lists
+  `array_access`, `field_access`, `identifier` and `parenthesized_expression` alongside the existing `expression`
+  supertype. The compared error-free trees retain their structure and the OpenJDK examples list drops four paths
+  (192 to 188). Several forms that javac rejects now parse with parenthesized assignment targets, as with ordinary
+  values at 2.2.0. These include whole parenthesized assignments as statements, `for` initializers or updates, and
+  switch statement arrow bodies. Statement expressions can also wrap the assignment in binary, unary, ternary or
+  cast expressions, field or array accesses, or method references. The same applies to unary `for` initializers,
+  ternary `for` updates, and binary, unary or ternary switch statement arrow bodies. Annotation values include
+  unkeyed, keyed, nested, array (including mixed entries) and element `default` values. Identifier tolerances cover
+  right-hand `_`, including in a conditional expression's middle arm and in call arguments, and the targets `(_)`,
+  `(obj.default)`, `(obj.if)`, `(obj._)`, `(_.field)`, `(_[0])` and `(a[_])`. A switch block can also contain an
+  unqualified `yield()` call alongside a `yield` of the assignment. Corpus and oracle cases record these forms with
+  controls that already parse at 2.2.0.
+
 - Extend the Ubuntu CI examples to parse OpenJDK 25.0.5+8 sources and javac langtools tests at pinned commit
   `fda231468e56663992785ec199a6efb8eca3cc7a`. No grammar change.
   The CI artifact of failing examples now holds the list of paths instead of the source files.
@@ -24,11 +41,26 @@
   Typed `_` keeps its visible `identifier` node and uses `underscore_pattern` as its underlying grammar symbol.
   Bare `_` still exposes `underscore_pattern`. `node-types.json` is byte-identical, and the pinned examples retain
   all 192 baseline failure paths.
+- Fix incremental parsing of typed unnamed bindings in switch and `instanceof` type patterns (K14).
+  The binding shares the `underscore_pattern` token and keeps its visible `identifier` node. The node schema is
+  unchanged. The parser grows by 4,484 bytes and 4 states.
 - Add the CI jobs `fuzz` (`tree-sitter fuzz` over the corpus, up to 3 random edits and 10 iterations per case, 120 s
   cap; after the edits it checks the incremental tree's sizes and changed ranges, and after undoing them that the
   incremental reparse equals the expected corpus tree) and
   `parser-cost` (`scripts/parser-cost.mjs --check`: `parser.c` bytes and `STATE_COUNT` must equal
   `test/parser-cost.json`). No grammar change.
+- Parse Unicode escapes with repeated `u` in string literals and text blocks and escapes where `\u005c` supplies the
+  backslash before a matching quote, as in `"\u005c""` and `'\u005c''` (JLS 25 §3.3 and §3.10.7,
+  tree-sitter-java issues #207 and #209, based on PR #210 by theawless). String and text block escape nodes now span
+  the complete repeated-`u` escape, an encoded backslash with an escaped double quote, or a pair of encoded
+  backslashes. Strings and text blocks parse an encoded backslash paired with a raw backslash both before the
+  closing delimiter and within the literal body. Each backslash in a mixed pair has its own `escape_sequence` node,
+  and ordinary characters after the pair form a `string_fragment` or `multiline_string_fragment`.
+  In `"\u005c\{1}"`, a `string_fragment` for `{1}` replaces the previous `string_interpolation`.
+  An encoded backslash before the only closing double quote or text block delimiter now leaves the literal
+  unterminated. Repeated `u` inherits ordinary string tolerances for encoded quotes and line breaks, illegal
+  escape tails, raw line breaks and string templates. In `"\uuu005cu0041"`, `u0041` is a string fragment, as in the
+  previously accepted single-`u` spelling.
 - Parse multiple type or record patterns in a single `case` label, with an optional trailing `when` guard (K11,
   JLS 25 §14.11.1). The `switch_label` has a `pattern` child for each alternative, in source order. Empty record
   pattern lists such as `case R(), S()` previously appeared as `method_invocation` children and now appear as

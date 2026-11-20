@@ -14,6 +14,8 @@ const DIGITS = token(choice('0', seq(/[1-9]/, optional(seq(optional(/_+/), sep1(
 // JLS Digits: leading zeros allowed; 00d and 0__1e1f are decimal floats, not octal.
 const DECIMAL_DIGITS = token(sep1(/[0-9]+/, /_+/));
 const HEX_DIGITS = token(sep1(/[A-Fa-f0-9]+/, /_+/));
+// JLS 25 §3.3: a Unicode escape can supply the backslash of a quote escape.
+const UNICODE_BACKSLASH = /\\u+005[cC]/;
 // Single underscores only: the non-Java 0o/0O octal prefix keeps its base behaviour (javac rejects it).
 const SINGLE_UNDERSCORE_OCTAL = token(sep1(/[0-7]+/, '_'));
 
@@ -70,6 +72,7 @@ module.exports = grammar({
   ],
 
   inline: $ => [
+    $._assignment_target,
     $._name,
     $._simple_type,
     $._class_body_declaration,
@@ -80,7 +83,10 @@ module.exports = grammar({
     [$.modifiers, $.annotated_type, $.receiver_parameter],
     [$.modifiers, $.annotated_type, $.module_declaration, $.package_declaration],
     [$.module_declaration, $._unannotated_type],
-    [$._unannotated_type, $.primary_expression, $.inferred_parameters],
+    // A closing parenthesis can end a target, a value, a cast type, or lambda parameters.
+    [$._parenthesized_assignment_target, $.inferred_parameters, $.primary_expression, $._unannotated_type],
+    [$._parenthesized_assignment_target, $.primary_expression],
+    [$._parenthesized_assignment_target, $.inferred_parameters, $.primary_expression],
     [$._unannotated_type, $.primary_expression],
     [$._unannotated_type, $._reserved_identifier],
     [$._unannotated_type, $.primary_expression, $.scoped_type_identifier],
@@ -192,6 +198,7 @@ module.exports = grammar({
         )),
         '\'',
       ),
+      seq('\'', UNICODE_BACKSLASH, choice('\'', '\\'), '\''),
       // Exactly one raw NUL. A NUL in the repeat above would also accept '<NUL><NUL>' and '<NUL>a', which javac rejects.
       '\'\x00\'',
     )),
@@ -201,9 +208,15 @@ module.exports = grammar({
       '"',
       repeat(choice(
         $.string_fragment,
-        $.escape_sequence,
+        $._string_escape_sequence,
         $.string_interpolation,
+        seq(repeat1($._mixed_backslash_escape), choice(
+          alias($._string_fragment_after_mixed_backslash, $.string_fragment),
+          $._string_escape_sequence,
+          $.string_interpolation,
+        )),
       )),
+      repeat($._mixed_backslash_escape),
       '"',
     ),
     _multiline_string_literal: $ => seq(
@@ -233,19 +246,40 @@ module.exports = grammar({
       '}',
     ),
 
-    _escape_sequence: $ => choice(
-      prec(2, token.immediate(seq('\\', /[^bfnrts'\"\\]/))),
-      prec(1, $.escape_sequence),
+    // A raw backslash followed by u starts a Unicode escape, even after a translated backslash.
+    _string_fragment_after_mixed_backslash: _ => token.immediate(prec(1, choice(
+      /[^u"\\]([^"\\]+|\x00)*/,
+      /\x00([^"\\]+|\x00)*/,
+    ))),
+
+    _mixed_backslash_escape: $ => seq(
+      alias($._encoded_backslash, $.escape_sequence),
+      alias($._raw_backslash, $.escape_sequence),
     ),
-    escape_sequence: _ => token.immediate(seq(
-      '\\',
-      choice(
-        /[^xu0-7]/,
-        /[0-7]{1,3}/,
-        /x[0-9a-fA-F]{2}/,
-        /u[0-9a-fA-F]{4}/,
-        /u\{[0-9a-fA-F]+\}/,
-      ))),
+    // Prefer complete Unicode tokens over the raw backslash of a mixed pair.
+    _encoded_backslash: _ => token.immediate(prec(3, UNICODE_BACKSLASH)),
+    _raw_backslash: _ => token.immediate(prec(1, /\\/)),
+
+    _string_escape_sequence: $ => choice($.escape_sequence, alias($._encoded_backslash, $.escape_sequence)),
+    _escape_sequence: $ => choice(
+      prec(2, token.immediate(seq('\\', /[^bfnrtsu'\"\\]/))),
+      // Keep the text block's existing fallback for malformed Unicode escapes.
+      token.immediate(prec(2, /\\u/)),
+      prec(1, $._string_escape_sequence),
+      $._mixed_backslash_escape,
+    ),
+    escape_sequence: _ => token.immediate(choice(
+      prec(3, seq(UNICODE_BACKSLASH, choice('"', UNICODE_BACKSLASH))),
+      prec(2, seq('\\', choice(/u+[0-9a-fA-F]{4}/, /u\{[0-9a-fA-F]+\}/))),
+      seq(
+        '\\',
+        choice(
+          /[^xu0-7]/,
+          /[0-7]{1,3}/,
+          /x[0-9a-fA-F]{2}/,
+        ),
+      ),
+    )),
 
     null_literal: _ => 'null',
 
@@ -280,15 +314,20 @@ module.exports = grammar({
     )),
 
     assignment_expression: $ => prec.right(PREC.ASSIGN, seq(
-      field('left', choice(
-        $.identifier,
-        $._reserved_identifier,
-        $.field_access,
-        $.array_access,
-      )),
+      field('left', $._assignment_target),
       field('operator', choice('=', '+=', '-=', '*=', '/=', '&=', '|=', '^=', '%=', '<<=', '>>=', '>>>=')),
       field('right', $.expression),
     )),
+
+    _assignment_target: $ => choice(
+      $.identifier,
+      $._reserved_identifier,
+      $.field_access,
+      $.array_access,
+      alias($._parenthesized_assignment_target, $.parenthesized_expression),
+    ),
+
+    _parenthesized_assignment_target: $ => seq('(', $._assignment_target, ')'),
 
     binary_expression: $ => choice(
       ...[
@@ -329,7 +368,7 @@ module.exports = grammar({
           choice(
             seq(
               field('right', $._type),
-              optional(field('name', choice($.identifier, $._reserved_identifier))),
+              optional(field('name', choice($.identifier, $._reserved_identifier, alias($.underscore_pattern, $.identifier)))),
             ),
             field('pattern', $.record_pattern),
           ),
@@ -339,7 +378,7 @@ module.exports = grammar({
         seq(
           alias($._instanceof_modifiers, $.modifiers),
           field('right', $._unannotated_type),
-          field('name', choice($.identifier, $._reserved_identifier)),
+          field('name', choice($.identifier, $._reserved_identifier, alias($.underscore_pattern, $.identifier))),
         ),
       ),
     )),
@@ -596,7 +635,12 @@ module.exports = grammar({
     ),
 
     // TypePattern is a LocalVariableDeclaration (JLS 25 §14.30.1), so it takes final and annotations as modifiers
-    type_pattern: $ => seq(optional(alias($._pattern_modifiers, $.modifiers)), $._unannotated_type, choice($.identifier, $._reserved_identifier)),
+    type_pattern: $ => seq(
+      optional(alias($._pattern_modifiers, $.modifiers)),
+      $._unannotated_type,
+      // Share the unnamed-variable token while keeping the public identifier node.
+      choice($.identifier, $._reserved_identifier, alias($.underscore_pattern, $.identifier)),
+    ),
     // Only VariableModifier (JLS 25 §4.12.4): other modifier keywords such as `non-sealed` would split `case non-sealed ->`
     _pattern_modifiers: $ => repeat1(choice('final', $._annotation)),
     // RecordPattern: ReferenceType ( ... ), so the type may be qualified (JLS 25 §14.30.1)
