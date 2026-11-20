@@ -28,9 +28,10 @@ patterns of the K4 fix), `k5` (valid and adjacent invalid variable arity paramet
 literals with leading zeros such as `00d`, underscores between digits such as `1__0` and `0_7`, and hex floating
 point exponents with leading zeros such as `0x1p03`), `k7` (valid and adjacent invalid annotated multi-catch
 alternatives, annotated receiver parameters and `instanceof` type patterns with annotations before `final` of the K7
-fix) and `k8` (a raw NUL byte inside string literals, text blocks
+fix), `k8` (a raw NUL byte inside string literals, text blocks
 and char literals, with adjacent unterminated literals, of the K8 fix, plus the probes of the PR #19 review: raw NUL
-next to CR, LF, line continuations and text block delimiters, with NUL-free controls). Every
+next to CR, LF, line continuations and text block delimiters, with NUL-free controls), and `k12` (parenthesized
+assignment targets, adjacent invalid inputs, and base-clean controls for expression and identifier tolerances). Every
 case names its origin in `provenance`: the bundle path with its `SHA256SUMS` hash, the PR, or "written in this task".
 IDs are prefixed with the set name. To add a case, append a line, hash its `source` (SHA-256 of the UTF-8 bytes; the
 replay prints the actual hash when it differs), then regenerate that set's verdicts.

@@ -776,6 +776,10 @@
           {
             "type": "identifier",
             "named": true
+          },
+          {
+            "type": "parenthesized_expression",
+            "named": true
           }
         ]
       },
@@ -2912,7 +2916,23 @@
       "required": true,
       "types": [
         {
+          "type": "array_access",
+          "named": true
+        },
+        {
           "type": "expression",
+          "named": true
+        },
+        {
+          "type": "field_access",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
           "named": true
         }
       ]

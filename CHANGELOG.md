@@ -2,6 +2,21 @@
 
 ## Unreleased
 
+- Parse parenthesized assignment targets (K12, JLS 25 §§15.8.5 and 15.26), including `(x) = 1`, `((x)) += 7`,
+  `(this.field) = x` and `(a[0]) <<= 1` in statements, `for` clauses and lambda bodies. The
+  `assignment_expression.left` field holds a `parenthesized_expression` for each pair of parentheses. In
+  `src/node-types.json`, `left` gains that type, and `parenthesized_expression.children` explicitly lists
+  `array_access`, `field_access`, `identifier` and `parenthesized_expression` alongside the existing `expression`
+  supertype. The compared error-free trees retain their structure and the OpenJDK examples list drops four paths
+  (192 to 188). Existing expression tolerances extend to the new assignments: javac rejects a whole parenthesized
+  assignment as a statement, as a `for` initializer or update, and as a switch statement's arrow body. Binary
+  expressions using such an assignment as an operand are also tolerated as statements and switch statement arrow
+  bodies. Annotation values tolerate the assignment in `@A((x) = 1)`, `@A(value = (x) = 1)`, `@A({(x) = 1})` and an
+  annotation element's `default (x) = 1`. Existing identifier tolerances cover `(_) = x`, `(x) = _`, a bare
+  assignment with a parenthesized target and `_` on the right in a conditional expression's middle arm, and the field
+  and array targets `(obj.default)`, `(obj._)`, `(_.field)`, `(_[0])` and `(a[_])`. Corpus and oracle cases record these
+  tolerances with controls that already parse at base.
+
 - Extend the Ubuntu CI examples to parse OpenJDK 25.0.5+8 sources and javac langtools tests at pinned commit
   `fda231468e56663992785ec199a6efb8eca3cc7a`. No grammar change.
   The CI artifact of failing examples now holds the list of paths instead of the source files.

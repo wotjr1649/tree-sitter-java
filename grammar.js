@@ -70,6 +70,7 @@ module.exports = grammar({
   ],
 
   inline: $ => [
+    $._assignment_target,
     $._name,
     $._simple_type,
     $._class_body_declaration,
@@ -79,7 +80,10 @@ module.exports = grammar({
   conflicts: $ => [
     [$.modifiers, $.annotated_type, $.receiver_parameter],
     [$.modifiers, $.annotated_type, $.module_declaration, $.package_declaration],
-    [$._unannotated_type, $.primary_expression, $.inferred_parameters],
+    // A closing parenthesis can end a target, a value, a cast type, or lambda parameters.
+    [$._parenthesized_assignment_target, $.inferred_parameters, $.primary_expression, $._unannotated_type],
+    [$._parenthesized_assignment_target, $.primary_expression],
+    [$._parenthesized_assignment_target, $.inferred_parameters, $.primary_expression],
     [$._unannotated_type, $.primary_expression],
     [$._unannotated_type, $.primary_expression, $.scoped_type_identifier],
     [$._unannotated_type, $.scoped_type_identifier],
@@ -275,15 +279,20 @@ module.exports = grammar({
     )),
 
     assignment_expression: $ => prec.right(PREC.ASSIGN, seq(
-      field('left', choice(
-        $.identifier,
-        $._reserved_identifier,
-        $.field_access,
-        $.array_access,
-      )),
+      field('left', $._assignment_target),
       field('operator', choice('=', '+=', '-=', '*=', '/=', '&=', '|=', '^=', '%=', '<<=', '>>=', '>>>=')),
       field('right', $.expression),
     )),
+
+    _assignment_target: $ => choice(
+      $.identifier,
+      $._reserved_identifier,
+      $.field_access,
+      $.array_access,
+      alias($._parenthesized_assignment_target, $.parenthesized_expression),
+    ),
+
+    _parenthesized_assignment_target: $ => seq('(', $._assignment_target, ')'),
 
     binary_expression: $ => choice(
       ...[

@@ -1,0 +1,759 @@
+==============================================
+K12 parenthesized assignment targets
+==============================================
+
+class Case {
+  int field;
+  int set(int x, int[] a) {
+    (x) = 1;
+    ((x)) += 7;
+    (this.field) = x;
+    ((a[0])) <<= 1;
+    return (x) = (a[0]) = 2;
+  }
+}
+
+---
+
+(program
+  (class_declaration
+    (identifier)
+    (class_body
+      (field_declaration
+        (integral_type)
+        (variable_declarator
+          (identifier)))
+      (method_declaration
+        (integral_type)
+        (identifier)
+        (formal_parameters
+          (formal_parameter
+            (integral_type)
+            (identifier))
+          (formal_parameter
+            (array_type
+              (integral_type)
+              (dimensions))
+            (identifier)))
+        (block
+          (expression_statement
+            (assignment_expression
+              (parenthesized_expression
+                (identifier))
+              (decimal_integer_literal)))
+          (expression_statement
+            (assignment_expression
+              (parenthesized_expression
+                (parenthesized_expression
+                  (identifier)))
+              (decimal_integer_literal)))
+          (expression_statement
+            (assignment_expression
+              (parenthesized_expression
+                (field_access
+                  (this)
+                  (identifier)))
+              (identifier)))
+          (expression_statement
+            (assignment_expression
+              (parenthesized_expression
+                (parenthesized_expression
+                  (array_access
+                    (identifier)
+                    (decimal_integer_literal))))
+              (decimal_integer_literal)))
+          (return_statement
+            (assignment_expression
+              (parenthesized_expression
+                (identifier))
+              (assignment_expression
+                (parenthesized_expression
+                  (array_access
+                    (identifier)
+                    (decimal_integer_literal)))
+                (decimal_integer_literal)))))))))
+
+==============================================
+K12 assignments in for updates and lambda bodies
+==============================================
+
+class Case {
+  void set(int x) {
+    for (; x < 1; (x) += 1) {}
+    java.util.function.IntUnaryOperator f = y -> (y) = 1;
+    java.util.function.IntConsumer g = y -> { (y) = 1; };
+  }
+}
+
+---
+
+(program
+  (class_declaration
+    (identifier)
+    (class_body
+      (method_declaration
+        (void_type)
+        (identifier)
+        (formal_parameters
+          (formal_parameter
+            (integral_type)
+            (identifier)))
+        (block
+          (for_statement
+            (binary_expression
+              (identifier)
+              (decimal_integer_literal))
+            (assignment_expression
+              (parenthesized_expression
+                (identifier))
+              (decimal_integer_literal))
+            (block))
+          (local_variable_declaration
+            (scoped_type_identifier
+              (scoped_type_identifier
+                (scoped_type_identifier
+                  (type_identifier)
+                  (type_identifier))
+                (type_identifier))
+              (type_identifier))
+            (variable_declarator
+              (identifier)
+              (lambda_expression
+                (identifier)
+                (assignment_expression
+                  (parenthesized_expression
+                    (identifier))
+                  (decimal_integer_literal)))))
+          (local_variable_declaration
+            (scoped_type_identifier
+              (scoped_type_identifier
+                (scoped_type_identifier
+                  (type_identifier)
+                  (type_identifier))
+                (type_identifier))
+              (type_identifier))
+            (variable_declarator
+              (identifier)
+              (lambda_expression
+                (identifier)
+                (block
+                  (expression_statement
+                    (assignment_expression
+                      (parenthesized_expression
+                        (identifier))
+                      (decimal_integer_literal))))))))))))
+
+==============================================
+K12 casts lambda parameters and update controls
+==============================================
+
+class Case {
+  int field;
+  int set(int x, int[] a) {
+    (x)++;
+    ++((x));
+    (a[0])--;
+    --(this.field);
+    ((/* target */ this.field)) = (int) (x) + ((x));
+    java.util.function.IntUnaryOperator f = (z) -> (z) = 1;
+    return (this).field;
+  }
+}
+
+---
+
+(program
+  (class_declaration
+    (identifier)
+    (class_body
+      (field_declaration
+        (integral_type)
+        (variable_declarator
+          (identifier)))
+      (method_declaration
+        (integral_type)
+        (identifier)
+        (formal_parameters
+          (formal_parameter
+            (integral_type)
+            (identifier))
+          (formal_parameter
+            (array_type
+              (integral_type)
+              (dimensions))
+            (identifier)))
+        (block
+          (expression_statement
+            (update_expression
+              (parenthesized_expression
+                (identifier))))
+          (expression_statement
+            (update_expression
+              (parenthesized_expression
+                (parenthesized_expression
+                  (identifier)))))
+          (expression_statement
+            (update_expression
+              (parenthesized_expression
+                (array_access
+                  (identifier)
+                  (decimal_integer_literal)))))
+          (expression_statement
+            (update_expression
+              (parenthesized_expression
+                (field_access
+                  (this)
+                  (identifier)))))
+          (expression_statement
+            (assignment_expression
+              (parenthesized_expression
+                (parenthesized_expression
+                  (block_comment)
+                  (field_access
+                    (this)
+                    (identifier))))
+              (binary_expression
+                (cast_expression
+                  (integral_type)
+                  (parenthesized_expression
+                    (identifier)))
+                (parenthesized_expression
+                  (parenthesized_expression
+                    (identifier))))))
+          (local_variable_declaration
+            (scoped_type_identifier
+              (scoped_type_identifier
+                (scoped_type_identifier
+                  (type_identifier)
+                  (type_identifier))
+                (type_identifier))
+              (type_identifier))
+            (variable_declarator
+              (identifier)
+              (lambda_expression
+                (inferred_parameters
+                  (identifier))
+                (assignment_expression
+                  (parenthesized_expression
+                    (identifier))
+                  (decimal_integer_literal)))))
+          (return_statement
+            (field_access
+              (parenthesized_expression
+                (this))
+              (identifier))))))))
+
+==============================================
+K12 statement expression tolerances
+==============================================
+
+class Case {
+  void set(int x) {
+    ((x) = 1);
+    (x = 1);
+    (1);
+    ((x) = 1) + 1;
+    (x = 1) + 1;
+    (1) + 1;
+    for (((x) = 0); x < 1; ((x) = 1)) {}
+    for ((x = 0); x < 1; (x = 1)) {}
+    for ((0); x < 1; (1)) {}
+    switch (x) { default -> ((x) = 1); }
+    switch (x) { default -> (x = 1); }
+    switch (x) { default -> (1); }
+    switch (x) { default -> ((x) = 1) + 1; }
+    switch (x) { default -> (x = 1) + 1; }
+    switch (x) { default -> (1) + 1; }
+  }
+}
+
+---
+
+(program
+  (class_declaration
+    (identifier)
+    (class_body
+      (method_declaration
+        (void_type)
+        (identifier)
+        (formal_parameters
+          (formal_parameter
+            (integral_type)
+            (identifier)))
+        (block
+          (expression_statement
+            (parenthesized_expression
+              (assignment_expression
+                (parenthesized_expression
+                  (identifier))
+                (decimal_integer_literal))))
+          (expression_statement
+            (parenthesized_expression
+              (assignment_expression
+                (identifier)
+                (decimal_integer_literal))))
+          (expression_statement
+            (parenthesized_expression
+              (decimal_integer_literal)))
+          (expression_statement
+            (binary_expression
+              (parenthesized_expression
+                (assignment_expression
+                  (parenthesized_expression
+                    (identifier))
+                  (decimal_integer_literal)))
+              (decimal_integer_literal)))
+          (expression_statement
+            (binary_expression
+              (parenthesized_expression
+                (assignment_expression
+                  (identifier)
+                  (decimal_integer_literal)))
+              (decimal_integer_literal)))
+          (expression_statement
+            (binary_expression
+              (parenthesized_expression
+                (decimal_integer_literal))
+              (decimal_integer_literal)))
+          (for_statement
+            (parenthesized_expression
+              (assignment_expression
+                (parenthesized_expression
+                  (identifier))
+                (decimal_integer_literal)))
+            (binary_expression
+              (identifier)
+              (decimal_integer_literal))
+            (parenthesized_expression
+              (assignment_expression
+                (parenthesized_expression
+                  (identifier))
+                (decimal_integer_literal)))
+            (block))
+          (for_statement
+            (parenthesized_expression
+              (assignment_expression
+                (identifier)
+                (decimal_integer_literal)))
+            (binary_expression
+              (identifier)
+              (decimal_integer_literal))
+            (parenthesized_expression
+              (assignment_expression
+                (identifier)
+                (decimal_integer_literal)))
+            (block))
+          (for_statement
+            (parenthesized_expression
+              (decimal_integer_literal))
+            (binary_expression
+              (identifier)
+              (decimal_integer_literal))
+            (parenthesized_expression
+              (decimal_integer_literal))
+            (block))
+          (switch_expression
+            (parenthesized_expression
+              (identifier))
+            (switch_block
+              (switch_rule
+                (switch_label)
+                (expression_statement
+                  (parenthesized_expression
+                    (assignment_expression
+                      (parenthesized_expression
+                        (identifier))
+                      (decimal_integer_literal)))))))
+          (switch_expression
+            (parenthesized_expression
+              (identifier))
+            (switch_block
+              (switch_rule
+                (switch_label)
+                (expression_statement
+                  (parenthesized_expression
+                    (assignment_expression
+                      (identifier)
+                      (decimal_integer_literal)))))))
+          (switch_expression
+            (parenthesized_expression
+              (identifier))
+            (switch_block
+              (switch_rule
+                (switch_label)
+                (expression_statement
+                  (parenthesized_expression
+                    (decimal_integer_literal))))))
+          (switch_expression
+            (parenthesized_expression
+              (identifier))
+            (switch_block
+              (switch_rule
+                (switch_label)
+                (expression_statement
+                  (binary_expression
+                    (parenthesized_expression
+                      (assignment_expression
+                        (parenthesized_expression
+                          (identifier))
+                        (decimal_integer_literal)))
+                    (decimal_integer_literal))))))
+          (switch_expression
+            (parenthesized_expression
+              (identifier))
+            (switch_block
+              (switch_rule
+                (switch_label)
+                (expression_statement
+                  (binary_expression
+                    (parenthesized_expression
+                      (assignment_expression
+                        (identifier)
+                        (decimal_integer_literal)))
+                    (decimal_integer_literal))))))
+          (switch_expression
+            (parenthesized_expression
+              (identifier))
+            (switch_block
+              (switch_rule
+                (switch_label)
+                (expression_statement
+                  (binary_expression
+                    (parenthesized_expression
+                      (decimal_integer_literal))
+                    (decimal_integer_literal)))))))))))
+
+==============================================
+K12 identifier and field tolerances
+==============================================
+
+class Case {
+  int field;
+  void set(Case obj, int x, int y, int[] a) {
+    (_) = x;
+    _ = x;
+    x = y;
+    (x) = _;
+    x = _;
+    x = 1;
+    (obj.default) = 1;
+    obj.default = 1;
+    (obj._) = 1;
+    obj._ = 1;
+    obj.field = 1;
+    (_.field) = 1;
+    _.field = 1;
+    (_[0]) = 1;
+    _[0] = 1;
+    (a[_]) = 1;
+    a[_] = 1;
+    a[0] = 1;
+    int b = x == 0 ? (x) = _ : 1;
+    int c = x == 0 ? x = _ : 1;
+    int d = x == 0 ? x = 2 : 1;
+  }
+}
+
+---
+
+(program
+  (class_declaration
+    (identifier)
+    (class_body
+      (field_declaration
+        (integral_type)
+        (variable_declarator
+          (identifier)))
+      (method_declaration
+        (void_type)
+        (identifier)
+        (formal_parameters
+          (formal_parameter
+            (type_identifier)
+            (identifier))
+          (formal_parameter
+            (integral_type)
+            (identifier))
+          (formal_parameter
+            (integral_type)
+            (identifier))
+          (formal_parameter
+            (array_type
+              (integral_type)
+              (dimensions))
+            (identifier)))
+        (block
+          (expression_statement
+            (assignment_expression
+              (parenthesized_expression
+                (identifier))
+              (identifier)))
+          (expression_statement
+            (assignment_expression
+              (identifier)
+              (identifier)))
+          (expression_statement
+            (assignment_expression
+              (identifier)
+              (identifier)))
+          (expression_statement
+            (assignment_expression
+              (parenthesized_expression
+                (identifier))
+              (identifier)))
+          (expression_statement
+            (assignment_expression
+              (identifier)
+              (identifier)))
+          (expression_statement
+            (assignment_expression
+              (identifier)
+              (decimal_integer_literal)))
+          (expression_statement
+            (assignment_expression
+              (parenthesized_expression
+                (field_access
+                  (identifier)
+                  (identifier)))
+              (decimal_integer_literal)))
+          (expression_statement
+            (assignment_expression
+              (field_access
+                (identifier)
+                (identifier))
+              (decimal_integer_literal)))
+          (expression_statement
+            (assignment_expression
+              (parenthesized_expression
+                (field_access
+                  (identifier)
+                  (identifier)))
+              (decimal_integer_literal)))
+          (expression_statement
+            (assignment_expression
+              (field_access
+                (identifier)
+                (identifier))
+              (decimal_integer_literal)))
+          (expression_statement
+            (assignment_expression
+              (field_access
+                (identifier)
+                (identifier))
+              (decimal_integer_literal)))
+          (expression_statement
+            (assignment_expression
+              (parenthesized_expression
+                (field_access
+                  (identifier)
+                  (identifier)))
+              (decimal_integer_literal)))
+          (expression_statement
+            (assignment_expression
+              (field_access
+                (identifier)
+                (identifier))
+              (decimal_integer_literal)))
+          (expression_statement
+            (assignment_expression
+              (parenthesized_expression
+                (array_access
+                  (identifier)
+                  (decimal_integer_literal)))
+              (decimal_integer_literal)))
+          (expression_statement
+            (assignment_expression
+              (array_access
+                (identifier)
+                (decimal_integer_literal))
+              (decimal_integer_literal)))
+          (expression_statement
+            (assignment_expression
+              (parenthesized_expression
+                (array_access
+                  (identifier)
+                  (identifier)))
+              (decimal_integer_literal)))
+          (expression_statement
+            (assignment_expression
+              (array_access
+                (identifier)
+                (identifier))
+              (decimal_integer_literal)))
+          (expression_statement
+            (assignment_expression
+              (array_access
+                (identifier)
+                (decimal_integer_literal))
+              (decimal_integer_literal)))
+          (local_variable_declaration
+            (integral_type)
+            (variable_declarator
+              (identifier)
+              (ternary_expression
+                (binary_expression
+                  (identifier)
+                  (decimal_integer_literal))
+                (assignment_expression
+                  (parenthesized_expression
+                    (identifier))
+                  (identifier))
+                (decimal_integer_literal))))
+          (local_variable_declaration
+            (integral_type)
+            (variable_declarator
+              (identifier)
+              (ternary_expression
+                (binary_expression
+                  (identifier)
+                  (decimal_integer_literal))
+                (assignment_expression
+                  (identifier)
+                  (identifier))
+                (decimal_integer_literal))))
+          (local_variable_declaration
+            (integral_type)
+            (variable_declarator
+              (identifier)
+              (ternary_expression
+                (binary_expression
+                  (identifier)
+                  (decimal_integer_literal))
+                (assignment_expression
+                  (identifier)
+                  (decimal_integer_literal))
+                (decimal_integer_literal)))))))))
+
+==============================================
+K12 annotation value tolerances
+==============================================
+
+@interface Scalar { int value(); }
+@interface Array { int[] value(); }
+@interface DefaultValue {
+  int x = 0;
+  int assignment() default (x) = 1;
+  int control() default 1;
+}
+@Scalar((x) = 1) class Unkeyed { static int x; }
+@Scalar((1)) class UnkeyedControl {}
+@Scalar(value = (x) = 1) class Keyed { static int x; }
+@Scalar(value = 1) class KeyedControl {}
+@Array({(x) = 1}) class List { static int x; }
+@Array({1}) class ListControl {}
+
+---
+
+(program
+  (annotation_type_declaration
+    (identifier)
+    (annotation_type_body
+      (annotation_type_element_declaration
+        (integral_type)
+        (identifier))))
+  (annotation_type_declaration
+    (identifier)
+    (annotation_type_body
+      (annotation_type_element_declaration
+        (array_type
+          (integral_type)
+          (dimensions))
+        (identifier))))
+  (annotation_type_declaration
+    (identifier)
+    (annotation_type_body
+      (constant_declaration
+        (integral_type)
+        (variable_declarator
+          (identifier)
+          (decimal_integer_literal)))
+      (annotation_type_element_declaration
+        (integral_type)
+        (identifier)
+        (assignment_expression
+          (parenthesized_expression
+            (identifier))
+          (decimal_integer_literal)))
+      (annotation_type_element_declaration
+        (integral_type)
+        (identifier)
+        (decimal_integer_literal))))
+  (class_declaration
+    (modifiers
+      (annotation
+        (identifier)
+        (annotation_argument_list
+          (assignment_expression
+            (parenthesized_expression
+              (identifier))
+            (decimal_integer_literal)))))
+    (identifier)
+    (class_body
+      (field_declaration
+        (modifiers)
+        (integral_type)
+        (variable_declarator
+          (identifier)))))
+  (class_declaration
+    (modifiers
+      (annotation
+        (identifier)
+        (annotation_argument_list
+          (parenthesized_expression
+            (decimal_integer_literal)))))
+    (identifier)
+    (class_body))
+  (class_declaration
+    (modifiers
+      (annotation
+        (identifier)
+        (annotation_argument_list
+          (element_value_pair
+            (identifier)
+            (assignment_expression
+              (parenthesized_expression
+                (identifier))
+              (decimal_integer_literal))))))
+    (identifier)
+    (class_body
+      (field_declaration
+        (modifiers)
+        (integral_type)
+        (variable_declarator
+          (identifier)))))
+  (class_declaration
+    (modifiers
+      (annotation
+        (identifier)
+        (annotation_argument_list
+          (element_value_pair
+            (identifier)
+            (decimal_integer_literal)))))
+    (identifier)
+    (class_body))
+  (class_declaration
+    (modifiers
+      (annotation
+        (identifier)
+        (annotation_argument_list
+          (element_value_array_initializer
+            (assignment_expression
+              (parenthesized_expression
+                (identifier))
+              (decimal_integer_literal))))))
+    (identifier)
+    (class_body
+      (field_declaration
+        (modifiers)
+        (integral_type)
+        (variable_declarator
+          (identifier)))))
+  (class_declaration
+    (modifiers
+      (annotation
+        (identifier)
+        (annotation_argument_list
+          (element_value_array_initializer
+            (decimal_integer_literal)))))
+    (identifier)
+    (class_body)))
