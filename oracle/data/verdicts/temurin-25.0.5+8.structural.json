@@ -1,8 +1,8 @@
 {
   "meta": {
     "api": "com.sun.source.util.JavacTask.parse()",
-    "case_count": 452,
-    "cases_sha256": "ee4c62cc0ffa843483cd76cf9ae863397e9e5456fa233d624413178b079ba76b",
+    "case_count": 462,
+    "cases_sha256": "6377d1b67430129058ba4ddeb719b1f0e1c2bf12f1a00b42b64fa3d21d8cb6b7",
     "java.runtime.version": "25.0.5+8-LTS",
     "java.vendor": "Eclipse Adoptium",
     "options": ["--release", "25", "-proc:none"],
@@ -463,6 +463,16 @@
     "structural/p9/text-slash-pair": [],
     "structural/p9/hex-subtract": [],
     "structural/p9/switch-following-update": [],
-    "structural/p9/annotated-array-spread": []
+    "structural/p9/annotated-array-spread": [],
+    "structural/fix1/assert": [],
+    "structural/fix1/labeled-continue-do": [],
+    "structural/fix1/synchronized": [],
+    "structural/fix1/empty-statement": [],
+    "structural/fix1/static-initializer": [],
+    "structural/fix1/comparison-shift": [],
+    "structural/fix1/compound-assignment": [],
+    "structural/fix1/super-wildcard": [],
+    "structural/fix1/long-minus": [],
+    "structural/fix1/enum-constants": []
   }
 }

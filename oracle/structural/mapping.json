@@ -2607,17 +2607,17 @@
         "javacKind": "PROVIDES",
         "group": "Declarations and recovery",
         "context": "default",
-        "action": "skip",
-        "range": "none",
+        "action": "compare",
+        "range": "same",
         "ts": [
           {
             "kind": "provides_module_directive",
             "named": true
           }
         ],
-        "parts": "The CST has the corresponding declaration/container.",
-        "reason": "Compilation units, package and module structure are outside this expression/statement/pattern draft.",
-        "rangeDescription": "The row is outside standalone range comparison. Preserve its comparable descendants."
+        "parts": "implementationNames → ordered provider fields.",
+        "reason": "From provides through the semicolon. Compare the javac implementation-name ranges with the provider fields.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
       }
     ]
   },

@@ -39,7 +39,8 @@ backslashes before literal content and closing delimiters, quote boundaries and 
 identifier tolerances), `k13` (typed and bare underscores in record patterns, other unnamed-variable contexts,
 and adjacent invalid patterns), and `structural` (Phase 3 ambiguity probes and independently written reproducers).
 Every case names its origin in `provenance`: the bundle path with its `SHA256SUMS`
-hash, the PR, or "written in this task". IDs are prefixed with the set name. To add a case, append a line, hash its
+hash, the PR, or "written in this task" (the task that added the case; the 56 `structural/p9/` probes say
+"independently written for Phase 3"). IDs are prefixed with the set name. To add a case, append a line, hash its
 `source` (SHA-256 of the UTF-8 bytes; the
 replay prints the actual hash when it differs), then regenerate that set's verdicts.
 
@@ -197,7 +198,8 @@ ID, javac kind, half-open UTF-8 range and status. It reports every added and mis
 change (2 on a tool or input fault). The reasons identify a K fix, a known projection limit (`limit`), or a corpus
 recovery case (`error-case`). When a K fix lands, delete the resolved entries for that K and rerun
 `--check`. Delete its entries in `data/expected-failures.json` as well if the fix removes an ERROR or MISSING from
-an oracle probe. Per-case comparison details are in the `*.results.jsonl` files.
+an oracle probe. Per-case comparison details are in the `*.results.jsonl` files. The summary lists every `compare` or
+`compare-range-only` row that no input reached (`uncompared_rows`, `uncompared_row_count`); such a row has no evidence.
 
 ## Comparing trees
 

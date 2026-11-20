@@ -168,7 +168,7 @@ function describe(node, javac, rule, source, byteAt) {
 }
 
 function compareCase(parser, source, row, mapping) {
-  const result = { id: row.id, errors: row.errors, counts: counts(), firstMismatch: null, mismatches: [] };
+  const result = { id: row.id, errors: row.errors, counts: counts(), rows: {}, firstMismatch: null, mismatches: [] };
   if (row.errors.length) return result;
   const tree = parser.parse(source, null, { bufferSize: Math.max(32 * 1024, source.length * 4) });
   result.treeHasError = tree.rootNode.hasError || tree.rootNode.endIndex !== source.length;
@@ -188,10 +188,13 @@ function compareCase(parser, source, row, mapping) {
       ranges.get(`${byteAt(start)}:${byteAt(end)}`)?.push({ node, range });
   }
   for (const { javac, rule } of wanted) {
-    if (rule?.action === 'skip' || !rule && mapping[javac.kind].every(({ when }) => when)) {
+    assert.ok(rule || !mapping[javac.kind].every(({ when }) => when),
+      `${row.id}: ${javac.kind} at ${javac.start} has no row for its when attributes`);
+    if (rule?.action === 'skip') {
       result.counts.skipped_by_mapping++;
       continue;
     }
+    if (rule) result.rows[`${javac.kind}:${rule.context}`] = (result.rows[`${javac.kind}:${rule.context}`] ?? 0) + 1;
     const atRange = ranges.get(`${javac.start}:${javac.end}`) ?? [];
     const expected = rule?.ts ?? [];
     const attr = {
@@ -296,31 +299,66 @@ async function runChild(command, args, maxRss) {
   }
 }
 
+// Contexts StructuralOracle.context() can emit, by javac kind. Keep in step with the runner.
+const runnerContexts = {
+  ASSIGNMENT: ['annotation-element'],
+  METHOD_INVOCATION: ['explicit-constructor-invocation'],
+  EXPRESSION_STATEMENT: ['explicit-constructor-invocation', 'for-header'],
+  MEMBER_SELECT: ['annotated-catch-qualification', 'class-literal', 'flattened-selector', 'qualified-name'],
+  IDENTIFIER: ['synthetic-enum-type', 'annotated-varargs-element', 'constructor-keyword-with-type-arguments',
+    'this-or-super', 'type-or-unresolved-name'],
+  BLOCK: ['static-initializer', 'constructor-body'],
+  PATTERN_CASE_LABEL: ['non-jls-mixed-switch-label'],
+  DECONSTRUCTION_PATTERN: ['non-jls-mixed-switch-label'],
+  CASE: ['arrow-rule', 'colon-case'],
+  BINDING_PATTERN: ['instanceof-type-binding', 'switch-or-record-component'],
+  MODIFIERS: ['empty-synthetic-or-split', 'instanceof-bare-final', 'contiguous-modifiers'],
+  ANNOTATED_TYPE: ['leading-annotated-type', 'distributed-annotations'],
+  ARRAY_TYPE: ['nested-or-distributed-array-type', 'outer-contiguous-array-type'],
+  VARIABLE: ['enum-constant', 'ordinary-formal-or-catch-parameter', 'single-local-declaration'],
+  PARAMETERIZED_TYPE: ['annotated-varargs-element'],
+  NEW_CLASS: ['enum-constant-initializer'],
+  CLASS: ['implicit-class', 'anonymous-class'],
+  INTERFACE: ['anonymous-class'], ENUM: ['anonymous-class'], RECORD: ['anonymous-class'], ANNOTATION_TYPE: ['anonymous-class'],
+  INT_LITERAL: ['absorbed-decimal-minus'],
+  LONG_LITERAL: ['absorbed-decimal-minus'],
+  STRING_LITERAL: ['folded-string-concatenation'],
+};
+const scalar = (value) => ['string', 'boolean', 'number'].includes(typeof value);
+
 function loadMapping(path) {
   const data = JSON.parse(readText(path));
-  const rows = Object.values(data).flatMap(({ variants }) => variants);
-  assert.ok(Array.isArray(rows) && rows.length, 'mapping has no rows');
-  for (const rule of rows) {
-    assert.ok(/^[A-Z_]+$/.test(rule.javacKind) && typeof rule.context === 'string'
-      && ['compare', 'compare-range-only', 'skip'].includes(rule.action)
-      && ['same', 'none', 'constructor-call', 'colon-case', 'constant-case-expression',
-        'instanceof-binding-tail', 'wildcard-core', 'constructor-selector'].includes(rule.range)
-      && Array.isArray(rule.ts) && rule.ts.every((node) => typeof node.kind === 'string' && typeof node.named === 'boolean'),
-    `invalid mapping row for ${rule.javacKind}`);
-  }
+  assert.ok(data && typeof data === 'object' && !Array.isArray(data), 'mapping must be an object');
+  const seen = new Set();
+  const rows = Object.entries(data).flatMap(([kind, entry]) => {
+    assert.ok(Array.isArray(entry?.variants) && entry.variants.length, `mapping ${kind} has no variants`);
+    for (const rule of entry.variants) {
+      assert.ok(rule && rule.javacKind === kind && /^[A-Z_]+$/.test(kind) && typeof rule.context === 'string'
+        && ['compare', 'compare-range-only', 'skip'].includes(rule.action)
+        && ['same', 'none', 'constructor-call', 'colon-case', 'constant-case-expression',
+          'instanceof-binding-tail', 'wildcard-core', 'constructor-selector'].includes(rule.range)
+        && Array.isArray(rule.ts) && rule.ts.every((node) => typeof node?.kind === 'string' && typeof node.named === 'boolean')
+        && (rule.when === undefined || rule.when && typeof rule.when === 'object' && !Array.isArray(rule.when)
+          && Object.keys(rule.when).length && Object.values(rule.when).every(scalar))
+        && ['operator', 'operatorField'].every((key) => rule[key] === undefined || typeof rule[key] === 'string')
+        && [undefined, 'prefix', 'postfix'].includes(rule.operatorPosition),
+      `invalid mapping row for ${kind} ${rule?.context}`);
+      // A `when` row is selected by javac attributes, so its context name is only a label.
+      assert.ok(rule.context === 'default' || rule.when || runnerContexts[kind]?.includes(rule.context),
+        `mapping row ${kind} ${rule.context}: the runner never emits this context`);
+      assert.ok(!seen.has(`${kind}:${rule.context}`), `duplicate mapping row ${kind} ${rule.context}`);
+      seen.add(`${kind}:${rule.context}`);
+    }
+    return entry.variants;
+  });
+  assert.ok(rows.length, 'mapping has no rows');
   const byKind = Object.groupBy(rows, ({ javacKind }) => javacKind);
   const comparable = Object.entries(byKind).filter(([, rules]) => rules.some((rule) => rule.action !== 'skip'));
   assert.ok(comparable.length, 'mapping has no comparable kinds');
-  const mapping = Object.fromEntries(comparable);
-  // The Phase 3 draft skips module directives; this rule checks the provider roles reported by javac.
-  mapping.PROVIDES ??= [{
-    action: 'compare', context: 'default', range: 'same', group: 'Declarations and recovery',
-    ts: [{ kind: 'provides_module_directive', named: true }],
-  }];
-  return mapping;
+  return Object.fromEntries(comparable);
 }
 
-async function compareGroup(name, cases, { java, out, empty, kinds, mapping, binding, runtime, batch, maxRss, differences }) {
+async function compareGroup(name, cases, { java, out, empty, kinds, mapping, binding, runtime, batch, maxRss, differences, rowCounts }) {
   const summary = {
     cases: cases.length, accepted: 0, rejected: 0, tree_errors: 0, cases_with_mismatch: 0,
     ...counts(), batches: 0, peak_child_rss_mib: 0,
@@ -353,6 +391,7 @@ async function compareGroup(name, cases, { java, out, empty, kinds, mapping, bin
       if (differences && row.mismatches.length) differences[row.id] = row.mismatches.map(({ javac, status }) =>
         ({ kind: javac.kind, start: javac.start, end: javac.end, status }));
       for (const key of Object.keys(row.counts)) summary[key] += row.counts[key];
+      for (const [key, n] of Object.entries(row.rows)) rowCounts[key] = (rowCounts[key] ?? 0) + n;
     }
     appendFileSync(resultsFile, rowText(results));
   }
@@ -393,7 +432,7 @@ function loadExpected() {
 async function selfTest(config) {
   const source = 'class T { Object m() { /* 한😀 */ return ((String) x) + "é"; } }';
   const rejected = 'class T { void m( {}';
-  const wrong = 'interface J { default String m() { return ""; } } class T implements J { Object f() { return (java.util.function.Supplier<String>) J.super::m; } }';
+  const wrong = 'interface J { default String m() { return ""; } } class T implements J { Object f() { return (java.util.function.Supplier<String>) J.super::m; } } enum E { A, @Deprecated B(1) {} ; E() {} E(int n) {} }';
   const inputs = [source, rejected, wrong].map((s, i) => ({ id: `self/${i}`, source: s, sha256: sha256(s) }));
   const summary = await compareGroup('self', inputs, config);
   const [accept, reject, reference] = readRows(join(config.out, 'self-1.javac.jsonl'));
@@ -425,6 +464,21 @@ async function selfTest(config) {
     ['added: t TYPE_CAST [4, 9) mismatched_kind', 'added: u TYPE_CAST [4, 9) mismatched_kind']);
   assert.deepEqual(baselineChanges(expected, { t: [{ ...range, status: 'no_node_at_range' }] }),
     ['added: t TYPE_CAST [4, 9) no_node_at_range', 'missing: t TYPE_CAST [4, 9) mismatched_kind (K16)']);
+  assert.deepEqual(reference.nodes.filter(({ context }) => context === 'enum-constant').map(({ start, end }) => [start, end]),
+    [position(wrong, 'A'), position(wrong, '@Deprecated B(1) {}')]);
+  assert.equal(rows[2].rows['VARIABLE:enum-constant'], 2);
+  // A node whose `when` attributes select no row is a tool fault, not a skip.
+  const { qualifiedSuper, ...noWhen } = method;
+  for (const node of [noWhen, { ...method, qualifiedSuper: 'yes' }])
+    assert.throws(() => compareCase(parser, wrong, { ...reference, nodes: [node] }, config.mapping), /no row for its when/);
+  const base = JSON.parse(readText(join(structural, 'mapping.json')));
+  const mappingFile = join(config.out, 'self-mapping.json');
+  const variable = base.VARIABLE.variants;
+  for (const [variants, message] of [[[...variable, { ...variable[0], context: 'enum-konstant' }], /never emits/],
+    [[...variable, variable[0]], /duplicate/], [[...variable, { ...variable[0], when: [] }], /invalid mapping row/]]) {
+    writeFileSync(mappingFile, JSON.stringify({ ...base, VARIABLE: { variants } }));
+    assert.throws(() => loadMapping(mappingFile), message);
+  }
   const known = rows[2].mismatches.find(({ javac }) => javac.kind === 'MEMBER_REFERENCE');
   if (known) console.log('qualified super mismatch:', JSON.stringify(known));
   console.log('self-test passed', JSON.stringify(summary));
@@ -455,7 +509,7 @@ async function main() {
   const config = {
     java: values.java, out, empty, kinds, mapping,
     binding: values.binding && resolve(values.binding), runtime: values.runtime && resolve(values.runtime),
-    batch, maxRss: cap * mib, differences: expected ? differences : null,
+    batch, maxRss: cap * mib, differences: expected ? differences : null, rowCounts: {},
   };
   if (values['self-test']) return selfTest({ ...config, batch: 3 });
   const summary = { mapping: sha256(readFileSync(mappingPath)) };
@@ -468,6 +522,10 @@ async function main() {
     summary[name] = await compareGroup(name, cases, config);
     mismatches += summary[name].cases_with_mismatch;
   }
+  // A compared row with no node in any input has no evidence; list it rather than imply coverage.
+  summary.uncompared_rows = Object.values(mapping).flat().filter((rule) => rule.action !== 'skip')
+    .map(({ javacKind, context }) => `${javacKind}:${context}`).filter((key) => !config.rowCounts[key]).sort();
+  summary.uncompared_row_count = summary.uncompared_rows.length;
   writeFileSync(join(out, 'summary.json'), JSON.stringify(summary, null, 2) + '\n');
   console.log(JSON.stringify(summary, (key, value) => key === 'peak_child_rss_mib' ? undefined : value, 2));
   if (expected) {

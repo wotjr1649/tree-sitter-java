@@ -253,6 +253,7 @@ public class StructuralOracle {
             }
             case VariableTree t -> {
                 if (end < 0) yield null;
+                if (enumInitializer(new TreePath(path, t), positions, unit)) yield "enum-constant";
                 if (parent instanceof CatchTree) yield "ordinary-formal-or-catch-parameter";
                 if (t.getType() != null && !span.contains("...") && (parent instanceof MethodTree m && m.getParameters().contains(t)
                     || parent instanceof LambdaExpressionTree lambda && lambda.getParameters().contains(t)))
