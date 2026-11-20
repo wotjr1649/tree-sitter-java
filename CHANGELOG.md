@@ -47,7 +47,7 @@ and the parser grows from 1,648 to 1,685 states (+37, +2.25%).
   This repository fixes defects independently and ended upstream tracking and merges at v1.0.0.
   The ADR updates documentation only.
 - **Breaking change (Phase 5).** Reserve all 51 Java keywords and the spellings `true`, `false` and `null`
-  in identifier positions. Contextual keywords remain usable as identifiers. Unnamed lambda parameters
+  in identifier positions. Contextual keywords remain usable as identifiers, except `when` in the documented K25 and K32 limits. Unnamed lambda parameters
   keep their `identifier` nodes. The public node schema is unchanged by this change.
   [JLS 25 §§3.8–3.10](https://docs.oracle.com/javase/specs/jls/se25/html/jls-3.html#jls-3.8)
 
