@@ -1710,7 +1710,7 @@
             "named": true
           }
         ],
-        "parts": "qualifierExpression → non-extra child before ::; typeArguments → children of optional type_arguments after ::; name/mode → final identifier or anonymous new.",
+        "parts": "qualifierExpression → the named non-extra children before :: (the qualifier, an identifier or scoped_type_identifier, then a named super); typeArguments → children of optional type_arguments after ::; name/mode → final identifier or anonymous new.",
         "reason": "Starts at qualifier and ends after member name/new. Compare qualifier range and require its final super to be the named super token. A type_identifier for that token is a mismatch at b28fed5 (grammar-orchard #50).",
         "when": {
           "qualifiedSuper": true
