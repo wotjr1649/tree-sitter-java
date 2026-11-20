@@ -82,13 +82,16 @@ forms only javac's parser accepts (a full compile rejects them), and 10 document
   unchanged.
 - Fix incremental parsing of typed unnamed bindings in switch and `instanceof` type patterns (K14).
   The binding shares the `underscore_pattern` token and keeps its visible `identifier` node. The node schema is
-  unchanged. The parser grows by 4,484 bytes and 4 states.
+  unchanged.
 
 - Set `tree-sitter.json` `metadata.version` and the package manifests to 2.3.0 (the generated `parser.c` embeds it).
 - Review criterion used in this release: a javac-rejected input that newly parses cleanly is kept, and pinned by
   corpus and oracle cases, when the same shape with the newly accepted part replaced by a valid value already parsed
-  cleanly at 2.2.0 (existing tolerance). The entries above name each such case. Forms that javac's parser accepts but
-  a full compile rejects are not defects, and the grammar may stay stricter (owner decision 2026-11-20).
+  cleanly at 2.2.0 (existing tolerance). The entries above name each such case. Any other javac-rejected input that
+  erred at 2.2.0 keeps erring; keywords read as identifiers are left for the reserved-words release. A defect is a
+  construct whose own reproducer passes a full `javac --release 25` compile and is derivable from the JLS 25
+  grammar (owner decision 2026-11-20): forms that javac's parser accepts but a full compile rejects are not defects
+  and the grammar may stay stricter, and forms javac accepts outside the JLS 25 grammar are documented limits.
 - Known limitations:
   - The two K5 forms with annotated dimensions before an annotated `...` (`int @A [] @B ... xs`) still contain ERROR
     and remain the oracle's expected failures.
