@@ -1,0 +1,3394 @@
+{
+  "AND": {
+    "variants": [
+      {
+        "javacKind": "AND",
+        "group": "Operators",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "binary_expression",
+            "named": true
+          }
+        ],
+        "parts": "leftOperand → left, rightOperand → right, token → operator.",
+        "reason": "Starts at the left operand, including its opening parenthesis when present, and ends at the right operand's end. Compare each operand in its field to test precedence and associativity.",
+        "operator": "&",
+        "operatorField": "operator",
+        "fields": {
+          "left": "leftOperand",
+          "right": "rightOperand"
+        },
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "AND_ASSIGNMENT": {
+    "variants": [
+      {
+        "javacKind": "AND_ASSIGNMENT",
+        "group": "Operators",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "assignment_expression",
+            "named": true
+          }
+        ],
+        "parts": "variable → left, expression → right, token → operator.",
+        "reason": "Starts at the assignment target and ends at the RHS. Compare right-associative nesting. Parenthesized targets use the public parenthesized_expression alias.",
+        "operator": "&=",
+        "operatorField": "operator",
+        "fields": {
+          "left": "variable",
+          "right": "expression"
+        },
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "ANNOTATED_TYPE": {
+    "variants": [
+      {
+        "javacKind": "ANNOTATED_TYPE",
+        "group": "Annotations and types",
+        "context": "leading-annotated-type",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "annotated_type",
+            "named": true
+          }
+        ],
+        "parts": "annotations → annotation children; underlyingType → the following type child.",
+        "reason": "Leading annotations and contiguous type occupy the whole span when enclosed by an annotated_type node.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      },
+      {
+        "javacKind": "ANNOTATED_TYPE",
+        "group": "Annotations and types",
+        "context": "distributed-annotations",
+        "action": "skip",
+        "range": "none",
+        "ts": [
+          {
+            "kind": "scoped_type_identifier",
+            "named": true
+          },
+          {
+            "kind": "array_type",
+            "named": true
+          },
+          {
+            "kind": "dimensions",
+            "named": true
+          },
+          {
+            "kind": "dimensions_expr",
+            "named": true
+          },
+          {
+            "kind": "modifiers",
+            "named": true
+          },
+          {
+            "kind": "spread_parameter",
+            "named": true
+          },
+          {
+            "kind": "array_creation_expression",
+            "named": true
+          }
+        ],
+        "parts": "Use TYPE_ANNOTATION/ANNOTATION ranges and the owning type, dimension or declaration role.",
+        "reason": "javac wraps annotated qualified names, wildcards, array layers, and variadic types. Even a leading @A T inside an array creation type can be a javac wrapper whose CST annotation is a direct array_creation_expression child. Object creation can also keep a leading type annotation next to the type field. In a qualified multi-catch alternative javac wraps only the leftmost segment while the CST wraps the entire type. Classify using the owning construct.",
+        "rangeDescription": "The row is outside standalone range comparison. Preserve its comparable descendants."
+      }
+    ]
+  },
+  "ANNOTATION": {
+    "variants": [
+      {
+        "javacKind": "ANNOTATION",
+        "group": "Annotations and types",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "marker_annotation",
+            "named": true
+          },
+          {
+            "kind": "annotation",
+            "named": true
+          }
+        ],
+        "parts": "annotationType → name; arguments → children of annotation_argument_list. Explicit name=value is element_value_pair with key/value. The marker spelling has no argument-list node.",
+        "reason": "From @ through name or closing parenthesis. Match the syntax even when getArguments() is empty for both @A and @A(). Declaration/type distinction is javac context; locate the CST annotation by its position and role.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "ANNOTATION_TYPE": {
+    "variants": [
+      {
+        "javacKind": "ANNOTATION_TYPE",
+        "group": "Declarations and recovery",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "annotation_type_declaration",
+            "named": true
+          }
+        ],
+        "parts": "name and body fields.",
+        "reason": "Explicit source declarations include modifiers and the declaration body. Inspect the enclosing statement slot for local declarations. Synthetic children remain out of scope.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "ANY_PATTERN": {
+    "variants": [
+      {
+        "javacKind": "ANY_PATTERN",
+        "group": "Switch and patterns",
+        "context": "default",
+        "action": "skip",
+        "range": "none",
+        "ts": [
+          {
+            "kind": "underscore_pattern",
+            "named": true
+          }
+        ],
+        "parts": "A bare _ inside record_pattern_component. Compare by parent component ordinal if needed; typed _ remains BINDING_PATTERN.",
+        "reason": "javac records start at the token after _ and end at the underscore end. The probe had zero-width intervals, and trivia can separate those endpoints. There is no usable standalone javac span.",
+        "rangeDescription": "The row is outside standalone range comparison. Preserve its comparable descendants."
+      }
+    ]
+  },
+  "ARRAY_ACCESS": {
+    "variants": [
+      {
+        "javacKind": "ARRAY_ACCESS",
+        "group": "Expressions",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "array_access",
+            "named": true
+          }
+        ],
+        "parts": "expression → array, index → index.",
+        "reason": "Starts at array expression, ends after closing bracket. A parenthesized new array remains nested in array.",
+        "fields": {
+          "array": "expression",
+          "index": "index"
+        },
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "ARRAY_TYPE": {
+    "variants": [
+      {
+        "javacKind": "ARRAY_TYPE",
+        "group": "Annotations and types",
+        "context": "outer-contiguous-array-type",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "array_type",
+            "named": true
+          }
+        ],
+        "parts": "Normalize javac nested array layers onto element and flat dimensions.",
+        "reason": "For a contiguous, in-type bracket suffix the outer type matches the same span. Count bracket pairs and compare the element; repeated javac array layers can share that span.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      },
+      {
+        "javacKind": "ARRAY_TYPE",
+        "group": "Annotations and types",
+        "context": "nested-or-distributed-array-type",
+        "action": "skip",
+        "range": "none",
+        "ts": [
+          {
+            "kind": "array_type",
+            "named": true
+          },
+          {
+            "kind": "dimensions",
+            "named": true
+          },
+          {
+            "kind": "spread_parameter",
+            "named": true
+          },
+          {
+            "kind": "array_creation_expression",
+            "named": true
+          }
+        ],
+        "parts": "Compare under the parent type or variable/constructor/array-creation row.",
+        "reason": "Inner javac layers may share the outer range; after-name brackets, varargs and array-creation type subtrees can lack a contiguous same-shaped CST array_type.",
+        "rangeDescription": "The row is outside standalone range comparison. Preserve its comparable descendants."
+      }
+    ]
+  },
+  "ASSERT": {
+    "variants": [
+      {
+        "javacKind": "ASSERT",
+        "group": "Statements",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "assert_statement",
+            "named": true
+          }
+        ],
+        "parts": "condition and optional detail → ordered expression children separated by :.",
+        "reason": "Includes assert and semicolon.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "ASSIGNMENT": {
+    "variants": [
+      {
+        "javacKind": "ASSIGNMENT",
+        "group": "Annotations and types",
+        "context": "annotation-element",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "element_value_pair",
+            "named": true
+          }
+        ],
+        "parts": "variable → key, expression → value. Anonymous = separates them.",
+        "reason": "An explicit annotation name=value argument is a javac assignment. Both spans start at the key and end at the value.",
+        "operator": "=",
+        "fields": {
+          "key": "variable",
+          "value": "expression"
+        },
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      },
+      {
+        "javacKind": "ASSIGNMENT",
+        "group": "Operators",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "assignment_expression",
+            "named": true
+          }
+        ],
+        "parts": "variable → left, expression → right, token → operator.",
+        "reason": "Starts at the assignment target and ends at the RHS. Compare right-associative nesting. Parenthesized targets use the public parenthesized_expression alias.",
+        "operator": "=",
+        "operatorField": "operator",
+        "fields": {
+          "left": "variable",
+          "right": "expression"
+        },
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "BINDING_PATTERN": {
+    "variants": [
+      {
+        "javacKind": "BINDING_PATTERN",
+        "group": "Switch and patterns",
+        "context": "switch-or-record-component",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "type_pattern",
+            "named": true
+          },
+          {
+            "kind": "record_pattern_component",
+            "named": true
+          }
+        ],
+        "parts": "variable → optional modifiers, type child and name identifier, including typed _ publicly aliased to identifier. The type pattern can sit under a switch-label pattern wrapper.",
+        "reason": "From first modifier, annotation or type through the bound identifier. A typed component has a record_pattern_component wrapper.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      },
+      {
+        "javacKind": "BINDING_PATTERN",
+        "group": "Switch and patterns",
+        "context": "instanceof-type-binding",
+        "action": "compare-range-only",
+        "range": "instanceof-binding-tail",
+        "ts": [
+          {
+            "kind": "instanceof_expression",
+            "named": true
+          }
+        ],
+        "parts": "variable → right and name fields with preceding modifier/annotation children or a bare final token; take the whole tail after instanceof.",
+        "reason": "The javac pattern spans the RHS type and name, but the CST flattens them into instanceof_expression. Derive the binding span from the first RHS token to the name end; the parent INSTANCE_OF checks shape.",
+        "rangeDescription": "Use the first non-extra token after the instanceof token through name.end. The parent INSTANCE_OF row verifies RHS shape."
+      }
+    ]
+  },
+  "BITWISE_COMPLEMENT": {
+    "variants": [
+      {
+        "javacKind": "BITWISE_COMPLEMENT",
+        "group": "Operators",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "unary_expression",
+            "named": true
+          }
+        ],
+        "parts": "expression → operand, token → operator.",
+        "reason": "Starts at the operator and ends at the operand. Decimal int/long forms absorbed by javac are handled by the literal rows.",
+        "operator": "~",
+        "operatorField": "operator",
+        "fields": {
+          "operand": "expression"
+        },
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "BLOCK": {
+    "variants": [
+      {
+        "javacKind": "BLOCK",
+        "group": "Statements",
+        "context": "static-initializer",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "static_initializer",
+            "named": true
+          }
+        ],
+        "parts": "statements → children of its block child.",
+        "reason": "The javac block starts at static and includes braces. The tree-sitter inner block starts at the opening brace.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      },
+      {
+        "javacKind": "BLOCK",
+        "group": "Statements",
+        "context": "constructor-body",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "constructor_body",
+            "named": true
+          }
+        ],
+        "parts": "Statements → children, including explicit_constructor_invocation where present.",
+        "reason": "Both cover the braces. Constructor bodies have their own named CST kind.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      },
+      {
+        "javacKind": "BLOCK",
+        "group": "Statements",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "block",
+            "named": true
+          }
+        ],
+        "parts": "statements → statement children, including anonymous empty statements.",
+        "reason": "Includes both braces, including finally blocks, instance initializers and arrow-rule blocks.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "BOOLEAN_LITERAL": {
+    "variants": [
+      {
+        "javacKind": "BOOLEAN_LITERAL",
+        "group": "Literals",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "true",
+            "named": true
+          },
+          {
+            "kind": "false",
+            "named": true
+          }
+        ],
+        "parts": "Select the named true or false token from LiteralTree.getValue().",
+        "reason": "Same token span.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "BREAK": {
+    "variants": [
+      {
+        "javacKind": "BREAK",
+        "group": "Statements",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "break_statement",
+            "named": true
+          }
+        ],
+        "parts": "Optional label → identifier child.",
+        "reason": "Includes break and semicolon.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "CASE": {
+    "variants": [
+      {
+        "javacKind": "CASE",
+        "group": "Switch and patterns",
+        "context": "arrow-rule",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "switch_rule",
+            "named": true
+          }
+        ],
+        "parts": "labels and guard → switch_label children; body → block, throw_statement or expression_statement child after ->. Unwrap the latter when javac getBody() is an expression.",
+        "reason": "From case/default through arrow body, including the semicolon for an expression or throw. Check getCaseKind() == RULE.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      },
+      {
+        "javacKind": "CASE",
+        "group": "Switch and patterns",
+        "context": "colon-case",
+        "action": "compare",
+        "range": "colon-case",
+        "ts": [
+          {
+            "kind": "switch_block_statement_group",
+            "named": true
+          }
+        ],
+        "parts": "Each switch_label through following : gives a case header. The statements after the final label belong to that final javac case.",
+        "reason": "A single-label group has identical bounds, including its colon and any statements. If the CST groups stacked labels, slice each javac case from its label to its colon or last statement. Probes produced separate groups.",
+        "rangeDescription": "Use a single-label group directly. For a group with multiple labels, use label.start through colon.end for nonfinal labels and label.start through group.end for the last label."
+      }
+    ]
+  },
+  "CATCH": {
+    "variants": [
+      {
+        "javacKind": "CATCH",
+        "group": "Statements",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "catch_clause",
+            "named": true
+          }
+        ],
+        "parts": "parameter → catch_formal_parameter, block → body.",
+        "reason": "From catch through closing brace. catch_type wraps both single-type and multi-catch parameter types.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "CHAR_LITERAL": {
+    "variants": [
+      {
+        "javacKind": "CHAR_LITERAL",
+        "group": "Literals",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "character_literal",
+            "named": true
+          }
+        ],
+        "parts": "One token, including quotes.",
+        "reason": "Same token span with source escapes preserved.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "CLASS": {
+    "variants": [
+      {
+        "javacKind": "CLASS",
+        "group": "Declarations and recovery",
+        "context": "implicit-class",
+        "action": "skip",
+        "range": "none",
+        "ts": [
+          {
+            "kind": "program",
+            "named": true
+          }
+        ],
+        "parts": "Check the explicit members of the compact compilation unit.",
+        "reason": "The implicit top-level class of a compact compilation unit has no source class header or closing brace and javac provides no end position.",
+        "rangeDescription": "The row is outside standalone range comparison. Preserve its comparable descendants."
+      },
+      {
+        "javacKind": "CLASS",
+        "group": "Declarations and recovery",
+        "context": "anonymous-class",
+        "action": "skip",
+        "range": "none",
+        "ts": [
+          {
+            "kind": "class_body",
+            "named": true
+          }
+        ],
+        "parts": "Body → class_body of object_creation_expression, or class_body of enum_constant.",
+        "reason": "Anonymous CLASS has no source class keyword/header; the owning construction checks its body.",
+        "rangeDescription": "The row is outside standalone range comparison. Preserve its comparable descendants."
+      },
+      {
+        "javacKind": "CLASS",
+        "group": "Declarations and recovery",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "class_declaration",
+            "named": true
+          }
+        ],
+        "parts": "name, type_parameters, superclass, interfaces, permits and body fields.",
+        "reason": "Explicit source declarations include modifiers and the declaration body. Inspect the enclosing statement slot for local declarations. Synthetic children remain out of scope.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "COMPILATION_UNIT": {
+    "variants": [
+      {
+        "javacKind": "COMPILATION_UNIT",
+        "group": "Declarations and recovery",
+        "context": "default",
+        "action": "skip",
+        "range": "none",
+        "ts": [
+          {
+            "kind": "program",
+            "named": true
+          }
+        ],
+        "parts": "The CST has the corresponding declaration/container.",
+        "reason": "Compilation units, package and module structure are outside this expression/statement/pattern draft.",
+        "rangeDescription": "The row is outside standalone range comparison. Preserve its comparable descendants."
+      }
+    ]
+  },
+  "CONDITIONAL_AND": {
+    "variants": [
+      {
+        "javacKind": "CONDITIONAL_AND",
+        "group": "Operators",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "binary_expression",
+            "named": true
+          }
+        ],
+        "parts": "leftOperand → left, rightOperand → right, token → operator.",
+        "reason": "Starts at the left operand, including its opening parenthesis when present, and ends at the right operand's end. Compare each operand in its field to test precedence and associativity.",
+        "operator": "&&",
+        "operatorField": "operator",
+        "fields": {
+          "left": "leftOperand",
+          "right": "rightOperand"
+        },
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "CONDITIONAL_EXPRESSION": {
+    "variants": [
+      {
+        "javacKind": "CONDITIONAL_EXPRESSION",
+        "group": "Operators",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "ternary_expression",
+            "named": true
+          }
+        ],
+        "parts": "condition → condition, trueExpression → consequence, falseExpression → alternative.",
+        "reason": "From condition start to false-arm end. Check arm placement as well as the nested ranges.",
+        "fields": {
+          "condition": "condition",
+          "consequence": "trueExpression",
+          "alternative": "falseExpression"
+        },
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "CONDITIONAL_OR": {
+    "variants": [
+      {
+        "javacKind": "CONDITIONAL_OR",
+        "group": "Operators",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "binary_expression",
+            "named": true
+          }
+        ],
+        "parts": "leftOperand → left, rightOperand → right, token → operator.",
+        "reason": "Starts at the left operand, including its opening parenthesis when present, and ends at the right operand's end. Compare each operand in its field to test precedence and associativity.",
+        "operator": "||",
+        "operatorField": "operator",
+        "fields": {
+          "left": "leftOperand",
+          "right": "rightOperand"
+        },
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "CONSTANT_CASE_LABEL": {
+    "variants": [
+      {
+        "javacKind": "CONSTANT_CASE_LABEL",
+        "group": "Switch and patterns",
+        "context": "default",
+        "action": "compare-range-only",
+        "range": "constant-case-expression",
+        "ts": [],
+        "parts": "constantExpression → corresponding expression child of switch_label, in label order.",
+        "reason": "The javac wrapper uses the expression's range. Compare the underlying expression via its own kind row.",
+        "rangeDescription": "Use the same-ordinal non-extra expression child of switch_label, without case keyword, comma, guard or delimiter."
+      }
+    ]
+  },
+  "CONTINUE": {
+    "variants": [
+      {
+        "javacKind": "CONTINUE",
+        "group": "Statements",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "continue_statement",
+            "named": true
+          }
+        ],
+        "parts": "Optional label → identifier child.",
+        "reason": "Includes continue and semicolon.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "DECONSTRUCTION_PATTERN": {
+    "variants": [
+      {
+        "javacKind": "DECONSTRUCTION_PATTERN",
+        "group": "Switch and patterns",
+        "context": "non-jls-mixed-switch-label",
+        "action": "skip",
+        "range": "none",
+        "ts": [
+          {
+            "kind": "switch_label",
+            "named": true
+          }
+        ],
+        "parts": "Retain the case and tree-error verdict. This exception applies only to a pattern in the mixed label.",
+        "reason": "A single label mixing constants or null with patterns falls outside JLS 25 §14.11.1. Javac may build a parse-only pattern for it. No Java 25 structural assertion follows from that spelling.",
+        "rangeDescription": "The row is outside standalone range comparison. Preserve its comparable descendants."
+      },
+      {
+        "javacKind": "DECONSTRUCTION_PATTERN",
+        "group": "Switch and patterns",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "record_pattern",
+            "named": true
+          }
+        ],
+        "parts": "deconstructor → first type/name child; nestedPatterns → ordered record_pattern_body children. Components can be typed, bare underscore or nested record patterns.",
+        "reason": "From deconstructor type start to closing parenthesis. Checks apply whether nested, in a switch pattern wrapper, or in instanceof's pattern field.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "DEFAULT_CASE_LABEL": {
+    "variants": [
+      {
+        "javacKind": "DEFAULT_CASE_LABEL",
+        "group": "Switch and patterns",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "default",
+            "named": false
+          }
+        ],
+        "parts": "Anonymous default token child of switch_label, including the second element of case null, default.",
+        "reason": "Same token span. Exclude enclosing case, colon and guard.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "DIVIDE": {
+    "variants": [
+      {
+        "javacKind": "DIVIDE",
+        "group": "Operators",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "binary_expression",
+            "named": true
+          }
+        ],
+        "parts": "leftOperand → left, rightOperand → right, token → operator.",
+        "reason": "Starts at the left operand, including its opening parenthesis when present, and ends at the right operand's end. Compare each operand in its field to test precedence and associativity.",
+        "operator": "/",
+        "operatorField": "operator",
+        "fields": {
+          "left": "leftOperand",
+          "right": "rightOperand"
+        },
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "DIVIDE_ASSIGNMENT": {
+    "variants": [
+      {
+        "javacKind": "DIVIDE_ASSIGNMENT",
+        "group": "Operators",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "assignment_expression",
+            "named": true
+          }
+        ],
+        "parts": "variable → left, expression → right, token → operator.",
+        "reason": "Starts at the assignment target and ends at the RHS. Compare right-associative nesting. Parenthesized targets use the public parenthesized_expression alias.",
+        "operator": "/=",
+        "operatorField": "operator",
+        "fields": {
+          "left": "variable",
+          "right": "expression"
+        },
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "DOUBLE_LITERAL": {
+    "variants": [
+      {
+        "javacKind": "DOUBLE_LITERAL",
+        "group": "Literals",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "decimal_floating_point_literal",
+            "named": true
+          },
+          {
+            "kind": "hex_floating_point_literal",
+            "named": true
+          }
+        ],
+        "parts": "One token, including the suffix. F/f marks float; D/d or no suffix marks double.",
+        "reason": "The whole token spans both representations. A prefix operator has its own tree.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "DO_WHILE_LOOP": {
+    "variants": [
+      {
+        "javacKind": "DO_WHILE_LOOP",
+        "group": "Statements",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "do_statement",
+            "named": true
+          }
+        ],
+        "parts": "statement → body; condition → condition.",
+        "reason": "From do through trailing semicolon. Condition includes parentheses.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "EMPTY_STATEMENT": {
+    "variants": [
+      {
+        "javacKind": "EMPTY_STATEMENT",
+        "group": "Statements",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": ";",
+            "named": false
+          }
+        ],
+        "parts": "Anonymous semicolon at a statement slot.",
+        "reason": "Same one-token span. Check the statement role to exclude punctuation in another construct.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "ENHANCED_FOR_LOOP": {
+    "variants": [
+      {
+        "javacKind": "ENHANCED_FOR_LOOP",
+        "group": "Statements",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "enhanced_for_statement",
+            "named": true
+          }
+        ],
+        "parts": "variable → modifiers plus type/name/dimensions, expression → value, statement → body.",
+        "reason": "From for through body. The enhanced-for variable has no CST declaration wrapper.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "ENUM": {
+    "variants": [
+      {
+        "javacKind": "ENUM",
+        "group": "Declarations and recovery",
+        "context": "anonymous-class",
+        "action": "skip",
+        "range": "none",
+        "ts": [
+          {
+            "kind": "enum_constant",
+            "named": true
+          },
+          {
+            "kind": "class_body",
+            "named": true
+          }
+        ],
+        "parts": "Inspect the children of the enum constant's body.",
+        "reason": "javac represents a constant-specific class body with an ENUM tree whose interval can cover the entire constant.",
+        "rangeDescription": "The row is outside standalone range comparison. Preserve its comparable descendants."
+      },
+      {
+        "javacKind": "ENUM",
+        "group": "Declarations and recovery",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "enum_declaration",
+            "named": true
+          }
+        ],
+        "parts": "name, interfaces and body fields.",
+        "reason": "Explicit source declarations include modifiers and the declaration body. Inspect the enclosing statement slot for local declarations. Synthetic children remain out of scope.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "EQUAL_TO": {
+    "variants": [
+      {
+        "javacKind": "EQUAL_TO",
+        "group": "Operators",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "binary_expression",
+            "named": true
+          }
+        ],
+        "parts": "leftOperand → left, rightOperand → right, token → operator.",
+        "reason": "Starts at the left operand, including its opening parenthesis when present, and ends at the right operand's end. Compare each operand in its field to test precedence and associativity.",
+        "operator": "==",
+        "operatorField": "operator",
+        "fields": {
+          "left": "leftOperand",
+          "right": "rightOperand"
+        },
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "ERRONEOUS": {
+    "variants": [
+      {
+        "javacKind": "ERRONEOUS",
+        "group": "Declarations and recovery",
+        "context": "default",
+        "action": "skip",
+        "range": "none",
+        "ts": [],
+        "parts": "No match in the accepted-source comparison.",
+        "reason": "Error recovery and unspecified implementation kinds are outside the structural oracle.",
+        "rangeDescription": "The row is outside standalone range comparison. Preserve its comparable descendants."
+      }
+    ]
+  },
+  "EXPORTS": {
+    "variants": [
+      {
+        "javacKind": "EXPORTS",
+        "group": "Declarations and recovery",
+        "context": "default",
+        "action": "skip",
+        "range": "none",
+        "ts": [
+          {
+            "kind": "exports_module_directive",
+            "named": true
+          }
+        ],
+        "parts": "The CST has the corresponding declaration/container.",
+        "reason": "Compilation units, package and module structure are outside this expression/statement/pattern draft.",
+        "rangeDescription": "The row is outside standalone range comparison. Preserve its comparable descendants."
+      }
+    ]
+  },
+  "EXPRESSION_STATEMENT": {
+    "variants": [
+      {
+        "javacKind": "EXPRESSION_STATEMENT",
+        "group": "Statements",
+        "context": "explicit-constructor-invocation",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "explicit_constructor_invocation",
+            "named": true
+          }
+        ],
+        "parts": "expression → invocation structure split into constructor, optional object, optional type_arguments and arguments.",
+        "reason": "Both include the semicolon. Check the enclosing constructor and the this/super target.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      },
+      {
+        "javacKind": "EXPRESSION_STATEMENT",
+        "group": "Statements",
+        "context": "for-header",
+        "action": "skip",
+        "range": "none",
+        "ts": [
+          {
+            "kind": "assignment_expression",
+            "named": true
+          },
+          {
+            "kind": "method_invocation",
+            "named": true
+          },
+          {
+            "kind": "object_creation_expression",
+            "named": true
+          },
+          {
+            "kind": "update_expression",
+            "named": true
+          }
+        ],
+        "parts": "Compare the wrapped expression in its init or update field of for_statement.",
+        "reason": "javac wraps each expression in an init/update list. tree-sitter uses the underlying expression directly, with no semicolon in its range.",
+        "rangeDescription": "The row is outside standalone range comparison. Preserve its comparable descendants."
+      },
+      {
+        "javacKind": "EXPRESSION_STATEMENT",
+        "group": "Statements",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "expression_statement",
+            "named": true
+          }
+        ],
+        "parts": "expression → sole non-extra named child.",
+        "reason": "Includes semicolon. A switch statement arrow expression can have this javac wrapper; a switch expression arrow value instead uses the nested expression alone.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "EXTENDS_WILDCARD": {
+    "variants": [
+      {
+        "javacKind": "EXTENDS_WILDCARD",
+        "group": "Annotations and types",
+        "context": "default",
+        "action": "compare",
+        "range": "wildcard-core",
+        "ts": [
+          {
+            "kind": "wildcard",
+            "named": true
+          }
+        ],
+        "parts": "Use extends as discriminator; a bounded wildcard also carries a type child.",
+        "reason": "From ? or leading annotation (when in the javac span) to the bound end, or through ? if unbounded. An annotation wrapper can own the leading annotation in javac.",
+        "rangeDescription": "Use the whole wildcard interval if no leading annotation is wrapped separately by javac. Otherwise use the start of the anonymous ? through wildcard.end."
+      }
+    ]
+  },
+  "FLOAT_LITERAL": {
+    "variants": [
+      {
+        "javacKind": "FLOAT_LITERAL",
+        "group": "Literals",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "decimal_floating_point_literal",
+            "named": true
+          },
+          {
+            "kind": "hex_floating_point_literal",
+            "named": true
+          }
+        ],
+        "parts": "One token, including the suffix. F/f marks float; D/d or no suffix marks double.",
+        "reason": "The whole token spans both representations. A prefix operator has its own tree.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "FOR_LOOP": {
+    "variants": [
+      {
+        "javacKind": "FOR_LOOP",
+        "group": "Statements",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "for_statement",
+            "named": true
+          }
+        ],
+        "parts": "initializer → init; condition → condition; update → update; statement → body.",
+        "reason": "From for through body. Normalize per-variable declarations and unwrap javac expression-statement lists in init/update. The condition field holds the expression between semicolons.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "GREATER_THAN": {
+    "variants": [
+      {
+        "javacKind": "GREATER_THAN",
+        "group": "Operators",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "binary_expression",
+            "named": true
+          }
+        ],
+        "parts": "leftOperand → left, rightOperand → right, token → operator.",
+        "reason": "Starts at the left operand, including its opening parenthesis when present, and ends at the right operand's end. Compare each operand in its field to test precedence and associativity.",
+        "operator": ">",
+        "operatorField": "operator",
+        "fields": {
+          "left": "leftOperand",
+          "right": "rightOperand"
+        },
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "GREATER_THAN_EQUAL": {
+    "variants": [
+      {
+        "javacKind": "GREATER_THAN_EQUAL",
+        "group": "Operators",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "binary_expression",
+            "named": true
+          }
+        ],
+        "parts": "leftOperand → left, rightOperand → right, token → operator.",
+        "reason": "Starts at the left operand, including its opening parenthesis when present, and ends at the right operand's end. Compare each operand in its field to test precedence and associativity.",
+        "operator": ">=",
+        "operatorField": "operator",
+        "fields": {
+          "left": "leftOperand",
+          "right": "rightOperand"
+        },
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "IDENTIFIER": {
+    "variants": [
+      {
+        "javacKind": "IDENTIFIER",
+        "group": "Expressions",
+        "context": "annotated-varargs-element",
+        "action": "skip",
+        "range": "none",
+        "ts": [
+          {
+            "kind": "spread_parameter",
+            "named": true
+          },
+          {
+            "kind": "type_identifier",
+            "named": true
+          }
+        ],
+        "parts": "Use the element type and pre-ellipsis annotations of spread_parameter.",
+        "reason": "The javac element name's range reaches through the annotations for the variadic dimension. Its standalone interval does not describe a type token.",
+        "rangeDescription": "The row is outside standalone range comparison. Preserve its comparable descendants."
+      },
+      {
+        "javacKind": "IDENTIFIER",
+        "group": "Expressions",
+        "context": "synthetic-enum-type",
+        "action": "skip",
+        "range": "none",
+        "ts": [
+          {
+            "kind": "enum_constant",
+            "named": true
+          }
+        ],
+        "parts": "Use the enclosing enum declaration and constant name.",
+        "reason": "javac synthesizes the enum type name for both the constant variable and its implicit initializer. These identifiers have no source end.",
+        "rangeDescription": "The row is outside standalone range comparison. Preserve its comparable descendants."
+      },
+      {
+        "javacKind": "IDENTIFIER",
+        "group": "Expressions",
+        "context": "constructor-keyword-with-type-arguments",
+        "action": "compare-range-only",
+        "range": "constructor-selector",
+        "ts": [
+          {
+            "kind": "explicit_constructor_invocation",
+            "named": true
+          }
+        ],
+        "parts": "Match the named this or super child. Its prefix can include a separate type_arguments field.",
+        "reason": "For an unqualified constructor selector with explicit type arguments, javac's IdentifierTree includes the leading type arguments through the keyword, as in <String>this.",
+        "rangeDescription": "For an unqualified selector with explicit type arguments, use type_arguments.start through constructor.end."
+      },
+      {
+        "javacKind": "IDENTIFIER",
+        "group": "Expressions",
+        "context": "this-or-super",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "this",
+            "named": true
+          },
+          {
+            "kind": "super",
+            "named": true
+          }
+        ],
+        "parts": "Match the named keyword token at the operand or qualifier position.",
+        "reason": "javac uses IdentifierTree for these unqualified keywords. A qualified super suffix is a member name in javac.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      },
+      {
+        "javacKind": "IDENTIFIER",
+        "group": "Expressions",
+        "context": "type-or-unresolved-name",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "identifier",
+            "named": true
+          },
+          {
+            "kind": "type_identifier",
+            "named": true
+          }
+        ],
+        "parts": "Match the leaf at the corresponding use. Permit type_identifier under a type/name context, including the part of an unresolved reference qualifier that can be a type.",
+        "reason": "IdentifierTree covers references to names and simple types. tree-sitter aliases type positions; declaration names may have no IdentifierTree at all.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      },
+      {
+        "javacKind": "IDENTIFIER",
+        "group": "Expressions",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "identifier",
+            "named": true
+          }
+        ],
+        "parts": "Match the expression identifier at its operand or selector position.",
+        "reason": "Covers the entire identifier. Contextual identifier aliases have the same public kind.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "IF": {
+    "variants": [
+      {
+        "javacKind": "IF",
+        "group": "Statements",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "if_statement",
+            "named": true
+          }
+        ],
+        "parts": "condition, thenStatement, elseStatement → condition, consequence, alternative.",
+        "reason": "From if through last selected branch. Header parentheses are a javac PARENTHESIZED and a CST parenthesized_expression.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "IMPORT": {
+    "variants": [
+      {
+        "javacKind": "IMPORT",
+        "group": "Declarations and recovery",
+        "context": "default",
+        "action": "skip",
+        "range": "none",
+        "ts": [
+          {
+            "kind": "import_declaration",
+            "named": true
+          }
+        ],
+        "parts": "The CST has the corresponding declaration/container.",
+        "reason": "Compilation units, package and module structure are outside this expression/statement/pattern draft.",
+        "rangeDescription": "The row is outside standalone range comparison. Preserve its comparable descendants."
+      }
+    ]
+  },
+  "INSTANCE_OF": {
+    "variants": [
+      {
+        "javacKind": "INSTANCE_OF",
+        "group": "Expressions",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "instanceof_expression",
+            "named": true
+          }
+        ],
+        "parts": "expression → left; ordinary type → right alone; type binding → right and name (with modifier/annotation children); deconstruction → pattern.",
+        "reason": "From operand start to type/pattern end. Compare pattern presence and form via getPattern(); getType() also returns the type of a simple binding, so it cannot distinguish the forms.",
+        "fields": {
+          "left": "expression"
+        },
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "INTERFACE": {
+    "variants": [
+      {
+        "javacKind": "INTERFACE",
+        "group": "Declarations and recovery",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "interface_declaration",
+            "named": true
+          }
+        ],
+        "parts": "name, type_parameters, permits and body fields plus extends_interfaces.",
+        "reason": "Explicit source declarations include modifiers and the declaration body. Inspect the enclosing statement slot for local declarations. Synthetic children remain out of scope.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "INTERSECTION_TYPE": {
+    "variants": [
+      {
+        "javacKind": "INTERSECTION_TYPE",
+        "group": "Annotations and types",
+        "context": "default",
+        "action": "skip",
+        "range": "none",
+        "ts": [
+          {
+            "kind": "cast_expression",
+            "named": true
+          }
+        ],
+        "parts": "bounds → repeated type fields in source order on the cast; type-parameter bounds are separate.",
+        "reason": "No CST intersection wrapper. In the probe the javac interval started at the cast's opening parenthesis and excluded its closing parenthesis.",
+        "rangeDescription": "The row is outside standalone range comparison. Preserve its comparable descendants."
+      }
+    ]
+  },
+  "INT_LITERAL": {
+    "variants": [
+      {
+        "javacKind": "INT_LITERAL",
+        "group": "Literals",
+        "context": "absorbed-decimal-minus",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "unary_expression",
+            "named": true
+          }
+        ],
+        "parts": "A prefix - token plus decimal_integer_literal in operand represents the one javac literal.",
+        "reason": "javac absorbs the minus for decimal integral literals, including minimum values. The normalized interval covers the minus and operand. Classify int/long by the L/l suffix on the operand.",
+        "operator": "-",
+        "operatorField": "operator",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      },
+      {
+        "javacKind": "INT_LITERAL",
+        "group": "Literals",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "decimal_integer_literal",
+            "named": true
+          },
+          {
+            "kind": "hex_integer_literal",
+            "named": true
+          },
+          {
+            "kind": "octal_integer_literal",
+            "named": true
+          },
+          {
+            "kind": "binary_integer_literal",
+            "named": true
+          }
+        ],
+        "parts": "One token; check the L/l suffix where applicable.",
+        "reason": "Covers the entire token. A minus outside an absorbed decimal literal has its own UNARY_MINUS.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "LABELED_STATEMENT": {
+    "variants": [
+      {
+        "javacKind": "LABELED_STATEMENT",
+        "group": "Statements",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "labeled_statement",
+            "named": true
+          }
+        ],
+        "parts": "label → first identifier; statement → child following colon.",
+        "reason": "From label start through statement end. Statement can itself be an anonymous semicolon.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "LAMBDA_EXPRESSION": {
+    "variants": [
+      {
+        "javacKind": "LAMBDA_EXPRESSION",
+        "group": "Expressions",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "lambda_expression",
+            "named": true
+          }
+        ],
+        "parts": "parameters → parameters (bare identifier, inferred_parameters or formal_parameters), body → body (expression or block).",
+        "reason": "From first parameter or opening parenthesis through body end. Check parameter form and ordered children. Empty () uses formal_parameters.",
+        "fields": {
+          "parameters": "parameters",
+          "body": "body"
+        },
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "LEFT_SHIFT": {
+    "variants": [
+      {
+        "javacKind": "LEFT_SHIFT",
+        "group": "Operators",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "binary_expression",
+            "named": true
+          }
+        ],
+        "parts": "leftOperand → left, rightOperand → right, token → operator.",
+        "reason": "Starts at the left operand, including its opening parenthesis when present, and ends at the right operand's end. Compare each operand in its field to test precedence and associativity.",
+        "operator": "<<",
+        "operatorField": "operator",
+        "fields": {
+          "left": "leftOperand",
+          "right": "rightOperand"
+        },
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "LEFT_SHIFT_ASSIGNMENT": {
+    "variants": [
+      {
+        "javacKind": "LEFT_SHIFT_ASSIGNMENT",
+        "group": "Operators",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "assignment_expression",
+            "named": true
+          }
+        ],
+        "parts": "variable → left, expression → right, token → operator.",
+        "reason": "Starts at the assignment target and ends at the RHS. Compare right-associative nesting. Parenthesized targets use the public parenthesized_expression alias.",
+        "operator": "<<=",
+        "operatorField": "operator",
+        "fields": {
+          "left": "variable",
+          "right": "expression"
+        },
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "LESS_THAN": {
+    "variants": [
+      {
+        "javacKind": "LESS_THAN",
+        "group": "Operators",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "binary_expression",
+            "named": true
+          }
+        ],
+        "parts": "leftOperand → left, rightOperand → right, token → operator.",
+        "reason": "Starts at the left operand, including its opening parenthesis when present, and ends at the right operand's end. Compare each operand in its field to test precedence and associativity.",
+        "operator": "<",
+        "operatorField": "operator",
+        "fields": {
+          "left": "leftOperand",
+          "right": "rightOperand"
+        },
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "LESS_THAN_EQUAL": {
+    "variants": [
+      {
+        "javacKind": "LESS_THAN_EQUAL",
+        "group": "Operators",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "binary_expression",
+            "named": true
+          }
+        ],
+        "parts": "leftOperand → left, rightOperand → right, token → operator.",
+        "reason": "Starts at the left operand, including its opening parenthesis when present, and ends at the right operand's end. Compare each operand in its field to test precedence and associativity.",
+        "operator": "<=",
+        "operatorField": "operator",
+        "fields": {
+          "left": "leftOperand",
+          "right": "rightOperand"
+        },
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "LOGICAL_COMPLEMENT": {
+    "variants": [
+      {
+        "javacKind": "LOGICAL_COMPLEMENT",
+        "group": "Operators",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "unary_expression",
+            "named": true
+          }
+        ],
+        "parts": "expression → operand, token → operator.",
+        "reason": "Starts at the operator and ends at the operand. Decimal int/long forms absorbed by javac are handled by the literal rows.",
+        "operator": "!",
+        "operatorField": "operator",
+        "fields": {
+          "operand": "expression"
+        },
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "LONG_LITERAL": {
+    "variants": [
+      {
+        "javacKind": "LONG_LITERAL",
+        "group": "Literals",
+        "context": "absorbed-decimal-minus",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "unary_expression",
+            "named": true
+          }
+        ],
+        "parts": "A prefix - token plus decimal_integer_literal in operand represents the one javac literal.",
+        "reason": "javac absorbs the minus for decimal integral literals, including minimum values. The normalized interval covers the minus and operand. Classify int/long by the L/l suffix on the operand.",
+        "operator": "-",
+        "operatorField": "operator",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      },
+      {
+        "javacKind": "LONG_LITERAL",
+        "group": "Literals",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "decimal_integer_literal",
+            "named": true
+          },
+          {
+            "kind": "hex_integer_literal",
+            "named": true
+          },
+          {
+            "kind": "octal_integer_literal",
+            "named": true
+          },
+          {
+            "kind": "binary_integer_literal",
+            "named": true
+          }
+        ],
+        "parts": "One token; check the L/l suffix where applicable.",
+        "reason": "Covers the entire token. A minus outside an absorbed decimal literal has its own UNARY_MINUS.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "MEMBER_REFERENCE": {
+    "variants": [
+      {
+        "javacKind": "MEMBER_REFERENCE",
+        "group": "Expressions",
+        "context": "qualified-super",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "method_reference",
+            "named": true
+          }
+        ],
+        "parts": "qualifierExpression → non-extra child before ::; typeArguments → children of optional type_arguments after ::; name/mode → final identifier or anonymous new.",
+        "reason": "Starts at qualifier and ends after member name/new. Compare qualifier range and require its final super to be the named super token. A type_identifier for that token is a mismatch at b28fed5 (grammar-orchard #50).",
+        "when": {
+          "qualifiedSuper": true
+        },
+        "qualifierFinalToken": {
+          "kind": "super",
+          "named": true
+        },
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      },
+      {
+        "javacKind": "MEMBER_REFERENCE",
+        "group": "Expressions",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "method_reference",
+            "named": true
+          }
+        ],
+        "parts": "qualifierExpression → non-extra child before ::; typeArguments → children of optional type_arguments after ::; name/mode → final identifier or anonymous new.",
+        "reason": "Starts at qualifier and ends after member name/new. Compare qualifier shape, allowing the unresolved type/name representation for plain names only. Compare INVOKE name or NEW token and any explicit type arguments.",
+        "when": {
+          "qualifiedSuper": false
+        },
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "MEMBER_SELECT": {
+    "variants": [
+      {
+        "javacKind": "MEMBER_SELECT",
+        "group": "Expressions",
+        "context": "flattened-selector",
+        "action": "skip",
+        "range": "none",
+        "ts": [
+          {
+            "kind": "method_invocation",
+            "named": true
+          },
+          {
+            "kind": "explicit_constructor_invocation",
+            "named": true
+          },
+          {
+            "kind": "method_reference",
+            "named": true
+          },
+          {
+            "kind": "field_access",
+            "named": true
+          }
+        ],
+        "parts": "Selection can be spread across fields of the enclosing node. Compare the qualifier, member name and super token using that row.",
+        "reason": "No standalone CST node for a call selector or the flattened qualified-super prefix. The member reference row checks a qualified-super qualifier directly.",
+        "rangeDescription": "The row is outside standalone range comparison. Preserve its comparable descendants."
+      },
+      {
+        "javacKind": "MEMBER_SELECT",
+        "group": "Expressions",
+        "context": "class-literal",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "class_literal",
+            "named": true
+          }
+        ],
+        "parts": "expression → type child; identifier class → anonymous class token.",
+        "reason": "From type start through class keyword. javac represents a class literal as a member selection.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      },
+      {
+        "javacKind": "MEMBER_SELECT",
+        "group": "Expressions",
+        "context": "annotated-catch-qualification",
+        "action": "skip",
+        "range": "none",
+        "ts": [
+          {
+            "kind": "annotated_type",
+            "named": true
+          },
+          {
+            "kind": "scoped_type_identifier",
+            "named": true
+          }
+        ],
+        "parts": "Use the qualified type child of the catch alternative and check the annotation independently.",
+        "reason": "For a leading annotation on a qualified multi-catch alternative, javac attaches it to the first segment. The enclosing selections start at @. CST wraps the entire qualified type once, leaving its qualified-name prefixes unannotated.",
+        "rangeDescription": "The row is outside standalone range comparison. Preserve its comparable descendants."
+      },
+      {
+        "javacKind": "MEMBER_SELECT",
+        "group": "Expressions",
+        "context": "qualified-name",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "scoped_type_identifier",
+            "named": true
+          },
+          {
+            "kind": "scoped_identifier",
+            "named": true
+          },
+          {
+            "kind": "field_access",
+            "named": true
+          }
+        ],
+        "parts": "expression → qualifier; identifier → final segment.",
+        "reason": "Same qualified-name span after checking each component. Use the name/type alternatives only when the parent permits this spelling without resolution. An annotated qualified type may wrap the same javac selection.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      },
+      {
+        "javacKind": "MEMBER_SELECT",
+        "group": "Expressions",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "field_access",
+            "named": true
+          }
+        ],
+        "parts": "expression → object; identifier → field. In a qualified super access, the extra super occurs between the object and field.",
+        "reason": "Starts at receiver and ends at the selected field or this. A selector appearing in an invocation follows the flattened-selector row.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "METHOD": {
+    "variants": [
+      {
+        "javacKind": "METHOD",
+        "group": "Declarations and recovery",
+        "context": "default",
+        "action": "skip",
+        "range": "none",
+        "ts": [
+          {
+            "kind": "method_declaration",
+            "named": true
+          },
+          {
+            "kind": "constructor_declaration",
+            "named": true
+          },
+          {
+            "kind": "compact_constructor_declaration",
+            "named": true
+          },
+          {
+            "kind": "annotation_type_element_declaration",
+            "named": true
+          }
+        ],
+        "parts": "Use parent declaration shape, annotations, and BLOCK or expression children.",
+        "reason": "Method-level matching is outside the expression/statement/pattern draft. METHOD also carries constructors and annotation elements.",
+        "rangeDescription": "The row is outside standalone range comparison. Preserve its comparable descendants."
+      }
+    ]
+  },
+  "METHOD_INVOCATION": {
+    "variants": [
+      {
+        "javacKind": "METHOD_INVOCATION",
+        "group": "Expressions",
+        "context": "explicit-constructor-invocation",
+        "action": "compare-range-only",
+        "range": "constructor-call",
+        "ts": [
+          {
+            "kind": "explicit_constructor_invocation",
+            "named": true
+          }
+        ],
+        "parts": "methodSelect → constructor (this/super) and optional object; typeArguments and arguments → children of corresponding fields.",
+        "reason": "The CST wrapper includes the semicolon; the javac invocation stops at the closing parenthesis. Build the interval from the wrapper start through arguments end, including leading explicit type arguments.",
+        "rangeDescription": "Project from the start of explicit_constructor_invocation to the end of its arguments field, excluding the statement semicolon."
+      },
+      {
+        "javacKind": "METHOD_INVOCATION",
+        "group": "Expressions",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "method_invocation",
+            "named": true
+          }
+        ],
+        "parts": "methodSelect → name plus optional object and optional unfielded super; typeArguments and arguments → ordered children of type_arguments and arguments.",
+        "reason": "From selector start to closing argument parenthesis. Check presence of explicit type arguments and each argument; the tree-sitter wrappers include their delimiters.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "MINUS": {
+    "variants": [
+      {
+        "javacKind": "MINUS",
+        "group": "Operators",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "binary_expression",
+            "named": true
+          }
+        ],
+        "parts": "leftOperand → left, rightOperand → right, token → operator.",
+        "reason": "Starts at the left operand, including its opening parenthesis when present, and ends at the right operand's end. Compare each operand in its field to test precedence and associativity.",
+        "operator": "-",
+        "operatorField": "operator",
+        "fields": {
+          "left": "leftOperand",
+          "right": "rightOperand"
+        },
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "MINUS_ASSIGNMENT": {
+    "variants": [
+      {
+        "javacKind": "MINUS_ASSIGNMENT",
+        "group": "Operators",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "assignment_expression",
+            "named": true
+          }
+        ],
+        "parts": "variable → left, expression → right, token → operator.",
+        "reason": "Starts at the assignment target and ends at the RHS. Compare right-associative nesting. Parenthesized targets use the public parenthesized_expression alias.",
+        "operator": "-=",
+        "operatorField": "operator",
+        "fields": {
+          "left": "variable",
+          "right": "expression"
+        },
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "MODIFIERS": {
+    "variants": [
+      {
+        "javacKind": "MODIFIERS",
+        "group": "Annotations and types",
+        "context": "contiguous-modifiers",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "modifiers",
+            "named": true
+          }
+        ],
+        "parts": "annotations → ordered annotation children; explicit modifier flags → anonymous keyword tokens.",
+        "reason": "From first through last explicit modifier in a contiguous modifier group. Compare source tokens; implicit flags do not require tokens.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      },
+      {
+        "javacKind": "MODIFIERS",
+        "group": "Annotations and types",
+        "context": "empty-synthetic-or-split",
+        "action": "skip",
+        "range": "none",
+        "ts": [
+          {
+            "kind": "modifiers",
+            "named": true
+          },
+          {
+            "kind": "annotated_type",
+            "named": true
+          }
+        ],
+        "parts": "Check individual annotation rows, and final using the corresponding parent construct.",
+        "reason": "Empty/synthetic modifiers have unavailable positions. The javac annotation declaration modifiers can extend through the @ of @interface, which is part of a CST keyword. Split placements include final @A under instanceof and annotations separated by a type parameter list.",
+        "rangeDescription": "The row is outside standalone range comparison. Preserve its comparable descendants."
+      },
+      {
+        "javacKind": "MODIFIERS",
+        "group": "Annotations and types",
+        "context": "instanceof-bare-final",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "final",
+            "named": false
+          }
+        ],
+        "parts": "Require the bare final token on instanceof_expression when it is the only source modifier.",
+        "reason": "The keyword alone occupies the javac modifier span. This branch does not expose a modifiers node.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "MODULE": {
+    "variants": [
+      {
+        "javacKind": "MODULE",
+        "group": "Declarations and recovery",
+        "context": "default",
+        "action": "skip",
+        "range": "none",
+        "ts": [
+          {
+            "kind": "module_declaration",
+            "named": true
+          }
+        ],
+        "parts": "The CST has the corresponding declaration/container.",
+        "reason": "Compilation units, package and module structure are outside this expression/statement/pattern draft.",
+        "rangeDescription": "The row is outside standalone range comparison. Preserve its comparable descendants."
+      }
+    ]
+  },
+  "MULTIPLY": {
+    "variants": [
+      {
+        "javacKind": "MULTIPLY",
+        "group": "Operators",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "binary_expression",
+            "named": true
+          }
+        ],
+        "parts": "leftOperand → left, rightOperand → right, token → operator.",
+        "reason": "Starts at the left operand, including its opening parenthesis when present, and ends at the right operand's end. Compare each operand in its field to test precedence and associativity.",
+        "operator": "*",
+        "operatorField": "operator",
+        "fields": {
+          "left": "leftOperand",
+          "right": "rightOperand"
+        },
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "MULTIPLY_ASSIGNMENT": {
+    "variants": [
+      {
+        "javacKind": "MULTIPLY_ASSIGNMENT",
+        "group": "Operators",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "assignment_expression",
+            "named": true
+          }
+        ],
+        "parts": "variable → left, expression → right, token → operator.",
+        "reason": "Starts at the assignment target and ends at the RHS. Compare right-associative nesting. Parenthesized targets use the public parenthesized_expression alias.",
+        "operator": "*=",
+        "operatorField": "operator",
+        "fields": {
+          "left": "variable",
+          "right": "expression"
+        },
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "NEW_ARRAY": {
+    "variants": [
+      {
+        "javacKind": "NEW_ARRAY",
+        "group": "Expressions",
+        "context": "bare-initializer",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "array_initializer",
+            "named": true
+          },
+          {
+            "kind": "element_value_array_initializer",
+            "named": true
+          }
+        ],
+        "parts": "initializers → ordered non-extra named children. The element-value variant belongs to an annotation or annotation element default.",
+        "reason": "Both include the braces. javac getType() is null for a bare initializer, including nested braces.",
+        "when": {
+          "bareInitializer": true
+        },
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      },
+      {
+        "javacKind": "NEW_ARRAY",
+        "group": "Expressions",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "array_creation_expression",
+            "named": true
+          }
+        ],
+        "parts": "type → type after unwrapping trailing empty dimensions and base annotations. dimensions → expression child of each dimensions_expr; remaining empty brackets → dimensions. initializers → children of value:array_initializer.",
+        "reason": "From new through last bracket or closing initializer brace. Compare dimensions individually and in order. Leading, sized-dimension and unsized-dimension annotations have distinct positions. javac type subtree ranges can span sized brackets.",
+        "when": {
+          "bareInitializer": false
+        },
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "NEW_CLASS": {
+    "variants": [
+      {
+        "javacKind": "NEW_CLASS",
+        "group": "Expressions",
+        "context": "enum-constant-initializer",
+        "action": "skip",
+        "range": "none",
+        "ts": [
+          {
+            "kind": "enum_constant",
+            "named": true
+          }
+        ],
+        "parts": "An enum constant can contain an arguments child and a class_body.",
+        "reason": "javac synthesizes a constructor tree for a constant. An explicit argument list/body can have usable positions despite there being no new expression.",
+        "rangeDescription": "The row is outside standalone range comparison. Preserve its comparable descendants."
+      },
+      {
+        "javacKind": "NEW_CLASS",
+        "group": "Expressions",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "object_creation_expression",
+            "named": true
+          }
+        ],
+        "parts": "enclosingExpression → optional unfielded qualifier before .new; identifier → type; typeArguments → children of type_arguments; arguments → children of arguments; classBody → optional class_body.",
+        "reason": "Starts at qualifier if present, otherwise new. Ends after arguments or anonymous class body. The anonymous CLASS only spans the body.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "NOT_EQUAL_TO": {
+    "variants": [
+      {
+        "javacKind": "NOT_EQUAL_TO",
+        "group": "Operators",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "binary_expression",
+            "named": true
+          }
+        ],
+        "parts": "leftOperand → left, rightOperand → right, token → operator.",
+        "reason": "Starts at the left operand, including its opening parenthesis when present, and ends at the right operand's end. Compare each operand in its field to test precedence and associativity.",
+        "operator": "!=",
+        "operatorField": "operator",
+        "fields": {
+          "left": "leftOperand",
+          "right": "rightOperand"
+        },
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "NULL_LITERAL": {
+    "variants": [
+      {
+        "javacKind": "NULL_LITERAL",
+        "group": "Literals",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "null_literal",
+            "named": true
+          }
+        ],
+        "parts": "One null token.",
+        "reason": "Same token span.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "OPENS": {
+    "variants": [
+      {
+        "javacKind": "OPENS",
+        "group": "Declarations and recovery",
+        "context": "default",
+        "action": "skip",
+        "range": "none",
+        "ts": [
+          {
+            "kind": "opens_module_directive",
+            "named": true
+          }
+        ],
+        "parts": "The CST has the corresponding declaration/container.",
+        "reason": "Compilation units, package and module structure are outside this expression/statement/pattern draft.",
+        "rangeDescription": "The row is outside standalone range comparison. Preserve its comparable descendants."
+      }
+    ]
+  },
+  "OR": {
+    "variants": [
+      {
+        "javacKind": "OR",
+        "group": "Operators",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "binary_expression",
+            "named": true
+          }
+        ],
+        "parts": "leftOperand → left, rightOperand → right, token → operator.",
+        "reason": "Starts at the left operand, including its opening parenthesis when present, and ends at the right operand's end. Compare each operand in its field to test precedence and associativity.",
+        "operator": "|",
+        "operatorField": "operator",
+        "fields": {
+          "left": "leftOperand",
+          "right": "rightOperand"
+        },
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "OR_ASSIGNMENT": {
+    "variants": [
+      {
+        "javacKind": "OR_ASSIGNMENT",
+        "group": "Operators",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "assignment_expression",
+            "named": true
+          }
+        ],
+        "parts": "variable → left, expression → right, token → operator.",
+        "reason": "Starts at the assignment target and ends at the RHS. Compare right-associative nesting. Parenthesized targets use the public parenthesized_expression alias.",
+        "operator": "|=",
+        "operatorField": "operator",
+        "fields": {
+          "left": "variable",
+          "right": "expression"
+        },
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "OTHER": {
+    "variants": [
+      {
+        "javacKind": "OTHER",
+        "group": "Declarations and recovery",
+        "context": "default",
+        "action": "skip",
+        "range": "none",
+        "ts": [],
+        "parts": "No match in the accepted-source comparison.",
+        "reason": "Error recovery and unspecified implementation kinds are outside the structural oracle.",
+        "rangeDescription": "The row is outside standalone range comparison. Preserve its comparable descendants."
+      }
+    ]
+  },
+  "PACKAGE": {
+    "variants": [
+      {
+        "javacKind": "PACKAGE",
+        "group": "Declarations and recovery",
+        "context": "default",
+        "action": "skip",
+        "range": "none",
+        "ts": [
+          {
+            "kind": "package_declaration",
+            "named": true
+          }
+        ],
+        "parts": "The CST has the corresponding declaration/container.",
+        "reason": "Compilation units, package and module structure are outside this expression/statement/pattern draft.",
+        "rangeDescription": "The row is outside standalone range comparison. Preserve its comparable descendants."
+      }
+    ]
+  },
+  "PARAMETERIZED_TYPE": {
+    "variants": [
+      {
+        "javacKind": "PARAMETERIZED_TYPE",
+        "group": "Annotations and types",
+        "context": "annotated-varargs-element",
+        "action": "skip",
+        "range": "none",
+        "ts": [
+          {
+            "kind": "spread_parameter",
+            "named": true
+          },
+          {
+            "kind": "generic_type",
+            "named": true
+          }
+        ],
+        "parts": "Use the varargs element type and separately check the type arguments and pre-ellipsis annotations.",
+        "reason": "With an annotated variadic dimension, the javac parameterized element type can extend beyond its closing > to the ellipsis annotation. CST exposes generic_type and the annotation as siblings.",
+        "rangeDescription": "The row is outside standalone range comparison. Preserve its comparable descendants."
+      },
+      {
+        "javacKind": "PARAMETERIZED_TYPE",
+        "group": "Annotations and types",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "generic_type",
+            "named": true
+          }
+        ],
+        "parts": "type → first type child; typeArguments → ordered type_arguments children.",
+        "reason": "From raw type start through closing >, including diamond <> when present.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "PARENTHESIZED": {
+    "variants": [
+      {
+        "javacKind": "PARENTHESIZED",
+        "group": "Expressions",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "parenthesized_expression",
+            "named": true
+          }
+        ],
+        "parts": "expression → sole non-extra named child. If wrapsCast is available, check whether that child is cast_expression.",
+        "reason": "Covers both parentheses for explicit grouping, parenthesized assignment targets and the if/while/do/switch/synchronized headers. Lambda parameters are separate.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "PATTERN_CASE_LABEL": {
+    "variants": [
+      {
+        "javacKind": "PATTERN_CASE_LABEL",
+        "group": "Switch and patterns",
+        "context": "non-jls-mixed-switch-label",
+        "action": "skip",
+        "range": "none",
+        "ts": [
+          {
+            "kind": "switch_label",
+            "named": true
+          }
+        ],
+        "parts": "Retain the case and tree-error verdict. This exception applies only to a pattern in the mixed label.",
+        "reason": "A single label mixing constants or null with patterns falls outside JLS 25 §14.11.1. Javac may build a parse-only pattern for it. No Java 25 structural assertion follows from that spelling.",
+        "rangeDescription": "The row is outside standalone range comparison. Preserve its comparable descendants."
+      },
+      {
+        "javacKind": "PATTERN_CASE_LABEL",
+        "group": "Switch and patterns",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "pattern",
+            "named": true
+          }
+        ],
+        "parts": "pattern → same-ordinal pattern child of switch_label, with a nested type_pattern or record_pattern.",
+        "reason": "Both cover just the pattern. Compare label role as well as the inner pattern under its own kind.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "PLUS": {
+    "variants": [
+      {
+        "javacKind": "PLUS",
+        "group": "Operators",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "binary_expression",
+            "named": true
+          }
+        ],
+        "parts": "leftOperand → left, rightOperand → right, token → operator.",
+        "reason": "Starts at the left operand, including its opening parenthesis when present, and ends at the right operand's end. Compare each operand in its field to test precedence and associativity. Folded string concatenations follow the STRING_LITERAL exception.",
+        "operator": "+",
+        "operatorField": "operator",
+        "fields": {
+          "left": "leftOperand",
+          "right": "rightOperand"
+        },
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "PLUS_ASSIGNMENT": {
+    "variants": [
+      {
+        "javacKind": "PLUS_ASSIGNMENT",
+        "group": "Operators",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "assignment_expression",
+            "named": true
+          }
+        ],
+        "parts": "variable → left, expression → right, token → operator.",
+        "reason": "Starts at the assignment target and ends at the RHS. Compare right-associative nesting. Parenthesized targets use the public parenthesized_expression alias.",
+        "operator": "+=",
+        "operatorField": "operator",
+        "fields": {
+          "left": "variable",
+          "right": "expression"
+        },
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "POSTFIX_DECREMENT": {
+    "variants": [
+      {
+        "javacKind": "POSTFIX_DECREMENT",
+        "group": "Operators",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "update_expression",
+            "named": true
+          }
+        ],
+        "parts": "expression → sole non-extra named child. Anonymous operator precedes or follows that child.",
+        "reason": "Covers operand and token. Compare token side to distinguish prefix and postfix.",
+        "operator": "--",
+        "operatorPosition": "postfix",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "POSTFIX_INCREMENT": {
+    "variants": [
+      {
+        "javacKind": "POSTFIX_INCREMENT",
+        "group": "Operators",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "update_expression",
+            "named": true
+          }
+        ],
+        "parts": "expression → sole non-extra named child. Anonymous operator precedes or follows that child.",
+        "reason": "Covers operand and token. Compare token side to distinguish prefix and postfix.",
+        "operator": "++",
+        "operatorPosition": "postfix",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "PREFIX_DECREMENT": {
+    "variants": [
+      {
+        "javacKind": "PREFIX_DECREMENT",
+        "group": "Operators",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "update_expression",
+            "named": true
+          }
+        ],
+        "parts": "expression → sole non-extra named child. Anonymous operator precedes or follows that child.",
+        "reason": "Covers operand and token. Compare token side to distinguish prefix and postfix.",
+        "operator": "--",
+        "operatorPosition": "prefix",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "PREFIX_INCREMENT": {
+    "variants": [
+      {
+        "javacKind": "PREFIX_INCREMENT",
+        "group": "Operators",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "update_expression",
+            "named": true
+          }
+        ],
+        "parts": "expression → sole non-extra named child. Anonymous operator precedes or follows that child.",
+        "reason": "Covers operand and token. Compare token side to distinguish prefix and postfix.",
+        "operator": "++",
+        "operatorPosition": "prefix",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "PRIMITIVE_TYPE": {
+    "variants": [
+      {
+        "javacKind": "PRIMITIVE_TYPE",
+        "group": "Annotations and types",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "integral_type",
+            "named": true
+          },
+          {
+            "kind": "floating_point_type",
+            "named": true
+          },
+          {
+            "kind": "boolean_type",
+            "named": true
+          },
+          {
+            "kind": "void_type",
+            "named": true
+          }
+        ],
+        "parts": "Check the actual keyword against getPrimitiveTypeKind().",
+        "reason": "Same keyword span. var is not a primitive type.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "PROVIDES": {
+    "variants": [
+      {
+        "javacKind": "PROVIDES",
+        "group": "Declarations and recovery",
+        "context": "default",
+        "action": "skip",
+        "range": "none",
+        "ts": [
+          {
+            "kind": "provides_module_directive",
+            "named": true
+          }
+        ],
+        "parts": "The CST has the corresponding declaration/container.",
+        "reason": "Compilation units, package and module structure are outside this expression/statement/pattern draft.",
+        "rangeDescription": "The row is outside standalone range comparison. Preserve its comparable descendants."
+      }
+    ]
+  },
+  "RECORD": {
+    "variants": [
+      {
+        "javacKind": "RECORD",
+        "group": "Declarations and recovery",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "record_declaration",
+            "named": true
+          }
+        ],
+        "parts": "name, type_parameters, parameters, interfaces and body fields.",
+        "reason": "Explicit source declarations include modifiers and the declaration body. Inspect the enclosing statement slot for local declarations. Synthetic children remain out of scope.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "REMAINDER": {
+    "variants": [
+      {
+        "javacKind": "REMAINDER",
+        "group": "Operators",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "binary_expression",
+            "named": true
+          }
+        ],
+        "parts": "leftOperand → left, rightOperand → right, token → operator.",
+        "reason": "Starts at the left operand, including its opening parenthesis when present, and ends at the right operand's end. Compare each operand in its field to test precedence and associativity.",
+        "operator": "%",
+        "operatorField": "operator",
+        "fields": {
+          "left": "leftOperand",
+          "right": "rightOperand"
+        },
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "REMAINDER_ASSIGNMENT": {
+    "variants": [
+      {
+        "javacKind": "REMAINDER_ASSIGNMENT",
+        "group": "Operators",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "assignment_expression",
+            "named": true
+          }
+        ],
+        "parts": "variable → left, expression → right, token → operator.",
+        "reason": "Starts at the assignment target and ends at the RHS. Compare right-associative nesting. Parenthesized targets use the public parenthesized_expression alias.",
+        "operator": "%=",
+        "operatorField": "operator",
+        "fields": {
+          "left": "variable",
+          "right": "expression"
+        },
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "REQUIRES": {
+    "variants": [
+      {
+        "javacKind": "REQUIRES",
+        "group": "Declarations and recovery",
+        "context": "default",
+        "action": "skip",
+        "range": "none",
+        "ts": [
+          {
+            "kind": "requires_module_directive",
+            "named": true
+          }
+        ],
+        "parts": "The CST has the corresponding declaration/container.",
+        "reason": "Compilation units, package and module structure are outside this expression/statement/pattern draft.",
+        "rangeDescription": "The row is outside standalone range comparison. Preserve its comparable descendants."
+      }
+    ]
+  },
+  "RETURN": {
+    "variants": [
+      {
+        "javacKind": "RETURN",
+        "group": "Statements",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "return_statement",
+            "named": true
+          }
+        ],
+        "parts": "Optional expression → sole non-extra named child.",
+        "reason": "Includes return and semicolon.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "RIGHT_SHIFT": {
+    "variants": [
+      {
+        "javacKind": "RIGHT_SHIFT",
+        "group": "Operators",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "binary_expression",
+            "named": true
+          }
+        ],
+        "parts": "leftOperand → left, rightOperand → right, token → operator.",
+        "reason": "Starts at the left operand, including its opening parenthesis when present, and ends at the right operand's end. Compare each operand in its field to test precedence and associativity.",
+        "operator": ">>",
+        "operatorField": "operator",
+        "fields": {
+          "left": "leftOperand",
+          "right": "rightOperand"
+        },
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "RIGHT_SHIFT_ASSIGNMENT": {
+    "variants": [
+      {
+        "javacKind": "RIGHT_SHIFT_ASSIGNMENT",
+        "group": "Operators",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "assignment_expression",
+            "named": true
+          }
+        ],
+        "parts": "variable → left, expression → right, token → operator.",
+        "reason": "Starts at the assignment target and ends at the RHS. Compare right-associative nesting. Parenthesized targets use the public parenthesized_expression alias.",
+        "operator": ">>=",
+        "operatorField": "operator",
+        "fields": {
+          "left": "variable",
+          "right": "expression"
+        },
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "STRING_LITERAL": {
+    "variants": [
+      {
+        "javacKind": "STRING_LITERAL",
+        "group": "Literals",
+        "context": "folded-string-concatenation",
+        "action": "skip",
+        "range": "none",
+        "ts": [
+          {
+            "kind": "binary_expression",
+            "named": true
+          }
+        ],
+        "parts": "CST + chains still contain individual string_literal nodes.",
+        "reason": "javac folds adjacent string literal concatenations during parse. A folded segment can lack a same-span binary CST subtree. Detect folding before applying the ordinary literal row.",
+        "rangeDescription": "The row is outside standalone range comparison. Preserve its comparable descendants."
+      },
+      {
+        "javacKind": "STRING_LITERAL",
+        "group": "Literals",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "string_literal",
+            "named": true
+          }
+        ],
+        "parts": "Whole quoted string or text block; fragments and escapes are CST children.",
+        "reason": "A single source literal includes its delimiters, including the triple quotes of a text block.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "SUPER_WILDCARD": {
+    "variants": [
+      {
+        "javacKind": "SUPER_WILDCARD",
+        "group": "Annotations and types",
+        "context": "default",
+        "action": "compare",
+        "range": "wildcard-core",
+        "ts": [
+          {
+            "kind": "wildcard",
+            "named": true
+          }
+        ],
+        "parts": "Use super as discriminator; a bounded wildcard also carries a type child.",
+        "reason": "From ? or leading annotation (when in the javac span) to the bound end, or through ? if unbounded. An annotation wrapper can own the leading annotation in javac.",
+        "rangeDescription": "Use the whole wildcard interval if no leading annotation is wrapped separately by javac. Otherwise use the start of the anonymous ? through wildcard.end."
+      }
+    ]
+  },
+  "SWITCH": {
+    "variants": [
+      {
+        "javacKind": "SWITCH",
+        "group": "Switch and patterns",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "switch_expression",
+            "named": true
+          }
+        ],
+        "parts": "expression → condition:parenthesized_expression; cases → switch_rule or switch_block_statement_group children of body:switch_block.",
+        "reason": "Both javac kinds cover switch through closing brace. tree-sitter uses the same node kind for statement and expression. Check enclosing statement/expression role.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "SWITCH_EXPRESSION": {
+    "variants": [
+      {
+        "javacKind": "SWITCH_EXPRESSION",
+        "group": "Switch and patterns",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "switch_expression",
+            "named": true
+          }
+        ],
+        "parts": "expression → condition:parenthesized_expression; cases → switch_rule or switch_block_statement_group children of body:switch_block.",
+        "reason": "Both javac kinds cover switch through closing brace. tree-sitter uses the same node kind for statement and expression. Check enclosing statement/expression role.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "SYNCHRONIZED": {
+    "variants": [
+      {
+        "javacKind": "SYNCHRONIZED",
+        "group": "Statements",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "synchronized_statement",
+            "named": true
+          }
+        ],
+        "parts": "expression → parenthesized_expression child, block → body.",
+        "reason": "From synchronized through closing brace.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "THROW": {
+    "variants": [
+      {
+        "javacKind": "THROW",
+        "group": "Statements",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "throw_statement",
+            "named": true
+          }
+        ],
+        "parts": "Thrown expression → sole non-extra named child.",
+        "reason": "Includes throw and semicolon.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "TRY": {
+    "variants": [
+      {
+        "javacKind": "TRY",
+        "group": "Statements",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "try_statement",
+            "named": true
+          },
+          {
+            "kind": "try_with_resources_statement",
+            "named": true
+          }
+        ],
+        "parts": "block → body; resources → children of resources:resource_specification; catches → catch_clause children; finallyBlock → block inside finally_clause.",
+        "reason": "From try through last body/catch/finally closing brace. Nonempty getResources() selects try_with_resources_statement.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "TYPE_ANNOTATION": {
+    "variants": [
+      {
+        "javacKind": "TYPE_ANNOTATION",
+        "group": "Annotations and types",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "marker_annotation",
+            "named": true
+          },
+          {
+            "kind": "annotation",
+            "named": true
+          }
+        ],
+        "parts": "annotationType → name; arguments → children of annotation_argument_list. Explicit name=value is element_value_pair with key/value. The marker spelling has no argument-list node.",
+        "reason": "From @ through name or closing parenthesis. Match the syntax even when getArguments() is empty for both @A and @A(). Declaration/type distinction is javac context; locate the CST annotation by its position and role.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "TYPE_CAST": {
+    "variants": [
+      {
+        "javacKind": "TYPE_CAST",
+        "group": "Expressions",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "cast_expression",
+            "named": true
+          }
+        ],
+        "parts": "type → repeated type field in source order, expression → value.",
+        "reason": "Covers the opening parenthesis, type list and operand. An intersection is a javac wrapper and is repeated type fields in tree-sitter.",
+        "fields": {
+          "type": "type",
+          "value": "expression"
+        },
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "TYPE_PARAMETER": {
+    "variants": [
+      {
+        "javacKind": "TYPE_PARAMETER",
+        "group": "Annotations and types",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "type_parameter",
+            "named": true
+          }
+        ],
+        "parts": "name → type_identifier child; annotations → leading annotation children; bounds → ordered children of type_bound.",
+        "reason": "Covers annotations, name and any extends bound list. The type_bound wrapper has no separate javac tree.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "UNARY_MINUS": {
+    "variants": [
+      {
+        "javacKind": "UNARY_MINUS",
+        "group": "Operators",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "unary_expression",
+            "named": true
+          }
+        ],
+        "parts": "expression → operand, token → operator.",
+        "reason": "Starts at the operator and ends at the operand. Decimal int/long forms absorbed by javac are handled by the literal rows.",
+        "operator": "-",
+        "operatorField": "operator",
+        "fields": {
+          "operand": "expression"
+        },
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "UNARY_PLUS": {
+    "variants": [
+      {
+        "javacKind": "UNARY_PLUS",
+        "group": "Operators",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "unary_expression",
+            "named": true
+          }
+        ],
+        "parts": "expression → operand, token → operator.",
+        "reason": "Starts at the operator and ends at the operand. Decimal int/long forms absorbed by javac are handled by the literal rows.",
+        "operator": "+",
+        "operatorField": "operator",
+        "fields": {
+          "operand": "expression"
+        },
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "UNBOUNDED_WILDCARD": {
+    "variants": [
+      {
+        "javacKind": "UNBOUNDED_WILDCARD",
+        "group": "Annotations and types",
+        "context": "default",
+        "action": "compare",
+        "range": "wildcard-core",
+        "ts": [
+          {
+            "kind": "wildcard",
+            "named": true
+          }
+        ],
+        "parts": "Use ? as discriminator; a bounded wildcard also carries a type child.",
+        "reason": "From ? or leading annotation (when in the javac span) to the bound end, or through ? if unbounded. An annotation wrapper can own the leading annotation in javac.",
+        "rangeDescription": "Use the whole wildcard interval if no leading annotation is wrapped separately by javac. Otherwise use the start of the anonymous ? through wildcard.end."
+      }
+    ]
+  },
+  "UNION_TYPE": {
+    "variants": [
+      {
+        "javacKind": "UNION_TYPE",
+        "group": "Annotations and types",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "catch_type",
+            "named": true
+          }
+        ],
+        "parts": "typeAlternatives → ordered type children separated by |.",
+        "reason": "From first type through last type. Only check a union in multi-catch. A one-type catch_type has no UNION_TYPE.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "UNSIGNED_RIGHT_SHIFT": {
+    "variants": [
+      {
+        "javacKind": "UNSIGNED_RIGHT_SHIFT",
+        "group": "Operators",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "binary_expression",
+            "named": true
+          }
+        ],
+        "parts": "leftOperand → left, rightOperand → right, token → operator.",
+        "reason": "Starts at the left operand, including its opening parenthesis when present, and ends at the right operand's end. Compare each operand in its field to test precedence and associativity.",
+        "operator": ">>>",
+        "operatorField": "operator",
+        "fields": {
+          "left": "leftOperand",
+          "right": "rightOperand"
+        },
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "UNSIGNED_RIGHT_SHIFT_ASSIGNMENT": {
+    "variants": [
+      {
+        "javacKind": "UNSIGNED_RIGHT_SHIFT_ASSIGNMENT",
+        "group": "Operators",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "assignment_expression",
+            "named": true
+          }
+        ],
+        "parts": "variable → left, expression → right, token → operator.",
+        "reason": "Starts at the assignment target and ends at the RHS. Compare right-associative nesting. Parenthesized targets use the public parenthesized_expression alias.",
+        "operator": ">>>=",
+        "operatorField": "operator",
+        "fields": {
+          "left": "variable",
+          "right": "expression"
+        },
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "USES": {
+    "variants": [
+      {
+        "javacKind": "USES",
+        "group": "Declarations and recovery",
+        "context": "default",
+        "action": "skip",
+        "range": "none",
+        "ts": [
+          {
+            "kind": "uses_module_directive",
+            "named": true
+          }
+        ],
+        "parts": "The CST has the corresponding declaration/container.",
+        "reason": "Compilation units, package and module structure are outside this expression/statement/pattern draft.",
+        "rangeDescription": "The row is outside standalone range comparison. Preserve its comparable descendants."
+      }
+    ]
+  },
+  "VARIABLE": {
+    "variants": [
+      {
+        "javacKind": "VARIABLE",
+        "group": "Annotations and types",
+        "context": "single-local-declaration",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "local_variable_declaration",
+            "named": true
+          }
+        ],
+        "parts": "modifiers and type are children/field of the declaration; name, dimensions and initializer are in its sole declarator.",
+        "reason": "A standalone one-declarator local declaration includes the semicolon in both trees. A for initializer, a shared declaration and split type spans need context.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      },
+      {
+        "javacKind": "VARIABLE",
+        "group": "Annotations and types",
+        "context": "ordinary-formal-or-catch-parameter",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "formal_parameter",
+            "named": true
+          },
+          {
+            "kind": "catch_formal_parameter",
+            "named": true
+          }
+        ],
+        "parts": "modifiers plus the type field (or catch_type child), name and optional dimensions.",
+        "reason": "An ordinary explicit formal parameter or catch parameter spans its own modifiers, type and name. Spread, receiver and inferred parameters have other representations.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      },
+      {
+        "javacKind": "VARIABLE",
+        "group": "Annotations and types",
+        "context": "enum-constant",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "enum_constant",
+            "named": true
+          }
+        ],
+        "parts": "name and optional arguments/body fields, plus annotation children.",
+        "reason": "The source enum constant spans its name and any annotations, arguments and body.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      },
+      {
+        "javacKind": "VARIABLE",
+        "group": "Annotations and types",
+        "context": "default",
+        "action": "skip",
+        "range": "none",
+        "ts": [
+          {
+            "kind": "local_variable_declaration",
+            "named": true
+          },
+          {
+            "kind": "variable_declarator",
+            "named": true
+          },
+          {
+            "kind": "field_declaration",
+            "named": true
+          },
+          {
+            "kind": "constant_declaration",
+            "named": true
+          },
+          {
+            "kind": "formal_parameter",
+            "named": true
+          },
+          {
+            "kind": "spread_parameter",
+            "named": true
+          },
+          {
+            "kind": "receiver_parameter",
+            "named": true
+          },
+          {
+            "kind": "catch_formal_parameter",
+            "named": true
+          },
+          {
+            "kind": "resource",
+            "named": true
+          },
+          {
+            "kind": "enum_constant",
+            "named": true
+          },
+          {
+            "kind": "enhanced_for_statement",
+            "named": true
+          },
+          {
+            "kind": "type_pattern",
+            "named": true
+          },
+          {
+            "kind": "record_pattern_component",
+            "named": true
+          },
+          {
+            "kind": "instanceof_expression",
+            "named": true
+          }
+        ],
+        "parts": "Check type and initializer as their own trees; check name, bracket suffix, final and ordering through the owning projection.",
+        "reason": "One javac kind spans many roles. Multiple declarators share a type and cumulative prefix ranges, while other variables are flattened into their parent. Inferred lambda parameters can be name-only.",
+        "rangeDescription": "The row is outside standalone range comparison. Preserve its comparable descendants."
+      }
+    ]
+  },
+  "WHILE_LOOP": {
+    "variants": [
+      {
+        "javacKind": "WHILE_LOOP",
+        "group": "Statements",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "while_statement",
+            "named": true
+          }
+        ],
+        "parts": "condition → condition; statement → body.",
+        "reason": "From while through body. Condition includes parentheses.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "XOR": {
+    "variants": [
+      {
+        "javacKind": "XOR",
+        "group": "Operators",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "binary_expression",
+            "named": true
+          }
+        ],
+        "parts": "leftOperand → left, rightOperand → right, token → operator.",
+        "reason": "Starts at the left operand, including its opening parenthesis when present, and ends at the right operand's end. Compare each operand in its field to test precedence and associativity.",
+        "operator": "^",
+        "operatorField": "operator",
+        "fields": {
+          "left": "leftOperand",
+          "right": "rightOperand"
+        },
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "XOR_ASSIGNMENT": {
+    "variants": [
+      {
+        "javacKind": "XOR_ASSIGNMENT",
+        "group": "Operators",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "assignment_expression",
+            "named": true
+          }
+        ],
+        "parts": "variable → left, expression → right, token → operator.",
+        "reason": "Starts at the assignment target and ends at the RHS. Compare right-associative nesting. Parenthesized targets use the public parenthesized_expression alias.",
+        "operator": "^=",
+        "operatorField": "operator",
+        "fields": {
+          "left": "variable",
+          "right": "expression"
+        },
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  },
+  "YIELD": {
+    "variants": [
+      {
+        "javacKind": "YIELD",
+        "group": "Statements",
+        "context": "default",
+        "action": "compare",
+        "range": "same",
+        "ts": [
+          {
+            "kind": "yield_statement",
+            "named": true
+          }
+        ],
+        "parts": "value → sole non-extra named child.",
+        "reason": "Includes yield and semicolon. A switch arrow expression has no source YieldTree.",
+        "rangeDescription": "Compare the whole half-open UTF-8 interval of the javac tree and the selected CST node or token."
+      }
+    ]
+  }
+}

@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Add a CI-checked structural oracle for javac and tree-sitter ranges and node kinds, with Phase 3 probes and an
+  exact baseline of known differences. This is a tooling change only.
+
 ## 2.3.0
 
 Phase 2 of the final-release plan: OpenJDK 25.0.5+8 as a second pinned example set, the Java 25 syntax fixes that
