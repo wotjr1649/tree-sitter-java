@@ -25,10 +25,6 @@
     {"kind": "ARRAY_TYPE", "start": 293, "end": 314, "status": "mismatched_kind", "reason": "limit"},
     {"kind": "ANNOTATED_TYPE", "start": 293, "end": 302, "status": "no_node_at_range", "reason": "limit"}
   ],
-  "structural/p8/annotation/cast-primitive-post-inc": [
-    {"kind": "TYPE_CAST", "start": 292, "end": 304, "status": "mismatched_kind", "reason": "K21"},
-    {"kind": "POSTFIX_INCREMENT", "start": 301, "end": 304, "status": "no_node_at_range", "reason": "K21"}
-  ],
   "structural/p8/annotation/explicit-type-argument-array": [
     {"kind": "ARRAY_TYPE", "start": 315, "end": 330, "status": "mismatched_kind", "reason": "limit"},
     {"kind": "ANNOTATED_TYPE", "start": 315, "end": 324, "status": "no_node_at_range", "reason": "limit"}
@@ -55,34 +51,6 @@
   "structural/p8/cast/intersection-not": [
     {"kind": "LOGICAL_COMPLEMENT", "start": 137, "end": 142, "status": "no_node_at_range", "reason": "limit"}
   ],
-  "structural/p8/cast/primitive-post-dec": [
-    {"kind": "TYPE_CAST", "start": 104, "end": 113, "status": "mismatched_kind", "reason": "K21"},
-    {"kind": "POSTFIX_DECREMENT", "start": 110, "end": 113, "status": "no_node_at_range", "reason": "K21"}
-  ],
-  "structural/p8/cast/primitive-post-inc": [
-    {"kind": "TYPE_CAST", "start": 104, "end": 113, "status": "mismatched_kind", "reason": "K21"},
-    {"kind": "POSTFIX_INCREMENT", "start": 110, "end": 113, "status": "no_node_at_range", "reason": "K21"}
-  ],
-  "structural/p8/cast/reference-post-inc": [
-    {"kind": "TYPE_CAST", "start": 104, "end": 117, "status": "mismatched_kind", "reason": "K21"},
-    {"kind": "POSTFIX_INCREMENT", "start": 114, "end": 117, "status": "no_node_at_range", "reason": "K21"}
-  ],
-  "structural/p8/operator/unary-postfix": [
-    {"kind": "UNARY_MINUS", "start": 150, "end": 154, "status": "mismatched_kind", "reason": "K21"},
-    {"kind": "POSTFIX_INCREMENT", "start": 151, "end": 154, "status": "no_node_at_range", "reason": "K21"}
-  ],
-  "structural/p8/operator/unary-postfix-array": [
-    {"kind": "BITWISE_COMPLEMENT", "start": 150, "end": 157, "status": "mismatched_kind", "reason": "K21"},
-    {"kind": "POSTFIX_INCREMENT", "start": 151, "end": 157, "status": "no_node_at_range", "reason": "K21"}
-  ],
-  "structural/p8/operator/unary-postfix-decrement": [
-    {"kind": "UNARY_MINUS", "start": 150, "end": 154, "status": "mismatched_kind", "reason": "K21"},
-    {"kind": "POSTFIX_DECREMENT", "start": 151, "end": 154, "status": "no_node_at_range", "reason": "K21"}
-  ],
-  "structural/p8/operator/unary-postfix-field": [
-    {"kind": "UNARY_PLUS", "start": 150, "end": 156, "status": "mismatched_kind", "reason": "K21"},
-    {"kind": "POSTFIX_INCREMENT", "start": 151, "end": 156, "status": "no_node_at_range", "reason": "K21"}
-  ],
   "structural/p8/switch/colon-guard-when-binding": [
     {"kind": "PATTERN_CASE_LABEL", "start": 46, "end": 57, "status": "no_node_at_range", "reason": "limit"},
     {"kind": "BINDING_PATTERN", "start": 46, "end": 57, "status": "no_node_at_range", "reason": "limit"},
@@ -104,12 +72,6 @@
     {"kind": "PATTERN_CASE_LABEL", "start": 183, "end": 194, "status": "no_node_at_range", "reason": "limit"},
     {"kind": "BINDING_PATTERN", "start": 183, "end": 194, "status": "no_node_at_range", "reason": "limit"}
   ],
-  "structural/p9/cast-update": [
-    {"kind": "TYPE_CAST", "start": 32, "end": 41, "status": "mismatched_kind", "reason": "K21"},
-    {"kind": "POSTFIX_INCREMENT", "start": 38, "end": 41, "status": "no_node_at_range", "reason": "K21"},
-    {"kind": "TYPE_CAST", "start": 67, "end": 78, "status": "mismatched_kind", "reason": "K21"},
-    {"kind": "POSTFIX_DECREMENT", "start": 73, "end": 78, "status": "no_node_at_range", "reason": "K21"}
-  ],
   "structural/p9/provides": [
     {"kind": "PROVIDES", "start": 25, "end": 86, "status": "mismatched_kind", "reason": "K17"}
   ],
@@ -123,9 +85,7 @@
     {"kind": "BITWISE_COMPLEMENT", "start": 71, "end": 73, "status": "no_node_at_range", "reason": "limit"}
   ],
   "corpus/k24.txt/K24 intersection complement postfix": [
-    {"kind": "TYPE_CAST", "start": 42, "end": 79, "status": "mismatched_kind", "reason": "limit"},
-    {"kind": "BITWISE_COMPLEMENT", "start": 75, "end": 79, "status": "no_node_at_range", "reason": "limit"},
-    {"kind": "POSTFIX_INCREMENT", "start": 76, "end": 79, "status": "no_node_at_range", "reason": "limit"}
+    {"kind": "BITWISE_COMPLEMENT", "start": 75, "end": 79, "status": "no_node_at_range", "reason": "limit"}
   ],
   "corpus/k24.txt/K24 intersection nested cast": [
     {"kind": "TYPE_CAST", "start": 39, "end": 79, "status": "no_node_at_range", "reason": "limit"},
@@ -148,9 +108,7 @@
     {"kind": "BITWISE_COMPLEMENT", "start": 70, "end": 72, "status": "no_node_at_range", "reason": "limit"}
   ],
   "k24/intersection-complement-postfix": [
-    {"kind": "TYPE_CAST", "start": 41, "end": 78, "status": "mismatched_kind", "reason": "limit"},
-    {"kind": "BITWISE_COMPLEMENT", "start": 74, "end": 78, "status": "no_node_at_range", "reason": "limit"},
-    {"kind": "POSTFIX_INCREMENT", "start": 75, "end": 78, "status": "no_node_at_range", "reason": "limit"}
+    {"kind": "BITWISE_COMPLEMENT", "start": 74, "end": 78, "status": "no_node_at_range", "reason": "limit"}
   ],
   "k24/intersection-nested-cast": [
     {"kind": "TYPE_CAST", "start": 38, "end": 78, "status": "no_node_at_range", "reason": "limit"},
@@ -164,14 +122,6 @@
   ],
   "k24/intersection-not": [
     {"kind": "LOGICAL_COMPLEMENT", "start": 77, "end": 82, "status": "no_node_at_range", "reason": "limit"}
-  ],
-  "k24/intersection-postfix-decrement": [
-    {"kind": "TYPE_CAST", "start": 41, "end": 77, "status": "mismatched_kind", "reason": "limit"},
-    {"kind": "POSTFIX_DECREMENT", "start": 74, "end": 77, "status": "no_node_at_range", "reason": "limit"}
-  ],
-  "k24/intersection-postfix-increment": [
-    {"kind": "TYPE_CAST", "start": 41, "end": 77, "status": "mismatched_kind", "reason": "limit"},
-    {"kind": "POSTFIX_INCREMENT", "start": 74, "end": 77, "status": "no_node_at_range", "reason": "limit"}
   ],
   "k24/intersection-switch": [
     {"kind": "RETURN", "start": 30, "end": 99, "status": "no_node_at_range", "reason": "limit"},

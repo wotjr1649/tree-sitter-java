@@ -41,7 +41,8 @@ const PREC = {
   MULT: 13,           // *  /  %
   CAST: 14,           // (Type)
   OBJ_INST: 14,       // new
-  UNARY: 15,          // ++a  --a  a++  a--  +  -  !  ~
+  UNARY: 15,          // ++a  --a  +  -  !  ~
+  POSTFIX: 16,        // a++  a--
   ARRAY: 16,          // [Index]
   OBJ_ACCESS: 16,     // .
   PARENS: 16,         // (Expression)
@@ -338,9 +339,14 @@ module.exports = grammar({
       )),
       seq(
         '(',
-        sep1(field('type', $._type), '&'),
+        field('type', $._type),
+        repeat1(seq('&', field('type', $._type))),
         ')',
-        field('value', allowLambda ? choice($.primary_expression, $.lambda_expression) : $.primary_expression),
+        field('value', choice(
+          $.primary_expression,
+          ...(allowLambda ? [$.lambda_expression] : []),
+          alias($._postfix_update_expression, $.update_expression),
+        )),
       ),
     ))),
 
@@ -451,13 +457,16 @@ module.exports = grammar({
       )),
     ))),
 
-    ...expressionRule('update_expression', ($, expression) => prec.left(PREC.UNARY, choice(
-      // Post (in|de)crement is evaluated before pre (in|de)crement
-      seq(expression, '++'),
-      seq(expression, '--'),
-      seq('++', expression),
-      seq('--', expression),
-    ))),
+    ...expressionRule('update_expression', ($, expression) => choice(
+      prec.left(PREC.POSTFIX, seq(expression, choice('++', '--'))),
+      prec.left(PREC.UNARY, seq(choice('++', '--'), expression)),
+    )),
+
+    _postfix_update_expression: $ => prec.left(PREC.POSTFIX, seq(
+      // Shift the postfix operator before reducing a cast with a primary operand.
+      choice($.primary_expression, alias($._postfix_update_expression, $.update_expression)),
+      choice('++', '--'),
+    )),
 
     primary_expression: $ => choice(
       $._literal,
@@ -744,7 +753,7 @@ module.exports = grammar({
     ),
 
     labeled_statement: $ => seq(
-      $.identifier, ':', $.statement,
+      choice($.identifier, $._reserved_identifier), ':', $.statement,
     ),
 
     assert_statement: $ => choice(

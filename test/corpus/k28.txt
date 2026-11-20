@@ -1,0 +1,2850 @@
+================================================================================
+K28 contextual keywords as statement labels and jump targets
+================================================================================
+
+class C {
+  void m(boolean stop) {
+    open: for (;;) { if (stop) break open; continue open; }
+    module: for (;;) { if (stop) break module; continue module; }
+    with: for (;;) { if (stop) break with; continue with; }
+    record: for (;;) { if (stop) break record; continue record; }
+    sealed: for (;;) { if (stop) break sealed; continue sealed; }
+    yield: for (;;) { if (stop) break yield; continue yield; }
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter type: (boolean_type) name: (identifier)))
+        body: (block
+          (labeled_statement
+            (identifier)
+            (for_statement
+              body: (block
+                (if_statement
+                  condition: (parenthesized_expression
+                    (identifier))
+                  consequence: (break_statement
+                    (identifier)))
+                (continue_statement
+                  (identifier)))))
+          (labeled_statement
+            (identifier)
+            (for_statement
+              body: (block
+                (if_statement
+                  condition: (parenthesized_expression
+                    (identifier))
+                  consequence: (break_statement
+                    (identifier)))
+                (continue_statement
+                  (identifier)))))
+          (labeled_statement
+            (identifier)
+            (for_statement
+              body: (block
+                (if_statement
+                  condition: (parenthesized_expression
+                    (identifier))
+                  consequence: (break_statement
+                    (identifier)))
+                (continue_statement
+                  (identifier)))))
+          (labeled_statement
+            (identifier)
+            (for_statement
+              body: (block
+                (if_statement
+                  condition: (parenthesized_expression
+                    (identifier))
+                  consequence: (break_statement
+                    (identifier)))
+                (continue_statement
+                  (identifier)))))
+          (labeled_statement
+            (identifier)
+            (for_statement
+              body: (block
+                (if_statement
+                  condition: (parenthesized_expression
+                    (identifier))
+                  consequence: (break_statement
+                    (identifier)))
+                (continue_statement
+                  (identifier)))))
+          (labeled_statement
+            (identifier)
+            (for_statement
+              body: (block
+                (if_statement
+                  condition: (parenthesized_expression
+                    (identifier))
+                  consequence: (break_statement
+                    (identifier)))
+                (continue_statement
+                  (identifier))))))))))
+
+================================================================================
+K28 statement labels inside switch blocks
+================================================================================
+
+class C {
+  int arrow(int n) {
+    return switch (n) { default -> { yield: yield 1; } };
+  }
+  int colon(int n) {
+    return switch (n) { default: open: { break open; } yield n; };
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (integral_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter type: (integral_type) name: (identifier)))
+        body: (block
+          (return_statement
+            (switch_expression
+              condition: (parenthesized_expression (identifier))
+              body: (switch_block
+                (switch_rule
+                  (switch_label)
+                  (block
+                    (labeled_statement
+                      (identifier)
+                      (yield_statement (decimal_integer_literal))))))))))
+      (method_declaration
+        type: (integral_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter type: (integral_type) name: (identifier)))
+        body: (block
+          (return_statement
+            (switch_expression
+              condition: (parenthesized_expression (identifier))
+              body: (switch_block
+                (switch_block_statement_group
+                  (switch_label)
+                  (labeled_statement (identifier) (block (break_statement (identifier))))
+                  (yield_statement (identifier)))))))))))
+
+================================================================================
+K28 existing labeled-statement tolerances with contextual labels
+================================================================================
+
+class C {
+  void m() {
+    ordinary: int n = 0;
+    ordinary: class Inner {}
+    ordinary: 7;
+    ordinary: yield(0, 3);
+    yield: int n = 0;
+    yield: class Inner {}
+    yield: 7;
+    yield: yield(0, 3);
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters)
+        body: (block
+          (labeled_statement (identifier) (local_variable_declaration type: (integral_type)
+            declarator: (variable_declarator name: (identifier) value: (decimal_integer_literal))))
+          (labeled_statement (identifier) (class_declaration name: (identifier) body: (class_body)))
+          (labeled_statement (identifier) (expression_statement (decimal_integer_literal)))
+          (labeled_statement (identifier) (expression_statement (method_invocation name: (identifier)
+            arguments: (argument_list (decimal_integer_literal) (decimal_integer_literal)))))
+          (labeled_statement (identifier) (local_variable_declaration type: (integral_type)
+            declarator: (variable_declarator name: (identifier) value: (decimal_integer_literal))))
+          (labeled_statement (identifier) (class_declaration name: (identifier) body: (class_body)))
+          (labeled_statement (identifier) (expression_statement (decimal_integer_literal)))
+          (labeled_statement (identifier) (expression_statement (method_invocation name: (identifier)
+            arguments: (argument_list (decimal_integer_literal) (decimal_integer_literal))))))))))
+
+================================================================================
+K28 REVIEW-41 tol record local
+================================================================================
+
+class C {
+  int f;
+  void m(boolean b, int n) {
+    ordinary: record R() {}
+    record: record R() {}
+    open: record R() {}
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (field_declaration type: (integral_type) declarator: (variable_declarator name: (identifier)))
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter type: (boolean_type) name: (identifier))
+          (formal_parameter type: (integral_type) name: (identifier)))
+        body: (block
+          (labeled_statement
+            (identifier)
+            (record_declaration name: (identifier) parameters: (formal_parameters) body: (class_body)))
+          (labeled_statement
+            (identifier)
+            (record_declaration name: (identifier) parameters: (formal_parameters) body: (class_body)))
+          (labeled_statement
+            (identifier)
+            (record_declaration name: (identifier) parameters: (formal_parameters) body: (class_body))))))))
+
+================================================================================
+K28 REVIEW-41 local interface after a field
+================================================================================
+
+class C {
+  int f;
+  void m(boolean b, int n) {
+    ordinary: interface I {}
+    sealed: interface I {}
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (field_declaration type: (integral_type) declarator: (variable_declarator name: (identifier)))
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter type: (boolean_type) name: (identifier))
+          (formal_parameter type: (integral_type) name: (identifier)))
+        body: (block
+          (labeled_statement (identifier) (interface_declaration name: (identifier) body: (interface_body)))
+          (labeled_statement (identifier) (interface_declaration name: (identifier) body: (interface_body))))))))
+
+================================================================================
+K28 REVIEW-41 local sealed interface after a field
+================================================================================
+
+class C {
+  int f;
+  void m(boolean b, int n) {
+    ordinary: sealed interface I {}
+    sealed: sealed interface I {}
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (field_declaration type: (integral_type) declarator: (variable_declarator name: (identifier)))
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter type: (boolean_type) name: (identifier))
+          (formal_parameter type: (integral_type) name: (identifier)))
+        body: (block
+          (labeled_statement
+            (identifier)
+            (interface_declaration (modifiers) name: (identifier) body: (interface_body)))
+          (labeled_statement
+            (identifier)
+            (interface_declaration (modifiers) name: (identifier) body: (interface_body))))))))
+
+================================================================================
+K28 REVIEW-41 arithmetic expression after a field
+================================================================================
+
+class C {
+  int f;
+  void m(boolean b, int n) {
+    ordinary: n + 1;
+    with: n + 1;
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (field_declaration type: (integral_type) declarator: (variable_declarator name: (identifier)))
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter type: (boolean_type) name: (identifier))
+          (formal_parameter type: (integral_type) name: (identifier)))
+        body: (block
+          (labeled_statement
+            (identifier)
+            (expression_statement (binary_expression left: (identifier) right: (decimal_integer_literal))))
+          (labeled_statement
+            (identifier)
+            (expression_statement (binary_expression left: (identifier) right: (decimal_integer_literal)))))))))
+
+================================================================================
+K28 REVIEW-41 local variable of type module
+================================================================================
+
+class C {
+  int f;
+  void m(boolean b, int n) {
+    ordinary: module x = null;
+    module: module x = null;
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (field_declaration type: (integral_type) declarator: (variable_declarator name: (identifier)))
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter type: (boolean_type) name: (identifier))
+          (formal_parameter type: (integral_type) name: (identifier)))
+        body: (block
+          (labeled_statement
+            (identifier)
+            (local_variable_declaration
+              type: (type_identifier)
+              declarator: (variable_declarator name: (identifier) value: (null_literal))))
+          (labeled_statement
+            (identifier)
+            (local_variable_declaration
+              type: (type_identifier)
+              declarator: (variable_declarator name: (identifier) value: (null_literal)))))))))
+
+================================================================================
+K28 REVIEW-41 top-level class declaration
+================================================================================
+
+ordinary: class C {}
+yield: class C {}
+module: class C {}
+open: class C {}
+record: class C {}
+sealed: class C {}
+with: class C {}
+
+--------------------------------------------------------------------------------
+
+(program
+  (labeled_statement (identifier) (class_declaration name: (identifier) body: (class_body)))
+  (labeled_statement (identifier) (class_declaration name: (identifier) body: (class_body)))
+  (labeled_statement (identifier) (class_declaration name: (identifier) body: (class_body)))
+  (labeled_statement (identifier) (class_declaration name: (identifier) body: (class_body)))
+  (labeled_statement (identifier) (class_declaration name: (identifier) body: (class_body)))
+  (labeled_statement (identifier) (class_declaration name: (identifier) body: (class_body)))
+  (labeled_statement (identifier) (class_declaration name: (identifier) body: (class_body))))
+
+================================================================================
+K28 REVIEW-41 local non-sealed class after a field
+================================================================================
+
+class C {
+  int f;
+  void m(boolean b, int n) {
+    ordinary: non-sealed class X {}
+    sealed: non-sealed class X {}
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (field_declaration type: (integral_type) declarator: (variable_declarator name: (identifier)))
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter type: (boolean_type) name: (identifier))
+          (formal_parameter type: (integral_type) name: (identifier)))
+        body: (block
+          (labeled_statement
+            (identifier)
+            (class_declaration (modifiers) name: (identifier) body: (class_body)))
+          (labeled_statement
+            (identifier)
+            (class_declaration (modifiers) name: (identifier) body: (class_body))))))))
+
+================================================================================
+K28 REVIEW-41 method-body variable
+================================================================================
+
+class C {
+  void m(int n) {
+    ordinary: int x = 0;
+    module: int x = 0;
+    open: int x = 0;
+    record: int x = 0;
+    sealed: int x = 0;
+    with: int x = 0;
+    yield: int x = 0;
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters (formal_parameter type: (integral_type) name: (identifier)))
+        body: (block
+          (labeled_statement
+            (identifier)
+            (local_variable_declaration
+              type: (integral_type)
+              declarator: (variable_declarator name: (identifier) value: (decimal_integer_literal))))
+          (labeled_statement
+            (identifier)
+            (local_variable_declaration
+              type: (integral_type)
+              declarator: (variable_declarator name: (identifier) value: (decimal_integer_literal))))
+          (labeled_statement
+            (identifier)
+            (local_variable_declaration
+              type: (integral_type)
+              declarator: (variable_declarator name: (identifier) value: (decimal_integer_literal))))
+          (labeled_statement
+            (identifier)
+            (local_variable_declaration
+              type: (integral_type)
+              declarator: (variable_declarator name: (identifier) value: (decimal_integer_literal))))
+          (labeled_statement
+            (identifier)
+            (local_variable_declaration
+              type: (integral_type)
+              declarator: (variable_declarator name: (identifier) value: (decimal_integer_literal))))
+          (labeled_statement
+            (identifier)
+            (local_variable_declaration
+              type: (integral_type)
+              declarator: (variable_declarator name: (identifier) value: (decimal_integer_literal))))
+          (labeled_statement
+            (identifier)
+            (local_variable_declaration
+              type: (integral_type)
+              declarator: (variable_declarator name: (identifier) value: (decimal_integer_literal)))))))))
+
+================================================================================
+K28 REVIEW-41 method-body class
+================================================================================
+
+class C {
+  void m(int n) {
+    ordinary: class Inner {}
+    module: class Inner {}
+    open: class Inner {}
+    record: class Inner {}
+    sealed: class Inner {}
+    with: class Inner {}
+    yield: class Inner {}
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters (formal_parameter type: (integral_type) name: (identifier)))
+        body: (block
+          (labeled_statement (identifier) (class_declaration name: (identifier) body: (class_body)))
+          (labeled_statement (identifier) (class_declaration name: (identifier) body: (class_body)))
+          (labeled_statement (identifier) (class_declaration name: (identifier) body: (class_body)))
+          (labeled_statement (identifier) (class_declaration name: (identifier) body: (class_body)))
+          (labeled_statement (identifier) (class_declaration name: (identifier) body: (class_body)))
+          (labeled_statement (identifier) (class_declaration name: (identifier) body: (class_body)))
+          (labeled_statement (identifier) (class_declaration name: (identifier) body: (class_body))))))))
+
+================================================================================
+K28 REVIEW-41 method-body record
+================================================================================
+
+class C {
+  void m(int n) {
+    ordinary: record R() {}
+    module: record R() {}
+    open: record R() {}
+    record: record R() {}
+    sealed: record R() {}
+    with: record R() {}
+    yield: record R() {}
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters (formal_parameter type: (integral_type) name: (identifier)))
+        body: (block
+          (labeled_statement
+            (identifier)
+            (record_declaration name: (identifier) parameters: (formal_parameters) body: (class_body)))
+          (labeled_statement
+            (identifier)
+            (record_declaration name: (identifier) parameters: (formal_parameters) body: (class_body)))
+          (labeled_statement
+            (identifier)
+            (record_declaration name: (identifier) parameters: (formal_parameters) body: (class_body)))
+          (labeled_statement
+            (identifier)
+            (record_declaration name: (identifier) parameters: (formal_parameters) body: (class_body)))
+          (labeled_statement
+            (identifier)
+            (record_declaration name: (identifier) parameters: (formal_parameters) body: (class_body)))
+          (labeled_statement
+            (identifier)
+            (record_declaration name: (identifier) parameters: (formal_parameters) body: (class_body)))
+          (labeled_statement
+            (identifier)
+            (record_declaration name: (identifier) parameters: (formal_parameters) body: (class_body))))))))
+
+================================================================================
+K28 REVIEW-41 method-body interface
+================================================================================
+
+class C {
+  void m(int n) {
+    ordinary: interface I {}
+    module: interface I {}
+    open: interface I {}
+    record: interface I {}
+    sealed: interface I {}
+    with: interface I {}
+    yield: interface I {}
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters (formal_parameter type: (integral_type) name: (identifier)))
+        body: (block
+          (labeled_statement (identifier) (interface_declaration name: (identifier) body: (interface_body)))
+          (labeled_statement (identifier) (interface_declaration name: (identifier) body: (interface_body)))
+          (labeled_statement (identifier) (interface_declaration name: (identifier) body: (interface_body)))
+          (labeled_statement (identifier) (interface_declaration name: (identifier) body: (interface_body)))
+          (labeled_statement (identifier) (interface_declaration name: (identifier) body: (interface_body)))
+          (labeled_statement (identifier) (interface_declaration name: (identifier) body: (interface_body)))
+          (labeled_statement (identifier) (interface_declaration name: (identifier) body: (interface_body))))))))
+
+================================================================================
+K28 REVIEW-41 method-body sealed interface
+================================================================================
+
+class C {
+  void m(int n) {
+    ordinary: sealed interface I {}
+    module: sealed interface I {}
+    open: sealed interface I {}
+    record: sealed interface I {}
+    sealed: sealed interface I {}
+    with: sealed interface I {}
+    yield: sealed interface I {}
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters (formal_parameter type: (integral_type) name: (identifier)))
+        body: (block
+          (labeled_statement
+            (identifier)
+            (interface_declaration (modifiers) name: (identifier) body: (interface_body)))
+          (labeled_statement
+            (identifier)
+            (interface_declaration (modifiers) name: (identifier) body: (interface_body)))
+          (labeled_statement
+            (identifier)
+            (interface_declaration (modifiers) name: (identifier) body: (interface_body)))
+          (labeled_statement
+            (identifier)
+            (interface_declaration (modifiers) name: (identifier) body: (interface_body)))
+          (labeled_statement
+            (identifier)
+            (interface_declaration (modifiers) name: (identifier) body: (interface_body)))
+          (labeled_statement
+            (identifier)
+            (interface_declaration (modifiers) name: (identifier) body: (interface_body)))
+          (labeled_statement
+            (identifier)
+            (interface_declaration (modifiers) name: (identifier) body: (interface_body))))))))
+
+================================================================================
+K28 REVIEW-41 method-body enum
+================================================================================
+
+class C {
+  void m(int n) {
+    ordinary: enum E { A }
+    module: enum E { A }
+    open: enum E { A }
+    record: enum E { A }
+    sealed: enum E { A }
+    with: enum E { A }
+    yield: enum E { A }
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters (formal_parameter type: (integral_type) name: (identifier)))
+        body: (block
+          (labeled_statement
+            (identifier)
+            (enum_declaration name: (identifier) body: (enum_body (enum_constant name: (identifier)))))
+          (labeled_statement
+            (identifier)
+            (enum_declaration name: (identifier) body: (enum_body (enum_constant name: (identifier)))))
+          (labeled_statement
+            (identifier)
+            (enum_declaration name: (identifier) body: (enum_body (enum_constant name: (identifier)))))
+          (labeled_statement
+            (identifier)
+            (enum_declaration name: (identifier) body: (enum_body (enum_constant name: (identifier)))))
+          (labeled_statement
+            (identifier)
+            (enum_declaration name: (identifier) body: (enum_body (enum_constant name: (identifier)))))
+          (labeled_statement
+            (identifier)
+            (enum_declaration name: (identifier) body: (enum_body (enum_constant name: (identifier)))))
+          (labeled_statement
+            (identifier)
+            (enum_declaration name: (identifier) body: (enum_body (enum_constant name: (identifier))))))))))
+
+================================================================================
+K28 REVIEW-41 method-body annotated class
+================================================================================
+
+class C {
+  void m(int n) {
+    ordinary: @Deprecated class Inner {}
+    module: @Deprecated class Inner {}
+    open: @Deprecated class Inner {}
+    record: @Deprecated class Inner {}
+    sealed: @Deprecated class Inner {}
+    with: @Deprecated class Inner {}
+    yield: @Deprecated class Inner {}
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters (formal_parameter type: (integral_type) name: (identifier)))
+        body: (block
+          (labeled_statement
+            (identifier)
+            (class_declaration
+              (modifiers (marker_annotation name: (identifier)))
+              name: (identifier)
+              body: (class_body)))
+          (labeled_statement
+            (identifier)
+            (class_declaration
+              (modifiers (marker_annotation name: (identifier)))
+              name: (identifier)
+              body: (class_body)))
+          (labeled_statement
+            (identifier)
+            (class_declaration
+              (modifiers (marker_annotation name: (identifier)))
+              name: (identifier)
+              body: (class_body)))
+          (labeled_statement
+            (identifier)
+            (class_declaration
+              (modifiers (marker_annotation name: (identifier)))
+              name: (identifier)
+              body: (class_body)))
+          (labeled_statement
+            (identifier)
+            (class_declaration
+              (modifiers (marker_annotation name: (identifier)))
+              name: (identifier)
+              body: (class_body)))
+          (labeled_statement
+            (identifier)
+            (class_declaration
+              (modifiers (marker_annotation name: (identifier)))
+              name: (identifier)
+              body: (class_body)))
+          (labeled_statement
+            (identifier)
+            (class_declaration
+              (modifiers (marker_annotation name: (identifier)))
+              name: (identifier)
+              body: (class_body))))))))
+
+================================================================================
+K28 REVIEW-41 method-body generic local
+================================================================================
+
+class C {
+  void m(int n) {
+    ordinary: java.util.List<String> names = null;
+    module: java.util.List<String> names = null;
+    open: java.util.List<String> names = null;
+    record: java.util.List<String> names = null;
+    sealed: java.util.List<String> names = null;
+    with: java.util.List<String> names = null;
+    yield: java.util.List<String> names = null;
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters (formal_parameter type: (integral_type) name: (identifier)))
+        body: (block
+          (labeled_statement
+            (identifier)
+            (local_variable_declaration
+              type: (generic_type
+                (scoped_type_identifier
+                  (scoped_type_identifier (type_identifier) (type_identifier))
+                  (type_identifier))
+                (type_arguments (type_identifier)))
+              declarator: (variable_declarator name: (identifier) value: (null_literal))))
+          (labeled_statement
+            (identifier)
+            (local_variable_declaration
+              type: (generic_type
+                (scoped_type_identifier
+                  (scoped_type_identifier (type_identifier) (type_identifier))
+                  (type_identifier))
+                (type_arguments (type_identifier)))
+              declarator: (variable_declarator name: (identifier) value: (null_literal))))
+          (labeled_statement
+            (identifier)
+            (local_variable_declaration
+              type: (generic_type
+                (scoped_type_identifier
+                  (scoped_type_identifier (type_identifier) (type_identifier))
+                  (type_identifier))
+                (type_arguments (type_identifier)))
+              declarator: (variable_declarator name: (identifier) value: (null_literal))))
+          (labeled_statement
+            (identifier)
+            (local_variable_declaration
+              type: (generic_type
+                (scoped_type_identifier
+                  (scoped_type_identifier (type_identifier) (type_identifier))
+                  (type_identifier))
+                (type_arguments (type_identifier)))
+              declarator: (variable_declarator name: (identifier) value: (null_literal))))
+          (labeled_statement
+            (identifier)
+            (local_variable_declaration
+              type: (generic_type
+                (scoped_type_identifier
+                  (scoped_type_identifier (type_identifier) (type_identifier))
+                  (type_identifier))
+                (type_arguments (type_identifier)))
+              declarator: (variable_declarator name: (identifier) value: (null_literal))))
+          (labeled_statement
+            (identifier)
+            (local_variable_declaration
+              type: (generic_type
+                (scoped_type_identifier
+                  (scoped_type_identifier (type_identifier) (type_identifier))
+                  (type_identifier))
+                (type_arguments (type_identifier)))
+              declarator: (variable_declarator name: (identifier) value: (null_literal))))
+          (labeled_statement
+            (identifier)
+            (local_variable_declaration
+              type: (generic_type
+                (scoped_type_identifier
+                  (scoped_type_identifier (type_identifier) (type_identifier))
+                  (type_identifier))
+                (type_arguments (type_identifier)))
+              declarator: (variable_declarator name: (identifier) value: (null_literal)))))))))
+
+================================================================================
+K28 REVIEW-41 method-body number
+================================================================================
+
+class C {
+  void m(int n) {
+    ordinary: 7;
+    module: 7;
+    open: 7;
+    record: 7;
+    sealed: 7;
+    with: 7;
+    yield: 7;
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters (formal_parameter type: (integral_type) name: (identifier)))
+        body: (block
+          (labeled_statement (identifier) (expression_statement (decimal_integer_literal)))
+          (labeled_statement (identifier) (expression_statement (decimal_integer_literal)))
+          (labeled_statement (identifier) (expression_statement (decimal_integer_literal)))
+          (labeled_statement (identifier) (expression_statement (decimal_integer_literal)))
+          (labeled_statement (identifier) (expression_statement (decimal_integer_literal)))
+          (labeled_statement (identifier) (expression_statement (decimal_integer_literal)))
+          (labeled_statement (identifier) (expression_statement (decimal_integer_literal))))))))
+
+================================================================================
+K28 REVIEW-41 method-body arithmetic
+================================================================================
+
+class C {
+  void m(int n) {
+    ordinary: n + 1;
+    module: n + 1;
+    open: n + 1;
+    record: n + 1;
+    sealed: n + 1;
+    with: n + 1;
+    yield: n + 1;
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters (formal_parameter type: (integral_type) name: (identifier)))
+        body: (block
+          (labeled_statement
+            (identifier)
+            (expression_statement (binary_expression left: (identifier) right: (decimal_integer_literal))))
+          (labeled_statement
+            (identifier)
+            (expression_statement (binary_expression left: (identifier) right: (decimal_integer_literal))))
+          (labeled_statement
+            (identifier)
+            (expression_statement (binary_expression left: (identifier) right: (decimal_integer_literal))))
+          (labeled_statement
+            (identifier)
+            (expression_statement (binary_expression left: (identifier) right: (decimal_integer_literal))))
+          (labeled_statement
+            (identifier)
+            (expression_statement (binary_expression left: (identifier) right: (decimal_integer_literal))))
+          (labeled_statement
+            (identifier)
+            (expression_statement (binary_expression left: (identifier) right: (decimal_integer_literal))))
+          (labeled_statement
+            (identifier)
+            (expression_statement (binary_expression left: (identifier) right: (decimal_integer_literal)))))))))
+
+================================================================================
+K28 REVIEW-41 method-body yield call
+================================================================================
+
+class C {
+  void m(int n) {
+    ordinary: yield(0, 3);
+    module: yield(0, 3);
+    open: yield(0, 3);
+    record: yield(0, 3);
+    sealed: yield(0, 3);
+    with: yield(0, 3);
+    yield: yield(0, 3);
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters (formal_parameter type: (integral_type) name: (identifier)))
+        body: (block
+          (labeled_statement
+            (identifier)
+            (expression_statement
+              (method_invocation
+                name: (identifier)
+                arguments: (argument_list (decimal_integer_literal) (decimal_integer_literal)))))
+          (labeled_statement
+            (identifier)
+            (expression_statement
+              (method_invocation
+                name: (identifier)
+                arguments: (argument_list (decimal_integer_literal) (decimal_integer_literal)))))
+          (labeled_statement
+            (identifier)
+            (expression_statement
+              (method_invocation
+                name: (identifier)
+                arguments: (argument_list (decimal_integer_literal) (decimal_integer_literal)))))
+          (labeled_statement
+            (identifier)
+            (expression_statement
+              (method_invocation
+                name: (identifier)
+                arguments: (argument_list (decimal_integer_literal) (decimal_integer_literal)))))
+          (labeled_statement
+            (identifier)
+            (expression_statement
+              (method_invocation
+                name: (identifier)
+                arguments: (argument_list (decimal_integer_literal) (decimal_integer_literal)))))
+          (labeled_statement
+            (identifier)
+            (expression_statement
+              (method_invocation
+                name: (identifier)
+                arguments: (argument_list (decimal_integer_literal) (decimal_integer_literal)))))
+          (labeled_statement
+            (identifier)
+            (expression_statement
+              (method_invocation
+                name: (identifier)
+                arguments: (argument_list (decimal_integer_literal) (decimal_integer_literal))))))))))
+
+================================================================================
+K28 REVIEW-41 method-body module
+================================================================================
+
+class C {
+  void m(int n) {
+    ordinary: module m {}
+    module: module m {}
+    open: module m {}
+    record: module m {}
+    sealed: module m {}
+    with: module m {}
+    yield: module m {}
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters (formal_parameter type: (integral_type) name: (identifier)))
+        body: (block
+          (labeled_statement (identifier) (module_declaration name: (identifier) body: (module_body)))
+          (labeled_statement (identifier) (module_declaration name: (identifier) body: (module_body)))
+          (labeled_statement (identifier) (module_declaration name: (identifier) body: (module_body)))
+          (labeled_statement (identifier) (module_declaration name: (identifier) body: (module_body)))
+          (labeled_statement (identifier) (module_declaration name: (identifier) body: (module_body)))
+          (labeled_statement (identifier) (module_declaration name: (identifier) body: (module_body)))
+          (labeled_statement (identifier) (module_declaration name: (identifier) body: (module_body))))))))
+
+================================================================================
+K28 REVIEW-41 method-body package
+================================================================================
+
+class C {
+  void m(int n) {
+    ordinary: package p;
+    module: package p;
+    open: package p;
+    record: package p;
+    sealed: package p;
+    with: package p;
+    yield: package p;
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters (formal_parameter type: (integral_type) name: (identifier)))
+        body: (block
+          (labeled_statement (identifier) (package_declaration (identifier)))
+          (labeled_statement (identifier) (package_declaration (identifier)))
+          (labeled_statement (identifier) (package_declaration (identifier)))
+          (labeled_statement (identifier) (package_declaration (identifier)))
+          (labeled_statement (identifier) (package_declaration (identifier)))
+          (labeled_statement (identifier) (package_declaration (identifier)))
+          (labeled_statement (identifier) (package_declaration (identifier))))))))
+
+================================================================================
+K28 REVIEW-41 method-body import
+================================================================================
+
+class C {
+  void m(int n) {
+    ordinary: import java.util.List;
+    module: import java.util.List;
+    open: import java.util.List;
+    record: import java.util.List;
+    sealed: import java.util.List;
+    with: import java.util.List;
+    yield: import java.util.List;
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters (formal_parameter type: (integral_type) name: (identifier)))
+        body: (block
+          (labeled_statement
+            (identifier)
+            (import_declaration
+              (scoped_identifier
+                scope: (scoped_identifier scope: (identifier) name: (identifier))
+                name: (identifier))))
+          (labeled_statement
+            (identifier)
+            (import_declaration
+              (scoped_identifier
+                scope: (scoped_identifier scope: (identifier) name: (identifier))
+                name: (identifier))))
+          (labeled_statement
+            (identifier)
+            (import_declaration
+              (scoped_identifier
+                scope: (scoped_identifier scope: (identifier) name: (identifier))
+                name: (identifier))))
+          (labeled_statement
+            (identifier)
+            (import_declaration
+              (scoped_identifier
+                scope: (scoped_identifier scope: (identifier) name: (identifier))
+                name: (identifier))))
+          (labeled_statement
+            (identifier)
+            (import_declaration
+              (scoped_identifier
+                scope: (scoped_identifier scope: (identifier) name: (identifier))
+                name: (identifier))))
+          (labeled_statement
+            (identifier)
+            (import_declaration
+              (scoped_identifier
+                scope: (scoped_identifier scope: (identifier) name: (identifier))
+                name: (identifier))))
+          (labeled_statement
+            (identifier)
+            (import_declaration
+              (scoped_identifier
+                scope: (scoped_identifier scope: (identifier) name: (identifier))
+                name: (identifier)))))))))
+
+================================================================================
+K28 REVIEW-41 top-level while statement
+================================================================================
+
+ordinary: while (true) break;
+module: while (true) break;
+open: while (true) break;
+record: while (true) break;
+sealed: while (true) break;
+with: while (true) break;
+yield: while (true) break;
+
+--------------------------------------------------------------------------------
+
+(program
+  (labeled_statement
+    (identifier)
+    (while_statement condition: (parenthesized_expression (true)) body: (break_statement)))
+  (labeled_statement
+    (identifier)
+    (while_statement condition: (parenthesized_expression (true)) body: (break_statement)))
+  (labeled_statement
+    (identifier)
+    (while_statement condition: (parenthesized_expression (true)) body: (break_statement)))
+  (labeled_statement
+    (identifier)
+    (while_statement condition: (parenthesized_expression (true)) body: (break_statement)))
+  (labeled_statement
+    (identifier)
+    (while_statement condition: (parenthesized_expression (true)) body: (break_statement)))
+  (labeled_statement
+    (identifier)
+    (while_statement condition: (parenthesized_expression (true)) body: (break_statement)))
+  (labeled_statement
+    (identifier)
+    (while_statement condition: (parenthesized_expression (true)) body: (break_statement))))
+
+================================================================================
+K28 REVIEW-41 top-level empty statement
+================================================================================
+
+ordinary: ;
+module: ;
+open: ;
+record: ;
+sealed: ;
+with: ;
+yield: ;
+
+--------------------------------------------------------------------------------
+
+(program
+  (labeled_statement (identifier))
+  (labeled_statement (identifier))
+  (labeled_statement (identifier))
+  (labeled_statement (identifier))
+  (labeled_statement (identifier))
+  (labeled_statement (identifier))
+  (labeled_statement (identifier)))
+
+================================================================================
+K28 REVIEW-41 local annotation type
+================================================================================
+
+class C {
+  void m() {
+    ordinary: @interface A {}
+    module: @interface A {}
+    open: @interface A {}
+    record: @interface A {}
+    sealed: @interface A {}
+    with: @interface A {}
+    yield: @interface A {}
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters)
+        body: (block
+          (labeled_statement
+            (identifier)
+            (annotation_type_declaration name: (identifier) body: (annotation_type_body)))
+          (labeled_statement
+            (identifier)
+            (annotation_type_declaration name: (identifier) body: (annotation_type_body)))
+          (labeled_statement
+            (identifier)
+            (annotation_type_declaration name: (identifier) body: (annotation_type_body)))
+          (labeled_statement
+            (identifier)
+            (annotation_type_declaration name: (identifier) body: (annotation_type_body)))
+          (labeled_statement
+            (identifier)
+            (annotation_type_declaration name: (identifier) body: (annotation_type_body)))
+          (labeled_statement
+            (identifier)
+            (annotation_type_declaration name: (identifier) body: (annotation_type_body)))
+          (labeled_statement
+            (identifier)
+            (annotation_type_declaration name: (identifier) body: (annotation_type_body))))))))
+
+================================================================================
+K28 REVIEW-41 local open module
+================================================================================
+
+class C {
+  void m() {
+    ordinary: open module m {}
+    module: open module m {}
+    open: open module m {}
+    record: open module m {}
+    sealed: open module m {}
+    with: open module m {}
+    yield: open module m {}
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters)
+        body: (block
+          (labeled_statement (identifier) (module_declaration name: (identifier) body: (module_body)))
+          (labeled_statement (identifier) (module_declaration name: (identifier) body: (module_body)))
+          (labeled_statement (identifier) (module_declaration name: (identifier) body: (module_body)))
+          (labeled_statement (identifier) (module_declaration name: (identifier) body: (module_body)))
+          (labeled_statement (identifier) (module_declaration name: (identifier) body: (module_body)))
+          (labeled_statement (identifier) (module_declaration name: (identifier) body: (module_body)))
+          (labeled_statement (identifier) (module_declaration name: (identifier) body: (module_body))))))))
+
+================================================================================
+K28 REVIEW-41 local annotated module
+================================================================================
+
+class C {
+  void m() {
+    ordinary: @Deprecated module m {}
+    module: @Deprecated module m {}
+    open: @Deprecated module m {}
+    record: @Deprecated module m {}
+    sealed: @Deprecated module m {}
+    with: @Deprecated module m {}
+    yield: @Deprecated module m {}
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters)
+        body: (block
+          (labeled_statement
+            (identifier)
+            (module_declaration (marker_annotation name: (identifier)) name: (identifier) body: (module_body)))
+          (labeled_statement
+            (identifier)
+            (module_declaration (marker_annotation name: (identifier)) name: (identifier) body: (module_body)))
+          (labeled_statement
+            (identifier)
+            (module_declaration (marker_annotation name: (identifier)) name: (identifier) body: (module_body)))
+          (labeled_statement
+            (identifier)
+            (module_declaration (marker_annotation name: (identifier)) name: (identifier) body: (module_body)))
+          (labeled_statement
+            (identifier)
+            (module_declaration (marker_annotation name: (identifier)) name: (identifier) body: (module_body)))
+          (labeled_statement
+            (identifier)
+            (module_declaration (marker_annotation name: (identifier)) name: (identifier) body: (module_body)))
+          (labeled_statement
+            (identifier)
+            (module_declaration (marker_annotation name: (identifier)) name: (identifier) body: (module_body))))))))
+
+================================================================================
+K28 REVIEW-41 local annotated package
+================================================================================
+
+class C {
+  void m() {
+    ordinary: @Deprecated package p;
+    module: @Deprecated package p;
+    open: @Deprecated package p;
+    record: @Deprecated package p;
+    sealed: @Deprecated package p;
+    with: @Deprecated package p;
+    yield: @Deprecated package p;
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters)
+        body: (block
+          (labeled_statement
+            (identifier)
+            (package_declaration (marker_annotation name: (identifier)) (identifier)))
+          (labeled_statement
+            (identifier)
+            (package_declaration (marker_annotation name: (identifier)) (identifier)))
+          (labeled_statement
+            (identifier)
+            (package_declaration (marker_annotation name: (identifier)) (identifier)))
+          (labeled_statement
+            (identifier)
+            (package_declaration (marker_annotation name: (identifier)) (identifier)))
+          (labeled_statement
+            (identifier)
+            (package_declaration (marker_annotation name: (identifier)) (identifier)))
+          (labeled_statement
+            (identifier)
+            (package_declaration (marker_annotation name: (identifier)) (identifier)))
+          (labeled_statement
+            (identifier)
+            (package_declaration (marker_annotation name: (identifier)) (identifier))))))))
+
+================================================================================
+K28 REVIEW-41 local static import
+================================================================================
+
+class C {
+  void m() {
+    ordinary: import static java.util.Collections.emptyList;
+    module: import static java.util.Collections.emptyList;
+    open: import static java.util.Collections.emptyList;
+    record: import static java.util.Collections.emptyList;
+    sealed: import static java.util.Collections.emptyList;
+    with: import static java.util.Collections.emptyList;
+    yield: import static java.util.Collections.emptyList;
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters)
+        body: (block
+          (labeled_statement
+            (identifier)
+            (import_declaration
+              (scoped_identifier
+                scope: (scoped_identifier
+                  scope: (scoped_identifier scope: (identifier) name: (identifier))
+                  name: (identifier))
+                name: (identifier))))
+          (labeled_statement
+            (identifier)
+            (import_declaration
+              (scoped_identifier
+                scope: (scoped_identifier
+                  scope: (scoped_identifier scope: (identifier) name: (identifier))
+                  name: (identifier))
+                name: (identifier))))
+          (labeled_statement
+            (identifier)
+            (import_declaration
+              (scoped_identifier
+                scope: (scoped_identifier
+                  scope: (scoped_identifier scope: (identifier) name: (identifier))
+                  name: (identifier))
+                name: (identifier))))
+          (labeled_statement
+            (identifier)
+            (import_declaration
+              (scoped_identifier
+                scope: (scoped_identifier
+                  scope: (scoped_identifier scope: (identifier) name: (identifier))
+                  name: (identifier))
+                name: (identifier))))
+          (labeled_statement
+            (identifier)
+            (import_declaration
+              (scoped_identifier
+                scope: (scoped_identifier
+                  scope: (scoped_identifier scope: (identifier) name: (identifier))
+                  name: (identifier))
+                name: (identifier))))
+          (labeled_statement
+            (identifier)
+            (import_declaration
+              (scoped_identifier
+                scope: (scoped_identifier
+                  scope: (scoped_identifier scope: (identifier) name: (identifier))
+                  name: (identifier))
+                name: (identifier))))
+          (labeled_statement
+            (identifier)
+            (import_declaration
+              (scoped_identifier
+                scope: (scoped_identifier
+                  scope: (scoped_identifier scope: (identifier) name: (identifier))
+                  name: (identifier))
+                name: (identifier)))))))))
+
+================================================================================
+K28 REVIEW-41 local module import
+================================================================================
+
+class C {
+  void m() {
+    ordinary: import module java.base;
+    module: import module java.base;
+    open: import module java.base;
+    record: import module java.base;
+    sealed: import module java.base;
+    with: import module java.base;
+    yield: import module java.base;
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters)
+        body: (block
+          (labeled_statement
+            (identifier)
+            (import_declaration (scoped_identifier scope: (identifier) name: (identifier))))
+          (labeled_statement
+            (identifier)
+            (import_declaration (scoped_identifier scope: (identifier) name: (identifier))))
+          (labeled_statement
+            (identifier)
+            (import_declaration (scoped_identifier scope: (identifier) name: (identifier))))
+          (labeled_statement
+            (identifier)
+            (import_declaration (scoped_identifier scope: (identifier) name: (identifier))))
+          (labeled_statement
+            (identifier)
+            (import_declaration (scoped_identifier scope: (identifier) name: (identifier))))
+          (labeled_statement
+            (identifier)
+            (import_declaration (scoped_identifier scope: (identifier) name: (identifier))))
+          (labeled_statement
+            (identifier)
+            (import_declaration (scoped_identifier scope: (identifier) name: (identifier)))))))))
+
+================================================================================
+K28 REVIEW-41 local sealed class
+================================================================================
+
+class C {
+  void m() {
+    ordinary: sealed class T {}
+    module: sealed class T {}
+    open: sealed class T {}
+    record: sealed class T {}
+    sealed: sealed class T {}
+    with: sealed class T {}
+    yield: sealed class T {}
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters)
+        body: (block
+          (labeled_statement
+            (identifier)
+            (class_declaration (modifiers) name: (identifier) body: (class_body)))
+          (labeled_statement
+            (identifier)
+            (class_declaration (modifiers) name: (identifier) body: (class_body)))
+          (labeled_statement
+            (identifier)
+            (class_declaration (modifiers) name: (identifier) body: (class_body)))
+          (labeled_statement
+            (identifier)
+            (class_declaration (modifiers) name: (identifier) body: (class_body)))
+          (labeled_statement
+            (identifier)
+            (class_declaration (modifiers) name: (identifier) body: (class_body)))
+          (labeled_statement
+            (identifier)
+            (class_declaration (modifiers) name: (identifier) body: (class_body)))
+          (labeled_statement
+            (identifier)
+            (class_declaration (modifiers) name: (identifier) body: (class_body))))))))
+
+================================================================================
+K28 REVIEW-41 local non-sealed class
+================================================================================
+
+class C {
+  void m() {
+    ordinary: non-sealed class T {}
+    module: non-sealed class T {}
+    open: non-sealed class T {}
+    record: non-sealed class T {}
+    sealed: non-sealed class T {}
+    with: non-sealed class T {}
+    yield: non-sealed class T {}
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters)
+        body: (block
+          (labeled_statement
+            (identifier)
+            (class_declaration (modifiers) name: (identifier) body: (class_body)))
+          (labeled_statement
+            (identifier)
+            (class_declaration (modifiers) name: (identifier) body: (class_body)))
+          (labeled_statement
+            (identifier)
+            (class_declaration (modifiers) name: (identifier) body: (class_body)))
+          (labeled_statement
+            (identifier)
+            (class_declaration (modifiers) name: (identifier) body: (class_body)))
+          (labeled_statement
+            (identifier)
+            (class_declaration (modifiers) name: (identifier) body: (class_body)))
+          (labeled_statement
+            (identifier)
+            (class_declaration (modifiers) name: (identifier) body: (class_body)))
+          (labeled_statement
+            (identifier)
+            (class_declaration (modifiers) name: (identifier) body: (class_body))))))))
+
+================================================================================
+K28 REVIEW-41 local non-sealed interface
+================================================================================
+
+class C {
+  void m() {
+    ordinary: non-sealed interface I {}
+    module: non-sealed interface I {}
+    open: non-sealed interface I {}
+    record: non-sealed interface I {}
+    sealed: non-sealed interface I {}
+    with: non-sealed interface I {}
+    yield: non-sealed interface I {}
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters)
+        body: (block
+          (labeled_statement
+            (identifier)
+            (interface_declaration (modifiers) name: (identifier) body: (interface_body)))
+          (labeled_statement
+            (identifier)
+            (interface_declaration (modifiers) name: (identifier) body: (interface_body)))
+          (labeled_statement
+            (identifier)
+            (interface_declaration (modifiers) name: (identifier) body: (interface_body)))
+          (labeled_statement
+            (identifier)
+            (interface_declaration (modifiers) name: (identifier) body: (interface_body)))
+          (labeled_statement
+            (identifier)
+            (interface_declaration (modifiers) name: (identifier) body: (interface_body)))
+          (labeled_statement
+            (identifier)
+            (interface_declaration (modifiers) name: (identifier) body: (interface_body)))
+          (labeled_statement
+            (identifier)
+            (interface_declaration (modifiers) name: (identifier) body: (interface_body))))))))
+
+================================================================================
+K28 REVIEW-41 top-level annotation type
+================================================================================
+
+ordinary: @interface A {}
+module: @interface A {}
+open: @interface A {}
+record: @interface A {}
+sealed: @interface A {}
+with: @interface A {}
+yield: @interface A {}
+
+--------------------------------------------------------------------------------
+
+(program
+  (labeled_statement
+    (identifier)
+    (annotation_type_declaration name: (identifier) body: (annotation_type_body)))
+  (labeled_statement
+    (identifier)
+    (annotation_type_declaration name: (identifier) body: (annotation_type_body)))
+  (labeled_statement
+    (identifier)
+    (annotation_type_declaration name: (identifier) body: (annotation_type_body)))
+  (labeled_statement
+    (identifier)
+    (annotation_type_declaration name: (identifier) body: (annotation_type_body)))
+  (labeled_statement
+    (identifier)
+    (annotation_type_declaration name: (identifier) body: (annotation_type_body)))
+  (labeled_statement
+    (identifier)
+    (annotation_type_declaration name: (identifier) body: (annotation_type_body)))
+  (labeled_statement
+    (identifier)
+    (annotation_type_declaration name: (identifier) body: (annotation_type_body))))
+
+================================================================================
+K28 REVIEW-41 top-level open module
+================================================================================
+
+ordinary: open module m {}
+module: open module m {}
+open: open module m {}
+record: open module m {}
+sealed: open module m {}
+with: open module m {}
+yield: open module m {}
+
+--------------------------------------------------------------------------------
+
+(program
+  (labeled_statement (identifier) (module_declaration name: (identifier) body: (module_body)))
+  (labeled_statement (identifier) (module_declaration name: (identifier) body: (module_body)))
+  (labeled_statement (identifier) (module_declaration name: (identifier) body: (module_body)))
+  (labeled_statement (identifier) (module_declaration name: (identifier) body: (module_body)))
+  (labeled_statement (identifier) (module_declaration name: (identifier) body: (module_body)))
+  (labeled_statement (identifier) (module_declaration name: (identifier) body: (module_body)))
+  (labeled_statement (identifier) (module_declaration name: (identifier) body: (module_body))))
+
+================================================================================
+K28 REVIEW-41 top-level annotated module
+================================================================================
+
+ordinary: @Deprecated module m {}
+module: @Deprecated module m {}
+open: @Deprecated module m {}
+record: @Deprecated module m {}
+sealed: @Deprecated module m {}
+with: @Deprecated module m {}
+yield: @Deprecated module m {}
+
+--------------------------------------------------------------------------------
+
+(program
+  (labeled_statement
+    (identifier)
+    (module_declaration (marker_annotation name: (identifier)) name: (identifier) body: (module_body)))
+  (labeled_statement
+    (identifier)
+    (module_declaration (marker_annotation name: (identifier)) name: (identifier) body: (module_body)))
+  (labeled_statement
+    (identifier)
+    (module_declaration (marker_annotation name: (identifier)) name: (identifier) body: (module_body)))
+  (labeled_statement
+    (identifier)
+    (module_declaration (marker_annotation name: (identifier)) name: (identifier) body: (module_body)))
+  (labeled_statement
+    (identifier)
+    (module_declaration (marker_annotation name: (identifier)) name: (identifier) body: (module_body)))
+  (labeled_statement
+    (identifier)
+    (module_declaration (marker_annotation name: (identifier)) name: (identifier) body: (module_body)))
+  (labeled_statement
+    (identifier)
+    (module_declaration (marker_annotation name: (identifier)) name: (identifier) body: (module_body))))
+
+================================================================================
+K28 REVIEW-41 top-level annotated package
+================================================================================
+
+ordinary: @Deprecated package p;
+module: @Deprecated package p;
+open: @Deprecated package p;
+record: @Deprecated package p;
+sealed: @Deprecated package p;
+with: @Deprecated package p;
+yield: @Deprecated package p;
+
+--------------------------------------------------------------------------------
+
+(program
+  (labeled_statement (identifier) (package_declaration (marker_annotation name: (identifier)) (identifier)))
+  (labeled_statement (identifier) (package_declaration (marker_annotation name: (identifier)) (identifier)))
+  (labeled_statement (identifier) (package_declaration (marker_annotation name: (identifier)) (identifier)))
+  (labeled_statement (identifier) (package_declaration (marker_annotation name: (identifier)) (identifier)))
+  (labeled_statement (identifier) (package_declaration (marker_annotation name: (identifier)) (identifier)))
+  (labeled_statement (identifier) (package_declaration (marker_annotation name: (identifier)) (identifier)))
+  (labeled_statement (identifier) (package_declaration (marker_annotation name: (identifier)) (identifier))))
+
+================================================================================
+K28 REVIEW-41 top-level static import
+================================================================================
+
+ordinary: import static java.util.Collections.emptyList;
+module: import static java.util.Collections.emptyList;
+open: import static java.util.Collections.emptyList;
+record: import static java.util.Collections.emptyList;
+sealed: import static java.util.Collections.emptyList;
+with: import static java.util.Collections.emptyList;
+yield: import static java.util.Collections.emptyList;
+
+--------------------------------------------------------------------------------
+
+(program
+  (labeled_statement
+    (identifier)
+    (import_declaration
+      (scoped_identifier
+        scope: (scoped_identifier
+          scope: (scoped_identifier scope: (identifier) name: (identifier))
+          name: (identifier))
+        name: (identifier))))
+  (labeled_statement
+    (identifier)
+    (import_declaration
+      (scoped_identifier
+        scope: (scoped_identifier
+          scope: (scoped_identifier scope: (identifier) name: (identifier))
+          name: (identifier))
+        name: (identifier))))
+  (labeled_statement
+    (identifier)
+    (import_declaration
+      (scoped_identifier
+        scope: (scoped_identifier
+          scope: (scoped_identifier scope: (identifier) name: (identifier))
+          name: (identifier))
+        name: (identifier))))
+  (labeled_statement
+    (identifier)
+    (import_declaration
+      (scoped_identifier
+        scope: (scoped_identifier
+          scope: (scoped_identifier scope: (identifier) name: (identifier))
+          name: (identifier))
+        name: (identifier))))
+  (labeled_statement
+    (identifier)
+    (import_declaration
+      (scoped_identifier
+        scope: (scoped_identifier
+          scope: (scoped_identifier scope: (identifier) name: (identifier))
+          name: (identifier))
+        name: (identifier))))
+  (labeled_statement
+    (identifier)
+    (import_declaration
+      (scoped_identifier
+        scope: (scoped_identifier
+          scope: (scoped_identifier scope: (identifier) name: (identifier))
+          name: (identifier))
+        name: (identifier))))
+  (labeled_statement
+    (identifier)
+    (import_declaration
+      (scoped_identifier
+        scope: (scoped_identifier
+          scope: (scoped_identifier scope: (identifier) name: (identifier))
+          name: (identifier))
+        name: (identifier)))))
+
+================================================================================
+K28 REVIEW-41 top-level module import
+================================================================================
+
+ordinary: import module java.base;
+module: import module java.base;
+open: import module java.base;
+record: import module java.base;
+sealed: import module java.base;
+with: import module java.base;
+yield: import module java.base;
+
+--------------------------------------------------------------------------------
+
+(program
+  (labeled_statement
+    (identifier)
+    (import_declaration (scoped_identifier scope: (identifier) name: (identifier))))
+  (labeled_statement
+    (identifier)
+    (import_declaration (scoped_identifier scope: (identifier) name: (identifier))))
+  (labeled_statement
+    (identifier)
+    (import_declaration (scoped_identifier scope: (identifier) name: (identifier))))
+  (labeled_statement
+    (identifier)
+    (import_declaration (scoped_identifier scope: (identifier) name: (identifier))))
+  (labeled_statement
+    (identifier)
+    (import_declaration (scoped_identifier scope: (identifier) name: (identifier))))
+  (labeled_statement
+    (identifier)
+    (import_declaration (scoped_identifier scope: (identifier) name: (identifier))))
+  (labeled_statement
+    (identifier)
+    (import_declaration (scoped_identifier scope: (identifier) name: (identifier)))))
+
+================================================================================
+K28 REVIEW-41 top-level sealed class
+================================================================================
+
+ordinary: sealed class T {}
+module: sealed class T {}
+open: sealed class T {}
+record: sealed class T {}
+sealed: sealed class T {}
+with: sealed class T {}
+yield: sealed class T {}
+
+--------------------------------------------------------------------------------
+
+(program
+  (labeled_statement (identifier) (class_declaration (modifiers) name: (identifier) body: (class_body)))
+  (labeled_statement (identifier) (class_declaration (modifiers) name: (identifier) body: (class_body)))
+  (labeled_statement (identifier) (class_declaration (modifiers) name: (identifier) body: (class_body)))
+  (labeled_statement (identifier) (class_declaration (modifiers) name: (identifier) body: (class_body)))
+  (labeled_statement (identifier) (class_declaration (modifiers) name: (identifier) body: (class_body)))
+  (labeled_statement (identifier) (class_declaration (modifiers) name: (identifier) body: (class_body)))
+  (labeled_statement (identifier) (class_declaration (modifiers) name: (identifier) body: (class_body))))
+
+================================================================================
+K28 REVIEW-41 top-level non-sealed class
+================================================================================
+
+ordinary: non-sealed class T {}
+module: non-sealed class T {}
+open: non-sealed class T {}
+record: non-sealed class T {}
+sealed: non-sealed class T {}
+with: non-sealed class T {}
+yield: non-sealed class T {}
+
+--------------------------------------------------------------------------------
+
+(program
+  (labeled_statement (identifier) (class_declaration (modifiers) name: (identifier) body: (class_body)))
+  (labeled_statement (identifier) (class_declaration (modifiers) name: (identifier) body: (class_body)))
+  (labeled_statement (identifier) (class_declaration (modifiers) name: (identifier) body: (class_body)))
+  (labeled_statement (identifier) (class_declaration (modifiers) name: (identifier) body: (class_body)))
+  (labeled_statement (identifier) (class_declaration (modifiers) name: (identifier) body: (class_body)))
+  (labeled_statement (identifier) (class_declaration (modifiers) name: (identifier) body: (class_body)))
+  (labeled_statement (identifier) (class_declaration (modifiers) name: (identifier) body: (class_body))))
+
+================================================================================
+K28 REVIEW-41 top-level non-sealed interface
+================================================================================
+
+ordinary: non-sealed interface I {}
+module: non-sealed interface I {}
+open: non-sealed interface I {}
+record: non-sealed interface I {}
+sealed: non-sealed interface I {}
+with: non-sealed interface I {}
+yield: non-sealed interface I {}
+
+--------------------------------------------------------------------------------
+
+(program
+  (labeled_statement
+    (identifier)
+    (interface_declaration (modifiers) name: (identifier) body: (interface_body)))
+  (labeled_statement
+    (identifier)
+    (interface_declaration (modifiers) name: (identifier) body: (interface_body)))
+  (labeled_statement
+    (identifier)
+    (interface_declaration (modifiers) name: (identifier) body: (interface_body)))
+  (labeled_statement
+    (identifier)
+    (interface_declaration (modifiers) name: (identifier) body: (interface_body)))
+  (labeled_statement
+    (identifier)
+    (interface_declaration (modifiers) name: (identifier) body: (interface_body)))
+  (labeled_statement
+    (identifier)
+    (interface_declaration (modifiers) name: (identifier) body: (interface_body)))
+  (labeled_statement
+    (identifier)
+    (interface_declaration (modifiers) name: (identifier) body: (interface_body))))
+
+================================================================================
+K28 REVIEW-41 top-level module
+================================================================================
+
+ordinary: module m {}
+module: module m {}
+open: module m {}
+record: module m {}
+sealed: module m {}
+with: module m {}
+yield: module m {}
+
+--------------------------------------------------------------------------------
+
+(program
+  (labeled_statement (identifier) (module_declaration name: (identifier) body: (module_body)))
+  (labeled_statement (identifier) (module_declaration name: (identifier) body: (module_body)))
+  (labeled_statement (identifier) (module_declaration name: (identifier) body: (module_body)))
+  (labeled_statement (identifier) (module_declaration name: (identifier) body: (module_body)))
+  (labeled_statement (identifier) (module_declaration name: (identifier) body: (module_body)))
+  (labeled_statement (identifier) (module_declaration name: (identifier) body: (module_body)))
+  (labeled_statement (identifier) (module_declaration name: (identifier) body: (module_body))))
+
+================================================================================
+K28 REVIEW-41 top-level package
+================================================================================
+
+ordinary: package p;
+module: package p;
+open: package p;
+record: package p;
+sealed: package p;
+with: package p;
+yield: package p;
+
+--------------------------------------------------------------------------------
+
+(program
+  (labeled_statement (identifier) (package_declaration (identifier)))
+  (labeled_statement (identifier) (package_declaration (identifier)))
+  (labeled_statement (identifier) (package_declaration (identifier)))
+  (labeled_statement (identifier) (package_declaration (identifier)))
+  (labeled_statement (identifier) (package_declaration (identifier)))
+  (labeled_statement (identifier) (package_declaration (identifier)))
+  (labeled_statement (identifier) (package_declaration (identifier))))
+
+================================================================================
+K28 REVIEW-41 top-level import
+================================================================================
+
+ordinary: import java.util.List;
+module: import java.util.List;
+open: import java.util.List;
+record: import java.util.List;
+sealed: import java.util.List;
+with: import java.util.List;
+yield: import java.util.List;
+
+--------------------------------------------------------------------------------
+
+(program
+  (labeled_statement
+    (identifier)
+    (import_declaration
+      (scoped_identifier scope: (scoped_identifier scope: (identifier) name: (identifier)) name: (identifier))))
+  (labeled_statement
+    (identifier)
+    (import_declaration
+      (scoped_identifier scope: (scoped_identifier scope: (identifier) name: (identifier)) name: (identifier))))
+  (labeled_statement
+    (identifier)
+    (import_declaration
+      (scoped_identifier scope: (scoped_identifier scope: (identifier) name: (identifier)) name: (identifier))))
+  (labeled_statement
+    (identifier)
+    (import_declaration
+      (scoped_identifier scope: (scoped_identifier scope: (identifier) name: (identifier)) name: (identifier))))
+  (labeled_statement
+    (identifier)
+    (import_declaration
+      (scoped_identifier scope: (scoped_identifier scope: (identifier) name: (identifier)) name: (identifier))))
+  (labeled_statement
+    (identifier)
+    (import_declaration
+      (scoped_identifier scope: (scoped_identifier scope: (identifier) name: (identifier)) name: (identifier))))
+  (labeled_statement
+    (identifier)
+    (import_declaration
+      (scoped_identifier scope: (scoped_identifier scope: (identifier) name: (identifier)) name: (identifier)))))
+
+================================================================================
+K28 REVIEW-41 top-level record
+================================================================================
+
+ordinary: record R() {}
+module: record R() {}
+open: record R() {}
+record: record R() {}
+sealed: record R() {}
+with: record R() {}
+yield: record R() {}
+
+--------------------------------------------------------------------------------
+
+(program
+  (labeled_statement
+    (identifier)
+    (record_declaration name: (identifier) parameters: (formal_parameters) body: (class_body)))
+  (labeled_statement
+    (identifier)
+    (record_declaration name: (identifier) parameters: (formal_parameters) body: (class_body)))
+  (labeled_statement
+    (identifier)
+    (record_declaration name: (identifier) parameters: (formal_parameters) body: (class_body)))
+  (labeled_statement
+    (identifier)
+    (record_declaration name: (identifier) parameters: (formal_parameters) body: (class_body)))
+  (labeled_statement
+    (identifier)
+    (record_declaration name: (identifier) parameters: (formal_parameters) body: (class_body)))
+  (labeled_statement
+    (identifier)
+    (record_declaration name: (identifier) parameters: (formal_parameters) body: (class_body)))
+  (labeled_statement
+    (identifier)
+    (record_declaration name: (identifier) parameters: (formal_parameters) body: (class_body))))
+
+================================================================================
+K28 REVIEW-41 top-level interface
+================================================================================
+
+ordinary: interface I {}
+module: interface I {}
+open: interface I {}
+record: interface I {}
+sealed: interface I {}
+with: interface I {}
+yield: interface I {}
+
+--------------------------------------------------------------------------------
+
+(program
+  (labeled_statement (identifier) (interface_declaration name: (identifier) body: (interface_body)))
+  (labeled_statement (identifier) (interface_declaration name: (identifier) body: (interface_body)))
+  (labeled_statement (identifier) (interface_declaration name: (identifier) body: (interface_body)))
+  (labeled_statement (identifier) (interface_declaration name: (identifier) body: (interface_body)))
+  (labeled_statement (identifier) (interface_declaration name: (identifier) body: (interface_body)))
+  (labeled_statement (identifier) (interface_declaration name: (identifier) body: (interface_body)))
+  (labeled_statement (identifier) (interface_declaration name: (identifier) body: (interface_body))))
+
+================================================================================
+K28 REVIEW-41 top-level enum
+================================================================================
+
+ordinary: enum E { A }
+module: enum E { A }
+open: enum E { A }
+record: enum E { A }
+sealed: enum E { A }
+with: enum E { A }
+yield: enum E { A }
+
+--------------------------------------------------------------------------------
+
+(program
+  (labeled_statement
+    (identifier)
+    (enum_declaration name: (identifier) body: (enum_body (enum_constant name: (identifier)))))
+  (labeled_statement
+    (identifier)
+    (enum_declaration name: (identifier) body: (enum_body (enum_constant name: (identifier)))))
+  (labeled_statement
+    (identifier)
+    (enum_declaration name: (identifier) body: (enum_body (enum_constant name: (identifier)))))
+  (labeled_statement
+    (identifier)
+    (enum_declaration name: (identifier) body: (enum_body (enum_constant name: (identifier)))))
+  (labeled_statement
+    (identifier)
+    (enum_declaration name: (identifier) body: (enum_body (enum_constant name: (identifier)))))
+  (labeled_statement
+    (identifier)
+    (enum_declaration name: (identifier) body: (enum_body (enum_constant name: (identifier)))))
+  (labeled_statement
+    (identifier)
+    (enum_declaration name: (identifier) body: (enum_body (enum_constant name: (identifier))))))
+
+================================================================================
+K28 REVIEW-41 top-level variable
+================================================================================
+
+ordinary: int x = 0;
+module: int x = 0;
+open: int x = 0;
+record: int x = 0;
+sealed: int x = 0;
+with: int x = 0;
+yield: int x = 0;
+
+--------------------------------------------------------------------------------
+
+(program
+  (labeled_statement
+    (identifier)
+    (local_variable_declaration
+      type: (integral_type)
+      declarator: (variable_declarator name: (identifier) value: (decimal_integer_literal))))
+  (labeled_statement
+    (identifier)
+    (local_variable_declaration
+      type: (integral_type)
+      declarator: (variable_declarator name: (identifier) value: (decimal_integer_literal))))
+  (labeled_statement
+    (identifier)
+    (local_variable_declaration
+      type: (integral_type)
+      declarator: (variable_declarator name: (identifier) value: (decimal_integer_literal))))
+  (labeled_statement
+    (identifier)
+    (local_variable_declaration
+      type: (integral_type)
+      declarator: (variable_declarator name: (identifier) value: (decimal_integer_literal))))
+  (labeled_statement
+    (identifier)
+    (local_variable_declaration
+      type: (integral_type)
+      declarator: (variable_declarator name: (identifier) value: (decimal_integer_literal))))
+  (labeled_statement
+    (identifier)
+    (local_variable_declaration
+      type: (integral_type)
+      declarator: (variable_declarator name: (identifier) value: (decimal_integer_literal))))
+  (labeled_statement
+    (identifier)
+    (local_variable_declaration
+      type: (integral_type)
+      declarator: (variable_declarator name: (identifier) value: (decimal_integer_literal)))))
+
+================================================================================
+K28 REVIEW-41b labeled variable in if consequence (yield)
+================================================================================
+
+class Probe { void m(int n, boolean b) { if (b) yield: int x = 0; else --n; } }
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter type: (integral_type) name: (identifier))
+          (formal_parameter type: (boolean_type) name: (identifier)))
+        body: (block
+          (if_statement
+            condition: (parenthesized_expression (identifier))
+            consequence: (labeled_statement
+              (identifier)
+              (local_variable_declaration
+                type: (integral_type)
+                declarator: (variable_declarator name: (identifier) value: (decimal_integer_literal))))
+            alternative: (expression_statement (update_expression (identifier)))))))))
+
+================================================================================
+K28 REVIEW-41b labeled variable in if consequence (ordinary)
+================================================================================
+
+class Probe { void m(int n, boolean b) { if (b) ordinary: int x = 0; else --n; } }
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter type: (integral_type) name: (identifier))
+          (formal_parameter type: (boolean_type) name: (identifier)))
+        body: (block
+          (if_statement
+            condition: (parenthesized_expression (identifier))
+            consequence: (labeled_statement
+              (identifier)
+              (local_variable_declaration
+                type: (integral_type)
+                declarator: (variable_declarator name: (identifier) value: (decimal_integer_literal))))
+            alternative: (expression_statement (update_expression (identifier)))))))))
+
+================================================================================
+K28 REVIEW-41b package declaration under nested labels (yield)
+================================================================================
+
+class Probe { void m(int n, boolean b) { yield: second: package p; } }
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter type: (integral_type) name: (identifier))
+          (formal_parameter type: (boolean_type) name: (identifier)))
+        body: (block
+          (labeled_statement
+            (identifier)
+            (labeled_statement (identifier) (package_declaration (identifier)))))))))
+
+================================================================================
+K28 REVIEW-41b package declaration under nested labels (ordinary)
+================================================================================
+
+class Probe { void m(int n, boolean b) { ordinary: second: package p; } }
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter type: (integral_type) name: (identifier))
+          (formal_parameter type: (boolean_type) name: (identifier)))
+        body: (block
+          (labeled_statement
+            (identifier)
+            (labeled_statement (identifier) (package_declaration (identifier)))))))))
+
+================================================================================
+K28 REVIEW-41b top-level labeled return (yield)
+================================================================================
+
+yield: return;
+
+--------------------------------------------------------------------------------
+
+(program (labeled_statement (identifier) (return_statement)))
+
+================================================================================
+K28 REVIEW-41b top-level labeled return (ordinary)
+================================================================================
+
+ordinary: return;
+
+--------------------------------------------------------------------------------
+
+(program (labeled_statement (identifier) (return_statement)))
+
+================================================================================
+K28 REVIEW-41b top-level labeled if (yield)
+================================================================================
+
+yield: if (true) {}
+
+--------------------------------------------------------------------------------
+
+(program
+  (labeled_statement
+    (identifier)
+    (if_statement condition: (parenthesized_expression (true)) consequence: (block))))
+
+================================================================================
+K28 REVIEW-41b top-level labeled if (ordinary)
+================================================================================
+
+ordinary: if (true) {}
+
+--------------------------------------------------------------------------------
+
+(program
+  (labeled_statement
+    (identifier)
+    (if_statement condition: (parenthesized_expression (true)) consequence: (block))))
+
+================================================================================
+K28 REVIEW-41b top-level labeled throw (yield)
+================================================================================
+
+yield: throw new RuntimeException();
+
+--------------------------------------------------------------------------------
+
+(program
+  (labeled_statement
+    (identifier)
+    (throw_statement (object_creation_expression type: (type_identifier) arguments: (argument_list)))))
+
+================================================================================
+K28 REVIEW-41b top-level labeled throw (ordinary)
+================================================================================
+
+ordinary: throw new RuntimeException();
+
+--------------------------------------------------------------------------------
+
+(program
+  (labeled_statement
+    (identifier)
+    (throw_statement (object_creation_expression type: (type_identifier) arguments: (argument_list)))))
+
+================================================================================
+K28 REVIEW-41b top-level labeled block (yield)
+================================================================================
+
+yield: {}
+
+--------------------------------------------------------------------------------
+
+(program (labeled_statement (identifier) (block)))
+
+================================================================================
+K28 REVIEW-41b top-level labeled block (ordinary)
+================================================================================
+
+ordinary: {}
+
+--------------------------------------------------------------------------------
+
+(program (labeled_statement (identifier) (block)))
+
+================================================================================
+K28 REVIEW-41b top-level labeled switch (yield)
+================================================================================
+
+yield: switch (1) { default: break; }
+
+--------------------------------------------------------------------------------
+
+(program
+  (labeled_statement
+    (identifier)
+    (switch_expression
+      condition: (parenthesized_expression (decimal_integer_literal))
+      body: (switch_block (switch_block_statement_group (switch_label) (break_statement))))))
+
+================================================================================
+K28 REVIEW-41b top-level labeled switch (ordinary)
+================================================================================
+
+ordinary: switch (1) { default: break; }
+
+--------------------------------------------------------------------------------
+
+(program
+  (labeled_statement
+    (identifier)
+    (switch_expression
+      condition: (parenthesized_expression (decimal_integer_literal))
+      body: (switch_block (switch_block_statement_group (switch_label) (break_statement))))))
+
+================================================================================
+K28 REVIEW-41b top-level labeled try (yield)
+================================================================================
+
+yield: try {} finally {}
+
+--------------------------------------------------------------------------------
+
+(program (labeled_statement (identifier) (try_statement body: (block) (finally_clause (block)))))
+
+================================================================================
+K28 REVIEW-41b top-level labeled try (ordinary)
+================================================================================
+
+ordinary: try {} finally {}
+
+--------------------------------------------------------------------------------
+
+(program (labeled_statement (identifier) (try_statement body: (block) (finally_clause (block)))))
+
+================================================================================
+K28 REVIEW-41b top-level labeled assignment (yield)
+================================================================================
+
+yield: n = 1;
+
+--------------------------------------------------------------------------------
+
+(program
+  (labeled_statement
+    (identifier)
+    (expression_statement (assignment_expression left: (identifier) right: (decimal_integer_literal)))))
+
+================================================================================
+K28 REVIEW-41b top-level labeled assignment (ordinary)
+================================================================================
+
+ordinary: n = 1;
+
+--------------------------------------------------------------------------------
+
+(program
+  (labeled_statement
+    (identifier)
+    (expression_statement (assignment_expression left: (identifier) right: (decimal_integer_literal)))))
+
+================================================================================
+K28 REVIEW-41b top-level labeled assert (yield)
+================================================================================
+
+yield: assert true;
+
+--------------------------------------------------------------------------------
+
+(program (labeled_statement (identifier) (assert_statement (true))))
+
+================================================================================
+K28 REVIEW-41b top-level labeled assert (ordinary)
+================================================================================
+
+ordinary: assert true;
+
+--------------------------------------------------------------------------------
+
+(program (labeled_statement (identifier) (assert_statement (true))))
+
+================================================================================
+K28 REVIEW-41b top-level labeled return after package declaration (yield)
+================================================================================
+
+package p;
+yield: return;
+
+--------------------------------------------------------------------------------
+
+(program (package_declaration (identifier)) (labeled_statement (identifier) (return_statement)))
+
+================================================================================
+K28 REVIEW-41b top-level labeled return after package declaration (ordinary)
+================================================================================
+
+package p;
+ordinary: return;
+
+--------------------------------------------------------------------------------
+
+(program (package_declaration (identifier)) (labeled_statement (identifier) (return_statement)))
+
+================================================================================
+K28 REVIEW-41c labeled declaration in else branch (yield)
+================================================================================
+
+class Probe { void m(int n, boolean b) { if (b) --n; else yield: int x = 0; } }
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter type: (integral_type) name: (identifier))
+          (formal_parameter type: (boolean_type) name: (identifier)))
+        body: (block
+          (if_statement
+            condition: (parenthesized_expression (identifier))
+            consequence: (expression_statement (update_expression (identifier)))
+            alternative: (labeled_statement
+              (identifier)
+              (local_variable_declaration
+                type: (integral_type)
+                declarator: (variable_declarator name: (identifier) value: (decimal_integer_literal))))))))))
+
+================================================================================
+K28 REVIEW-41c labeled declaration in else branch (ordinary)
+================================================================================
+
+class Probe { void m(int n, boolean b) { if (b) --n; else ordinary: int x = 0; } }
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter type: (integral_type) name: (identifier))
+          (formal_parameter type: (boolean_type) name: (identifier)))
+        body: (block
+          (if_statement
+            condition: (parenthesized_expression (identifier))
+            consequence: (expression_statement (update_expression (identifier)))
+            alternative: (labeled_statement
+              (identifier)
+              (local_variable_declaration
+                type: (integral_type)
+                declarator: (variable_declarator name: (identifier) value: (decimal_integer_literal))))))))))
+
+================================================================================
+K28 REVIEW-41c labeled declaration in while body (yield)
+================================================================================
+
+class Probe { void m(int n, boolean b) { while (b) yield: int x = 0; } }
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter type: (integral_type) name: (identifier))
+          (formal_parameter type: (boolean_type) name: (identifier)))
+        body: (block
+          (while_statement
+            condition: (parenthesized_expression (identifier))
+            body: (labeled_statement
+              (identifier)
+              (local_variable_declaration
+                type: (integral_type)
+                declarator: (variable_declarator name: (identifier) value: (decimal_integer_literal))))))))))
+
+================================================================================
+K28 REVIEW-41c labeled declaration in while body (ordinary)
+================================================================================
+
+class Probe { void m(int n, boolean b) { while (b) ordinary: int x = 0; } }
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter type: (integral_type) name: (identifier))
+          (formal_parameter type: (boolean_type) name: (identifier)))
+        body: (block
+          (while_statement
+            condition: (parenthesized_expression (identifier))
+            body: (labeled_statement
+              (identifier)
+              (local_variable_declaration
+                type: (integral_type)
+                declarator: (variable_declarator name: (identifier) value: (decimal_integer_literal))))))))))
+
+================================================================================
+K28 REVIEW-41c labeled package under an outer label (yield)
+================================================================================
+
+class Probe { void m(int n, boolean b) { outer: yield: package p; } }
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter type: (integral_type) name: (identifier))
+          (formal_parameter type: (boolean_type) name: (identifier)))
+        body: (block
+          (labeled_statement
+            (identifier)
+            (labeled_statement (identifier) (package_declaration (identifier)))))))))
+
+================================================================================
+K28 REVIEW-41c labeled package under an outer label (ordinary)
+================================================================================
+
+class Probe { void m(int n, boolean b) { outer: ordinary: package p; } }
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter type: (integral_type) name: (identifier))
+          (formal_parameter type: (boolean_type) name: (identifier)))
+        body: (block
+          (labeled_statement
+            (identifier)
+            (labeled_statement (identifier) (package_declaration (identifier)))))))))
+
+================================================================================
+K28 REVIEW-41c labeled declaration in switch colon group (yield)
+================================================================================
+
+class Probe { void m(int n, boolean b) { switch (n) { default: yield: int x = 0; } } }
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter type: (integral_type) name: (identifier))
+          (formal_parameter type: (boolean_type) name: (identifier)))
+        body: (block
+          (switch_expression
+            condition: (parenthesized_expression (identifier))
+            body: (switch_block
+              (switch_block_statement_group
+                (switch_label)
+                (labeled_statement
+                  (identifier)
+                  (local_variable_declaration
+                    type: (integral_type)
+                    declarator: (variable_declarator name: (identifier) value: (decimal_integer_literal))))))))))))
+
+================================================================================
+K28 REVIEW-41c labeled declaration in switch colon group (ordinary)
+================================================================================
+
+class Probe { void m(int n, boolean b) { switch (n) { default: ordinary: int x = 0; } } }
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter type: (integral_type) name: (identifier))
+          (formal_parameter type: (boolean_type) name: (identifier)))
+        body: (block
+          (switch_expression
+            condition: (parenthesized_expression (identifier))
+            body: (switch_block
+              (switch_block_statement_group
+                (switch_label)
+                (labeled_statement
+                  (identifier)
+                  (local_variable_declaration
+                    type: (integral_type)
+                    declarator: (variable_declarator name: (identifier) value: (decimal_integer_literal))))))))))))
+
+================================================================================
+K28 REVIEW-41c top-level labeled synchronized statement (yield)
+================================================================================
+
+yield: synchronized (new Object()) {}
+
+--------------------------------------------------------------------------------
+
+(program
+  (labeled_statement
+    (identifier)
+    (synchronized_statement
+      (parenthesized_expression
+        (object_creation_expression type: (type_identifier) arguments: (argument_list)))
+      body: (block))))
+
+================================================================================
+K28 REVIEW-41c top-level labeled synchronized statement (ordinary)
+================================================================================
+
+ordinary: synchronized (new Object()) {}
+
+--------------------------------------------------------------------------------
+
+(program
+  (labeled_statement
+    (identifier)
+    (synchronized_statement
+      (parenthesized_expression
+        (object_creation_expression type: (type_identifier) arguments: (argument_list)))
+      body: (block))))
+
+================================================================================
+K28 REVIEW-41c top-level labeled break (yield)
+================================================================================
+
+yield: break;
+
+--------------------------------------------------------------------------------
+
+(program (labeled_statement (identifier) (break_statement)))
+
+================================================================================
+K28 REVIEW-41c top-level labeled break (ordinary)
+================================================================================
+
+ordinary: break;
+
+--------------------------------------------------------------------------------
+
+(program (labeled_statement (identifier) (break_statement)))
+
+================================================================================
+K28 REVIEW-41c top-level labeled do loop (yield)
+================================================================================
+
+yield: do {} while (false);
+
+--------------------------------------------------------------------------------
+
+(program
+  (labeled_statement
+    (identifier)
+    (do_statement body: (block) condition: (parenthesized_expression (false)))))
+
+================================================================================
+K28 REVIEW-41c top-level labeled do loop (ordinary)
+================================================================================
+
+ordinary: do {} while (false);
+
+--------------------------------------------------------------------------------
+
+(program
+  (labeled_statement
+    (identifier)
+    (do_statement body: (block) condition: (parenthesized_expression (false)))))
+
+================================================================================
+K28 REVIEW-41c top-level labeled binary expression (yield)
+================================================================================
+
+yield: 1 + 2;
+
+--------------------------------------------------------------------------------
+
+(program
+  (labeled_statement
+    (identifier)
+    (expression_statement
+      (binary_expression left: (decimal_integer_literal) right: (decimal_integer_literal)))))
+
+================================================================================
+K28 REVIEW-41c top-level labeled binary expression (ordinary)
+================================================================================
+
+ordinary: 1 + 2;
+
+--------------------------------------------------------------------------------
+
+(program
+  (labeled_statement
+    (identifier)
+    (expression_statement
+      (binary_expression left: (decimal_integer_literal) right: (decimal_integer_literal)))))
