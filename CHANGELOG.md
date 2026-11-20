@@ -2,6 +2,23 @@
 
 ## Unreleased
 
+- Parse parenthesized assignment targets (K12, JLS 25 §§15.8.5 and 15.26), including `(x) = 1`, `((x)) += 7`,
+  `(this.field) = x` and `(a[0]) <<= 1` in statements, `for` clauses and lambda bodies. The
+  `assignment_expression.left` field holds a `parenthesized_expression` for each pair of parentheses. In
+  `src/node-types.json`, `left` gains that type, and `parenthesized_expression.children` explicitly lists
+  `array_access`, `field_access`, `identifier` and `parenthesized_expression` alongside the existing `expression`
+  supertype. The compared error-free trees retain their structure and the OpenJDK examples list drops four paths
+  (192 to 188). Several forms that javac rejects now parse with parenthesized assignment targets, as with ordinary
+  values at 2.2.0. These include whole parenthesized assignments as statements, `for` initializers or updates, and
+  switch statement arrow bodies. Statement expressions can also wrap the assignment in binary, unary, ternary or
+  cast expressions, field or array accesses, or method references. The same applies to unary `for` initializers,
+  ternary `for` updates, and binary, unary or ternary switch statement arrow bodies. Annotation values include
+  unkeyed, keyed, nested, array (including mixed entries) and element `default` values. Identifier tolerances cover
+  right-hand `_`, including in a conditional expression's middle arm and in call arguments, and the targets `(_)`,
+  `(obj.default)`, `(obj.if)`, `(obj._)`, `(_.field)`, `(_[0])` and `(a[_])`. A switch block can also contain an
+  unqualified `yield()` call alongside a `yield` of the assignment. Corpus and oracle cases record these forms with
+  controls that already parse at 2.2.0.
+
 - Extend the Ubuntu CI examples to parse OpenJDK 25.0.5+8 sources and javac langtools tests at pinned commit
   `fda231468e56663992785ec199a6efb8eca3cc7a`. No grammar change.
   The CI artifact of failing examples now holds the list of paths instead of the source files.
