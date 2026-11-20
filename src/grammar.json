@@ -3608,6 +3608,32 @@
             {
               "type": "SYMBOL",
               "name": "super"
+            },
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "SYMBOL",
+                      "name": "identifier"
+                    },
+                    {
+                      "type": "SYMBOL",
+                      "name": "scoped_type_identifier"
+                    }
+                  ]
+                },
+                {
+                  "type": "STRING",
+                  "value": "."
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "super"
+                }
+              ]
             }
           ]
         },
@@ -8566,7 +8592,13 @@
     [
       "_unannotated_type",
       "primary_expression",
-      "scoped_type_identifier"
+      "scoped_type_identifier",
+      "method_reference"
+    ],
+    [
+      "_unannotated_type",
+      "scoped_type_identifier",
+      "method_reference"
     ],
     [
       "_unannotated_type",

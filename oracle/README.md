@@ -36,9 +36,10 @@ character literals, with controls for repeated `u`, including after an encoded b
 backslashes before literal content and closing delimiters, quote boundaries and adjacent invalid inputs), `k11`
 (multiple type and record patterns in a `case` label, with adjacent invalid inputs and single-pattern controls),
 `k12` (parenthesized assignment targets, adjacent invalid inputs, and base-clean controls for expression and
-identifier tolerances), and `k13` (typed and bare underscores in record patterns, other unnamed-variable contexts,
-and adjacent invalid patterns). Every case names its origin in `provenance`: the bundle path with its `SHA256SUMS`
-hash, the PR, or "written in this task". IDs are prefixed with the set name. To add a case, append a line, hash its
+identifier tolerances), `k13` (typed and bare underscores in record patterns, other unnamed-variable contexts,
+and adjacent invalid patterns), and `k20` (qualified `super` method references, with explicit type arguments,
+control references, and adjacent invalid inputs). Every case names its origin in `provenance`: the bundle path with
+its `SHA256SUMS` hash, the PR, or "written in this task". IDs are prefixed with the set name. To add a case, append a line, hash its
 `source` (SHA-256 of the UTF-8 bytes; the
 replay prints the actual hash when it differs), then regenerate that set's verdicts.
 

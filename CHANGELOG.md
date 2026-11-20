@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased
+
+- Represent `TypeName.super::m` and `TypeName.super::<T>m` with a named `super` child of `method_reference` (K20,
+  JLS 25 §15.13, [grammar-orchard issue #50](https://codeberg.org/grammar-orchard/tree-sitter-java-orchard/issues/50)).
+  The qualifier is a separate `identifier` or `scoped_type_identifier`. The qualifier, `super`, optional
+  `type_arguments`, and member `identifier` have no fields on `method_reference`. `node-types.json` adds
+  `scoped_type_identifier` to the allowed children of `method_reference`. The adjacent invalid probes retain their
+  baseline parse verdicts.
+
 ## 2.3.0
 
 Phase 2 of the final-release plan: OpenJDK 25.0.5+8 as a second pinned example set, the Java 25 syntax fixes that
