@@ -310,7 +310,8 @@ module.exports = grammar({
       )),
       seq(
         '(',
-        sep1(field('type', $._type), '&'),
+        field('type', $._type),
+        repeat1(seq('&', field('type', $._type))),
         ')',
         field('value', choice(
           $.primary_expression,
@@ -428,7 +429,6 @@ module.exports = grammar({
     )),
 
     update_expression: $ => choice(
-      $._postfix_update_expression,
       prec.left(PREC.POSTFIX, seq($.expression, choice('++', '--'))),
       prec.left(PREC.UNARY, seq(choice('++', '--'), $.expression)),
     ),

@@ -29,7 +29,8 @@
 - Bind postfix `++` and `--` inside casts and unary expressions (K21, JLS 25 §§15.14–15.16, Phase 3
   operator and cast probes and grammar-orchard PR #23). A cast such as `(int) n++` now has an
   `update_expression` as its `value`, including for reference and intersection casts. A unary
-  expression such as `-n++` now has an `update_expression` as its `operand`. Standalone prefix updates and
+  expression such as `-n++` now has an `update_expression` as its `operand`. For `++a++` and `!a++`, which full javac
+  compilation rejects, the trees now read as `++(a++)` and `!(a++)`. Standalone prefix updates and
   following additive operators keep their precedence. `node-types.json` is unchanged. `docs/tolerances.md` gains a row
   for the existing tolerances `(Integer) ++i`, `(Integer) --i`, `(n) ++ k;` and `(n) -- k;`, which javac rejects and
   K21 leaves unchanged.
