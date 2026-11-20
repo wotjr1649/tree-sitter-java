@@ -64,12 +64,6 @@
       "base_failure": "root hasError; 1 ERROR",
       "base_tree": "(program (import_declaration (scoped_identifier scope: (scoped_identifier scope: (identifier) name: (identifier)) name: (identifier))) (import_declaration (scoped_identifier scope: (scoped_identifier scope: (identifier) name: (identifier)) name: (identifier)) (asterisk)) (annotation_type_declaration (modifiers (annotation name: (identifier) arguments: (annotation_argument_list (field_access object: (identifier) field: (identifier))))) name: (identifier) body: (annotation_type_body)) (annotation_type_declaration (modifiers (annotation name: (identifier) arguments: (annotation_argument_list (field_access object: (identifier) field: (identifier))))) name: (identifier) body: (annotation_type_body)) (class_declaration name: (identifier) type_parameters: (type_parameters (type_parameter (type_identifier))) body: (class_body (class_declaration (modifiers) name: (identifier) superclass: (superclass (type_identifier)) body: (class_body)) (method_declaration type: (void_type) name: (identifier) parameters: (formal_parameters (spread_parameter (array_type element: (integral_type) dimensions: (dimensions (marker_annotation name: (identifier)))) (ERROR (marker_annotation name: (identifier))) (variable_declarator name: (identifier)))) body: (block)))))"
     },
-    "structural/p9/raw-cr-missing": {
-      "k": "K23",
-      "sha256": "0a5d018e963d0dd90771546a209ba6258db0e3b19bda0fbec7153f4c16cfc65c",
-      "base_failure": "root hasError; 1 MISSING",
-      "base_tree": "(program (class_declaration name: (identifier) body: (class_body (line_comment) (MISSING \"}\"))))"
-    },
     "structural/p9/annotated-array-spread": {
       "k": "K5",
       "sha256": "710865672c01f2b2845b4d3b42a85c120cb9e4d29108784a4e4ce13b1db73ea5",
