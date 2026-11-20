@@ -127,9 +127,7 @@
     {"kind": "BITWISE_COMPLEMENT", "start": 71, "end": 73, "status": "no_node_at_range", "reason": "limit"}
   ],
   "corpus/k24.txt/K24 intersection complement postfix": [
-    {"kind": "TYPE_CAST", "start": 42, "end": 79, "status": "mismatched_kind", "reason": "limit"},
-    {"kind": "BITWISE_COMPLEMENT", "start": 75, "end": 79, "status": "no_node_at_range", "reason": "limit"},
-    {"kind": "POSTFIX_INCREMENT", "start": 76, "end": 79, "status": "no_node_at_range", "reason": "limit"}
+    {"kind": "BITWISE_COMPLEMENT", "start": 75, "end": 79, "status": "no_node_at_range", "reason": "limit"}
   ],
   "corpus/k24.txt/K24 intersection nested cast": [
     {"kind": "TYPE_CAST", "start": 39, "end": 79, "status": "no_node_at_range", "reason": "limit"},
@@ -152,9 +150,7 @@
     {"kind": "BITWISE_COMPLEMENT", "start": 70, "end": 72, "status": "no_node_at_range", "reason": "limit"}
   ],
   "k24/intersection-complement-postfix": [
-    {"kind": "TYPE_CAST", "start": 41, "end": 78, "status": "mismatched_kind", "reason": "limit"},
-    {"kind": "BITWISE_COMPLEMENT", "start": 74, "end": 78, "status": "no_node_at_range", "reason": "limit"},
-    {"kind": "POSTFIX_INCREMENT", "start": 75, "end": 78, "status": "no_node_at_range", "reason": "limit"}
+    {"kind": "BITWISE_COMPLEMENT", "start": 74, "end": 78, "status": "no_node_at_range", "reason": "limit"}
   ],
   "k24/intersection-nested-cast": [
     {"kind": "TYPE_CAST", "start": 38, "end": 78, "status": "no_node_at_range", "reason": "limit"},
@@ -168,14 +164,6 @@
   ],
   "k24/intersection-not": [
     {"kind": "LOGICAL_COMPLEMENT", "start": 77, "end": 82, "status": "no_node_at_range", "reason": "limit"}
-  ],
-  "k24/intersection-postfix-decrement": [
-    {"kind": "TYPE_CAST", "start": 41, "end": 77, "status": "mismatched_kind", "reason": "limit"},
-    {"kind": "POSTFIX_DECREMENT", "start": 74, "end": 77, "status": "no_node_at_range", "reason": "limit"}
-  ],
-  "k24/intersection-postfix-increment": [
-    {"kind": "TYPE_CAST", "start": 41, "end": 77, "status": "mismatched_kind", "reason": "limit"},
-    {"kind": "POSTFIX_INCREMENT", "start": 74, "end": 77, "status": "no_node_at_range", "reason": "limit"}
   ],
   "k24/intersection-switch": [
     {"kind": "RETURN", "start": 30, "end": 99, "status": "no_node_at_range", "reason": "limit"},

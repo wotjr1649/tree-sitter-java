@@ -43,20 +43,6 @@
       "base_tree": "(program (class_declaration name: (identifier) body: (class_body (method_declaration type: (type_identifier) name: (identifier) parameters: (formal_parameters (formal_parameter type: (integral_type) name: (identifier))) body: (block (return_statement (ERROR (type_identifier) type: (scoped_type_identifier (scoped_type_identifier (type_identifier) (type_identifier)) (type_identifier)) (integral_type) (identifier))))))))",
       "note": "documented limit (owner 2026-11-20)"
     },
-    "k24/intersection-postfix-increment": {
-      "k": "K24",
-      "sha256": "3a44448bedd1143403342b202d9773f6d593e43209a61ba1a0416b0bd90382b9",
-      "base_failure": "\"n++\" has no named update_expression node (found: identifier \"++\")",
-      "base_tree": "(program (class_declaration name: (identifier) body: (class_body (method_declaration type: (type_identifier) name: (identifier) parameters: (formal_parameters (formal_parameter type: (type_identifier) name: (identifier))) body: (block (return_statement (update_expression (cast_expression type: (type_identifier) type: (scoped_type_identifier (scoped_type_identifier (type_identifier) (type_identifier)) (type_identifier)) value: (identifier)))))))))",
-      "note": "documented limit (owner 2026-11-20)"
-    },
-    "k24/intersection-postfix-decrement": {
-      "k": "K24",
-      "sha256": "5b99036abc1e7e4493cffbaf981df6078882b1a05aa06aada510fc1c2ccb1e3c",
-      "base_failure": "\"n--\" has no named update_expression node (found: identifier \"--\")",
-      "base_tree": "(program (class_declaration name: (identifier) body: (class_body (method_declaration type: (type_identifier) name: (identifier) parameters: (formal_parameters (formal_parameter type: (type_identifier) name: (identifier))) body: (block (return_statement (update_expression (cast_expression type: (type_identifier) type: (scoped_type_identifier (scoped_type_identifier (type_identifier) (type_identifier)) (type_identifier)) value: (identifier)))))))))",
-      "note": "documented limit (owner 2026-11-20)"
-    },
     "k24/intersection-annotated": {
       "k": "K24",
       "sha256": "7334a904763e4111a1a0467def023f1cba9a6d8f882feac75f6a91cbf0df5ed8",
