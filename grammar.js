@@ -1434,7 +1434,7 @@ module.exports = grammar({
     // https://docs.oracle.com/javase/specs/jls/se8/html/jls-3.html#jls-IdentifierChars
     identifier: _ => /[\p{XID_Start}_$][\p{XID_Continue}\u00A2_$]*/,
 
-    line_comment: _ => token(prec(PREC.COMMENT, seq('//', /[^\n]*/))),
+    line_comment: _ => token(prec(PREC.COMMENT, seq('//', /[^\r\n]*/))),
 
     // http://stackoverflow.com/questions/13014947/regex-to-match-a-c-style-multiline-comment/36328890#36328890
     block_comment: _ => token(prec(PREC.COMMENT,
