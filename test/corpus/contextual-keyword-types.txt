@@ -195,7 +195,7 @@ open module m { requires transitive a; provides x with y; }
         module: (identifier))
       (provides_module_directive
         provided: (identifier)
-        (identifier)))))
+        provider: (identifier)))))
 
 ====================
 K9 contextual keywords as ordinary identifiers
