@@ -1,0 +1,198 @@
+================================================================================
+K21 primitive casts take postfix updates
+================================================================================
+
+class C { long f(int a) { return (long) a++ + (int) (a)--; } }
+
+---
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (integral_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (integral_type)
+            name: (identifier)))
+        body: (block
+          (return_statement
+            (binary_expression
+              left: (cast_expression
+                type: (integral_type)
+                value: (update_expression
+                  (identifier)))
+              right: (cast_expression
+                type: (integral_type)
+                value: (update_expression
+                  (parenthesized_expression
+                    (identifier)))))))))))
+
+================================================================================
+K21 reference cast takes postfix update
+================================================================================
+
+class C { Integer f(int a) { return (Integer) a++; } }
+
+---
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (type_identifier)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (integral_type)
+            name: (identifier)))
+        body: (block
+          (return_statement
+            (cast_expression
+              type: (type_identifier)
+              value: (update_expression
+                (identifier)))))))))
+
+================================================================================
+K21 unary signs take postfix updates
+================================================================================
+
+class C { int f(int a) { return -a++ + -a--; } }
+
+---
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (integral_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (integral_type)
+            name: (identifier)))
+        body: (block
+          (return_statement
+            (binary_expression
+              left: (unary_expression
+                operand: (update_expression
+                  (identifier)))
+              right: (unary_expression
+                operand: (update_expression
+                  (identifier))))))))))
+
+================================================================================
+K21 prefix and grouped updates keep precedence
+================================================================================
+
+class C { int f(int a) { return ++a + (int) ++a + -(a++) + (int) (a++); } }
+
+---
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (integral_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (integral_type)
+            name: (identifier)))
+        body: (block
+          (return_statement
+            (binary_expression
+              left: (binary_expression
+                left: (binary_expression
+                  left: (update_expression
+                    (identifier))
+                  right: (cast_expression
+                    type: (integral_type)
+                    value: (update_expression
+                      (identifier))))
+                right: (unary_expression
+                  operand: (parenthesized_expression
+                    (update_expression
+                      (identifier)))))
+              right: (cast_expression
+                type: (integral_type)
+                value: (parenthesized_expression
+                  (update_expression
+                    (identifier)))))))))))
+
+================================================================================
+K21 postfix update stops at an additive operator
+================================================================================
+
+class C { int f(int a, int b) { return a++ + b + (a+++b) + (a++ - -b); } }
+
+---
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (integral_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (integral_type)
+            name: (identifier))
+          (formal_parameter
+            type: (integral_type)
+            name: (identifier)))
+        body: (block
+          (return_statement
+            (binary_expression
+              left: (binary_expression
+                left: (binary_expression
+                  left: (update_expression
+                    (identifier))
+                  right: (identifier))
+                right: (parenthesized_expression
+                  (binary_expression
+                    left: (update_expression
+                      (identifier))
+                    right: (identifier))))
+              right: (parenthesized_expression
+                (binary_expression
+                  left: (update_expression
+                    (identifier))
+                  right: (unary_expression
+                    operand: (identifier)))))))))))
+
+================================================================================
+K21 intersection cast takes postfix update
+================================================================================
+
+class C { Object f(Integer n) { return (Integer & Comparable<Integer>) n++; } }
+
+---
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (type_identifier)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (type_identifier)
+            name: (identifier)))
+        body: (block
+          (return_statement
+            (cast_expression
+              type: (type_identifier)
+              type: (generic_type
+                (type_identifier)
+                (type_arguments
+                  (type_identifier)))
+              value: (update_expression
+                (identifier)))))))))

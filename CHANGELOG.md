@@ -64,9 +64,9 @@
   an LF (pinned with an LF control). `node-types.json` and the documented tolerances are unchanged.
   [JLS 25 §§3.4 and 3.7](https://docs.oracle.com/javase/specs/jls/se25/html/jls-3.html#jls-3.4),
   [grammar-orchard issue #42](https://codeberg.org/grammar-orchard/tree-sitter-java-orchard/issues/42).
-- Document intersection casts followed by logical or bitwise complements, nested casts, postfix updates, or a
-  switch expression as a known limit (K24). The oracle records the existing errors and misplaced postfix update
-  nodes. The limits also record the direct prefix updates and signed operand that javac accepts outside the JLS grammar.
+- Document intersection casts followed by logical or bitwise complements, nested casts, or a switch
+  expression as a known limit (K24). The oracle records the remaining errors, including a bitwise complement of a
+  postfix update. The limits also record the direct prefix updates and signed operand that javac accepts outside the JLS grammar.
   See [known limits](docs/tolerances.md#known-limits) and
   [JLS 25 §15.16](https://docs.oracle.com/javase/specs/jls/se25/html/jls-15.html#jls-15.16).
 - Document type-pattern bindings named `when` in switch labels and `instanceof` as a known limit (K25).
@@ -99,6 +99,15 @@
   `C.super x;`, `C.super x = null;` and `Names.J.super x = null;` as local declarations, the cast `(C.super) f`,
   `C.super[]::new` and `C.super<String>::bm`.
   [Documented tolerances](docs/tolerances.md)
+- Bind postfix `++` and `--` inside casts and unary expressions (K21, JLS 25 §§15.14–15.16, Phase 3
+  operator and cast probes and grammar-orchard PR #23). A cast such as `(int) n++` now has an
+  `update_expression` as its `value`, including for reference casts. Direct postfix operands `n++` and `n--` after an intersection cast
+  now parse cleanly as the cast's value, resolving those K24 cases. A unary
+  expression such as `-n++` now has an `update_expression` as its `operand`. For `++a++` and `!a++`, which full javac
+  compilation rejects, the trees now read as `++(a++)` and `!(a++)`. Standalone prefix updates and
+  following additive operators keep their precedence. `node-types.json` is unchanged. `docs/tolerances.md` gains a row
+  for the existing tolerances `(Integer) ++i`, `(Integer) --i`, `(n) ++ k;` and `(n) -- k;`, which javac rejects and
+  K21 leaves unchanged.
 
 ## 2.3.0
 
