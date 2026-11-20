@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+- **K33.** Parse `transitive` as the dependency name in `requires transitive;` and
+  `requires static transitive;`, and as the first segment of a qualified dependency name.
+  These forms use the existing `module` field with an `identifier` or `scoped_identifier`.
+  Modifier positions and the public node schema are unchanged. Repeated modifiers retain the
+  ordinary module-name tolerance, including `requires static static transitive;`.
+  Reproduced in REVIEW-49. [JLS 25 §3.9](https://docs.oracle.com/javase/specs/jls/se25/html/jls-3.html#jls-3.9) ·
+  [§7.7.1](https://docs.oracle.com/javase/specs/jls/se25/html/jls-7.html#jls-7.7.1)
+
 - **Breaking change (Go).** For v3, the module path is `github.com/wotjr1649/tree-sitter-java/v3`. Update Go imports
   to `github.com/wotjr1649/tree-sitter-java/v3/bindings/go`.
 - **Breaking change (K17)**. In a module directive such as `provides S with A, B;`, every service implementation
