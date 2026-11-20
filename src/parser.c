@@ -6330,7 +6330,8 @@ static bool ts_lex(TSLexer *lexer, TSStateId state) {
     case 116:
       ACCEPT_TOKEN(sym_string_fragment);
       if ((!eof && lookahead == 00)) ADVANCE(116);
-      if (lookahead == '\n') ADVANCE(113);
+      if (lookahead == '\n' ||
+          lookahead == '\r') ADVANCE(113);
       if (lookahead != 0 &&
           lookahead != '"' &&
           lookahead != '\\') ADVANCE(116);
@@ -6381,7 +6382,8 @@ static bool ts_lex(TSLexer *lexer, TSStateId state) {
     case 122:
       ACCEPT_TOKEN(aux_sym__multiline_string_fragment_token1);
       if ((!eof && lookahead == 00)) ADVANCE(122);
-      if (lookahead == '\n') ADVANCE(119);
+      if (lookahead == '\n' ||
+          lookahead == '\r') ADVANCE(119);
       if (lookahead != 0 &&
           lookahead != '"' &&
           lookahead != '\\') ADVANCE(122);
@@ -6452,7 +6454,8 @@ static bool ts_lex(TSLexer *lexer, TSStateId state) {
     case 132:
       ACCEPT_TOKEN(sym__string_fragment_after_mixed_backslash);
       if ((!eof && lookahead == 00)) ADVANCE(132);
-      if (lookahead == '\n') ADVANCE(129);
+      if (lookahead == '\n' ||
+          lookahead == '\r') ADVANCE(129);
       if (lookahead != 0 &&
           lookahead != '"' &&
           lookahead != '\\') ADVANCE(132);
@@ -6797,7 +6800,8 @@ static bool ts_lex(TSLexer *lexer, TSStateId state) {
     case 223:
       ACCEPT_TOKEN(sym_line_comment);
       if (lookahead != 0 &&
-          lookahead != '\n') ADVANCE(223);
+          lookahead != '\n' &&
+          lookahead != '\r') ADVANCE(223);
       END_STATE();
     case 224:
       ACCEPT_TOKEN(sym_block_comment);

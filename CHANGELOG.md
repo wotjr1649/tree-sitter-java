@@ -49,6 +49,18 @@
   JLS 25 §14.21; an unqualified method named `yield` cannot be invoked, §3.8, REVIEW-33). As in javac, this also
   applies outside a switch, where javac then reports `no.switch.expression`. `yield ()`, `yield (x, n)`, qualified
   calls and the K12 unqualified-call tolerance keep their trees. The node schema is unchanged.
+- End a `line_comment` before CR, LF or CRLF (K23). Code after a lone CR now gets its own nodes, and a CRLF
+  comment's range ends before the CR, consistent with LF: in files with CRLF line ends every line comment is one
+  byte shorter and its text has no trailing CR. Code after a lone CR that was hidden in a comment now parses, so
+  javac-rejected code there now errs, and existing tolerances such as an illegal string escape apply to it as after
+  an LF (pinned with an LF control). `node-types.json` and the documented tolerances are unchanged.
+  [JLS 25 §§3.4 and 3.7](https://docs.oracle.com/javase/specs/jls/se25/html/jls-3.html#jls-3.4),
+  [grammar-orchard issue #42](https://codeberg.org/grammar-orchard/tree-sitter-java-orchard/issues/42).
+- Document intersection casts followed by logical or bitwise complements, nested casts, postfix updates, or a
+  switch expression as a known limit (K24). The oracle records the existing errors and misplaced postfix update
+  nodes. The limits also record the direct prefix updates and signed operand that javac accepts outside the JLS grammar.
+  See [known limits](docs/tolerances.md#known-limits) and
+  [JLS 25 §15.16](https://docs.oracle.com/javase/specs/jls/se25/html/jls-15.html#jls-15.16).
 
 ## 2.3.0
 
