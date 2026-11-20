@@ -37,6 +37,15 @@
   by javac's parser. The example failure baseline rises from 183 to 190. See
   [withdrawn and retained tolerances](docs/tolerances.md#withdrawn-in-300).
 
+- Parse `open`, `module`, and `with` as names of ordinary constructors and compact record constructors (K30, REVIEW-49).
+  These names are `identifier` nodes in the `name` field of `constructor_declaration` or
+  `compact_constructor_declaration`. The public node schema is unchanged.
+  The names inherit ordinary-name tolerances for mismatched names, compact forms in class bodies, and
+  constructor modifiers such as `static`. The [K30 oracle cases](oracle/data/cases/k30.jsonl) pin those forms.
+  [JLS 25 §§3.8–3.9](https://docs.oracle.com/javase/specs/jls/se25/html/jls-3.html#jls-3.8) ·
+  [§8.8](https://docs.oracle.com/javase/specs/jls/se25/html/jls-8.html#jls-8.8) ·
+  [§8.10.4.2](https://docs.oracle.com/javase/specs/jls/se25/html/jls-8.html#jls-8.10.4.2)
+
 ## 2.4.0
 
 Phase 3 adds a structural oracle and CI check that compare javac ASTs and tree-sitter trees over the same

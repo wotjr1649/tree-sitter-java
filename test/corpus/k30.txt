@@ -1,0 +1,134 @@
+================================================================================
+K30 regular constructors named open, module and with
+================================================================================
+
+class open { open() {} }
+class module { module() {} }
+class with { with() {} }
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (constructor_declaration
+        name: (identifier)
+        parameters: (formal_parameters)
+        body: (constructor_body))))
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (constructor_declaration
+        name: (identifier)
+        parameters: (formal_parameters)
+        body: (constructor_body))))
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (constructor_declaration
+        name: (identifier)
+        parameters: (formal_parameters)
+        body: (constructor_body)))))
+
+================================================================================
+K30 compact constructors named open, module and with
+================================================================================
+
+record open() { open {} }
+record module() { module {} }
+record with() { with {} }
+
+--------------------------------------------------------------------------------
+
+(program
+  (record_declaration
+    name: (identifier)
+    parameters: (formal_parameters)
+    body: (class_body
+      (compact_constructor_declaration
+        name: (identifier)
+        body: (block))))
+  (record_declaration
+    name: (identifier)
+    parameters: (formal_parameters)
+    body: (class_body
+      (compact_constructor_declaration
+        name: (identifier)
+        body: (block))))
+  (record_declaration
+    name: (identifier)
+    parameters: (formal_parameters)
+    body: (class_body
+      (compact_constructor_declaration
+        name: (identifier)
+        body: (block)))))
+
+================================================================================
+K30 inherited tolerance for mismatch-module
+================================================================================
+
+class Different { module() {} }
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (constructor_declaration
+        name: (identifier)
+        parameters: (formal_parameters)
+        body: (constructor_body)))))
+
+================================================================================
+K30 inherited tolerance for class-compact-module
+================================================================================
+
+class Different { module {} }
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (compact_constructor_declaration
+        name: (identifier)
+        body: (block)))))
+
+================================================================================
+K30 inherited tolerance for record-mismatch-module
+================================================================================
+
+record Different() { module {} }
+
+--------------------------------------------------------------------------------
+
+(program
+  (record_declaration
+    name: (identifier)
+    parameters: (formal_parameters)
+    body: (class_body
+      (compact_constructor_declaration
+        name: (identifier)
+        body: (block)))))
+
+================================================================================
+K30 inherited tolerance for modifier-module
+================================================================================
+
+class module { static module() {} }
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (constructor_declaration
+        (modifiers)
+        name: (identifier)
+        parameters: (formal_parameters)
+        body: (constructor_body)))))
+

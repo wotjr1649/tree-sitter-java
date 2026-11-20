@@ -1167,7 +1167,7 @@ module.exports = grammar({
 
     _constructor_declarator: $ => seq(
       field('type_parameters', optional($.type_parameters)),
-      field('name', $.identifier),
+      field('name', choice($.identifier, alias(choice('open', 'module', 'with'), $.identifier))),
       field('parameters', $.formal_parameters),
     ),
 
@@ -1468,7 +1468,7 @@ module.exports = grammar({
 
     compact_constructor_declaration: $ => seq(
       optional($.modifiers),
-      field('name', $.identifier),
+      field('name', choice($.identifier, alias(choice('open', 'module', 'with'), $.identifier))),
       field('body', $.block),
     ),
 
