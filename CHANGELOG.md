@@ -71,6 +71,10 @@
   The forms are `open.super::_`, `open.super::int`, `open.super::true`, `open.super::class`,
   `open.super::<? extends String>m` and the standalone statement `open.super::<String>m;`. The paired `C` forms
   already parsed without errors at `b28fed5` and `4a3678b`.
+  As qualifiers of `super::`, `open`, `module` and `with` inherit every tolerance of the ordinary qualifier `C`
+  at the same position. REVIEW-39d pins `open.super::false`, `open.super::null`, `open.super::return`,
+  `open.super::<? super String>m`, `open.super::<String, ?>m` and the standalone statement `open.super::<String>new;`.
+  All six paired forms with `C` parsed without errors at the PR base, `08c9b11`.
   Six inputs that javac's parser rejects and that parsed without errors at 2.3.0 now produce errors:
   `C.super x;`, `C.super x = null;` and `Names.J.super x = null;` as local declarations, the cast `(C.super) f`,
   `C.super[]::new` and `C.super<String>::bm`.

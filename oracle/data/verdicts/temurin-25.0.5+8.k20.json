@@ -1,8 +1,8 @@
 {
   "meta": {
     "api": "com.sun.source.util.JavacTask.parse()",
-    "case_count": 57,
-    "cases_sha256": "4bec86dfb626e3183f92652f8b85c2aee4e857315b808e625a19607c718bd0ac",
+    "case_count": 69,
+    "cases_sha256": "4a4a731934bb9b5b7399443db14df7089d0c5d19f20c7cc09c29e9c145947833",
     "java.runtime.version": "25.0.5+8-LTS",
     "java.vendor": "Eclipse Adoptium",
     "options": ["--release", "25", "-proc:none"],
@@ -68,6 +68,18 @@
     "k20/negative-bounded-wildcard-open": ["compiler.err.illegal.start.of.type", "compiler.err.illegal.start.of.expr", "compiler.err.expected", "compiler.err.expected"],
     "k20/negative-bounded-wildcard-c-control": ["compiler.err.illegal.start.of.type", "compiler.err.illegal.start.of.expr", "compiler.err.expected", "compiler.err.expected"],
     "k20/negative-typed-statement-open": ["compiler.err.not.stmt"],
-    "k20/negative-typed-statement-c-control": ["compiler.err.not.stmt"]
+    "k20/negative-typed-statement-c-control": ["compiler.err.not.stmt"],
+    "k20/negative-false-member-open": ["compiler.err.expected"],
+    "k20/negative-false-member-c-control": ["compiler.err.expected"],
+    "k20/negative-null-member-open": ["compiler.err.expected"],
+    "k20/negative-null-member-c-control": ["compiler.err.expected"],
+    "k20/negative-return-member-open": ["compiler.err.expected"],
+    "k20/negative-return-member-c-control": ["compiler.err.expected"],
+    "k20/negative-lower-wildcard-open": ["compiler.err.illegal.start.of.type", "compiler.err.expected", "compiler.err.expected"],
+    "k20/negative-lower-wildcard-c-control": ["compiler.err.illegal.start.of.type", "compiler.err.expected", "compiler.err.expected"],
+    "k20/negative-mixed-wildcard-open": ["compiler.err.illegal.start.of.type", "compiler.err.illegal.start.of.expr", "compiler.err.expected"],
+    "k20/negative-mixed-wildcard-c-control": ["compiler.err.illegal.start.of.type", "compiler.err.illegal.start.of.expr", "compiler.err.expected"],
+    "k20/negative-typed-constructor-statement-open": ["compiler.err.not.stmt"],
+    "k20/negative-typed-constructor-statement-c-control": ["compiler.err.not.stmt"]
   }
 }

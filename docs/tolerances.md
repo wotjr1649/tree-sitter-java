@@ -130,6 +130,14 @@ The rows citing those reviews record existing fresh-parse behavior.
 | `open.super::_`<br>`open.super::int`<br>`open.super::true`<br>`open.super::class` | `use.of.underscore.not.allowed.non.variable` (`_`), `expected` (`int`, `true`, `class`) | [K20 cases](../oracle/data/cases/k20.jsonl), underscore, int, true and class member pairs | Unreleased (K20) | REVIEW-39c. The paired `C` forms already parsed without errors at `b28fed5` and `4a3678b`. |
 | `open.super::<? extends String>m` | `illegal.start.of.type`, `illegal.start.of.expr`, `expected` | [K20 cases](../oracle/data/cases/k20.jsonl), bounded-wildcard pair | Unreleased (K20) | REVIEW-39c. The paired `C` form already parsed without errors at `b28fed5` and `4a3678b`. |
 | `open.super::<String>m;` (statement) | `not.stmt` | [K20 cases](../oracle/data/cases/k20.jsonl), typed-statement pair | Unreleased (K20) | REVIEW-39c. The paired `C` form already parsed without errors at `b28fed5` and `4a3678b`. |
+| `open.super::false`<br>`open.super::null`<br>`open.super::return` | `expected` | [K20 cases](../oracle/data/cases/k20.jsonl), false, null and return member pairs | Unreleased (K20) | REVIEW-39d. The paired `C` forms already parsed without errors at `08c9b11`. |
+| `open.super::<? super String>m`<br>`open.super::<String, ?>m` | `illegal.start.of.type`, `illegal.start.of.expr`, `expected` | [K20 cases](../oracle/data/cases/k20.jsonl), lower-bound and mixed-wildcard pairs | Unreleased (K20) | REVIEW-39d. The paired `C` forms already parsed without errors at `08c9b11`. |
+| `open.super::<String>new;` (statement) | `not.stmt` | [K20 cases](../oracle/data/cases/k20.jsonl), typed constructor statement pair | Unreleased (K20) | REVIEW-39d. The paired `C` form already parsed without errors at `08c9b11`. |
+
+A name or keyword newly accepted in a syntactic position inherits every tolerance of an ordinary name in that
+position. For K20, this applies to `open`, `module` and `with` as qualifiers of `super::`, with `C` as the ordinary-name
+control. The corpus and oracle pin representative contexts and the forms found in review. A form that produced a
+parse error at the PR base must keep producing an error if its `C` counterpart also errored there.
 
 ## Stricter than javac's parser
 
