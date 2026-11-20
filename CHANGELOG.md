@@ -26,6 +26,13 @@
   cases record each form with a counterpart that writes the first slash as `\057` and parses at 2.3.0. Inputs that
   javac rejects and that parsed at 2.3.0 only because a comment swallowed a delimiter now produce errors, as in
   `"""<LF>/* x """ */ """` and `"""<LF>// a """ """<LF>"""`.
+- Preserve a text-block line continuation as an `escape_sequence` spanning a raw backslash and the complete LF,
+  CRLF, or CR terminator (K19, JLS 25 §§3.4 and 3.10.7).
+  A paired backslash escape still leaves the following line terminator in the text block's content.
+  Ordinary string literals now report a parse error for a raw backslash immediately followed by a line terminator.
+  A backslash written as `\u005c` before a line terminator keeps its 2.3.0 tree in both kinds of literal.
+  The generated public schema is byte-identical to 2.3.0.
+  [grammar-orchard PR #9](https://codeberg.org/grammar-orchard/tree-sitter-java-orchard/pulls/9)
 
 ## 2.3.0
 
