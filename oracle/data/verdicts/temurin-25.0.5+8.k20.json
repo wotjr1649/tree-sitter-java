@@ -1,8 +1,8 @@
 {
   "meta": {
     "api": "com.sun.source.util.JavacTask.parse()",
-    "case_count": 45,
-    "cases_sha256": "d231d207a0ec6f987934ae28a57c067b1075fc8e2c4ec97dabcbfa68fc7ef16a",
+    "case_count": 57,
+    "cases_sha256": "4bec86dfb626e3183f92652f8b85c2aee4e857315b808e625a19607c718bd0ac",
     "java.runtime.version": "25.0.5+8-LTS",
     "java.vendor": "Eclipse Adoptium",
     "options": ["--release", "25", "-proc:none"],
@@ -56,6 +56,18 @@
     "k20/negative-select-open": [],
     "k20/negative-select-c-control": [],
     "k20/negative-postfix-open": [],
-    "k20/negative-postfix-c-control": []
+    "k20/negative-postfix-c-control": [],
+    "k20/negative-underscore-member-open": ["compiler.err.use.of.underscore.not.allowed.non.variable"],
+    "k20/negative-underscore-member-c-control": ["compiler.err.use.of.underscore.not.allowed.non.variable"],
+    "k20/negative-int-member-open": ["compiler.err.expected", "compiler.err.expected"],
+    "k20/negative-int-member-c-control": ["compiler.err.expected", "compiler.err.expected"],
+    "k20/negative-true-member-open": ["compiler.err.expected"],
+    "k20/negative-true-member-c-control": ["compiler.err.expected"],
+    "k20/negative-class-member-open": ["compiler.err.expected", "compiler.err.expected"],
+    "k20/negative-class-member-c-control": ["compiler.err.expected", "compiler.err.expected"],
+    "k20/negative-bounded-wildcard-open": ["compiler.err.illegal.start.of.type", "compiler.err.illegal.start.of.expr", "compiler.err.expected", "compiler.err.expected"],
+    "k20/negative-bounded-wildcard-c-control": ["compiler.err.illegal.start.of.type", "compiler.err.illegal.start.of.expr", "compiler.err.expected", "compiler.err.expected"],
+    "k20/negative-typed-statement-open": ["compiler.err.not.stmt"],
+    "k20/negative-typed-statement-c-control": ["compiler.err.not.stmt"]
   }
 }

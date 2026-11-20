@@ -505,3 +505,143 @@ class Q {
             (identifier)
             (super)
             (identifier)))))))
+
+======================
+K20 tolerances for member tokens and explicit type arguments
+======================
+
+class Probe {
+  Object underscore = open.super::_;
+  Object underscoreControl = C.super::_;
+  Object intMember = open.super::int;
+  Object intMemberControl = C.super::int;
+  Object trueMember = open.super::true;
+  Object trueMemberControl = C.super::true;
+  Object classMember = open.super::class;
+  Object classMemberControl = C.super::class;
+  Object bounded = open.super::<? extends String>m;
+  Object boundedControl = C.super::<? extends String>m;
+
+  void m(int n, boolean b) {
+    open.super::<String>m;
+    C.super::<String>m;
+  }
+}
+
+----------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (field_declaration
+        type: (type_identifier)
+        declarator: (variable_declarator
+          name: (identifier)
+          value: (method_reference
+            (identifier)
+            (super)
+            (identifier))))
+      (field_declaration
+        type: (type_identifier)
+        declarator: (variable_declarator
+          name: (identifier)
+          value: (method_reference
+            (identifier)
+            (super)
+            (identifier))))
+      (field_declaration
+        type: (type_identifier)
+        declarator: (variable_declarator
+          name: (identifier)
+          value: (method_reference
+            (identifier)
+            (super)
+            (identifier))))
+      (field_declaration
+        type: (type_identifier)
+        declarator: (variable_declarator
+          name: (identifier)
+          value: (method_reference
+            (identifier)
+            (super)
+            (identifier))))
+      (field_declaration
+        type: (type_identifier)
+        declarator: (variable_declarator
+          name: (identifier)
+          value: (method_reference
+            (identifier)
+            (super)
+            (identifier))))
+      (field_declaration
+        type: (type_identifier)
+        declarator: (variable_declarator
+          name: (identifier)
+          value: (method_reference
+            (identifier)
+            (super)
+            (identifier))))
+      (field_declaration
+        type: (type_identifier)
+        declarator: (variable_declarator
+          name: (identifier)
+          value: (method_reference
+            (identifier)
+            (super)
+            (identifier))))
+      (field_declaration
+        type: (type_identifier)
+        declarator: (variable_declarator
+          name: (identifier)
+          value: (method_reference
+            (identifier)
+            (super)
+            (identifier))))
+      (field_declaration
+        type: (type_identifier)
+        declarator: (variable_declarator
+          name: (identifier)
+          value: (method_reference
+            (identifier)
+            (super)
+            (type_arguments
+              (wildcard
+                (type_identifier)))
+            (identifier))))
+      (field_declaration
+        type: (type_identifier)
+        declarator: (variable_declarator
+          name: (identifier)
+          value: (method_reference
+            (identifier)
+            (super)
+            (type_arguments
+              (wildcard
+                (type_identifier)))
+            (identifier))))
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (integral_type)
+            name: (identifier))
+          (formal_parameter
+            type: (boolean_type)
+            name: (identifier)))
+        body: (block
+          (expression_statement
+            (method_reference
+              (identifier)
+              (super)
+              (type_arguments
+                (type_identifier))
+              (identifier)))
+          (expression_statement
+            (method_reference
+              (identifier)
+              (super)
+              (type_arguments
+                (type_identifier))
+              (identifier))))))))

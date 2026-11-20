@@ -63,9 +63,13 @@
   forms that javac's parser rejects: the standalone statement `open.super::m;`, the wildcard `open.super::<?>m`,
   the constructor reference `open.super::<>new` and the member token in `open.super::super`. It also pins
   `open.super::m.f` and `open.super::m++`, which javac rejects during full compilation. Each counterpart with
-  `C` already parsed without errors at `f1e4257`. Six inputs that javac's parser rejects and that parsed without
-  errors at 2.3.0 now produce errors: `C.super x;`, `C.super x = null;` and `Names.J.super x = null;` as local
-  declarations, the cast `(C.super) f`, `C.super[]::new` and `C.super<String>::bm`.
+  `C` already parsed without errors at `f1e4257`. REVIEW-39c pins six more forms that javac's parser rejects.
+  The forms are `open.super::_`, `open.super::int`, `open.super::true`, `open.super::class`,
+  `open.super::<? extends String>m` and the standalone statement `open.super::<String>m;`. The paired `C` forms
+  already parsed without errors at `b28fed5` and `4a3678b`.
+  Six inputs that javac's parser rejects and that parsed without errors at 2.3.0 now produce errors:
+  `C.super x;`, `C.super x = null;` and `Names.J.super x = null;` as local declarations, the cast `(C.super) f`,
+  `C.super[]::new` and `C.super<String>::bm`.
   [Documented tolerances](docs/tolerances.md)
 
 ## 2.3.0
