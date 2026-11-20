@@ -1,0 +1,1762 @@
+{
+  "meta": {
+    "api": "com.sun.source.util.JavacTask.parse()",
+    "java.runtime.version": "25.0.5+8-LTS",
+    "java.vendor": "Eclipse Adoptium",
+    "options": [
+      "--release",
+      "25",
+      "-proc:none"
+    ],
+    "preview": false,
+    "release": "25",
+    "source_encoding": "UTF-8",
+    "runner_sha256": "c45e32e314b98ccb46481c4db18aa25173ca9b2fe46e45888f0a743ceb6c70ee",
+    "example_pins": {
+      "RxJava": "ca68c460f34b4591cec3a69ba67872f5040ef346",
+      "cassandra": "53c3561e9db3fa0b1ed8e29ce462fde6ce566ff0",
+      "elasticsearch": "fad3d94329d6857092b576a393795d8aa619aff2",
+      "flink": "cc91df476a0b39ae7d6eb50eb8cf96f1dbad2b47",
+      "guava": "1dfc2cbc4c3db95d135525aee1d4243c966fdb7e",
+      "jdk": "fda231468e56663992785ec199a6efb8eca3cc7a",
+      "log4j2": "572cd83040450763a673ea749ad0c960563eeec9"
+    },
+    "failure_count": 183,
+    "failures_sha256": "ab95f93da1ae1295d3f37d25f3b23022b07d88825437c06fd9c763ff5dc3a649"
+  },
+  "entries": [
+    {
+      "path": "examples/flink/flink-quickstart/flink-quickstart-java/src/main/resources/archetype-resources/src/main/java/DataStreamJob.java",
+      "sha256": "5c305d1fc4ce0c51f6b8ec33a4ac4006f4201a485c562ff45981b474b23c1bf7",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.expected"
+      ]
+    },
+    {
+      "path": "examples/flink/flink-walkthroughs/flink-walkthrough-datastream-java/src/main/resources/archetype-resources/src/main/java/FraudDetectionJob.java",
+      "sha256": "f069df8f3af39ecceacd3b7e0e5ecd74dd9674e29b54809eff6b9353491f1825",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.expected"
+      ]
+    },
+    {
+      "path": "examples/flink/flink-walkthroughs/flink-walkthrough-datastream-java/src/main/resources/archetype-resources/src/main/java/FraudDetector.java",
+      "sha256": "bf3b21e552f9484622c17cab4a89838d2573f2a70b3570aa2a9474dc764d0a2a",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.expected"
+      ]
+    },
+    {
+      "path": "examples/flink/flink-walkthroughs/flink-walkthrough-table-java/src/main/resources/archetype-resources/src/main/java/MyFloor.java",
+      "sha256": "bc629da04df44d5a1c418027ae2cbd2c5189b36c7338bd4659bf907c7cfdc858",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.expected"
+      ]
+    },
+    {
+      "path": "examples/flink/flink-walkthroughs/flink-walkthrough-table-java/src/main/resources/archetype-resources/src/main/java/SpendReport.java",
+      "sha256": "54757e49c0d96296ef97039d9ee400a58856134322499af44d2136b28efc7077",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.expected"
+      ]
+    },
+    {
+      "path": "examples/flink/flink-walkthroughs/flink-walkthrough-table-java/src/main/resources/archetype-resources/src/test/java/SpendReportTest.java",
+      "sha256": "188e15dbeedf3c550c94a9bebabefa86461e3c3d62fdd3873c747214cfd47810",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.expected"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/6440583/A.java",
+      "sha256": "2ded03f1b8e2cc55390d4d524b6d509dc8a5673fef85f371bab990b26874e35a",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.not.stmt",
+        "compiler.err.expected"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/8245153/T8245153.java",
+      "sha256": "7af9d2ea67c8e7f32820e2f883ed3c3b7021cef5a0fe03483c7bbeaf86ac5e57",
+      "verdict": "accepted",
+      "codes": [],
+      "category": "limit:unicode-escape"
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/BadAnnotation.java",
+      "sha256": "cea43c756fad250f2470e8587d72ad39af286be429f364248e4fd10d8b55315d",
+      "verdict": "accepted",
+      "codes": [],
+      "category": "parse-only",
+      "group": "annotation-member-parameters"
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/BadHexConstant.java",
+      "sha256": "20645642f2e1de0547cd20d8a0799dd8b6f4fe9cd387aefdd37a1055a811284a",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.invalid.hex.number"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/DefiniteAssignment/ConstantInfiniteWhile.java",
+      "sha256": "66940a798e0a74d06aecbe1d35ffe80bbaf0b149a0da9c1c8d2bb84347b60f46",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.unclosed.comment",
+        "compiler.err.premature.eof"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/Digits.java",
+      "sha256": "f819ba5dca14ae44163c7c8e8fb4c2d71a4b770a1f5bb1b18c2f4aa93e2b53c6",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.illegal.nonascii.digit"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/EOI.java",
+      "sha256": "f1563941756ffb07fc5d8e86952d4970c9bed3813762e2a73044ade05837e0a8",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.premature.eof"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/ExtraneousEquals.java",
+      "sha256": "dfa4305a5ba5ddde5a4a754d2ca7f4fbd7752abf239c6c883e93fa9ef2463684",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.illegal.start.of.expr",
+        "compiler.err.illegal.start.of.expr",
+        "compiler.err.illegal.array.creation.both.dimension.and.initialization"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/ImplicitClass/ImplicitClassRecovery.java",
+      "sha256": "6d168ce97c0e40026b6f92b33368d310913302566c9a07e9029f6cee7b6b2a43",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.expected"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/MethodParameters/UncommonParamNames.java",
+      "sha256": "0898d166e01864287b92c140640f1716ad50584008ffd6cf8777f269d07e9e84",
+      "verdict": "accepted",
+      "codes": [],
+      "category": "limit:unicode-escape"
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/Parens3.java",
+      "sha256": "a855c6eaa8a20c461f31e68ec39b7e0098106900bc069d8927d646b50756ad2f",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.not.stmt",
+        "compiler.err.expected"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/StandaloneQualifiedSuper.java",
+      "sha256": "10638c585332a3bbb8d106ca64856a86cf7440880fcf612259076e81bd9f4d0d",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.expected"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/StoreClass.java",
+      "sha256": "3a1dd7a11391d62718c252a556609df153078717aada7e047d99c577859a24d0",
+      "verdict": "accepted",
+      "codes": [],
+      "category": "parse-only",
+      "group": "assignment-primitive-class-literal"
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/SuperInit/SuperInitFails.java",
+      "sha256": "15d304b513aa22c9da842cfe850996fbb5d02cbc4a01153d8ffeedbe5657679e",
+      "verdict": "accepted",
+      "codes": [],
+      "category": "parse-only",
+      "group": "constructor-call-in-initializer"
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/T4994049/T4994049.java",
+      "sha256": "3dfef0d9f192565316707f0b392410b43486d574426de578bd53cae13ec09a0c",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.expected3"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/T6882235.java",
+      "sha256": "6b3e628d540baa96804ad413521b29c73eeff47b0051fc8c030d6651bb219c50",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.illegal.start.of.expr",
+        "compiler.err.malformed.fp.lit",
+        "compiler.err.illegal.start.of.expr",
+        "compiler.err.illegal.start.of.expr"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/T8026963/TypeAnnotationsCrashWithErroneousTreeTest.java",
+      "sha256": "dfbb20d09d3f51c20ba4e39ce54f8e02912ffdaf0583747ab428a0b71db76bac",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.illegal.start.of.type"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/T8036019.java",
+      "sha256": "1122ce22109a1905744182b4d0c05d289c12073c64a8de91273baea1516322b0",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.expected2",
+        "compiler.err.expected3",
+        "compiler.err.enum.constant.expected",
+        "compiler.err.expected2",
+        "compiler.err.expected",
+        "compiler.err.expected",
+        "compiler.err.annotation.missing.element.value",
+        "compiler.err.class.method.or.field.expected",
+        "compiler.err.class.method.or.field.expected"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/T8175198/AnnotationsAndFormalParamsTest.java",
+      "sha256": "f9ec5451792d2692ce136f9b82858eeb2f559f0cc0a331af69464479f0a71d06",
+      "verdict": "accepted",
+      "codes": [],
+      "category": "parse-only",
+      "group": "annotation-member-parameters"
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/T8185983/RejectTypeArgsOnSelectTest.java",
+      "sha256": "2b002baea18a459441b8c1d9936565a7df71d1a5c7d50d7dc952d347e90845b7",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.illegal.start.of.expr"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/T8199744/IncorrectMsgQualifiedReceiverTest.java",
+      "sha256": "445473180cf450d11ce8dc63821172bc5a92d18e63e5641eef5f01ecad6ce369",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.this.as.identifier",
+        "compiler.err.this.as.identifier"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/T8203813/WrongReceiverTest.java",
+      "sha256": "87628cb1a67fb6fa84764af51af8297542239b34d4dacb818b0ef6a6093cc76a",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.wrong.receiver"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/T8286057.java",
+      "sha256": "f87ad3eb40f26813181fff77c326dcbb71104f3af52a08ef02573fb33bfbd6d3",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.enum.cant.be.generic",
+        "compiler.err.enum.cant.be.generic",
+        "compiler.err.enum.cant.be.generic"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/T8314216.java",
+      "sha256": "b0d109b39724f4250346110b0e3684cc7989dd5111b45f0bd2d659d28282ab88",
+      "verdict": "accepted",
+      "codes": [],
+      "category": "parse-only",
+      "group": "switch-mixed-constant-pattern"
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/TryWithResources/BadTwrSyntax.java",
+      "sha256": "a4d697c28843fc44b4087d8e3c699a744afdde6edcfd77da76ea01f146f00c4f",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.illegal.start.of.expr"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/TryWithResources/PlainTry.java",
+      "sha256": "68104d904c27c3223ef25f32f1fe57928d488e5852c01db3194afd620e67f698",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.try.without.catch.finally.or.resource.decls"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/TryWithResources/ResDeclOutsideTry.java",
+      "sha256": "640478a12af680ce4ef028c1ba35e67285642719b2d2ef703b9aa81755ef6c7b",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.try.with.resources.expr.needs.var"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/TryWithResources/TwrForVariable2.java",
+      "sha256": "598c97a9155ffb48fdcdc2059a1464c4369b641dda4d674e7f9b329eb223bde2",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.expected",
+        "compiler.err.expected",
+        "compiler.err.illegal.start.of.expr",
+        "compiler.err.try.with.resources.expr.needs.var",
+        "compiler.err.try.with.resources.expr.needs.var",
+        "compiler.err.try.with.resources.expr.needs.var",
+        "compiler.err.try.with.resources.expr.needs.var",
+        "compiler.err.try.with.resources.expr.needs.var"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/annotations/FinalReceiverTest.java",
+      "sha256": "970434a41039b80b069ce36efa387adb7d4dd190484689b73296061ddbbffe36",
+      "verdict": "accepted",
+      "codes": [],
+      "category": "parse-only",
+      "group": "final-qualified-receiver"
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/annotations/neg/AnnComma.java",
+      "sha256": "599ac92fb86d434f26045cadd267850e93474ee670c549320dc870b5a69b179e",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.illegal.start.of.expr",
+        "compiler.err.illegal.start.of.expr"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/annotations/neg/NoDefault.java",
+      "sha256": "c616c9fb534714f697e8da72c2c54dd9386ca950d27e3e847bce950f58dbea68",
+      "verdict": "accepted",
+      "codes": [],
+      "category": "parse-only",
+      "group": "annotation-member-body"
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/annotations/neg/NoStatic.java",
+      "sha256": "ef48a7ba62fe6da359ada1c513116b4bb3c0e299f78336fc572fb9f28ce83dd9",
+      "verdict": "accepted",
+      "codes": [],
+      "category": "parse-only",
+      "group": "annotation-member-body"
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/annotations/neg/Syntax1.java",
+      "sha256": "633ec5575e96becf741b1f9382372bcc28ab8608d6b9e110c2e04e830da702ff",
+      "verdict": "accepted",
+      "codes": [],
+      "category": "parse-only",
+      "group": "annotation-positional-argument-list"
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/annotations/neg/Z13.java",
+      "sha256": "4f6794b158befa341fe56b45b8c82e779ace64759645f1f3df5fb55beaa7d6f7",
+      "verdict": "accepted",
+      "codes": [],
+      "category": "parse-only",
+      "group": "annotation-member-throws"
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/annotations/neg/Z14.java",
+      "sha256": "0569ff12ff9a5f72b46cce327bdcbae345713e6cfb963ae08c2b32e6eac5b106",
+      "verdict": "accepted",
+      "codes": [],
+      "category": "parse-only",
+      "group": "annotation-declaration-type-parameters"
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/annotations/neg/Z2.java",
+      "sha256": "2611d9b80cb00a3ab1c43b595a58f9892042300ded9c2e9371f03602d6b63881",
+      "verdict": "accepted",
+      "codes": [],
+      "category": "parse-only",
+      "group": "ordinary-method-default"
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/annotations/neg/Z3.java",
+      "sha256": "c50a0d3121b650a1e93d77ba7b035841019405332502e37017ca8f241def4a25",
+      "verdict": "accepted",
+      "codes": [],
+      "category": "parse-only",
+      "group": "ordinary-method-default"
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/annotations/neg/Z5.java",
+      "sha256": "76f41f0d8b188aeb6d475898b1cd146c734154472445034dc8a9e99fd396733b",
+      "verdict": "accepted",
+      "codes": [],
+      "category": "parse-only",
+      "group": "annotation-declaration-extends"
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/annotations/neg/Z8.java",
+      "sha256": "3998c3941e090162958796dca3965f3f0d10614c6f9056482811fd007961b4c5",
+      "verdict": "accepted",
+      "codes": [],
+      "category": "parse-only",
+      "group": "annotation-member-parameters"
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/annotations/neg/Z9.java",
+      "sha256": "c644d6c17b24d9bbe296acffb8f013bd2141b33f716581fba081599a5dbc6bff",
+      "verdict": "accepted",
+      "codes": [],
+      "category": "parse-only",
+      "group": "annotation-member-type-parameters"
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/annotations/typeAnnotations/6967002/T6967002.java",
+      "sha256": "d3abbf887b32f3f72ed7fa370feafbd8eaecdfc3f69e9af3116bf4360f63908f",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.expected2"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/annotations/typeAnnotations/api/AnnotatedArrayOrder.java",
+      "sha256": "acdc8b2452610c02c058115382fe0d8a4f9fcbad2616742812428feb1f46d8c9",
+      "verdict": "accepted",
+      "codes": [],
+      "category": "limit:k5"
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/annotations/typeAnnotations/api/ArrayPositionConsistency.java",
+      "sha256": "a6e08a4f7a8549af3a049b93b5134cf4d9eeb1a283845535d9db7b24df6ee683",
+      "verdict": "accepted",
+      "codes": [],
+      "category": "limit:k5"
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/annotations/typeAnnotations/failures/AnnotatedClassExpr.java",
+      "sha256": "a2ecdb905e63be6fb196bf38dc572cf6a7db407ba67778feb3357951ab3a2084",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.no.annotations.on.dot.class",
+        "compiler.err.no.annotations.on.dot.class",
+        "compiler.err.no.annotations.on.dot.class",
+        "compiler.err.no.annotations.on.dot.class",
+        "compiler.err.no.annotations.on.dot.class",
+        "compiler.err.no.annotations.on.dot.class",
+        "compiler.err.no.annotations.on.dot.class"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/annotations/typeAnnotations/failures/AnnotatedImport.java",
+      "sha256": "6a75c31f04be694180ac561295027d08070d498a448f526863a08461ebe1476d",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.expected",
+        "compiler.err.class.method.or.field.expected",
+        "compiler.err.class.method.or.field.expected",
+        "compiler.err.class.method.or.field.expected",
+        "compiler.err.class.method.or.field.expected",
+        "compiler.err.class.method.or.field.expected"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/annotations/typeAnnotations/failures/AnnotatedMethodSelectorTest.java",
+      "sha256": "d46e972b96435ba2fad6fa6b90fa2f51817b84f8dcddca179bb8a172c060f411",
+      "verdict": "accepted",
+      "codes": [],
+      "category": "parse-only",
+      "group": "annotated-method-selector"
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/annotations/typeAnnotations/failures/AnnotatedPackage1.java",
+      "sha256": "70ed8048af9c402d4c81612e0d052b582401d208c1afb7b4bd013a10d4fcf6d7",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.expected",
+        "compiler.err.expected4",
+        "compiler.err.expected4"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/annotations/typeAnnotations/failures/AnnotatedPackage2.java",
+      "sha256": "788d12a8e9c8606909b32b04b327eee6f6d2567a41f4a85114eac93ef18c9c4e",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.expected",
+        "compiler.err.expected4",
+        "compiler.err.expected4"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/annotations/typeAnnotations/failures/BadCast.java",
+      "sha256": "d3fc1a7a3b952c240df71bca4116b64fd6e1e30f8da1e2ac6001ab63896901f8",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.illegal.start.of.type"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/annotations/typeAnnotations/failures/IncompleteArray.java",
+      "sha256": "a31bf156a5a40ce6e6f0d88b9139fedde48a643d347a65530e35e8525cf4a403",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.illegal.start.of.type"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/annotations/typeAnnotations/failures/IndexArray.java",
+      "sha256": "0c096f5ff54137d8af3a9c6daae84c7f87992f193232fdae842546bf6acd6aa0",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.illegal.start.of.expr"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/annotations/typeAnnotations/failures/OldArray.java",
+      "sha256": "a7ca1dbfa072eebdb9da28d66a96d79184b0cc50fa904883b204a970e7650b30",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.expected",
+        "compiler.err.expected",
+        "compiler.err.invalid.meth.decl.ret.type.req"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/annotations/typeAnnotations/failures/StaticFields.java",
+      "sha256": "958664fc126cef95f6ecc4b1d444f264b1bd7d27963e3b2747f5244326303088",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.expected",
+        "compiler.err.illegal.start.of.expr",
+        "compiler.err.illegal.start.of.expr",
+        "compiler.err.illegal.start.of.expr"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/annotations/typeAnnotations/failures/target/DotClass.java",
+      "sha256": "aaef571e17c5d27f9a021e9b3478c03c0d9af78c992e0117a8a99bbdc62a801c",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.no.annotations.on.dot.class",
+        "compiler.err.no.annotations.on.dot.class",
+        "compiler.err.no.annotations.on.dot.class",
+        "compiler.err.no.annotations.on.dot.class",
+        "compiler.err.no.annotations.on.dot.class",
+        "compiler.err.no.annotations.on.dot.class",
+        "compiler.err.no.annotations.on.dot.class",
+        "compiler.err.no.annotations.on.dot.class",
+        "compiler.err.no.annotations.on.dot.class",
+        "compiler.err.no.annotations.on.dot.class",
+        "compiler.err.no.annotations.on.dot.class",
+        "compiler.err.no.annotations.on.dot.class",
+        "compiler.err.no.annotations.on.dot.class",
+        "compiler.err.no.annotations.on.dot.class",
+        "compiler.err.no.annotations.on.dot.class",
+        "compiler.err.no.annotations.on.dot.class"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/annotations/typeAnnotations/failures/target/IncompleteArray.java",
+      "sha256": "7865e6071c944a5f3673f1ceaab00ddebea226c0611f62ab25eef0ce49297bdb",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.illegal.start.of.type"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/api/T6265137a.java",
+      "sha256": "a75d52500fa6ae3fe53925f1c189e4c6add45c6e8ec7ad2a858a87d00771fbc1",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.premature.eof"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/AnnotationMissingElementValue.java",
+      "sha256": "cad6bd89ea5dc6030e9a7f310b7e8f632464988ab29224b08d7f3bac032b49c8",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.annotation.missing.element.value"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/AnnotationMustBeNameValue.java",
+      "sha256": "5874263b0d8f1a8e6111a6e5e7a02c7a27a197aa01688d544395b3745f77b77d",
+      "verdict": "accepted",
+      "codes": [],
+      "category": "parse-only",
+      "group": "annotation-mixed-argument-values"
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/ArrayAndReceiver.java",
+      "sha256": "257fe5e32284bf49ef6f5bdd8ae01b92de1dbe0db1fccad6b7c051ef7a4c1d09",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.array.and.receiver"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/ArrayDimMissing.java",
+      "sha256": "eaf47249028184c074f727798fedfe989fb123e999fbcb739add6b0ea7e5e292",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.array.dimension.missing"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/CallOnlyInConstructor.java",
+      "sha256": "6448ce9951f3e485fbe3acdba7158bb374117b1ebe4e3f377db02c4aad470aaa",
+      "verdict": "accepted",
+      "codes": [],
+      "category": "parse-only",
+      "group": "constructor-call-outside-constructor"
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/CallsNotAllowedHere.java",
+      "sha256": "e07232ff02216ff89f927dddc75b6b6c7bedc61e7b9a1368d1dfcc6d1d54f36e",
+      "verdict": "accepted",
+      "codes": [],
+      "category": "parse-only",
+      "group": "constructor-call-nested-statement"
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/CannotCreateArrayWithTypeArgs.java",
+      "sha256": "c77db8a7e1466797d47064647a88318f0f6b0a22542dc13a4fcd7e30bde7a199",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.cannot.create.array.with.type.arguments"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/CantAssignToThis.java",
+      "sha256": "591bbd8ae79b957a4582c9c2d543d7f7aad11f2ac0bd91f7a95a8cfabd048bf1",
+      "verdict": "accepted",
+      "codes": [],
+      "category": "parse-only",
+      "group": "assignment-this"
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/CantExtendIntfAnno.java",
+      "sha256": "623833d27aa85d747a55d011a8dc399c910a57dd509ffa1f01c049787ebc7830",
+      "verdict": "accepted",
+      "codes": [],
+      "category": "parse-only",
+      "group": "annotation-declaration-extends"
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/CatchWithoutTry.java",
+      "sha256": "832484b55f03a76d4f96be3977522b5370769187e6198d01a4cb9803a6733302",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.catch.without.try"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/ClassMethodOrFieldExpected.java",
+      "sha256": "dcf8a17ac7dfc6da74f6ad26f396c5605b138e4d05e0b8a45c8553c6e2b9ca7f",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.class.method.or.field.expected"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/DefaultAllowedInIntfAnnotationMember.java",
+      "sha256": "146344bf312f9689c86b878dd0b091d9773f43ea6c90eb87accc1036dc762180",
+      "verdict": "accepted",
+      "codes": [],
+      "category": "parse-only",
+      "group": "ordinary-method-default"
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/DotClassExpected.java",
+      "sha256": "682dd1724224ad29c20b190f7e0c4b8323b28eeb51df56db5d5130b62aa60853",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.dot.class.expected"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/ElseWithoutIf.java",
+      "sha256": "a3de7de9810c405bb14f72012bb99f14453d8db088a0ac036c509cfade40c367",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.else.without.if"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/EmptyCharLiteral.java",
+      "sha256": "63238eada2d367e6dac1cf16d0a68353e8a2c3c6011ea0e51b1eb97dfc4db076",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.empty.char.lit"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/EnumConstantExpected.java",
+      "sha256": "b39e8a0eb885e266012dfe7df87270c657f3f59c4b1322b260b959a4eed634f2",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.enum.constant.expected"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/EnumConstantNotExpected.java",
+      "sha256": "5b1ea9a839aaff1c29549d1543c188aede41e21fe80d77e9fa8a7394c39b84e0",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.enum.constant.not.expected"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/EnumsCantBeGeneric.java",
+      "sha256": "a48454331f946801116b618d6bcd4290e4fcec6389604a4ebcddc0d496eee80f",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.enum.cant.be.generic"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/Expected2.java",
+      "sha256": "f659127dba3039297ed5723e3cd09beefb14d3393fb15db3b6f95d66d88b5d52",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.expected2"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/Expected3.java",
+      "sha256": "8d6be0a61a423ea11e63c9e1b2d3320187f48e825a5416c999befc9ce3c5c8df",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.expected3"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/ExpectedModule.java",
+      "sha256": "38f4a6cae297f3576bdbbd516b9d71aaf95419aa4bc35bd1e440df0b5fd85f1b",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.expected.module"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/ExplicitImplicitLambda.java",
+      "sha256": "8017c57c5d6947b231e557e01df97ae30c8f2413edb2a524c45035a29a2cde5d",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.invalid.lambda.parameter.declaration"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/FinallyWithoutTry.java",
+      "sha256": "e46d9f1dde49c0ca363ebdf60aff70f6096231187f9e4f1e2803fcf0e7c7ac39",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.finally.without.try"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/ForeachBadInitialization.java",
+      "sha256": "b822100fd3f71f5c4ab40d011cf0235d6b402d8c2a3c0a78bc84f710721b1a79",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.bad.initializer"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/IdentifierExpected.java",
+      "sha256": "79f0e9f8d987be9cb507cd96c2ccdf994ca54e73913ce3cbca641b530a952108",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.expected"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/IllegalArrayCreation.java",
+      "sha256": "fcccdc8218cc5d995f67d3156a3e6da2e2d0c650a478dbafce90fabd814fd151",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.illegal.array.creation.both.dimension.and.initialization"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/IllegalChar.java",
+      "sha256": "424b4081be5d2a7e633fd5b754ab78311975a94ae00b3f0674d0453964e8aa67",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.illegal.char"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/IllegalDigitInBinaryLiteral.java",
+      "sha256": "e4f6b341d24c84853c2b06f09c8bd40ba69c037064fa1e4a7a76737e850330f4",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.illegal.digit.in.binary.literal"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/IllegalDigitInOctalLiteral.java",
+      "sha256": "3df9fa5b0ac2c54d8febdf1c818cf42b65cbce13890d981160ea5021f8b9f244",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.illegal.digit.in.octal.literal"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/IllegalDot.java",
+      "sha256": "492e797c5407ee739214b106ff11a463a0296796fd59606b469f419ec2ff3b4d",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.illegal.dot"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/IllegalLineEndInCharLit.java",
+      "sha256": "a8afe49b3556807466576c4ad0ddc697d7802a1ef13070b38314dc18db7efc33",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.illegal.line.end.in.char.lit"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/IllegalNonAsciiDigit.java",
+      "sha256": "3015137ca17302564b8907ab0bf1bedb66d8f0b10c679a29b6472d66153322ef",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.illegal.nonascii.digit"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/IllegalStartOfExpr.java",
+      "sha256": "58642e62da6b8c3fab679361a5737a8f47c41fdc2ff164a1a2f721ae6092bc97",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.illegal.start.of.expr"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/IllegalStartOfStmt.java",
+      "sha256": "2c6d5d9cac01d711b9a2e072bbad7c71fb8186cc39ba5f3a5c12e2c566ff775c",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.illegal.start.of.stmt",
+        "compiler.err.class.method.or.field.expected"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/IllegalStartOfType.java",
+      "sha256": "2aff632eb542a1d7fa7cefd4f6a7cc9aa01e9c4c0ff14d656b0f8dc604e9f403",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.illegal.start.of.type"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/IllegalUnderscore.java",
+      "sha256": "610c95cc3f903a76c404d59b67436b470e189ddfb2a11bbd738400a3c94f6dd4",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.illegal.underscore"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/IllegalUnicodeEscape.java",
+      "sha256": "09b19eb8036a77be398a427ebe9217810599582f030625f1a5784284c993ced9",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.illegal.unicode.esc"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/IncorrectRecordDeclaration.java",
+      "sha256": "1ece0fa5bc2851664527ace4161ac9c1f4ba38d4fcc8e1d40fc3597ebc72974d",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.expected",
+        "compiler.err.illegal.start.of.type"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/InitializerNotAllowed.java",
+      "sha256": "b28a357679b4fe304a1a78e7f205ab627b91a67ea519dbaad826f175d57470d3",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.initializer.not.allowed"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/IntfAnnotationCantHaveTypeParams.java",
+      "sha256": "b58f7b6c3f7d230436737791467d0b906147db9ec1a470a51f3143f0122dbfeb",
+      "verdict": "accepted",
+      "codes": [],
+      "category": "parse-only",
+      "group": "annotation-declaration-type-parameters"
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/IntfAnnotationsCantHaveParams.java",
+      "sha256": "d61f243320d90a86a4bfd52dd9db921f686166516aec96adfc9fce40e934f37a",
+      "verdict": "accepted",
+      "codes": [],
+      "category": "parse-only",
+      "group": "annotation-member-parameters"
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/IntfAnnotationsCantHaveTypeParams.java",
+      "sha256": "303602eb494cc9180ef8a0e4e2135b4412de8631b6ececfe2088e4f56c0e9ef2",
+      "verdict": "accepted",
+      "codes": [],
+      "category": "parse-only",
+      "group": "annotation-member-type-parameters"
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/InvalidBinaryNumber.java",
+      "sha256": "1d0078d7f77be620da7576d77d78e49bb7461fc08fb2172e80d1435ba34e3a42",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.invalid.binary.number"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/InvalidHexNumber.java",
+      "sha256": "710fff2d7eb7f24416e55a9b5242549aa036954ebec763e5bcf3f0c9dbf788f5",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.invalid.hex.number",
+        "compiler.err.expected",
+        "compiler.err.expected"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/InvalidModuleDirective/module-info.java",
+      "sha256": "5054bf7b2af5250c8e81a3a3f4de609abcd2f25a2d043abcb35ff4c523253850",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.invalid.module.directive"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/MalformedFpLit.java",
+      "sha256": "72bb7e9d9cfc5b021f1d57ea68ae7d6e9da05f10cff9c0af2e2500253d154e8d",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.malformed.fp.lit",
+        "compiler.err.illegal.start.of.expr"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/NoAnnotationsOnDotClass.java",
+      "sha256": "f632536719a3e3d33ffa6b19471a40bd8a0b9aa71d002df9d3dd1567cd324bfa",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.no.annotations.on.dot.class"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/Orphaned.java",
+      "sha256": "c67f313d600dd114e69cf88a485c349dd639f4d67d179d553c651e7181495ac0",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.orphaned"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/PrematureEOF.java",
+      "sha256": "b625dd34a854869d99d56570ccc5146ad3c5cd4184b871ec859d81d9f1e31f6b",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.premature.eof"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/ProcessorWrongType/ProcessorWrongType.java",
+      "sha256": "f9cbfc3f8ea772de5e66f4a03c0ef5c55fa01d55a9e01b736c2c5a48ac313ef1",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.class.method.or.field.expected"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/RecordPatternsAnnotationsNotAllowed.java",
+      "sha256": "5fb2aa8851c3b390ff171bf84c07f9b78ae05650e09a998e1ea49a36494e56b8",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.record.patterns.annotations.not.allowed"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/SwitchMixingCaseTypes.java",
+      "sha256": "f767c596187a5e6dd7ba2efd072aace6d226af9d9bc1774a0c05ad44891a0c89",
+      "verdict": "accepted",
+      "codes": [],
+      "category": "parse-only",
+      "group": "switch-mixed-colon-arrow"
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/TextBlockCloseDelimiter.java",
+      "sha256": "aae9e94cd61e439378cf527ec286ffa25caecbdcae60a39d49ddc6f396f1ef43",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.unclosed.text.block"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/ThisAsIdentifier.java",
+      "sha256": "1a6f122013fd04bb5233bca17e37afc615d9560d815bce9ba856fa66dc10311a",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.this.as.identifier"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/ThrowsNotAllowedInAnno.java",
+      "sha256": "398c4664c06105372d0ade4b0b170dfbf76be5201aead7bbce3da46f3f904041",
+      "verdict": "accepted",
+      "codes": [],
+      "category": "parse-only",
+      "group": "annotation-member-throws"
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/TryWithResourcesExprNeedsVar.java",
+      "sha256": "7d7451a25caf70fe42d37b73e81c213c91ac64a691907ae9397412b799efcd5b",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.try.with.resources.expr.needs.var"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/TryWithoutCatchOrFinallyOrResource.java",
+      "sha256": "4a1557637509458d6f4d42fc55c65d35aaedbaa9851059b52b45226761ba5fb1",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.try.without.catch.finally.or.resource.decls"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/UnclosedCharLiteral.java",
+      "sha256": "5660c79f8396a872472b83d0cd2b53c138d33f802e54678ba2a91ba19daee00f",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.unclosed.char.lit"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/UnclosedComment.java",
+      "sha256": "59bd605b317e2023e7af9208cc4fb432178160a8e8469ff959b39ddbfa67bc52",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.unclosed.comment",
+        "compiler.err.premature.eof"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/UnclosedStringLiteral.java",
+      "sha256": "65ff35836a2442a5f4165d35d1272669ea5d47eff9e7670b38b6f6dfc6ee69a7",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.unclosed.str.lit"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/UnexpectedTokenInModuleInfo/module-info.java",
+      "sha256": "b31478de89ebd1708090183697dbd8f789efcb7f7c550d9276a35d56be2a39f5",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.expected.module.or.open"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/VarAllOrNothing.java",
+      "sha256": "c26db8b96ffb0b77a08be0ffbed4f3d84ff4e9c670eac9aafada142a0e90489b",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.invalid.lambda.parameter.declaration"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/VarInImplicitLambda.java",
+      "sha256": "c4c1853dbb7e8614c04dcb2c792b1c0b062b2950c1317f1c6500e7ddaa87ba87",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.invalid.lambda.parameter.declaration"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/VarargsAndReceiver.java",
+      "sha256": "928721a585e74d5180ef128b933ef804a579a1785bb3308a4a8f145b480851b1",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.varargs.and.receiver"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/WithExpected/module-info.java",
+      "sha256": "c30bc2533b82133eaf5975daaf8f277444b49f3b59224afc722a930437c2a5f5",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.expected.str"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/WrongReceiver.java",
+      "sha256": "8b8ec4bb90dc017c3e8498d33a39c12eb609405595a559ec5b18d9227569f434",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.wrong.receiver"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/enum/EnumMembersOrder.java",
+      "sha256": "e3885bd6166fb3c23498c87623786e7041150b0e20a9a70aab19ca0eef139a5b",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.expected2",
+        "compiler.err.expected3",
+        "compiler.err.enum.constant.expected"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/failover/FailOver01.java",
+      "sha256": "a0551e90a6096a334bfec72e4c33ef13efc30bd08eb1ba16bef657da7ecbd4e7",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.expected"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/failover/FailOver15.java",
+      "sha256": "12d7b73122557dfa1783dfe1fac949ff986633af6a4014ab4fe0553420ddce82",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.expected"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/generics/6413682/T6413682.java",
+      "sha256": "5b9d9c4d5c20309776abb85e218c8c7bf97275961b9f5e9405af75088e7ae61a",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.cannot.create.array.with.type.arguments"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/incompleteStatements/T8000484.java",
+      "sha256": "360e6ce5a996c620e4fff8b3cb5e6536991a08b2e942ddef46648b0b7dc37a0f",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.catch.without.try",
+        "compiler.err.else.without.if",
+        "compiler.err.finally.without.try",
+        "compiler.err.catch.without.try",
+        "compiler.err.catch.without.try",
+        "compiler.err.else.without.if",
+        "compiler.err.else.without.if",
+        "compiler.err.finally.without.try",
+        "compiler.err.finally.without.try"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/lambda/8131742/T8131742.java",
+      "sha256": "ee7bfc6f3bb83308592a9b72d2dcb9ff09e25f7388d2644e52e949dea05836ef",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.this.as.identifier",
+        "compiler.err.expected"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/lambda/IdentifierTest.java",
+      "sha256": "fed4c60c2a6c0a49d0484b9ba2477319faf601a0696f64b001229967eb94197c",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.with.brackets",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/lambda/UnderscoreAsIdent.java",
+      "sha256": "d47b5fd77a4300a70e78a0d1602907d7c5dfa16265cf50d0a6b6a8b7e583ad49",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/lambda/funcInterfaces/LambdaTest1_neg1.java",
+      "sha256": "c082ae75911f19238b885387d9cbde99326198bba8e5cdc5aabae5a520505d23",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.not.stmt",
+        "compiler.err.expected"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/lambda/lambdaExpression/InvalidExpression1.java",
+      "sha256": "be5711c6946acc815d37155a43b2fe957376be8ac4888346121e4509b4b77c29",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.not.stmt",
+        "compiler.err.expected"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/literals/BadBinaryLiterals.java",
+      "sha256": "6d2f9bc396d2176b3a8440e2485101478351922d3a01f41f6c574f842f5e6af4",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.illegal.digit.in.binary.literal",
+        "compiler.err.int.number.too.large",
+        "compiler.err.int.number.too.large",
+        "compiler.err.expected",
+        "compiler.err.expected",
+        "compiler.err.expected"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/literals/BadUnderscoreLiterals.java",
+      "sha256": "18d48cb7c43d61d2691a8e100478c3e3168f7616f07bcdb2af410214191c2d33",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.illegal.underscore",
+        "compiler.err.illegal.underscore",
+        "compiler.err.illegal.underscore",
+        "compiler.err.illegal.underscore",
+        "compiler.err.illegal.underscore",
+        "compiler.err.illegal.underscore",
+        "compiler.err.illegal.underscore",
+        "compiler.err.illegal.underscore",
+        "compiler.err.illegal.underscore",
+        "compiler.err.illegal.underscore",
+        "compiler.err.illegal.underscore",
+        "compiler.err.illegal.underscore",
+        "compiler.err.illegal.underscore",
+        "compiler.err.illegal.underscore",
+        "compiler.err.illegal.underscore",
+        "compiler.err.illegal.underscore",
+        "compiler.err.illegal.underscore",
+        "compiler.err.illegal.underscore"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/literals/T6891079.java",
+      "sha256": "a59417f0a192132d72f4f9984b068b565b32dcdd7cf54b7210cafc284d5f77e0",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.invalid.binary.number",
+        "compiler.err.invalid.binary.number",
+        "compiler.err.invalid.hex.number",
+        "compiler.err.invalid.hex.number"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/modules/InvalidModuleDirective/module-info.java",
+      "sha256": "ceb44bf5974bcf9af8d063f4c2b7109968410f32f93c290bd57bbff3b07cd057",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.invalid.module.directive"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/parser/7157165/T7157165.java",
+      "sha256": "b6b7b12f5c3c83108512ebb22e2e1b0e8abe35f93af849bb03275462267018da",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.expected2",
+        "compiler.err.expected",
+        "compiler.err.expected"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/parser/ErroneousParameters.java",
+      "sha256": "04bce803ffccdcbc915f8fed01e469122e102fe72437bcf662179244bc0b693b",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.varargs.must.be.last",
+        "compiler.err.expected3",
+        "compiler.err.illegal.start.of.type",
+        "compiler.err.expected",
+        "compiler.err.expected3"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/parser/MissingClosingBrace.java",
+      "sha256": "eea4ee1ec224d7f27a003d8abd2da51a64d25a254b0ec8d0fcabfc68bd96d953",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.illegal.start.of.expr"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/parser/SingleCommaAnnotationValueFail.java",
+      "sha256": "8a54053f919237bc8bce412e5127ca764f44592b02c03cfd7e26d61c82133901",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.annotation.missing.element.value",
+        "compiler.err.class.method.or.field.expected"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/parser/T4881269.java",
+      "sha256": "8d7184cb21cfcfef4ec9b5b10c6632076ab646feb0d0f7fb70f01e71772e6cba",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.illegal.dot",
+        "compiler.err.illegal.dot",
+        "compiler.err.not.stmt",
+        "compiler.err.illegal.dot"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/patterns/AnnotationErrors.java",
+      "sha256": "2dffb53e7704387b87f40a488d0f1e36ef6c00ca0b1166eb95e6d606534dc02d",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.record.patterns.annotations.not.allowed",
+        "compiler.err.record.patterns.annotations.not.allowed",
+        "compiler.err.record.patterns.annotations.not.allowed",
+        "compiler.err.record.patterns.annotations.not.allowed",
+        "compiler.err.record.patterns.annotations.not.allowed",
+        "compiler.err.record.patterns.annotations.not.allowed",
+        "compiler.err.record.patterns.annotations.not.allowed",
+        "compiler.err.record.patterns.annotations.not.allowed",
+        "compiler.err.record.patterns.annotations.not.allowed",
+        "compiler.err.record.patterns.annotations.not.allowed"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/patterns/DeconstructionPatternErrors.java",
+      "sha256": "acd60d0750e86d993891be1f70283d5a3eab921b32ce7d670ceb803044ca4406",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.illegal.start.of.type",
+        "compiler.err.illegal.start.of.type",
+        "compiler.err.expected",
+        "compiler.err.not.stmt"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/patterns/NoModifiersOnBinding.java",
+      "sha256": "fedc5a376e1fe23c81be9f31513d29b505503d9c6844cbdcad840f2abaad21a3",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.mod.not.allowed.here",
+        "compiler.err.mod.not.allowed.here"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/patterns/Parenthesized.java",
+      "sha256": "cb8ba8dc882f889d59ba6dd9d50b30cc9b0588b32a084df08aec66e373c92432",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.illegal.start.of.type",
+        "compiler.err.illegal.start.of.type",
+        "compiler.err.illegal.start.of.type",
+        "compiler.err.illegal.start.of.type"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/patterns/PatternCaseErrorRecovery.java",
+      "sha256": "175e4a4eeeb0f7302b605ce6ec8affe99a6502cf9a3b940a529277367a080f46",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.expected2",
+        "compiler.err.not.stmt",
+        "compiler.err.expected2",
+        "compiler.err.not.stmt",
+        "compiler.err.expected2",
+        "compiler.err.not.stmt"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/patterns/PatternErrorRecovery.java",
+      "sha256": "ed35d1dfdb6473cbf5f6c7c397f2787d21ea2c7a32dec0bc4da8c907a49ddcfb",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.illegal.start.of.type"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/patterns/SwitchErrors.java",
+      "sha256": "2d0f10f5efd4304c7e4793bbac82f524c4c38cf6b79da40851fdfd367457fc8f",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.default.label.not.allowed",
+        "compiler.err.default.label.not.allowed",
+        "compiler.err.default.label.not.allowed",
+        "compiler.err.default.label.not.allowed",
+        "compiler.err.default.label.not.allowed",
+        "compiler.err.default.label.not.allowed",
+        "compiler.err.default.label.not.allowed",
+        "compiler.err.default.label.not.allowed",
+        "compiler.err.default.label.not.allowed",
+        "compiler.err.default.label.not.allowed",
+        "compiler.err.illegal.start.of.type",
+        "compiler.err.illegal.start.of.type",
+        "compiler.err.expected2",
+        "compiler.err.expected2",
+        "compiler.err.expected2"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/patterns/T8309054.java",
+      "sha256": "e3a292fffdb18550eade78aabea7d87a7cccf9eb875edea2aab3cc44ec0bcc69",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.expected2",
+        "compiler.err.expected2",
+        "compiler.err.expected"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/patterns/T8317300.java",
+      "sha256": "f2ab364bb64045929ab7dfe6e9c81ccffca104287b4eea4a87cbe10b464e09b3",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.mod.not.allowed.here",
+        "compiler.err.mod.not.allowed.here"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/patterns/UnnamedErrors.java",
+      "sha256": "cf871904f3677a2ee77698f379942d7fe5d7db1734e0888109e726be9bf47c7f",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed",
+        "compiler.err.use.of.underscore.not.allowed",
+        "compiler.err.use.of.underscore.not.allowed",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed",
+        "compiler.err.use.of.underscore.not.allowed",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.restricted.type.not.allowed.here",
+        "compiler.err.use.of.underscore.not.allowed.non.variable",
+        "compiler.err.expected",
+        "compiler.err.expected2",
+        "compiler.err.expected",
+        "compiler.err.expected",
+        "compiler.err.expected",
+        "compiler.err.expected",
+        "compiler.err.expected",
+        "compiler.err.use.of.underscore.not.allowed.with.brackets",
+        "compiler.err.use.of.underscore.not.allowed.with.brackets",
+        "compiler.err.use.of.underscore.not.allowed.non.variable"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/policy/test3/A.java",
+      "sha256": "6a881be26c9c65847e76954374a43e4d672abb7c9715f8adf1dbdbfbf6ba9df5",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.not.stmt",
+        "compiler.err.expected"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/processing/6994946/SyntaxErrorTest.java",
+      "sha256": "9a734287225ef0efd16c5a9eb43fa05710908a75320cdceee681fa2bb79b2300",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.expected"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/processing/errors/TestParseErrors/ParseErrors.java",
+      "sha256": "c9d0378756ddd7b8fa5aade3388e36f340f714e2cd147d386a8e24d3aaa1749b",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.expected",
+        "compiler.err.illegal.start.of.type"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/processing/model/util/elements/TestGetDocComment_Line.java",
+      "sha256": "d96e7a93b2388c375d14d7994d3c1e053c6c1bf1350e7ef92c656ead5998969e",
+      "verdict": "accepted",
+      "codes": [],
+      "category": "limit:unicode-escape"
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/quid/T6999438.java",
+      "sha256": "250c7087f5cf7f3f080a0307a06167b2e0345842bb42dd6ad66ce682288cde3b",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.illegal.char"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/rawDiags/Error.java",
+      "sha256": "cc2ef62dce9745c8b919b2249ae020a2a88678ef0fffab01286f870c62501266",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.premature.eof"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/records/RecordDeclarationSyntaxTest.java",
+      "sha256": "70fa62f65842fb905b4b3038ab2daf57b3334a3599065e00e46f8ab2e86f19b9",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.expected",
+        "compiler.err.illegal.start.of.type"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/recovery/T8337976.java",
+      "sha256": "04b59dc0917dcbcb356313f79354f4ca9fb526ffcf02e088c2805c73e038d958",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.statement.not.expected",
+        "compiler.err.statement.not.expected"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/switchexpr/ParserRecovery.java",
+      "sha256": "9638e4eb4f705ab8864aac90789ebfeb342f75dcc1edd87142d5232949e3224a",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.expected2",
+        "compiler.err.expected2"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/switchexpr/WarnWrongYieldTest.java",
+      "sha256": "e4cc3cda593a6d13d18e3950dbd8fce1be02fdbe3f9eab2b7fe021b572f472da",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.restricted.type.not.allowed",
+        "compiler.err.restricted.type.not.allowed.here",
+        "compiler.err.restricted.type.not.allowed.here",
+        "compiler.err.invalid.yield",
+        "compiler.err.invalid.yield",
+        "compiler.err.invalid.yield",
+        "compiler.err.invalid.yield",
+        "compiler.err.invalid.yield",
+        "compiler.err.invalid.yield",
+        "compiler.err.restricted.type.not.allowed.here",
+        "compiler.err.restricted.type.not.allowed.here"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/switchexpr/WrongYieldTest.java",
+      "sha256": "c14fc8a690ac892e77cef4e69e3f527609fab5440ee27c16f893d94c6d7c279a",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.restricted.type.not.allowed",
+        "compiler.err.restricted.type.not.allowed.here",
+        "compiler.err.restricted.type.not.allowed.here",
+        "compiler.err.invalid.yield",
+        "compiler.err.invalid.yield",
+        "compiler.err.invalid.yield",
+        "compiler.err.invalid.yield",
+        "compiler.err.invalid.yield",
+        "compiler.err.invalid.yield",
+        "compiler.err.restricted.type.not.allowed.here"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/switchextra/SwitchArrowBrokenConstant.java",
+      "sha256": "2aacf81b52443b57eca1e6bd25b72c367a24255b06a4925361875335594c1c2b",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.expected",
+        "compiler.err.expected2",
+        "compiler.err.expected",
+        "compiler.err.expected2",
+        "compiler.err.expected2",
+        "compiler.err.expected2",
+        "compiler.err.expected2",
+        "compiler.err.expected2"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/switchextra/SwitchStatementBroken.java",
+      "sha256": "9b1c6648d84b16eeb30389ad83810d592a1ab187f98f880a1cf69fd9c99c99cc",
+      "verdict": "accepted",
+      "codes": [],
+      "category": "parse-only",
+      "group": "switch-mixed-colon-arrow"
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/switchextra/SwitchStatementBroken2.java",
+      "sha256": "ce81e8c258635f407972bf78777451f671c7f07d5e7dc77cb1055d85e6f0b75a",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.switch.case.unexpected.statement",
+        "compiler.err.switch.case.unexpected.statement",
+        "compiler.err.switch.case.unexpected.statement",
+        "compiler.err.variable.not.allowed",
+        "compiler.err.switch.case.unexpected.statement"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/unicode/FirstChar2.java",
+      "sha256": "b5b09886cb3ba56392fa096919447dea1705023fe9deeacd04f8ad31507dd1ac",
+      "verdict": "accepted",
+      "codes": [],
+      "category": "limit:unicode-escape"
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/unicode/NonasciiDigit.java",
+      "sha256": "b6f977fbd7903ef388ea19f6a047694f576c021e894210bb625319e530f5361c",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.illegal.nonascii.digit",
+        "compiler.err.illegal.nonascii.digit",
+        "compiler.err.illegal.nonascii.digit",
+        "compiler.err.illegal.nonascii.digit",
+        "compiler.err.illegal.nonascii.digit",
+        "compiler.err.illegal.nonascii.digit",
+        "compiler.err.illegal.nonascii.digit",
+        "compiler.err.illegal.nonascii.digit",
+        "compiler.err.illegal.nonascii.digit"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/unicode/SupplementaryJavaID1.java",
+      "sha256": "cb84e2ee4c4b7330536623c47e8a6fafb62817b2f78cb44e789679b305b19dbc",
+      "verdict": "accepted",
+      "codes": [],
+      "category": "limit:unicode-escape"
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/unicode/SupplementaryJavaID2.java",
+      "sha256": "9d31c232140c37f5120089590a36d17b9323ba47a8ed6884032d9089e8abe9fb",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.illegal.char",
+        "compiler.err.illegal.char",
+        "compiler.err.expected"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/unicode/SupplementaryJavaID3.java",
+      "sha256": "4c0aebc899a5c320b5fbafa585903cfe3b148508df71b8132427b8c7bccd9c51",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.illegal.char",
+        "compiler.err.illegal.char"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/unicode/SupplementaryJavaID4.java",
+      "sha256": "d5fa9c89e6dfc508903adae7132c3df34eed9e407065a0d6f7999420cd6a1475",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.illegal.char"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/unicode/SupplementaryJavaID5.java",
+      "sha256": "eca95a37e09cf8178b045dba53c7f3a488113c0559c29dfa6559c148f9599380",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.illegal.char"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/unicode/SupplementaryJavaID6.java",
+      "sha256": "0161083ab78cc4669da1159241219937dc1b79382e1cc7d3cfb6b0bd3e04224f",
+      "verdict": "accepted",
+      "codes": [],
+      "category": "limit:unicode-escape"
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/unicode/TripleQuote.java",
+      "sha256": "073805dd06c33d02bcf884e75b668f3d72b449360c9e351b66db33efde0e1640",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.empty.char.lit",
+        "compiler.err.empty.char.lit"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/unicode/UnicodeAtEOL.java",
+      "sha256": "a5d5cee408a5155a2e0b7f538c6829360e72ade4205b3698c7331d49453e207c",
+      "verdict": "accepted",
+      "codes": [],
+      "category": "limit:unicode-escape"
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/unicode/UnicodeCommentDelimiter.java",
+      "sha256": "ab47699c4884918b9936af59ddbbe4ca264cc206bdc5d419db5d87e8aae66b80",
+      "verdict": "accepted",
+      "codes": [],
+      "category": "limit:unicode-escape"
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/var_implicit_lambda/VarInImplicitLambdaNegTest01.java",
+      "sha256": "c8eee12e65304e3c64188dc013604d62ecca01dacdcc3ea8076327d44602c47d",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.invalid.lambda.parameter.declaration",
+        "compiler.err.invalid.lambda.parameter.declaration",
+        "compiler.err.invalid.lambda.parameter.declaration",
+        "compiler.err.invalid.lambda.parameter.declaration",
+        "compiler.err.restricted.type.not.allowed.array"
+      ]
+    }
+  ]
+}

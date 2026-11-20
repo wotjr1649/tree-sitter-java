@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Record the pinned javac parse verdict, diagnostic codes and original file hash for each example baseline failure.
+  CI checks the verdict file against the failure list and the pinned checkouts.
 - Document the [grammar tolerances and known limits](docs/tolerances.md), including forms accepted by
   javac's parser and rejected during full compilation.
 
