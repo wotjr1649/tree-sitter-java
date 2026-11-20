@@ -712,7 +712,7 @@ module.exports = grammar({
     ),
 
     labeled_statement: $ => seq(
-      $.identifier, ':', $.statement,
+      choice($.identifier, $._reserved_identifier), ':', $.statement,
     ),
 
     assert_statement: $ => choice(
