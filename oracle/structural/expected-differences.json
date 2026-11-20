@@ -312,19 +312,5 @@
   "k25/when-type-and-name": [
     {"kind": "PATTERN_CASE_LABEL", "start": 88, "end": 97, "status": "no_node_at_range", "reason": "limit"},
     {"kind": "BINDING_PATTERN", "start": 88, "end": 97, "status": "no_node_at_range", "reason": "limit"}
-  ],
-  "corpus/k22.txt/Single named annotation argument with a direct lambda": [
-    {"kind": "ASSIGNMENT", "start": 49, "end": 59, "status": "mismatched_kind", "reason": "limit"}
-  ],
-  "k22/limit-cast-label": [
-    {"kind": "CONSTANT_CASE_LABEL", "start": 211, "end": 220, "status": "no_node_at_range", "reason": "limit"},
-    {"kind": "TYPE_CAST", "start": 211, "end": 220, "status": "no_node_at_range", "reason": "limit"},
-    {"kind": "LAMBDA_EXPRESSION", "start": 224, "end": 242, "status": "no_node_at_range", "reason": "limit"}
-  ],
-  "k22/limit-conditional-label": [
-    {"kind": "CONSTANT_CASE_LABEL", "start": 211, "end": 231, "status": "no_node_at_range", "reason": "limit"},
-    {"kind": "CONDITIONAL_EXPRESSION", "start": 211, "end": 231, "status": "no_node_at_range", "reason": "limit"},
-    {"kind": "PARENTHESIZED", "start": 224, "end": 231, "status": "mismatched_kind", "reason": "limit"},
-    {"kind": "LAMBDA_EXPRESSION", "start": 235, "end": 253, "status": "no_node_at_range", "reason": "limit"}
   ]
 }

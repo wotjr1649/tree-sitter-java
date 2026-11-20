@@ -53,14 +53,13 @@
   Javac accepts these bindings, and the existing grammar can report an error. The smallest tested candidate
   that passed the corpus added 6.74% to `parser.c` and 84 parser states. The pinned examples contain no occurrence.
   The grammar and parser are unchanged. See [known limits](docs/tolerances.md#known-limits).
-- Prefer the full lambda in the `switch_rule` body when the rule and lambda arrows are ambiguous (K22).
-  In `case KEY -> arg -> arg - 2`, the `switch_label` holds `KEY` and the body holds the full
-  `lambda_expression`. This also covers guarded patterns and switch arms with lambda-valued conditional
-  expressions. A cast or conditional case label can still absorb the first arrow when the lambda body
-  is an unparenthesized conditional expression. A sole named annotation argument of the form `@A(x = n -> n)`
-  now forms an `assignment_expression` where the previous CST had an `element_value_pair`. Javac
-  accepts its syntax and rejects it during full compilation. The public node schema is unchanged.
-  [Known limits](docs/tolerances.md#known-limits) · [JLS 25 §14.11.1](https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html#jls-14.11.1) ·
+- Keep the switch rule arrow outside the lambda result (K22). In
+  `case KEY -> arg -> arg - 2`, the label holds `KEY` and the body holds the full lambda.
+  A separate expression path for labels and guards also handles cast and conditional labels while
+  preserving lambdas in delimited subexpressions such as method arguments. A sole named annotation
+  argument such as `@A(x = n -> n)` retains the 2.3.0 `element_value_pair` tree. The public node
+  schema is unchanged. `parser.c` grows by 210,555 bytes (+7.71%) and 110 states relative to `08c9b11`.
+  [JLS 25 §14.11.1](https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html#jls-14.11.1) ·
   [grammar-orchard PR #21](https://codeberg.org/grammar-orchard/tree-sitter-java-orchard/pulls/21).
 
 ## 2.3.0

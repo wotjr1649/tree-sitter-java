@@ -1100,9 +1100,9 @@ Single named annotation argument with a direct lambda
       (annotation
         name: (identifier)
         arguments: (annotation_argument_list
-          (assignment_expression
-            left: (identifier)
-            right: (lambda_expression
+          (element_value_pair
+            key: (identifier)
+            value: (lambda_expression
               parameters: (identifier)
               body: (identifier))))))
     name: (identifier)
@@ -1145,3 +1145,175 @@ Single named annotation argument with a direct lambda
             value: (decimal_integer_literal)))))
     name: (identifier)
     body: (class_body)))
+
+======================================================
+Cast label before a lambda with a conditional body
+======================================================
+
+import java.util.function.IntUnaryOperator;
+class Case {
+  static final int KEY = 3, LIMIT = 4;
+  int value;
+  IntUnaryOperator f(int n, boolean yes) {
+    IntUnaryOperator fn;
+    return switch(n) {
+      case (int) KEY -> x -> yes ? x+1 : x;
+      default -> x -> x;
+    };
+  }
+}
+
+---
+
+(program
+  (import_declaration
+    (scoped_identifier
+      (scoped_identifier
+        (scoped_identifier
+          (identifier)
+          (identifier))
+        (identifier))
+      (identifier)))
+  (class_declaration
+    (identifier)
+    (class_body
+      (field_declaration
+        (modifiers)
+        (integral_type)
+        (variable_declarator
+          (identifier)
+          (decimal_integer_literal))
+        (variable_declarator
+          (identifier)
+          (decimal_integer_literal)))
+      (field_declaration
+        (integral_type)
+        (variable_declarator
+          (identifier)))
+      (method_declaration
+        (type_identifier)
+        (identifier)
+        (formal_parameters
+          (formal_parameter
+            (integral_type)
+            (identifier))
+          (formal_parameter
+            (boolean_type)
+            (identifier)))
+        (block
+          (local_variable_declaration
+            (type_identifier)
+            (variable_declarator
+              (identifier)))
+          (return_statement
+            (switch_expression
+              (parenthesized_expression
+                (identifier))
+              (switch_block
+                (switch_rule
+                  (switch_label
+                    (cast_expression
+                      (integral_type)
+                      (identifier)))
+                  (expression_statement
+                    (lambda_expression
+                      (identifier)
+                      (ternary_expression
+                        (identifier)
+                        (binary_expression
+                          (identifier)
+                          (decimal_integer_literal))
+                        (identifier)))))
+                (switch_rule
+                  (switch_label)
+                  (expression_statement
+                    (lambda_expression
+                      (identifier)
+                      (identifier))))))))))))
+
+======================================================
+Conditional label before a lambda with a conditional body
+======================================================
+
+import java.util.function.IntUnaryOperator;
+class Case {
+  static final int KEY = 3, LIMIT = 4;
+  int value;
+  IntUnaryOperator f(int n, boolean yes) {
+    IntUnaryOperator fn;
+    return switch(n) {
+      case true ? KEY : (LIMIT) -> x -> yes ? x+1 : x;
+      default -> x -> x;
+    };
+  }
+}
+
+---
+
+(program
+  (import_declaration
+    (scoped_identifier
+      (scoped_identifier
+        (scoped_identifier
+          (identifier)
+          (identifier))
+        (identifier))
+      (identifier)))
+  (class_declaration
+    (identifier)
+    (class_body
+      (field_declaration
+        (modifiers)
+        (integral_type)
+        (variable_declarator
+          (identifier)
+          (decimal_integer_literal))
+        (variable_declarator
+          (identifier)
+          (decimal_integer_literal)))
+      (field_declaration
+        (integral_type)
+        (variable_declarator
+          (identifier)))
+      (method_declaration
+        (type_identifier)
+        (identifier)
+        (formal_parameters
+          (formal_parameter
+            (integral_type)
+            (identifier))
+          (formal_parameter
+            (boolean_type)
+            (identifier)))
+        (block
+          (local_variable_declaration
+            (type_identifier)
+            (variable_declarator
+              (identifier)))
+          (return_statement
+            (switch_expression
+              (parenthesized_expression
+                (identifier))
+              (switch_block
+                (switch_rule
+                  (switch_label
+                    (ternary_expression
+                      (true)
+                      (identifier)
+                      (parenthesized_expression
+                        (identifier))))
+                  (expression_statement
+                    (lambda_expression
+                      (identifier)
+                      (ternary_expression
+                        (identifier)
+                        (binary_expression
+                          (identifier)
+                          (decimal_integer_literal))
+                        (identifier)))))
+                (switch_rule
+                  (switch_label)
+                  (expression_statement
+                    (lambda_expression
+                      (identifier)
+                      (identifier))))))))))))

@@ -41,8 +41,8 @@ and adjacent invalid patterns), `k16` (parenthesized names before additive opera
 and adjacent invalid inputs), `k18` (comment-like text in text blocks, escape and delimiter boundaries, CRLF and raw
 NUL, controls for comments outside literals and in interpolation expressions, and adjacent invalid inputs), `k19`
 (text-block line continuations with LF, CRLF and CR, with adjacent escape controls and invalid inputs), `k22` (switch
-rules with lambda results, guarded patterns, colon and arrow controls, adjacent invalid inputs, and documented cast
-and conditional label limits), `k23` (CR, CRLF, LF and EOF line comments, with literal and block-comment controls),
+rules with lambda results, cast and conditional labels, guarded patterns, colon and arrow controls, and adjacent
+invalid inputs), `k23` (CR, CRLF, LF and EOF line comments, with literal and block-comment controls),
 `k24` (documented intersection-cast operand limits, single-type cast and binary-expression controls, and adjacent
 invalid inputs), `k25` (`when` as the name of a type pattern in switch labels and `instanceof`, with guard and
 invalid-input controls), `k26` (guarded empty record patterns in colon labels and arrow rules, with adjacent invalid
@@ -167,8 +167,6 @@ A later K pull request that fixes a defect **deletes its entries** from `expecte
 cases and their assertions stay as passing cases). K4 deleted the last two entries (`pr233/record-pattern-qualified`, `pr233/switch-final-type-pattern`), so the set was
 empty. K5 adds two cases it does not fix, `k5/v04-after-dimensions` and `k5/v05-many-dimensions`: an annotation right
 after an array dimension and before `...` (`int @A [] @B ... xs`) still starts a dimension and errs.
-K22 records two switch labels that absorb the first arrow without a parse error. Their range assertions require
-the full lambda in the rule body.
 A new input that the grammar fails but javac accepts is never added silently: it is a new defect, so it needs its own
 fix, or a recorded entry with its javac verdict and evidence. K25 records the documented limit on type-pattern
 bindings named `when`. Its dedicated cases record the trees from `f1e4257`, and the existing structural probes
