@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add a CI-checked structural oracle for javac and tree-sitter ranges and node kinds, with Phase 3 probes and an
+  exact baseline of known differences. This is a tooling change only.
 - Keep comment-like text inside text blocks in `multiline_string_fragment` nodes and preserve `escape_sequence`
   nodes (K18, JLS 25 §§3.7 and 3.10.6, grammar-orchard PR #41 and the Phase 3 `text-block-comments` report).
   A closing delimiter on the same line as `//` now closes the block. Comments outside the delimiters and within
