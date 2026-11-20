@@ -30,7 +30,7 @@ class Difference extends Error {}
 function run(command, args, options = {}) {
   const result = spawnSync(command, args, { encoding: 'utf8', ...options });
   if (result.error) throw result.error;
-  if (result.status !== 0) throw new Error(`${command} failed (exit ${result.status ?? result.signal}): ${result.stderr?.trim() ?? ''}`);
+  if (result.status !== 0) throw new Error(`${command} failed (exit ${result.status ?? result.signal}): ${String(result.stderr ?? '').trim()}`);
   return result.stdout;
 }
 
