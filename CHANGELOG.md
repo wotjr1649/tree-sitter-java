@@ -37,6 +37,15 @@
   by javac's parser. The example failure baseline rises from 183 to 190. See
   [withdrawn and retained tolerances](docs/tolerances.md#withdrawn-in-300).
 
+- **K31.** `sealed` as an enum constant name no longer produces errors: `enum E { sealed }`, `sealed(1)`,
+  `sealed { }` and `@Deprecated sealed`, with the same `enum_constant` tree as any other name (a `name: (identifier)`).
+  Every other contextual keyword already parsed as an enum constant. javac accepts all of these (JLS 25
+  [§3.9](https://docs.oracle.com/javase/specs/jls/se25/html/jls-3.html#jls-3.9) and
+  [§8.9.1](https://docs.oracle.com/javase/specs/jls/se25/html/jls-8.html#jls-8.9.1)); the source report is REVIEW-49.
+  `src/node-types.json` is unchanged. The name inherits the tolerance of an ordinary name: the grammar accepts
+  modifiers before an enum constant, so `enum E { public sealed }` and `enum E { sealed sealed }` now parse
+  without errors like `enum E { public A }` and `enum E { sealed A }` did (javac rejects all four).
+
 ## 2.4.0
 
 Phase 3 adds a structural oracle and CI check that compare javac ASTs and tree-sitter trees over the same
