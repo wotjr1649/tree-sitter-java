@@ -4038,8 +4038,12 @@
           "name": "type_pattern"
         },
         {
-          "type": "SYMBOL",
-          "name": "record_pattern"
+          "type": "PREC_DYNAMIC",
+          "value": 1,
+          "content": {
+            "type": "SYMBOL",
+            "name": "record_pattern"
+          }
         }
       ]
     },
