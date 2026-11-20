@@ -1,0 +1,75 @@
+====================
+K23 CR comment before a field
+====================
+
+class C { // noteint field;
+}
+
+---
+
+(program
+  (class_declaration
+    (identifier)
+    (class_body
+      (line_comment)
+      (field_declaration
+        (integral_type)
+        (variable_declarator
+          (identifier))))))
+
+====================
+K23 CR-only lines before a field and closing brace
+====================
+
+class C {// noteint field;}
+
+---
+
+(program
+  (class_declaration
+    (identifier)
+    (class_body
+      (line_comment)
+      (field_declaration
+        (integral_type)
+        (variable_declarator
+          (identifier))))))
+
+====================
+K23 CR comment after a text block
+====================
+
+class C { String s = """plain"""; // note}
+
+---
+
+(program
+  (class_declaration
+    (identifier)
+    (class_body
+      (field_declaration
+        (type_identifier)
+        (variable_declarator
+          (identifier)
+          (string_literal
+            (multiline_string_fragment))))
+      (line_comment))))
+
+====================
+K23 comment-like text in a CR-only text block
+====================
+
+class C { String s = """// textok"""; }
+
+---
+
+(program
+  (class_declaration
+    (identifier)
+    (class_body
+      (field_declaration
+        (type_identifier)
+        (variable_declarator
+          (identifier)
+          (string_literal
+            (multiline_string_fragment)))))))
