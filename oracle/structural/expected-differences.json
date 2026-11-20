@@ -50,10 +50,10 @@
     {"kind": "PARAMETERIZED_TYPE", "start": 296, "end": 313, "status": "no_node_at_range", "reason": "limit"}
   ],
   "structural/p8/cast/intersection-complement": [
-    {"kind": "BITWISE_COMPLEMENT", "start": 136, "end": 138, "status": "no_node_at_range", "reason": "K24"}
+    {"kind": "BITWISE_COMPLEMENT", "start": 136, "end": 138, "status": "no_node_at_range", "reason": "limit"}
   ],
   "structural/p8/cast/intersection-not": [
-    {"kind": "LOGICAL_COMPLEMENT", "start": 137, "end": 142, "status": "no_node_at_range", "reason": "K24"}
+    {"kind": "LOGICAL_COMPLEMENT", "start": 137, "end": 142, "status": "no_node_at_range", "reason": "limit"}
   ],
   "structural/p8/cast/primitive-post-dec": [
     {"kind": "TYPE_CAST", "start": 104, "end": 113, "status": "mismatched_kind", "reason": "K21"},
@@ -133,5 +133,72 @@
   ],
   "structural/p9/switch-lambda-guard": [
     {"kind": "LAMBDA_EXPRESSION", "start": 110, "end": 120, "status": "no_node_at_range", "reason": "K22"}
+  ],
+  "corpus/k24.txt/K24 intersection annotated": [
+    {"kind": "LOGICAL_COMPLEMENT", "start": 172, "end": 177, "status": "no_node_at_range", "reason": "limit"}
+  ],
+  "corpus/k24.txt/K24 intersection cast with !": [
+    {"kind": "LOGICAL_COMPLEMENT", "start": 78, "end": 83, "status": "no_node_at_range", "reason": "limit"}
+  ],
+  "corpus/k24.txt/K24 intersection cast with ~": [
+    {"kind": "BITWISE_COMPLEMENT", "start": 71, "end": 73, "status": "no_node_at_range", "reason": "limit"}
+  ],
+  "corpus/k24.txt/K24 intersection complement postfix": [
+    {"kind": "TYPE_CAST", "start": 42, "end": 79, "status": "mismatched_kind", "reason": "limit"},
+    {"kind": "BITWISE_COMPLEMENT", "start": 75, "end": 79, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "POSTFIX_INCREMENT", "start": 76, "end": 79, "status": "no_node_at_range", "reason": "limit"}
+  ],
+  "corpus/k24.txt/K24 intersection nested cast": [
+    {"kind": "TYPE_CAST", "start": 39, "end": 79, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "TYPE_CAST", "start": 72, "end": 79, "status": "no_node_at_range", "reason": "limit"}
+  ],
+  "corpus/k24.txt/K24 intersection nested primitive signed": [
+    {"kind": "TYPE_CAST", "start": 71, "end": 79, "status": "mismatched_kind", "reason": "limit"}
+  ],
+  "corpus/k24.txt/K24 intersection switch": [
+    {"kind": "RETURN", "start": 31, "end": 100, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "TYPE_CAST", "start": 38, "end": 99, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "SWITCH_EXPRESSION", "start": 71, "end": 99, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "PARENTHESIZED", "start": 78, "end": 81, "status": "mismatched_kind", "reason": "limit"},
+    {"kind": "CASE", "start": 84, "end": 97, "status": "no_node_at_range", "reason": "limit"}
+  ],
+  "k24/intersection-annotated": [
+    {"kind": "LOGICAL_COMPLEMENT", "start": 171, "end": 176, "status": "no_node_at_range", "reason": "limit"}
+  ],
+  "k24/intersection-complement": [
+    {"kind": "BITWISE_COMPLEMENT", "start": 70, "end": 72, "status": "no_node_at_range", "reason": "limit"}
+  ],
+  "k24/intersection-complement-postfix": [
+    {"kind": "TYPE_CAST", "start": 41, "end": 78, "status": "mismatched_kind", "reason": "limit"},
+    {"kind": "BITWISE_COMPLEMENT", "start": 74, "end": 78, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "POSTFIX_INCREMENT", "start": 75, "end": 78, "status": "no_node_at_range", "reason": "limit"}
+  ],
+  "k24/intersection-nested-cast": [
+    {"kind": "TYPE_CAST", "start": 38, "end": 78, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "TYPE_CAST", "start": 71, "end": 78, "status": "no_node_at_range", "reason": "limit"}
+  ],
+  "k24/intersection-nested-primitive-signed": [
+    {"kind": "TYPE_CAST", "start": 70, "end": 78, "status": "mismatched_kind", "reason": "limit"}
+  ],
+  "k24/intersection-nested-reference": [
+    {"kind": "TYPE_CAST", "start": 73, "end": 84, "status": "no_node_at_range", "reason": "limit"}
+  ],
+  "k24/intersection-not": [
+    {"kind": "LOGICAL_COMPLEMENT", "start": 77, "end": 82, "status": "no_node_at_range", "reason": "limit"}
+  ],
+  "k24/intersection-postfix-decrement": [
+    {"kind": "TYPE_CAST", "start": 41, "end": 77, "status": "mismatched_kind", "reason": "limit"},
+    {"kind": "POSTFIX_DECREMENT", "start": 74, "end": 77, "status": "no_node_at_range", "reason": "limit"}
+  ],
+  "k24/intersection-postfix-increment": [
+    {"kind": "TYPE_CAST", "start": 41, "end": 77, "status": "mismatched_kind", "reason": "limit"},
+    {"kind": "POSTFIX_INCREMENT", "start": 74, "end": 77, "status": "no_node_at_range", "reason": "limit"}
+  ],
+  "k24/intersection-switch": [
+    {"kind": "RETURN", "start": 30, "end": 99, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "TYPE_CAST", "start": 37, "end": 98, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "SWITCH_EXPRESSION", "start": 70, "end": 98, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "PARENTHESIZED", "start": 77, "end": 80, "status": "mismatched_kind", "reason": "limit"},
+    {"kind": "CASE", "start": 83, "end": 96, "status": "no_node_at_range", "reason": "limit"}
   ]
 }

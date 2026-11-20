@@ -1,0 +1,108 @@
+===========================
+K24 intersection cast with !
+:error
+===========================
+
+class K24 { Object f(boolean flag) { return (Boolean & java.io.Serializable) !flag; } }
+
+---
+
+===========================
+K24 intersection cast with ~
+:error
+===========================
+
+class K24 { Object f(int n) { return (Integer & java.io.Serializable) ~n; } }
+
+---
+
+===========================
+K24 intersection annotated
+:error
+===========================
+
+@java.lang.annotation.Target(java.lang.annotation.ElementType.TYPE_USE) @interface A {}
+class K24 { Object f(boolean flag) { return (@A Boolean & java.io.@A Serializable) !flag; } }
+
+---
+
+===========================
+K24 intersection nested cast
+:error
+===========================
+
+class K24 { Object f(long n) { return (Integer & java.io.Serializable) (int) n; } }
+
+---
+
+===========================
+K24 intersection nested primitive signed
+:error
+===========================
+
+class K24 { Object f(int n) { return (Integer & java.io.Serializable) (int) -n; } }
+
+---
+
+===========================
+K24 intersection complement postfix
+:error
+===========================
+
+class K24 { Object f(Integer n) { return (Integer & java.io.Serializable) ~n++; } }
+
+---
+
+===========================
+K24 intersection switch
+:error
+===========================
+
+class K24 { Object f(int n) { return (Integer & java.io.Serializable) switch (n) { default -> 0; }; } }
+
+---
+
+===========================
+K24 intersection generic plus missing operand
+:error
+===========================
+
+class K24 { Object f(int n) { return (Integer & Comparable<Integer>) +; } }
+
+---
+
+===========================
+K24 intersection generic minus missing operand
+:error
+===========================
+
+class K24 { Object f(int n) { return (Integer & Comparable<Integer>) -; } }
+
+---
+
+===========================
+K24 intersection nested invalid prefix
+:error
+===========================
+
+class K24 { Object f(Integer n) { return (Integer & Comparable<Integer>) (n)++n; } }
+
+---
+
+===========================
+K24 intersection prefix increment
+:error
+===========================
+
+class K24 { Object f(Integer n) { return (Integer & java.io.Serializable) ++n; } }
+
+---
+
+===========================
+K24 intersection prefix decrement
+:error
+===========================
+
+class K24 { Object f(Integer n) { return (Integer & java.io.Serializable) --n; } }
+
+---

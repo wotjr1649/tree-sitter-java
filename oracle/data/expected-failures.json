@@ -1,6 +1,6 @@
 {
   "rule": "a",
-  "note": "Expected-failure set (oracle/README.md, rule (a)): only cases javac accepts and the base grammar fails. A K pull request deletes its entries. K4 deleted the last two; K5 (simple variant) adds two cases it does not fix: an annotation right after an array dimension and before ... still starts a dimension. Phase 3 structural probe trees were recorded at v2.3.0.",
+  "note": "Expected-failure set (oracle/README.md, rule (a)): only cases javac accepts and the base grammar fails. A K pull request deletes its entries. K4 deleted the last two; K5 (simple variant) adds two cases it does not fix: an annotation right after an array dimension and before ... still starts a dimension. Phase 3 structural probe trees were recorded at v2.3.0. The added K24 limit cases were recorded at 472e763.",
   "grammar_base": {
     "commit": "a241253570b20a5f83c9dde367a5a50f0116a978",
     "tag": "v1.0.0",
@@ -22,17 +22,89 @@
       "base_failure": "root hasError; 2 ERROR",
       "base_tree": "(program (class_declaration name: (identifier) body: (class_body (ERROR (void_type) (identifier) (integral_type) (marker_annotation name: (identifier)) (marker_annotation name: (identifier)) (marker_annotation name: (identifier)) (marker_annotation name: (identifier)) (marker_annotation name: (scoped_identifier scope: (identifier) (ERROR) name: (identifier)))))))"
     },
+    "k24/intersection-not": {
+      "k": "K24",
+      "sha256": "28fc679ea54cb9236274e1df2c09d6b3875d7c13773b60d85c473110e7067b04",
+      "base_failure": "root hasError; 1 ERROR; \"!flag\" has no named unary_expression node (found: ERROR \"!\" identifier)",
+      "base_tree": "(program (class_declaration name: (identifier) body: (class_body (method_declaration type: (type_identifier) name: (identifier) parameters: (formal_parameters (formal_parameter type: (boolean_type) name: (identifier))) body: (block (return_statement (cast_expression type: (type_identifier) type: (scoped_type_identifier (scoped_type_identifier (type_identifier) (type_identifier)) (type_identifier)) (ERROR) value: (identifier))))))))",
+      "note": "documented limit (owner 2026-11-20)"
+    },
+    "k24/intersection-complement": {
+      "k": "K24",
+      "sha256": "641baafe6470e3c500f7783a0b13dd0596648d9c0cdd6110be109fb0be4c1736",
+      "base_failure": "root hasError; 1 ERROR; \"~n\" has no named unary_expression node (found: ERROR \"~\" identifier)",
+      "base_tree": "(program (class_declaration name: (identifier) body: (class_body (method_declaration type: (type_identifier) name: (identifier) parameters: (formal_parameters (formal_parameter type: (integral_type) name: (identifier))) body: (block (return_statement (cast_expression type: (type_identifier) type: (scoped_type_identifier (scoped_type_identifier (type_identifier) (type_identifier)) (type_identifier)) (ERROR) value: (identifier))))))))",
+      "note": "documented limit (owner 2026-11-20)"
+    },
+    "k24/intersection-nested-cast": {
+      "k": "K24",
+      "sha256": "6239e6b6f9fa22b8f5e29fd212f8a2b6f90683751dcc1e0e3c973c1056c45f7f",
+      "base_failure": "root hasError; 1 ERROR; \"(Integer & java.io.Serializable) (int) n\" has no named cast_expression node (found: ERROR \"(\" type_identifier \"&\" scoped_type_identifier scoped_type_identifier type_identifier \".\" type_identifier \".\" type_identifier \")\" \"(\" integral_type \"int\" \")\" identifier); \"(int) n\" has no named cast_expression node (found: \"(\" integral_type \"int\" \")\" identifier)",
+      "base_tree": "(program (class_declaration name: (identifier) body: (class_body (method_declaration type: (type_identifier) name: (identifier) parameters: (formal_parameters (formal_parameter type: (integral_type) name: (identifier))) body: (block (return_statement (ERROR (type_identifier) type: (scoped_type_identifier (scoped_type_identifier (type_identifier) (type_identifier)) (type_identifier)) (integral_type) (identifier))))))))",
+      "note": "documented limit (owner 2026-11-20)"
+    },
+    "k24/intersection-postfix-increment": {
+      "k": "K24",
+      "sha256": "3a44448bedd1143403342b202d9773f6d593e43209a61ba1a0416b0bd90382b9",
+      "base_failure": "\"n++\" has no named update_expression node (found: identifier \"++\")",
+      "base_tree": "(program (class_declaration name: (identifier) body: (class_body (method_declaration type: (type_identifier) name: (identifier) parameters: (formal_parameters (formal_parameter type: (type_identifier) name: (identifier))) body: (block (return_statement (update_expression (cast_expression type: (type_identifier) type: (scoped_type_identifier (scoped_type_identifier (type_identifier) (type_identifier)) (type_identifier)) value: (identifier)))))))))",
+      "note": "documented limit (owner 2026-11-20)"
+    },
+    "k24/intersection-postfix-decrement": {
+      "k": "K24",
+      "sha256": "5b99036abc1e7e4493cffbaf981df6078882b1a05aa06aada510fc1c2ccb1e3c",
+      "base_failure": "\"n--\" has no named update_expression node (found: identifier \"--\")",
+      "base_tree": "(program (class_declaration name: (identifier) body: (class_body (method_declaration type: (type_identifier) name: (identifier) parameters: (formal_parameters (formal_parameter type: (type_identifier) name: (identifier))) body: (block (return_statement (update_expression (cast_expression type: (type_identifier) type: (scoped_type_identifier (scoped_type_identifier (type_identifier) (type_identifier)) (type_identifier)) value: (identifier)))))))))",
+      "note": "documented limit (owner 2026-11-20)"
+    },
+    "k24/intersection-annotated": {
+      "k": "K24",
+      "sha256": "7334a904763e4111a1a0467def023f1cba9a6d8f882feac75f6a91cbf0df5ed8",
+      "base_failure": "root hasError; 1 ERROR; \"!flag\" has no named unary_expression node (found: ERROR \"!\" identifier)",
+      "base_tree": "(program (annotation_type_declaration (modifiers (annotation name: (scoped_identifier scope: (scoped_identifier scope: (scoped_identifier scope: (identifier) name: (identifier)) name: (identifier)) name: (identifier)) arguments: (annotation_argument_list (field_access object: (field_access object: (field_access object: (field_access object: (identifier) field: (identifier)) field: (identifier)) field: (identifier)) field: (identifier))))) name: (identifier) body: (annotation_type_body)) (class_declaration name: (identifier) body: (class_body (method_declaration type: (type_identifier) name: (identifier) parameters: (formal_parameters (formal_parameter type: (boolean_type) name: (identifier))) body: (block (return_statement (cast_expression type: (annotated_type (marker_annotation name: (identifier)) (type_identifier)) type: (scoped_type_identifier (scoped_type_identifier (type_identifier) (type_identifier)) (marker_annotation name: (identifier)) (type_identifier)) (ERROR) value: (identifier))))))))",
+      "note": "documented limit (owner 2026-11-20)"
+    },
+    "k24/intersection-switch": {
+      "k": "K24",
+      "sha256": "de418e0fac95092d2e8d9363b36a593e459d8d67a25a8be6a79457a7aa16312b",
+      "base_failure": "root hasError; 1 ERROR; 1 MISSING; \"switch (n) { default -> 0; }\" has no named switch_expression node (found: method_invocation identifier argument_list \"(\" identifier \")\" \";\" block \"{\" ERROR \"default\" \"->\" expression_statement decimal_integer_literal \";\" \"}\")",
+      "base_tree": "(program (class_declaration name: (identifier) body: (class_body (method_declaration type: (type_identifier) name: (identifier) parameters: (formal_parameters (formal_parameter type: (integral_type) name: (identifier))) body: (block (return_statement (cast_expression type: (type_identifier) type: (scoped_type_identifier (scoped_type_identifier (type_identifier) (type_identifier)) (type_identifier)) value: (method_invocation name: (identifier) arguments: (argument_list (identifier)))) (MISSING \";\")) (block (ERROR) (expression_statement (decimal_integer_literal))))))))",
+      "note": "documented limit (owner 2026-11-20)"
+    },
+    "k24/intersection-complement-postfix": {
+      "k": "K24",
+      "sha256": "d60bf234fc970eaa8af0557fbb64f61eedb0d3ee066271bd033225391fae4e9b",
+      "base_failure": "root hasError; 1 ERROR; \"~n++\" has no named unary_expression node (found: ERROR \"~\" identifier \"++\")",
+      "base_tree": "(program (class_declaration name: (identifier) body: (class_body (method_declaration type: (type_identifier) name: (identifier) parameters: (formal_parameters (formal_parameter type: (type_identifier) name: (identifier))) body: (block (return_statement (update_expression (cast_expression type: (type_identifier) type: (scoped_type_identifier (scoped_type_identifier (type_identifier) (type_identifier)) (type_identifier)) (ERROR) value: (identifier)))))))))",
+      "note": "documented limit (owner 2026-11-20)"
+    },
+    "k24/intersection-nested-primitive-signed": {
+      "k": "K24",
+      "sha256": "2d4e9e10e1ea700c310fed86aa08441c7a913dbf1bd5ee4ef66fdf2b47121407",
+      "base_failure": "root hasError; 1 ERROR; 1 MISSING; \"(int) -n\" has no named cast_expression node (found: parenthesized_expression \"(\" ERROR integral_type \"int\" \")\" unary_expression \"-\" identifier \")\")",
+      "base_tree": "(program (class_declaration name: (identifier) body: (class_body (method_declaration type: (type_identifier) name: (identifier) parameters: (formal_parameters (formal_parameter type: (integral_type) name: (identifier))) body: (block (return_statement (cast_expression type: (type_identifier) type: (scoped_type_identifier (scoped_type_identifier (type_identifier) (type_identifier)) (type_identifier)) value: (parenthesized_expression (ERROR (integral_type)) (unary_expression operand: (identifier)) (MISSING \")\")))))))))",
+      "note": "documented limit (owner 2026-11-20)"
+    },
+    "k24/intersection-nested-reference": {
+      "k": "K24",
+      "sha256": "95a0bbf70caaa9bfabb588fc7662e881810f793d1a4f64e46a4d8ac270f9f072",
+      "base_failure": "root hasError; 1 ERROR; \"(Integer) o\" has no named cast_expression node (found: ERROR inferred_parameters \"(\" identifier \")\" identifier)",
+      "base_tree": "(program (class_declaration name: (identifier) body: (class_body (method_declaration type: (type_identifier) name: (identifier) parameters: (formal_parameters (formal_parameter type: (type_identifier) name: (identifier))) body: (block (return_statement (cast_expression type: (type_identifier) type: (scoped_type_identifier (scoped_type_identifier (type_identifier) (type_identifier)) (type_identifier)) (ERROR (inferred_parameters (identifier))) value: (identifier))))))))",
+      "note": "documented limit (owner 2026-11-20)"
+    },
     "structural/p8/cast/intersection-not": {
       "k": "K24",
       "sha256": "11bc9b681d1b904703265226bf3b254a81282fae2c0cbe64e5ccc858f73bf2cd",
       "base_failure": "root hasError; 1 ERROR",
-      "base_tree": "(program (class_declaration name: (identifier) body: (class_body (class_declaration (modifiers) name: (identifier) body: (class_body)) (class_declaration (modifiers) name: (identifier) body: (class_body)) (method_declaration type: (type_identifier) name: (identifier) parameters: (formal_parameters (formal_parameter type: (integral_type) name: (identifier)) (formal_parameter type: (type_identifier) name: (identifier)) (formal_parameter type: (boolean_type) name: (identifier)) (formal_parameter type: (array_type element: (integral_type) dimensions: (dimensions)) name: (identifier))) body: (block (return_statement (cast_expression type: (type_identifier) type: (scoped_type_identifier (scoped_type_identifier (type_identifier) (type_identifier)) (type_identifier)) (ERROR) value: (identifier))))))))"
+      "base_tree": "(program (class_declaration name: (identifier) body: (class_body (class_declaration (modifiers) name: (identifier) body: (class_body)) (class_declaration (modifiers) name: (identifier) body: (class_body)) (method_declaration type: (type_identifier) name: (identifier) parameters: (formal_parameters (formal_parameter type: (integral_type) name: (identifier)) (formal_parameter type: (type_identifier) name: (identifier)) (formal_parameter type: (boolean_type) name: (identifier)) (formal_parameter type: (array_type element: (integral_type) dimensions: (dimensions)) name: (identifier))) body: (block (return_statement (cast_expression type: (type_identifier) type: (scoped_type_identifier (scoped_type_identifier (type_identifier) (type_identifier)) (type_identifier)) (ERROR) value: (identifier))))))))",
+      "note": "documented limit (owner 2026-11-20)"
     },
     "structural/p8/cast/intersection-complement": {
       "k": "K24",
       "sha256": "fc36fc912d00b9df372e7141dc47ca12cd4401536accd8a3482999920b9c1bec",
       "base_failure": "root hasError; 1 ERROR",
-      "base_tree": "(program (class_declaration name: (identifier) body: (class_body (class_declaration (modifiers) name: (identifier) body: (class_body)) (class_declaration (modifiers) name: (identifier) body: (class_body)) (method_declaration type: (type_identifier) name: (identifier) parameters: (formal_parameters (formal_parameter type: (integral_type) name: (identifier)) (formal_parameter type: (type_identifier) name: (identifier)) (formal_parameter type: (boolean_type) name: (identifier)) (formal_parameter type: (array_type element: (integral_type) dimensions: (dimensions)) name: (identifier))) body: (block (return_statement (cast_expression type: (type_identifier) type: (scoped_type_identifier (scoped_type_identifier (type_identifier) (type_identifier)) (type_identifier)) (ERROR) value: (identifier))))))))"
+      "base_tree": "(program (class_declaration name: (identifier) body: (class_body (class_declaration (modifiers) name: (identifier) body: (class_body)) (class_declaration (modifiers) name: (identifier) body: (class_body)) (method_declaration type: (type_identifier) name: (identifier) parameters: (formal_parameters (formal_parameter type: (integral_type) name: (identifier)) (formal_parameter type: (type_identifier) name: (identifier)) (formal_parameter type: (boolean_type) name: (identifier)) (formal_parameter type: (array_type element: (integral_type) dimensions: (dimensions)) name: (identifier))) body: (block (return_statement (cast_expression type: (type_identifier) type: (scoped_type_identifier (scoped_type_identifier (type_identifier) (type_identifier)) (type_identifier)) (ERROR) value: (identifier))))))))",
+      "note": "documented limit (owner 2026-11-20)"
     },
     "structural/p8/switch/guard-when-binding": {
       "k": "K25",
