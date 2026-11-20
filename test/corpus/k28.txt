@@ -2526,3 +2526,325 @@ ordinary: return;
 --------------------------------------------------------------------------------
 
 (program (package_declaration (identifier)) (labeled_statement (identifier) (return_statement)))
+
+================================================================================
+K28 REVIEW-41c labeled declaration in else branch (yield)
+================================================================================
+
+class Probe { void m(int n, boolean b) { if (b) --n; else yield: int x = 0; } }
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter type: (integral_type) name: (identifier))
+          (formal_parameter type: (boolean_type) name: (identifier)))
+        body: (block
+          (if_statement
+            condition: (parenthesized_expression (identifier))
+            consequence: (expression_statement (update_expression (identifier)))
+            alternative: (labeled_statement
+              (identifier)
+              (local_variable_declaration
+                type: (integral_type)
+                declarator: (variable_declarator name: (identifier) value: (decimal_integer_literal))))))))))
+
+================================================================================
+K28 REVIEW-41c labeled declaration in else branch (ordinary)
+================================================================================
+
+class Probe { void m(int n, boolean b) { if (b) --n; else ordinary: int x = 0; } }
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter type: (integral_type) name: (identifier))
+          (formal_parameter type: (boolean_type) name: (identifier)))
+        body: (block
+          (if_statement
+            condition: (parenthesized_expression (identifier))
+            consequence: (expression_statement (update_expression (identifier)))
+            alternative: (labeled_statement
+              (identifier)
+              (local_variable_declaration
+                type: (integral_type)
+                declarator: (variable_declarator name: (identifier) value: (decimal_integer_literal))))))))))
+
+================================================================================
+K28 REVIEW-41c labeled declaration in while body (yield)
+================================================================================
+
+class Probe { void m(int n, boolean b) { while (b) yield: int x = 0; } }
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter type: (integral_type) name: (identifier))
+          (formal_parameter type: (boolean_type) name: (identifier)))
+        body: (block
+          (while_statement
+            condition: (parenthesized_expression (identifier))
+            body: (labeled_statement
+              (identifier)
+              (local_variable_declaration
+                type: (integral_type)
+                declarator: (variable_declarator name: (identifier) value: (decimal_integer_literal))))))))))
+
+================================================================================
+K28 REVIEW-41c labeled declaration in while body (ordinary)
+================================================================================
+
+class Probe { void m(int n, boolean b) { while (b) ordinary: int x = 0; } }
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter type: (integral_type) name: (identifier))
+          (formal_parameter type: (boolean_type) name: (identifier)))
+        body: (block
+          (while_statement
+            condition: (parenthesized_expression (identifier))
+            body: (labeled_statement
+              (identifier)
+              (local_variable_declaration
+                type: (integral_type)
+                declarator: (variable_declarator name: (identifier) value: (decimal_integer_literal))))))))))
+
+================================================================================
+K28 REVIEW-41c labeled package under an outer label (yield)
+================================================================================
+
+class Probe { void m(int n, boolean b) { outer: yield: package p; } }
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter type: (integral_type) name: (identifier))
+          (formal_parameter type: (boolean_type) name: (identifier)))
+        body: (block
+          (labeled_statement
+            (identifier)
+            (labeled_statement (identifier) (package_declaration (identifier)))))))))
+
+================================================================================
+K28 REVIEW-41c labeled package under an outer label (ordinary)
+================================================================================
+
+class Probe { void m(int n, boolean b) { outer: ordinary: package p; } }
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter type: (integral_type) name: (identifier))
+          (formal_parameter type: (boolean_type) name: (identifier)))
+        body: (block
+          (labeled_statement
+            (identifier)
+            (labeled_statement (identifier) (package_declaration (identifier)))))))))
+
+================================================================================
+K28 REVIEW-41c labeled declaration in switch colon group (yield)
+================================================================================
+
+class Probe { void m(int n, boolean b) { switch (n) { default: yield: int x = 0; } } }
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter type: (integral_type) name: (identifier))
+          (formal_parameter type: (boolean_type) name: (identifier)))
+        body: (block
+          (switch_expression
+            condition: (parenthesized_expression (identifier))
+            body: (switch_block
+              (switch_block_statement_group
+                (switch_label)
+                (labeled_statement
+                  (identifier)
+                  (local_variable_declaration
+                    type: (integral_type)
+                    declarator: (variable_declarator name: (identifier) value: (decimal_integer_literal))))))))))))
+
+================================================================================
+K28 REVIEW-41c labeled declaration in switch colon group (ordinary)
+================================================================================
+
+class Probe { void m(int n, boolean b) { switch (n) { default: ordinary: int x = 0; } } }
+
+--------------------------------------------------------------------------------
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter type: (integral_type) name: (identifier))
+          (formal_parameter type: (boolean_type) name: (identifier)))
+        body: (block
+          (switch_expression
+            condition: (parenthesized_expression (identifier))
+            body: (switch_block
+              (switch_block_statement_group
+                (switch_label)
+                (labeled_statement
+                  (identifier)
+                  (local_variable_declaration
+                    type: (integral_type)
+                    declarator: (variable_declarator name: (identifier) value: (decimal_integer_literal))))))))))))
+
+================================================================================
+K28 REVIEW-41c top-level labeled synchronized statement (yield)
+================================================================================
+
+yield: synchronized (new Object()) {}
+
+--------------------------------------------------------------------------------
+
+(program
+  (labeled_statement
+    (identifier)
+    (synchronized_statement
+      (parenthesized_expression
+        (object_creation_expression type: (type_identifier) arguments: (argument_list)))
+      body: (block))))
+
+================================================================================
+K28 REVIEW-41c top-level labeled synchronized statement (ordinary)
+================================================================================
+
+ordinary: synchronized (new Object()) {}
+
+--------------------------------------------------------------------------------
+
+(program
+  (labeled_statement
+    (identifier)
+    (synchronized_statement
+      (parenthesized_expression
+        (object_creation_expression type: (type_identifier) arguments: (argument_list)))
+      body: (block))))
+
+================================================================================
+K28 REVIEW-41c top-level labeled break (yield)
+================================================================================
+
+yield: break;
+
+--------------------------------------------------------------------------------
+
+(program (labeled_statement (identifier) (break_statement)))
+
+================================================================================
+K28 REVIEW-41c top-level labeled break (ordinary)
+================================================================================
+
+ordinary: break;
+
+--------------------------------------------------------------------------------
+
+(program (labeled_statement (identifier) (break_statement)))
+
+================================================================================
+K28 REVIEW-41c top-level labeled do loop (yield)
+================================================================================
+
+yield: do {} while (false);
+
+--------------------------------------------------------------------------------
+
+(program
+  (labeled_statement
+    (identifier)
+    (do_statement body: (block) condition: (parenthesized_expression (false)))))
+
+================================================================================
+K28 REVIEW-41c top-level labeled do loop (ordinary)
+================================================================================
+
+ordinary: do {} while (false);
+
+--------------------------------------------------------------------------------
+
+(program
+  (labeled_statement
+    (identifier)
+    (do_statement body: (block) condition: (parenthesized_expression (false)))))
+
+================================================================================
+K28 REVIEW-41c top-level labeled binary expression (yield)
+================================================================================
+
+yield: 1 + 2;
+
+--------------------------------------------------------------------------------
+
+(program
+  (labeled_statement
+    (identifier)
+    (expression_statement
+      (binary_expression left: (decimal_integer_literal) right: (decimal_integer_literal)))))
+
+================================================================================
+K28 REVIEW-41c top-level labeled binary expression (ordinary)
+================================================================================
+
+ordinary: 1 + 2;
+
+--------------------------------------------------------------------------------
+
+(program
+  (labeled_statement
+    (identifier)
+    (expression_statement
+      (binary_expression left: (decimal_integer_literal) right: (decimal_integer_literal)))))

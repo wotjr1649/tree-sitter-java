@@ -1,8 +1,8 @@
 {
   "meta": {
     "api": "com.sun.source.util.JavacTask.parse()",
-    "case_count": 373,
-    "cases_sha256": "502472fc3ce55573a26b318c55b14c972a344c89cba21b9bef35bdc27e745e1e",
+    "case_count": 389,
+    "cases_sha256": "36346943f1dc50e819af7515403f7f7ed394afeb2604e9ff0c89643ffc75922c",
     "java.runtime.version": "25.0.5+8-LTS",
     "java.vendor": "Eclipse Adoptium",
     "options": ["--release", "25", "-proc:none"],
@@ -384,6 +384,22 @@
     "k28/review-41b-top-assert-yield": ["compiler.err.class.method.or.field.expected"],
     "k28/review-41b-top-assert-ordinary": ["compiler.err.class.method.or.field.expected"],
     "k28/review-41b-top-package-then-label-yield": ["compiler.err.expected4"],
-    "k28/review-41b-top-package-then-label-ordinary": ["compiler.err.expected4"]
+    "k28/review-41b-top-package-then-label-ordinary": ["compiler.err.expected4"],
+    "k28/review-41c-else-variable-yield": ["compiler.err.variable.not.allowed"],
+    "k28/review-41c-else-variable-ordinary": ["compiler.err.variable.not.allowed"],
+    "k28/review-41c-while-variable-yield": ["compiler.err.variable.not.allowed"],
+    "k28/review-41c-while-variable-ordinary": ["compiler.err.variable.not.allowed"],
+    "k28/review-41c-nested-package-yield": ["compiler.err.illegal.start.of.expr", "compiler.err.not.stmt"],
+    "k28/review-41c-nested-package-ordinary": ["compiler.err.illegal.start.of.expr", "compiler.err.not.stmt"],
+    "k28/review-41c-switch-variable-yield": ["compiler.err.variable.not.allowed"],
+    "k28/review-41c-switch-variable-ordinary": ["compiler.err.variable.not.allowed"],
+    "k28/review-41c-top-synchronized-yield": ["compiler.err.class.method.or.field.expected"],
+    "k28/review-41c-top-synchronized-ordinary": ["compiler.err.class.method.or.field.expected"],
+    "k28/review-41c-top-break-yield": ["compiler.err.class.method.or.field.expected"],
+    "k28/review-41c-top-break-ordinary": ["compiler.err.class.method.or.field.expected"],
+    "k28/review-41c-top-do-yield": ["compiler.err.class.method.or.field.expected"],
+    "k28/review-41c-top-do-ordinary": ["compiler.err.class.method.or.field.expected"],
+    "k28/review-41c-top-expression-yield": ["compiler.err.class.method.or.field.expected"],
+    "k28/review-41c-top-expression-ordinary": ["compiler.err.class.method.or.field.expected"]
   }
 }

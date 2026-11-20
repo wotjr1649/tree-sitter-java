@@ -5,15 +5,18 @@
 - Parse the contextual keywords `module`, `open`, `record`, `sealed`, `with` and `yield` as `identifier`
   children of `labeled_statement` (K28, REVIEW-38 and grammar-orchard PR #22). The same names already
   parse as `identifier` targets of `break_statement` and `continue_statement`. Switch blocks can contain
-  labels such as `yield: yield 1;`. The generated node schema is unchanged. Existing labeled-body tolerances
-  also apply to the newly recognized labels. In methods, javac rejects labeled variable and type declarations,
-  module, package and import declarations (such as `open: module m {}`), non-statement expressions, and
-  unqualified `yield` calls. A label at compilation-unit level can also prefix declarations (such as
+  labels such as `yield: yield 1;`. The generated node schema is unchanged. Contextual-keyword labels inherit
+  every tolerance of an ordinary label (`L:`) in the same position. In methods, javac rejects labeled variable
+  and type declarations, module, package and import declarations (such as `open: module m {}`),
+  non-statement expressions, and unqualified `yield` calls. A label at compilation-unit level can also prefix declarations (such as
   `yield: class C {}`), loops and empty statements. REVIEW-41 pins these forms with ordinary-label controls that parsed cleanly at the base.
   REVIEW-41b adds a labeled variable declaration in an `if` branch and a package declaration under nested labels
   in a method. It also pins compilation-unit labels on `return`, `if`, `throw`, blocks, `switch`, `try`, assignments
   and `assert`, including a labeled `return` after a package declaration. All eleven `ordinary:` controls parsed cleanly
-  at the K28 base.
+  at the K28 base. REVIEW-41c pins labeled variable declarations in `else` branches, `while` bodies and
+  `switch` colon groups, a package declaration under an inner `yield:` label, and compilation-unit labels
+  on `synchronized`, `break`, `do` and a binary expression. All eight `ordinary:` controls parsed cleanly
+  at the PR base.
   [JLS 25 §7.3](https://docs.oracle.com/javase/specs/jls/se25/html/jls-7.html#jls-7.3) ·
   [JLS 25 §3.9](https://docs.oracle.com/javase/specs/jls/se25/html/jls-3.html#jls-3.9) ·
   [§14.7](https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html#jls-14.7) ·
