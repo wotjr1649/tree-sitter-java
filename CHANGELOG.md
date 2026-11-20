@@ -7,7 +7,8 @@
 - Parse a parenthesized name followed by `+` or `-` as the left operand of a `binary_expression` (K16,
   Phase 3 cast/additive probes). In `(n) + k * 3`, the multiplication is the right operand of the addition. Primitive
   casts such as `(int) -b`, ordinary reference casts and parenthesized lambda parameters keep their trees.
-  `node-types.json` and the documented tolerances are unchanged.
+  `node-types.json` is unchanged; `docs/tolerances.md` gains a row for the existing `(@A Integer) -k` tolerance.
+  After `yield`, `yield (n) + k * 3;` still reads `yield(n)` as a method call (as at 2.3.0); that is tracked as K27.
   [JLS 25 §§15.15–15.18](https://docs.oracle.com/javase/specs/jls/se25/html/jls-15.html#jls-15.15),
   [grammar-orchard issue #45](https://codeberg.org/grammar-orchard/tree-sitter-java-orchard/issues/45).
 
