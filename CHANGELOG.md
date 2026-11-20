@@ -63,6 +63,16 @@
   `src/node-types.json` is unchanged. The name inherits the tolerance of an ordinary name: the grammar accepts
   modifiers before an enum constant, so `enum E { public sealed }` and `enum E { sealed sealed }` now parse
   without errors like `enum E { public A }` and `enum E { sealed A }` did (javac rejects all four).
+- Parse `open`, `module`, and `with` as names of ordinary constructors and compact record constructors (K30, REVIEW-49).
+  These names are `identifier` nodes in the `name` field of `constructor_declaration` or
+  `compact_constructor_declaration`. The public node schema is unchanged.
+  The names inherit ordinary-name tolerances for mismatched names, compact forms in class bodies, and
+  constructor modifiers such as `static`, in anonymous class bodies and enum constant bodies.
+  The names also work in local classes and records and in non-compact canonical record constructors.
+  The [K30 oracle cases](oracle/data/cases/k30.jsonl) pin those forms.
+  [JLS 25 §§3.8–3.9](https://docs.oracle.com/javase/specs/jls/se25/html/jls-3.html#jls-3.8) ·
+  [§8.8](https://docs.oracle.com/javase/specs/jls/se25/html/jls-8.html#jls-8.8) ·
+  [§8.10.4.2](https://docs.oracle.com/javase/specs/jls/se25/html/jls-8.html#jls-8.10.4.2)
 
 ## 2.4.0
 
