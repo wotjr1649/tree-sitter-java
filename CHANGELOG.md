@@ -2,6 +2,26 @@
 
 ## Unreleased
 
+- Parse the contextual keywords `module`, `open`, `record`, `sealed`, `with` and `yield` as `identifier`
+  children of `labeled_statement` (K28, REVIEW-38 and grammar-orchard PR #22). The same names already
+  parse as `identifier` targets of `break_statement` and `continue_statement`. Switch blocks can contain
+  labels such as `yield: yield 1;`. The generated node schema is unchanged. Contextual-keyword labels inherit
+  every tolerance of an ordinary label (`L:`) in the same position. In methods, javac rejects labeled variable
+  and type declarations, module, package and import declarations (such as `open: module m {}`),
+  non-statement expressions, and unqualified `yield` calls. A label at compilation-unit level can also prefix declarations (such as
+  `yield: class C {}`), loops and empty statements. REVIEW-41 pins these forms with ordinary-label controls that parsed cleanly at the base.
+  REVIEW-41b adds a labeled variable declaration in an `if` branch and a package declaration under nested labels
+  in a method. It also pins compilation-unit labels on `return`, `if`, `throw`, blocks, `switch`, `try`, assignments
+  and `assert`, including a labeled `return` after a package declaration. All eleven `ordinary:` controls parsed cleanly
+  at the K28 base. REVIEW-41c pins labeled variable declarations in `else` branches, `while` bodies and
+  `switch` colon groups, a package declaration under an inner `yield:` label, and compilation-unit labels
+  on `synchronized`, `break`, `do` and a binary expression. All eight `ordinary:` controls parsed cleanly
+  at the PR base.
+  [JLS 25 §7.3](https://docs.oracle.com/javase/specs/jls/se25/html/jls-7.html#jls-7.3) ·
+  [JLS 25 §3.9](https://docs.oracle.com/javase/specs/jls/se25/html/jls-3.html#jls-3.9) ·
+  [§14.7](https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html#jls-14.7) ·
+  [§14.15](https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html#jls-14.15) ·
+  [§14.16](https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html#jls-14.16)
 - Add a CI-checked structural oracle for javac and tree-sitter ranges and node kinds, with Phase 3 probes and an
   exact baseline of known differences. This is a tooling change only.
 - Parse a parenthesized name followed by `+` or `-` as the left operand of a `binary_expression` (K16,
@@ -44,9 +64,9 @@
   an LF (pinned with an LF control). `node-types.json` and the documented tolerances are unchanged.
   [JLS 25 §§3.4 and 3.7](https://docs.oracle.com/javase/specs/jls/se25/html/jls-3.html#jls-3.4),
   [grammar-orchard issue #42](https://codeberg.org/grammar-orchard/tree-sitter-java-orchard/issues/42).
-- Document intersection casts followed by logical or bitwise complements, nested casts, postfix updates, or a
-  switch expression as a known limit (K24). The oracle records the existing errors and misplaced postfix update
-  nodes. The limits also record the direct prefix updates and signed operand that javac accepts outside the JLS grammar.
+- Document intersection casts followed by logical or bitwise complements, nested casts, or a switch
+  expression as a known limit (K24). The oracle records the remaining errors, including a bitwise complement of a
+  postfix update. The limits also record the direct prefix updates and signed operand that javac accepts outside the JLS grammar.
   See [known limits](docs/tolerances.md#known-limits) and
   [JLS 25 §15.16](https://docs.oracle.com/javase/specs/jls/se25/html/jls-15.html#jls-15.16).
 - Document type-pattern bindings named `when` in switch labels and `instanceof` as a known limit (K25).
@@ -79,6 +99,15 @@
   `C.super x;`, `C.super x = null;` and `Names.J.super x = null;` as local declarations, the cast `(C.super) f`,
   `C.super[]::new` and `C.super<String>::bm`.
   [Documented tolerances](docs/tolerances.md)
+- Bind postfix `++` and `--` inside casts and unary expressions (K21, JLS 25 §§15.14–15.16, Phase 3
+  operator and cast probes and grammar-orchard PR #23). A cast such as `(int) n++` now has an
+  `update_expression` as its `value`, including for reference casts. Direct postfix operands `n++` and `n--` after an intersection cast
+  now parse cleanly as the cast's value, resolving those K24 cases. A unary
+  expression such as `-n++` now has an `update_expression` as its `operand`. For `++a++` and `!a++`, which full javac
+  compilation rejects, the trees now read as `++(a++)` and `!(a++)`. Standalone prefix updates and
+  following additive operators keep their precedence. `node-types.json` is unchanged. `docs/tolerances.md` gains a row
+  for the existing tolerances `(Integer) ++i`, `(Integer) --i`, `(n) ++ k;` and `(n) -- k;`, which javac rejects and
+  K21 leaves unchanged.
 - Parse qualified types starting with `open`, `module`, or `with` (K29, K20 follow-up 3 report and
   [K29 oracle cases](oracle/data/cases/k29.jsonl)). A declaration such as `open.A x = null` gets a
   `scoped_type_identifier` in its `type` field. Qualified references such as `open.a.super::m` have a
