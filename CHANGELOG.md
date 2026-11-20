@@ -30,7 +30,9 @@
   operator and cast probes and grammar-orchard PR #23). A cast such as `(int) n++` now has an
   `update_expression` as its `value`, including for reference and intersection casts. A unary
   expression such as `-n++` now has an `update_expression` as its `operand`. Standalone prefix updates and
-  following additive operators keep their precedence. `node-types.json` is unchanged.
+  following additive operators keep their precedence. `node-types.json` is unchanged. `docs/tolerances.md` gains a row
+  for the existing tolerances `(Integer) ++i`, `(Integer) --i`, `(n) ++ k;` and `(n) -- k;`, which javac rejects and
+  K21 leaves unchanged.
 
 ## 2.3.0
 
