@@ -53,9 +53,8 @@ controls, and adjacent invalid inputs), `k25` (`when` as the name of a type patt
 `k26` (guarded empty record patterns in colon labels and arrow rules, with adjacent invalid inputs and unchanged controls), `k27` (parenthesized yield values, qualified calls,
 identifier controls and adjacent invalid inputs), `k28` (contextual statement labels and their break/continue
 targets, switch controls and adjacent invalid inputs), `k29` (qualified type names starting with `open`, `module`, or
-`with`, qualified `super` method references, ordinary name controls, and adjacent invalid inputs), `k30`
-(`open`, `module`, and `with` as ordinary and compact constructor names, ordinary-name tolerances, and adjacent invalid
-inputs), `phase5`
+`with`, qualified `super` method references, ordinary name controls, and adjacent invalid inputs), `k31` (`sealed` as an enum constant name, with
+the other contextual keywords, modifier tolerance controls and adjacent invalid inputs), `phase5`
 (the 14 corpus inputs with withdrawn reserved-word tolerances), and `structural`
 (Phase 3 ambiguity probes and independently written reproducers). Every case names its origin in `provenance`: the
 bundle path with its `SHA256SUMS` hash, the PR, or "written in this task" (the task that added the case; the 56

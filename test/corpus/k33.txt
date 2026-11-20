@@ -1,0 +1,85 @@
+====================
+K33 transitive names a dependency
+====================
+
+module client { requires transitive; }
+
+---
+
+(program
+  (module_declaration
+    name: (identifier)
+    body: (module_body
+      (requires_module_directive
+        module: (identifier)))))
+
+====================
+K33 transitive names a static dependency
+====================
+
+module client { requires static transitive; }
+
+---
+
+(program
+  (module_declaration
+    name: (identifier)
+    body: (module_body
+      (requires_module_directive
+        modifiers: (requires_modifier)
+        module: (identifier)))))
+
+====================
+K33 transitive starts a qualified module name
+====================
+
+module client { requires static transitive transitive.deep.leaf; }
+
+---
+
+(program
+  (module_declaration
+    name: (identifier)
+    body: (module_body
+      (requires_module_directive
+        modifiers: (requires_modifier)
+        modifiers: (requires_modifier)
+        module: (scoped_identifier
+          scope: (scoped_identifier
+            scope: (identifier)
+            name: (identifier))
+          name: (identifier))))))
+
+====================
+K33 module names inherit the repeated static modifier tolerance
+====================
+
+module client { requires static static transitive; }
+
+---
+
+(program
+  (module_declaration
+    name: (identifier)
+    body: (module_body
+      (requires_module_directive
+        modifiers: (requires_modifier)
+        modifiers: (requires_modifier)
+        module: (identifier)))))
+
+====================
+K33 module names inherit the repeated transitive modifier tolerance
+====================
+
+module client { requires transitive transitive transitive; }
+
+---
+
+(program
+  (module_declaration
+    name: (identifier)
+    body: (module_body
+      (requires_module_directive
+        modifiers: (requires_modifier)
+        modifiers: (requires_modifier)
+        module: (identifier)))))
