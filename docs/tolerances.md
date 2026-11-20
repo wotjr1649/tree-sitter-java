@@ -157,9 +157,11 @@ diagnostics, and tree-sitter gives `ERROR` or `MISSING`. The examples stay in th
 ## Known limits
 
 The release counts a grammar defect when the same reproducer passes a full `javac --release 25` compile and is
-derivable from the JLS 25 grammar. The forms below meet both conditions. The full K5 examples declare their annotations with `@Target(ElementType.TYPE_USE)`.
-Tree-sitter can give `ERROR` or `MISSING` or tokenize the source differently, as shown in the Unicode row.
-The two K5 cases are in the [oracle's expected-failure set](../oracle/data/expected-failures.json).
+derivable from the JLS 25 grammar. The full K5 examples declare their annotations with `@Target(ElementType.TYPE_USE)`.
+Tree-sitter can report `ERROR` or `MISSING`, use different token boundaries, or produce a different CST without errors.
+The [oracle's expected-failure set](../oracle/data/expected-failures.json) includes the original K5 examples
+and the two K22 switch labels. The K22 annotation row records a CST difference on input that javac's parser
+accepts and full compilation rejects.
 
 | Java form | javac diagnostic code(s) | Oracle or corpus case | Release | Note |
 | --- | --- | --- | --- | --- |
@@ -167,6 +169,8 @@ The two K5 cases are in the [oracle's expected-failure set](../oracle/data/expec
 | `void m(int @A [] @B @C [] [] @D @E ... r) {}` | None | k5/v05-many-dimensions | 2.1.0 (K5), 2.2.0 | The same limit applies with several dimensions and annotations. |
 | `int x<NUL>y;` | None | raw-nul.txt, “review probe outside/identifier” and “review probe outside/final” | 2.2.0 (K8) | Javac treats the NUL as ignorable within the identifier. The grammar still errs outside a literal in this position. |
 | `int \u0061lpha;`<br>`int f\u003b`<br>`// \u000A int f;`<br>`\u002f\u002f comment`<br>`cl\u0061ss C {}`<br>`class\u0009C {}`<br>`int \uD801\uDC00;` | None | Pinned OpenJDK variants under [Unicode escapes outside literals](#unicode-escapes-outside-literals)<br>Independent separator probe (`\u003b`) | 2.3.0 | Javac translates escapes before tokenization. Outside literals, the grammar can give ERROR or keep a different token boundary. In the encoded line-end example, int f; remains part of one line_comment. |
+| `case (int) KEY -> x -> yes ? x + 1 : x;`<br>`case true ? KEY : (LIMIT) -> x -> yes ? x + 1 : x;` | None | `k22/limit-cast-label`, `k22/limit-conditional-label` | Unreleased (K22) | The cast operand or the conditional alternative absorbs the first arrow as part of a lambda. Tree-sitter reports no errors and uses the second arrow as the rule delimiter. None of the 56 cast- or conditional-label rules in the pinned examples had a lambda body. |
+| `@A(x = n -> n)` | `expression.not.allowable.as.annotation.value` (full compile) | `k22.txt`, “Single named annotation argument with a direct lambda”<br>OpenJDK `T8181464/LambdaInAnnotationsCausesNPETest1.java` and `LambdaInAnnotationsCausesNPETest2.java` | Unreleased (K22) | When the argument list contains exactly one named argument and its value is a lambda immediately after `=`, Tree-sitter reads it as an `assignment_expression` with the lambda on the right. Parenthesizing the entire lambda, supplying another named argument, or using a constant value retains `element_value_pair`. |
 
 ### Unicode escapes outside literals
 

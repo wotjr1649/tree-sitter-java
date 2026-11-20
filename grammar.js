@@ -97,6 +97,9 @@ module.exports = grammar({
     [$.expression, $.statement],
     // Only conflicts in switch expressions
     [$.lambda_expression, $.primary_expression],
+    [$.expression, $._switch_lambda_result],
+    [$.expression, $._nested_lambda],
+    [$.cast_expression],
     [$.inferred_parameters, $.primary_expression],
     [$.argument_list, $.record_pattern_body],
     [$.yield_statement, $._reserved_identifier],
@@ -305,20 +308,20 @@ module.exports = grammar({
         '(',
         field('type', $._type),
         ')',
-        field('value', $.expression),
+        field('value', choice($.expression, $._nested_lambda)),
       )),
       seq(
         '(',
         sep1(field('type', $._type), '&'),
         ')',
-        field('value', choice($.primary_expression, $.lambda_expression)),
+        field('value', choice($.primary_expression, $._nested_lambda)),
       ),
     )),
 
     assignment_expression: $ => prec.right(PREC.ASSIGN, seq(
       field('left', $._assignment_target),
       field('operator', choice('=', '+=', '-=', '*=', '/=', '&=', '|=', '^=', '%=', '<<=', '>>=', '>>>=')),
-      field('right', $.expression),
+      field('right', choice($.expression, $._nested_lambda)),
     )),
 
     _assignment_target: $ => choice(
@@ -392,8 +395,9 @@ module.exports = grammar({
         $.identifier, $.formal_parameters, $.inferred_parameters, $._reserved_identifier,
       )),
       '->',
-      field('body', choice($.expression, $.block)),
+      field('body', choice($._nested_lambda, $.expression, $.block)),
     ),
+    _nested_lambda: $ => prec.dynamic(1, $.lambda_expression),
 
     inferred_parameters: $ => seq(
       '(',
@@ -406,7 +410,7 @@ module.exports = grammar({
       '?',
       field('consequence', $.expression),
       ':',
-      field('alternative', $.expression),
+      field('alternative', choice($.expression, $._nested_lambda)),
     )),
 
     unary_expression: $ => choice(...[
@@ -581,8 +585,17 @@ module.exports = grammar({
     switch_rule: $ => seq(
       $.switch_label,
       '->',
-      choice($.expression_statement, $.throw_statement, $.block),
+      choice(
+        alias($._switch_lambda_result, $.expression_statement),
+        $.expression_statement,
+        $.throw_statement,
+        $.block,
+      ),
     ),
+    _switch_lambda_result: $ => prec.dynamic(2, seq(
+      choice($.lambda_expression, $.ternary_expression, $.cast_expression, $.assignment_expression),
+      ';',
+    )),
 
     switch_label: $ => choice(
       seq('case',

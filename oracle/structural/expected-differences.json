@@ -14,6 +14,9 @@
   "corpus/k11.txt/K11 pattern then constant": [
     {"kind": "CONSTANT_CASE_LABEL", "start": 79, "end": 80, "status": "mismatched_kind", "reason": "error-case"}
   ],
+  "corpus/k22.txt/Single named annotation argument with a direct lambda": [
+    {"kind": "ASSIGNMENT", "start": 49, "end": 59, "status": "mismatched_kind", "reason": "limit"}
+  ],
   "corpus/raw-nul.txt/review probe text-block/crlf-line-continuation": [
     {"kind": "STRING_LITERAL", "start": 30, "end": 51, "status": "mismatched_kind", "reason": "K19"}
   ],
@@ -25,6 +28,17 @@
   ],
   "corpus/raw-nul.txt/review probe text-block/raw-line-continuation": [
     {"kind": "STRING_LITERAL", "start": 30, "end": 49, "status": "mismatched_kind", "reason": "K19"}
+  ],
+  "k22/limit-cast-label": [
+    {"kind": "CONSTANT_CASE_LABEL", "start": 211, "end": 220, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "TYPE_CAST", "start": 211, "end": 220, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "LAMBDA_EXPRESSION", "start": 224, "end": 242, "status": "no_node_at_range", "reason": "limit"}
+  ],
+  "k22/limit-conditional-label": [
+    {"kind": "CONSTANT_CASE_LABEL", "start": 211, "end": 231, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "CONDITIONAL_EXPRESSION", "start": 211, "end": 231, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "PARENTHESIZED", "start": 224, "end": 231, "status": "mismatched_kind", "reason": "limit"},
+    {"kind": "LAMBDA_EXPRESSION", "start": 235, "end": 253, "status": "no_node_at_range", "reason": "limit"}
   ],
   "k8/probe-text-block-crlf-line-continuation": [
     {"kind": "STRING_LITERAL", "start": 29, "end": 50, "status": "mismatched_kind", "reason": "K19"}
@@ -142,20 +156,6 @@
     {"kind": "PATTERN_CASE_LABEL", "start": 183, "end": 194, "status": "no_node_at_range", "reason": "K25"},
     {"kind": "BINDING_PATTERN", "start": 183, "end": 194, "status": "no_node_at_range", "reason": "K25"}
   ],
-  "structural/p8/switch/lambda-arm-constant": [
-    {"kind": "CONSTANT_CASE_LABEL", "start": 187, "end": 190, "status": "mismatched_kind", "reason": "K22"},
-    {"kind": "LAMBDA_EXPRESSION", "start": 194, "end": 208, "status": "no_node_at_range", "reason": "K22"}
-  ],
-  "structural/p8/switch/lambda-arm-guard-name": [
-    {"kind": "LAMBDA_EXPRESSION", "start": 212, "end": 235, "status": "no_node_at_range", "reason": "K22"}
-  ],
-  "structural/p8/switch/lambda-arm-guard-parens": [
-    {"kind": "PARENTHESIZED", "start": 201, "end": 210, "status": "mismatched_kind", "reason": "K22"},
-    {"kind": "LAMBDA_EXPRESSION", "start": 214, "end": 237, "status": "no_node_at_range", "reason": "K22"}
-  ],
-  "structural/p8/switch/lambda-arm-guard-record": [
-    {"kind": "LAMBDA_EXPRESSION", "start": 215, "end": 229, "status": "no_node_at_range", "reason": "K22"}
-  ],
   "structural/p8/switch/unguarded-when-binding": [
     {"kind": "PATTERN_CASE_LABEL", "start": 183, "end": 194, "status": "no_node_at_range", "reason": "K25"},
     {"kind": "BINDING_PATTERN", "start": 183, "end": 194, "status": "no_node_at_range", "reason": "K25"}
@@ -177,13 +177,6 @@
   ],
   "structural/p9/ref-super": [
     {"kind": "MEMBER_REFERENCE", "start": 115, "end": 131, "status": "mismatched_kind", "reason": "K20"}
-  ],
-  "structural/p9/switch-lambda": [
-    {"kind": "CONSTANT_CASE_LABEL", "start": 115, "end": 120, "status": "mismatched_kind", "reason": "K22"},
-    {"kind": "LAMBDA_EXPRESSION", "start": 124, "end": 134, "status": "no_node_at_range", "reason": "K22"}
-  ],
-  "structural/p9/switch-lambda-guard": [
-    {"kind": "LAMBDA_EXPRESSION", "start": 110, "end": 120, "status": "no_node_at_range", "reason": "K22"}
   ],
   "structural/p9/text-continuation": [
     {"kind": "STRING_LITERAL", "start": 24, "end": 55, "status": "mismatched_kind", "reason": "K19"}

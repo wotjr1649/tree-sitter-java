@@ -1686,8 +1686,17 @@
                   "type": "FIELD",
                   "name": "value",
                   "content": {
-                    "type": "SYMBOL",
-                    "name": "expression"
+                    "type": "CHOICE",
+                    "members": [
+                      {
+                        "type": "SYMBOL",
+                        "name": "expression"
+                      },
+                      {
+                        "type": "SYMBOL",
+                        "name": "_nested_lambda"
+                      }
+                    ]
                   }
                 }
               ]
@@ -1749,7 +1758,7 @@
                     },
                     {
                       "type": "SYMBOL",
-                      "name": "lambda_expression"
+                      "name": "_nested_lambda"
                     }
                   ]
                 }
@@ -1834,8 +1843,17 @@
             "type": "FIELD",
             "name": "right",
             "content": {
-              "type": "SYMBOL",
-              "name": "expression"
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "expression"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "_nested_lambda"
+                }
+              ]
             }
           }
         ]
@@ -2734,6 +2752,10 @@
             "members": [
               {
                 "type": "SYMBOL",
+                "name": "_nested_lambda"
+              },
+              {
+                "type": "SYMBOL",
                 "name": "expression"
               },
               {
@@ -2744,6 +2766,14 @@
           }
         }
       ]
+    },
+    "_nested_lambda": {
+      "type": "PREC_DYNAMIC",
+      "value": 1,
+      "content": {
+        "type": "SYMBOL",
+        "name": "lambda_expression"
+      }
     },
     "inferred_parameters": {
       "type": "SEQ",
@@ -2835,8 +2865,17 @@
             "type": "FIELD",
             "name": "alternative",
             "content": {
-              "type": "SYMBOL",
-              "name": "expression"
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "expression"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "_nested_lambda"
+                }
+              ]
             }
           }
         ]
@@ -3907,6 +3946,15 @@
           "type": "CHOICE",
           "members": [
             {
+              "type": "ALIAS",
+              "content": {
+                "type": "SYMBOL",
+                "name": "_switch_lambda_result"
+              },
+              "named": true,
+              "value": "expression_statement"
+            },
+            {
               "type": "SYMBOL",
               "name": "expression_statement"
             },
@@ -3921,6 +3969,40 @@
           ]
         }
       ]
+    },
+    "_switch_lambda_result": {
+      "type": "PREC_DYNAMIC",
+      "value": 2,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "lambda_expression"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "ternary_expression"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "cast_expression"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "assignment_expression"
+              }
+            ]
+          },
+          {
+            "type": "STRING",
+            "value": ";"
+          }
+        ]
+      }
     },
     "switch_label": {
       "type": "CHOICE",
@@ -8606,6 +8688,17 @@
     [
       "lambda_expression",
       "primary_expression"
+    ],
+    [
+      "expression",
+      "_switch_lambda_result"
+    ],
+    [
+      "expression",
+      "_nested_lambda"
+    ],
+    [
+      "cast_expression"
     ],
     [
       "inferred_parameters",

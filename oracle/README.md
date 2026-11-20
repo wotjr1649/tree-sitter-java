@@ -39,8 +39,10 @@ backslashes before literal content and closing delimiters, quote boundaries and 
 identifier tolerances), `k13` (typed and bare underscores in record patterns, other unnamed-variable contexts,
 and adjacent invalid patterns), `k16` (parenthesized names before additive operators, with cast and lambda controls
 and adjacent invalid inputs), `k18` (comment-like text in text blocks, escape and delimiter boundaries, CRLF and raw
-NUL, controls for comments outside literals and in interpolation expressions, and adjacent invalid inputs), `k26`
-(guarded empty record patterns in colon labels and arrow rules, with adjacent invalid inputs and unchanged controls),
+NUL, controls for comments outside literals and in interpolation expressions, and adjacent invalid inputs), `k22`
+(switch rules with lambda results, guarded patterns, colon and arrow controls, adjacent invalid inputs, and
+documented cast and conditional label limits), `k26` (guarded empty record patterns in colon labels and arrow rules,
+with adjacent invalid inputs and unchanged controls),
 and `structural` (Phase 3 ambiguity probes and independently written reproducers). Every case names its origin in
 `provenance`: the bundle path with its `SHA256SUMS` hash, the PR, or "written in this task" (the task that added the
 case; the 56 `structural/p9/` probes say "independently written for Phase 3"). IDs are prefixed with the set name. To
@@ -160,6 +162,8 @@ A later K pull request that fixes a defect **deletes its entries** from `expecte
 cases and their assertions stay as passing cases). K4 deleted the last two entries (`pr233/record-pattern-qualified`, `pr233/switch-final-type-pattern`), so the set was
 empty. K5 adds two cases it does not fix, `k5/v04-after-dimensions` and `k5/v05-many-dimensions`: an annotation right
 after an array dimension and before `...` (`int @A [] @B ... xs`) still starts a dimension and errs.
+K22 records two switch labels that absorb the first arrow without a parse error. Their range assertions require
+the full lambda in the rule body.
 A new input that the grammar fails but javac accepts is never added silently: it is a new defect, so it needs its own
 fix, or a recorded entry with its javac verdict and evidence.
 
@@ -199,7 +203,7 @@ heap at 1 GiB and javac's heap at 512 MiB, and stops if a worker exceeds 2 GiB R
 
 `--check` requires the exact multiset in [expected-differences.json](structural/expected-differences.json), using case
 ID, javac kind, half-open UTF-8 range and status. It reports every added and missing difference and exits 1 on any
-change (2 on a tool or input fault). The reasons identify a K fix, a known projection limit (`limit`), or a corpus
+change (2 on a tool or input fault). The reasons identify a K fix, a documented limit (`limit`), or a corpus
 recovery case (`error-case`). When a K fix lands, delete the resolved entries for that K and rerun
 `--check`. Delete its entries in `data/expected-failures.json` as well if the fix removes an ERROR or MISSING from
 an oracle probe. Per-case comparison details are in the `*.results.jsonl` files. The summary lists every `compare` or

@@ -27,6 +27,16 @@
   javac rejects and that parsed at 2.3.0 only because a comment swallowed a delimiter now produce errors, as in
   `"""<LF>/* x """ */ """` and `"""<LF>// a """ """<LF>"""`.
 
+- Prefer the full lambda in the `switch_rule` body when the rule and lambda arrows are ambiguous (K22).
+  In `case KEY -> arg -> arg - 2`, the `switch_label` holds `KEY` and the body holds the full
+  `lambda_expression`. This also covers guarded patterns and switch arms with lambda-valued conditional
+  expressions. A cast or conditional case label can still absorb the first arrow when the lambda body
+  is an unparenthesized conditional expression. A sole named annotation argument of the form `@A(x = n -> n)`
+  now forms an `assignment_expression` where the previous CST had an `element_value_pair`. Javac
+  accepts its syntax and rejects it during full compilation. The public node schema is unchanged.
+  [Known limits](docs/tolerances.md#known-limits) · [JLS 25 §14.11.1](https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html#jls-14.11.1) ·
+  [grammar-orchard PR #21](https://codeberg.org/grammar-orchard/tree-sitter-java-orchard/pulls/21).
+
 ## 2.3.0
 
 Phase 2 of the final-release plan: OpenJDK 25.0.5+8 as a second pinned example set, the Java 25 syntax fixes that

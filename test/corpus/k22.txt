@@ -1,0 +1,1147 @@
+============================
+Switch arrow before lambda
+============================
+
+class Case {
+  static final int KEY = 7;
+  java.util.function.IntUnaryOperator f(int n) {
+    return switch (n) {
+      case KEY -> arg -> arg - 2;
+      default -> x -> x;
+    };
+  }
+}
+
+---
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (field_declaration
+        (modifiers)
+        type: (integral_type)
+        declarator: (variable_declarator
+          name: (identifier)
+          value: (decimal_integer_literal)))
+      (method_declaration
+        type: (scoped_type_identifier
+          (scoped_type_identifier
+            (scoped_type_identifier
+              (type_identifier)
+              (type_identifier))
+            (type_identifier))
+          (type_identifier))
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (integral_type)
+            name: (identifier)))
+        body: (block
+          (return_statement
+            (switch_expression
+              condition: (parenthesized_expression
+                (identifier))
+              body: (switch_block
+                (switch_rule
+                  (switch_label
+                    (identifier))
+                  (expression_statement
+                    (lambda_expression
+                      parameters: (identifier)
+                      body: (binary_expression
+                        left: (identifier)
+                        right: (decimal_integer_literal)))))
+                (switch_rule
+                  (switch_label)
+                  (expression_statement
+                    (lambda_expression
+                      parameters: (identifier)
+                      body: (identifier))))))))))))
+
+============================
+Switch arrow after a name guard
+============================
+
+class Case {
+  java.util.function.IntUnaryOperator f(Object o, boolean enabled) {
+    return switch (o) {
+      case String s when enabled -> x -> x + s.length();
+      default -> x -> x;
+    };
+  }
+}
+
+---
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (scoped_type_identifier
+          (scoped_type_identifier
+            (scoped_type_identifier
+              (type_identifier)
+              (type_identifier))
+            (type_identifier))
+          (type_identifier))
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (type_identifier)
+            name: (identifier))
+          (formal_parameter
+            type: (boolean_type)
+            name: (identifier)))
+        body: (block
+          (return_statement
+            (switch_expression
+              condition: (parenthesized_expression
+                (identifier))
+              body: (switch_block
+                (switch_rule
+                  (switch_label
+                    (pattern
+                      (type_pattern
+                        (type_identifier)
+                        (identifier)))
+                    (guard
+                      (identifier)))
+                  (expression_statement
+                    (lambda_expression
+                      parameters: (identifier)
+                      body: (binary_expression
+                        left: (identifier)
+                        right: (method_invocation
+                          object: (identifier)
+                          name: (identifier)
+                          arguments: (argument_list))))))
+                (switch_rule
+                  (switch_label)
+                  (expression_statement
+                    (lambda_expression
+                      parameters: (identifier)
+                      body: (identifier))))))))))))
+
+============================
+Switch arrow after a parenthesized guard
+============================
+
+class Case {
+  java.util.function.IntUnaryOperator f(Object o, boolean enabled) {
+    return switch (o) {
+      case String s when (enabled) -> x -> x + s.length();
+      default -> x -> x;
+    };
+  }
+}
+
+---
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (scoped_type_identifier
+          (scoped_type_identifier
+            (scoped_type_identifier
+              (type_identifier)
+              (type_identifier))
+            (type_identifier))
+          (type_identifier))
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (type_identifier)
+            name: (identifier))
+          (formal_parameter
+            type: (boolean_type)
+            name: (identifier)))
+        body: (block
+          (return_statement
+            (switch_expression
+              condition: (parenthesized_expression
+                (identifier))
+              body: (switch_block
+                (switch_rule
+                  (switch_label
+                    (pattern
+                      (type_pattern
+                        (type_identifier)
+                        (identifier)))
+                    (guard
+                      (parenthesized_expression
+                        (identifier))))
+                  (expression_statement
+                    (lambda_expression
+                      parameters: (identifier)
+                      body: (binary_expression
+                        left: (identifier)
+                        right: (method_invocation
+                          object: (identifier)
+                          name: (identifier)
+                          arguments: (argument_list))))))
+                (switch_rule
+                  (switch_label)
+                  (expression_statement
+                    (lambda_expression
+                      parameters: (identifier)
+                      body: (identifier))))))))))))
+
+============================
+Switch arrow after a guarded record pattern
+============================
+
+class Case {
+  record Gate(boolean on) {}
+  java.util.function.IntUnaryOperator f(Object o) {
+    return switch (o) {
+      case Gate(boolean on) when on -> x -> x * 5;
+      default -> x -> x;
+    };
+  }
+}
+
+---
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (record_declaration
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (boolean_type)
+            name: (identifier)))
+        body: (class_body))
+      (method_declaration
+        type: (scoped_type_identifier
+          (scoped_type_identifier
+            (scoped_type_identifier
+              (type_identifier)
+              (type_identifier))
+            (type_identifier))
+          (type_identifier))
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (type_identifier)
+            name: (identifier)))
+        body: (block
+          (return_statement
+            (switch_expression
+              condition: (parenthesized_expression
+                (identifier))
+              body: (switch_block
+                (switch_rule
+                  (switch_label
+                    (pattern
+                      (record_pattern
+                        (identifier)
+                        (record_pattern_body
+                          (record_pattern_component
+                            (boolean_type)
+                            (identifier)))))
+                    (guard
+                      (identifier)))
+                  (expression_statement
+                    (lambda_expression
+                      parameters: (identifier)
+                      body: (binary_expression
+                        left: (identifier)
+                        right: (decimal_integer_literal)))))
+                (switch_rule
+                  (switch_label)
+                  (expression_statement
+                    (lambda_expression
+                      parameters: (identifier)
+                      body: (identifier))))))))))))
+
+============================
+Switch arrow after a binary guard
+============================
+
+class Case {
+  java.util.function.IntUnaryOperator f(Object o, boolean a, boolean b) {
+    return switch (o) {
+      case String s when a && b -> x -> x + s.length();
+      default -> x -> x;
+    };
+  }
+}
+
+---
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (scoped_type_identifier
+          (scoped_type_identifier
+            (scoped_type_identifier
+              (type_identifier)
+              (type_identifier))
+            (type_identifier))
+          (type_identifier))
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (type_identifier)
+            name: (identifier))
+          (formal_parameter
+            type: (boolean_type)
+            name: (identifier))
+          (formal_parameter
+            type: (boolean_type)
+            name: (identifier)))
+        body: (block
+          (return_statement
+            (switch_expression
+              condition: (parenthesized_expression
+                (identifier))
+              body: (switch_block
+                (switch_rule
+                  (switch_label
+                    (pattern
+                      (type_pattern
+                        (type_identifier)
+                        (identifier)))
+                    (guard
+                      (binary_expression
+                        left: (identifier)
+                        right: (identifier))))
+                  (expression_statement
+                    (lambda_expression
+                      parameters: (identifier)
+                      body: (binary_expression
+                        left: (identifier)
+                        right: (method_invocation
+                          object: (identifier)
+                          name: (identifier)
+                          arguments: (argument_list))))))
+                (switch_rule
+                  (switch_label)
+                  (expression_statement
+                    (lambda_expression
+                      parameters: (identifier)
+                      body: (identifier))))))))))))
+
+============================
+Lambda argument in a guard
+============================
+
+class Case {
+  boolean check(java.util.function.IntPredicate p) { return p.test(1); }
+  java.util.function.IntUnaryOperator f(Object o, boolean available) {
+    return switch (o) {
+      case String s when check(x -> x > 0) && available -> x -> x + s.length();
+      default -> x -> x;
+    };
+  }
+  void statement(Object o) {
+    switch (o) {
+      case String s when check(x -> x > 0) -> System.out.println(s);
+      default -> {}
+    }
+  }
+}
+
+---
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (boolean_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (scoped_type_identifier
+              (scoped_type_identifier
+                (scoped_type_identifier
+                  (type_identifier)
+                  (type_identifier))
+                (type_identifier))
+              (type_identifier))
+            name: (identifier)))
+        body: (block
+          (return_statement
+            (method_invocation
+              object: (identifier)
+              name: (identifier)
+              arguments: (argument_list
+                (decimal_integer_literal))))))
+      (method_declaration
+        type: (scoped_type_identifier
+          (scoped_type_identifier
+            (scoped_type_identifier
+              (type_identifier)
+              (type_identifier))
+            (type_identifier))
+          (type_identifier))
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (type_identifier)
+            name: (identifier))
+          (formal_parameter
+            type: (boolean_type)
+            name: (identifier)))
+        body: (block
+          (return_statement
+            (switch_expression
+              condition: (parenthesized_expression
+                (identifier))
+              body: (switch_block
+                (switch_rule
+                  (switch_label
+                    (pattern
+                      (type_pattern
+                        (type_identifier)
+                        (identifier)))
+                    (guard
+                      (binary_expression
+                        left: (method_invocation
+                          name: (identifier)
+                          arguments: (argument_list
+                            (lambda_expression
+                              parameters: (identifier)
+                              body: (binary_expression
+                                left: (identifier)
+                                right: (decimal_integer_literal)))))
+                        right: (identifier))))
+                  (expression_statement
+                    (lambda_expression
+                      parameters: (identifier)
+                      body: (binary_expression
+                        left: (identifier)
+                        right: (method_invocation
+                          object: (identifier)
+                          name: (identifier)
+                          arguments: (argument_list))))))
+                (switch_rule
+                  (switch_label)
+                  (expression_statement
+                    (lambda_expression
+                      parameters: (identifier)
+                      body: (identifier)))))))))
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (type_identifier)
+            name: (identifier)))
+        body: (block
+          (switch_expression
+            condition: (parenthesized_expression
+              (identifier))
+            body: (switch_block
+              (switch_rule
+                (switch_label
+                  (pattern
+                    (type_pattern
+                      (type_identifier)
+                      (identifier)))
+                  (guard
+                    (method_invocation
+                      name: (identifier)
+                      arguments: (argument_list
+                        (lambda_expression
+                          parameters: (identifier)
+                          body: (binary_expression
+                            left: (identifier)
+                            right: (decimal_integer_literal)))))))
+                (expression_statement
+                  (method_invocation
+                    object: (field_access
+                      object: (identifier)
+                      field: (identifier))
+                    name: (identifier)
+                    arguments: (argument_list
+                      (identifier)))))
+              (switch_rule
+                (switch_label)
+                (block)))))))))
+
+============================
+Switch arrow after a conditional constant
+============================
+
+class Case {
+  static final int LEFT = 1, RIGHT = 2;
+  java.util.function.IntUnaryOperator f(int n) {
+    return switch (n) {
+      case (3 * LEFT), false ? LEFT : RIGHT -> x -> x + 3;
+      default -> x -> 0;
+    };
+  }
+}
+
+---
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (field_declaration
+        (modifiers)
+        type: (integral_type)
+        declarator: (variable_declarator
+          name: (identifier)
+          value: (decimal_integer_literal))
+        declarator: (variable_declarator
+          name: (identifier)
+          value: (decimal_integer_literal)))
+      (method_declaration
+        type: (scoped_type_identifier
+          (scoped_type_identifier
+            (scoped_type_identifier
+              (type_identifier)
+              (type_identifier))
+            (type_identifier))
+          (type_identifier))
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (integral_type)
+            name: (identifier)))
+        body: (block
+          (return_statement
+            (switch_expression
+              condition: (parenthesized_expression
+                (identifier))
+              body: (switch_block
+                (switch_rule
+                  (switch_label
+                    (parenthesized_expression
+                      (binary_expression
+                        left: (decimal_integer_literal)
+                        right: (identifier)))
+                    (ternary_expression
+                      condition: (false)
+                      consequence: (identifier)
+                      alternative: (identifier)))
+                  (expression_statement
+                    (lambda_expression
+                      parameters: (identifier)
+                      body: (binary_expression
+                        left: (identifier)
+                        right: (decimal_integer_literal)))))
+                (switch_rule
+                  (switch_label)
+                  (expression_statement
+                    (lambda_expression
+                      parameters: (identifier)
+                      body: (decimal_integer_literal))))))))))))
+
+============================
+Switch arrow after a conditional guard
+============================
+
+class Case {
+  java.util.function.IntUnaryOperator f(Object o, boolean cond, boolean a, boolean b) {
+    return switch (o) {
+      case String s when cond ? a : (b) -> (x) -> x + s.length();
+      default -> x -> x;
+    };
+  }
+}
+
+---
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (scoped_type_identifier
+          (scoped_type_identifier
+            (scoped_type_identifier
+              (type_identifier)
+              (type_identifier))
+            (type_identifier))
+          (type_identifier))
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (type_identifier)
+            name: (identifier))
+          (formal_parameter
+            type: (boolean_type)
+            name: (identifier))
+          (formal_parameter
+            type: (boolean_type)
+            name: (identifier))
+          (formal_parameter
+            type: (boolean_type)
+            name: (identifier)))
+        body: (block
+          (return_statement
+            (switch_expression
+              condition: (parenthesized_expression
+                (identifier))
+              body: (switch_block
+                (switch_rule
+                  (switch_label
+                    (pattern
+                      (type_pattern
+                        (type_identifier)
+                        (identifier)))
+                    (guard
+                      (ternary_expression
+                        condition: (identifier)
+                        consequence: (identifier)
+                        alternative: (parenthesized_expression
+                          (identifier)))))
+                  (expression_statement
+                    (lambda_expression
+                      parameters: (inferred_parameters
+                        (identifier))
+                      body: (binary_expression
+                        left: (identifier)
+                        right: (method_invocation
+                          object: (identifier)
+                          name: (identifier)
+                          arguments: (argument_list))))))
+                (switch_rule
+                  (switch_label)
+                  (expression_statement
+                    (lambda_expression
+                      parameters: (identifier)
+                      body: (identifier))))))))))))
+
+============================
+Qualified and enum labels with lambda results
+============================
+
+class Case {
+  static final int KEY = 7;
+  enum E { A, B }
+  java.util.function.IntSupplier f(int n) {
+    return switch (n) {
+      case Case.KEY -> () -> 1;
+      default -> () -> 0;
+    };
+  }
+  java.util.function.IntUnaryOperator g(E e) {
+    return switch (e) {
+      case A -> (x) -> x;
+      case E.B -> x -> x;
+    };
+  }
+}
+
+---
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (field_declaration
+        (modifiers)
+        type: (integral_type)
+        declarator: (variable_declarator
+          name: (identifier)
+          value: (decimal_integer_literal)))
+      (enum_declaration
+        name: (identifier)
+        body: (enum_body
+          (enum_constant
+            name: (identifier))
+          (enum_constant
+            name: (identifier))))
+      (method_declaration
+        type: (scoped_type_identifier
+          (scoped_type_identifier
+            (scoped_type_identifier
+              (type_identifier)
+              (type_identifier))
+            (type_identifier))
+          (type_identifier))
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (integral_type)
+            name: (identifier)))
+        body: (block
+          (return_statement
+            (switch_expression
+              condition: (parenthesized_expression
+                (identifier))
+              body: (switch_block
+                (switch_rule
+                  (switch_label
+                    (field_access
+                      object: (identifier)
+                      field: (identifier)))
+                  (expression_statement
+                    (lambda_expression
+                      parameters: (formal_parameters)
+                      body: (decimal_integer_literal))))
+                (switch_rule
+                  (switch_label)
+                  (expression_statement
+                    (lambda_expression
+                      parameters: (formal_parameters)
+                      body: (decimal_integer_literal)))))))))
+      (method_declaration
+        type: (scoped_type_identifier
+          (scoped_type_identifier
+            (scoped_type_identifier
+              (type_identifier)
+              (type_identifier))
+            (type_identifier))
+          (type_identifier))
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (type_identifier)
+            name: (identifier)))
+        body: (block
+          (return_statement
+            (switch_expression
+              condition: (parenthesized_expression
+                (identifier))
+              body: (switch_block
+                (switch_rule
+                  (switch_label
+                    (identifier))
+                  (expression_statement
+                    (lambda_expression
+                      parameters: (inferred_parameters
+                        (identifier))
+                      body: (identifier))))
+                (switch_rule
+                  (switch_label
+                    (field_access
+                      object: (identifier)
+                      field: (identifier)))
+                  (expression_statement
+                    (lambda_expression
+                      parameters: (identifier)
+                      body: (identifier))))))))))))
+
+============================
+Switch arrow before nested lambdas
+============================
+
+class Case {
+  static final int KEY = 7;
+  interface Curry { java.util.function.IntUnaryOperator apply(int x); }
+  Curry f(int n) {
+    return switch (n) {
+      case KEY -> x -> y -> x + y;
+      default -> x -> y -> y;
+    };
+  }
+}
+
+---
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (field_declaration
+        (modifiers)
+        type: (integral_type)
+        declarator: (variable_declarator
+          name: (identifier)
+          value: (decimal_integer_literal)))
+      (interface_declaration
+        name: (identifier)
+        body: (interface_body
+          (method_declaration
+            type: (scoped_type_identifier
+              (scoped_type_identifier
+                (scoped_type_identifier
+                  (type_identifier)
+                  (type_identifier))
+                (type_identifier))
+              (type_identifier))
+            name: (identifier)
+            parameters: (formal_parameters
+              (formal_parameter
+                type: (integral_type)
+                name: (identifier))))))
+      (method_declaration
+        type: (type_identifier)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (integral_type)
+            name: (identifier)))
+        body: (block
+          (return_statement
+            (switch_expression
+              condition: (parenthesized_expression
+                (identifier))
+              body: (switch_block
+                (switch_rule
+                  (switch_label
+                    (identifier))
+                  (expression_statement
+                    (lambda_expression
+                      parameters: (identifier)
+                      body: (lambda_expression
+                        parameters: (identifier)
+                        body: (binary_expression
+                          left: (identifier)
+                          right: (identifier))))))
+                (switch_rule
+                  (switch_label)
+                  (expression_statement
+                    (lambda_expression
+                      parameters: (identifier)
+                      body: (lambda_expression
+                        parameters: (identifier)
+                        body: (identifier)))))))))))))
+
+============================
+Multiple guarded patterns with a lambda result
+============================
+
+class Case {
+  record Gate() {}
+  java.util.function.IntUnaryOperator f(Object o, boolean enabled) {
+    return switch (o) {
+      case String _, Gate() when enabled -> x -> x + 1;
+      default -> x -> x;
+    };
+  }
+}
+
+---
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (record_declaration
+        name: (identifier)
+        parameters: (formal_parameters)
+        body: (class_body))
+      (method_declaration
+        type: (scoped_type_identifier
+          (scoped_type_identifier
+            (scoped_type_identifier
+              (type_identifier)
+              (type_identifier))
+            (type_identifier))
+          (type_identifier))
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (type_identifier)
+            name: (identifier))
+          (formal_parameter
+            type: (boolean_type)
+            name: (identifier)))
+        body: (block
+          (return_statement
+            (switch_expression
+              condition: (parenthesized_expression
+                (identifier))
+              body: (switch_block
+                (switch_rule
+                  (switch_label
+                    (pattern
+                      (type_pattern
+                        (type_identifier)
+                        (identifier)))
+                    (pattern
+                      (record_pattern
+                        (identifier)
+                        (record_pattern_body)))
+                    (guard
+                      (identifier)))
+                  (expression_statement
+                    (lambda_expression
+                      parameters: (identifier)
+                      body: (binary_expression
+                        left: (identifier)
+                        right: (decimal_integer_literal)))))
+                (switch_rule
+                  (switch_label)
+                  (expression_statement
+                    (lambda_expression
+                      parameters: (identifier)
+                      body: (identifier))))))))))))
+
+============================
+Colon switch labels with guarded patterns
+============================
+
+class Case {
+  record Gate() {}
+  boolean check(java.util.function.IntPredicate p) { return p.test(1); }
+  int f(Object o) {
+    return switch (o) {
+      case Gate() when check(x -> x > 0): yield 1;
+      default: yield 0;
+    };
+  }
+  void statement(Object o, boolean enabled) {
+    switch (o) {
+      case String s when (enabled): System.out.println(s); break;
+      default: break;
+    }
+  }
+}
+
+---
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (record_declaration
+        name: (identifier)
+        parameters: (formal_parameters)
+        body: (class_body))
+      (method_declaration
+        type: (boolean_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (scoped_type_identifier
+              (scoped_type_identifier
+                (scoped_type_identifier
+                  (type_identifier)
+                  (type_identifier))
+                (type_identifier))
+              (type_identifier))
+            name: (identifier)))
+        body: (block
+          (return_statement
+            (method_invocation
+              object: (identifier)
+              name: (identifier)
+              arguments: (argument_list
+                (decimal_integer_literal))))))
+      (method_declaration
+        type: (integral_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (type_identifier)
+            name: (identifier)))
+        body: (block
+          (return_statement
+            (switch_expression
+              condition: (parenthesized_expression
+                (identifier))
+              body: (switch_block
+                (switch_block_statement_group
+                  (switch_label
+                    (pattern
+                      (record_pattern
+                        (identifier)
+                        (record_pattern_body)))
+                    (guard
+                      (method_invocation
+                        name: (identifier)
+                        arguments: (argument_list
+                          (lambda_expression
+                            parameters: (identifier)
+                            body: (binary_expression
+                              left: (identifier)
+                              right: (decimal_integer_literal)))))))
+                  (yield_statement
+                    (decimal_integer_literal)))
+                (switch_block_statement_group
+                  (switch_label)
+                  (yield_statement
+                    (decimal_integer_literal))))))))
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (type_identifier)
+            name: (identifier))
+          (formal_parameter
+            type: (boolean_type)
+            name: (identifier)))
+        body: (block
+          (switch_expression
+            condition: (parenthesized_expression
+              (identifier))
+            body: (switch_block
+              (switch_block_statement_group
+                (switch_label
+                  (pattern
+                    (type_pattern
+                      (type_identifier)
+                      (identifier)))
+                  (guard
+                    (parenthesized_expression
+                      (identifier))))
+                (expression_statement
+                  (method_invocation
+                    object: (field_access
+                      object: (identifier)
+                      field: (identifier))
+                    name: (identifier)
+                    arguments: (argument_list
+                      (identifier))))
+                (break_statement))
+              (switch_block_statement_group
+                (switch_label)
+                (break_statement)))))))))
+
+============================
+Lambda results in conditional switch arms
+============================
+
+class Case {
+  enum Mode { UP, DOWN, KEEP }
+  java.util.function.IntUnaryOperator f(Mode mode, boolean positive) {
+    return switch (mode) {
+      case UP, DOWN -> x -> x - 1;
+      case KEEP -> positive ? x -> x + 1 : x -> x;
+    };
+  }
+}
+
+---
+
+(program
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (enum_declaration
+        name: (identifier)
+        body: (enum_body
+          (enum_constant
+            name: (identifier))
+          (enum_constant
+            name: (identifier))
+          (enum_constant
+            name: (identifier))))
+      (method_declaration
+        type: (scoped_type_identifier
+          (scoped_type_identifier
+            (scoped_type_identifier
+              (type_identifier)
+              (type_identifier))
+            (type_identifier))
+          (type_identifier))
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (type_identifier)
+            name: (identifier))
+          (formal_parameter
+            type: (boolean_type)
+            name: (identifier)))
+        body: (block
+          (return_statement
+            (switch_expression
+              condition: (parenthesized_expression
+                (identifier))
+              body: (switch_block
+                (switch_rule
+                  (switch_label
+                    (identifier)
+                    (identifier))
+                  (expression_statement
+                    (lambda_expression
+                      parameters: (identifier)
+                      body: (binary_expression
+                        left: (identifier)
+                        right: (decimal_integer_literal)))))
+                (switch_rule
+                  (switch_label
+                    (identifier))
+                  (expression_statement
+                    (ternary_expression
+                      condition: (identifier)
+                      consequence: (lambda_expression
+                        parameters: (identifier)
+                        body: (binary_expression
+                          left: (identifier)
+                          right: (decimal_integer_literal)))
+                      alternative: (lambda_expression
+                        parameters: (identifier)
+                        body: (identifier)))))))))))))
+
+=======================================================
+Single named annotation argument with a direct lambda
+=======================================================
+
+@interface A { int x(); int z() default 0; }
+@A(x = n -> n) class Direct {}
+@A(x = (n -> n)) class Parenthesized {}
+@A(x = n -> n, z = 1) class Multiple {}
+@A(x = 1) class Constant {}
+
+---
+
+(program
+  (annotation_type_declaration
+    name: (identifier)
+    body: (annotation_type_body
+      (annotation_type_element_declaration
+        type: (integral_type)
+        name: (identifier))
+      (annotation_type_element_declaration
+        type: (integral_type)
+        name: (identifier)
+        value: (decimal_integer_literal))))
+  (class_declaration
+    (modifiers
+      (annotation
+        name: (identifier)
+        arguments: (annotation_argument_list
+          (assignment_expression
+            left: (identifier)
+            right: (lambda_expression
+              parameters: (identifier)
+              body: (identifier))))))
+    name: (identifier)
+    body: (class_body))
+  (class_declaration
+    (modifiers
+      (annotation
+        name: (identifier)
+        arguments: (annotation_argument_list
+          (element_value_pair
+            key: (identifier)
+            value: (parenthesized_expression
+              (lambda_expression
+                parameters: (identifier)
+                body: (identifier)))))))
+    name: (identifier)
+    body: (class_body))
+  (class_declaration
+    (modifiers
+      (annotation
+        name: (identifier)
+        arguments: (annotation_argument_list
+          (element_value_pair
+            key: (identifier)
+            value: (lambda_expression
+              parameters: (identifier)
+              body: (identifier)))
+          (element_value_pair
+            key: (identifier)
+            value: (decimal_integer_literal)))))
+    name: (identifier)
+    body: (class_body))
+  (class_declaration
+    (modifiers
+      (annotation
+        name: (identifier)
+        arguments: (annotation_argument_list
+          (element_value_pair
+            key: (identifier)
+            value: (decimal_integer_literal)))))
+    name: (identifier)
+    body: (class_body)))
