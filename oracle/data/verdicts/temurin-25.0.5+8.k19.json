@@ -1,0 +1,30 @@
+{
+  "meta": {
+    "api": "com.sun.source.util.JavacTask.parse()",
+    "case_count": 14,
+    "cases_sha256": "7a491461be0452316438f70cdd5b85a38c974a5022d5610565bd4c935e816cff",
+    "java.runtime.version": "25.0.5+8-LTS",
+    "java.vendor": "Eclipse Adoptium",
+    "options": ["--release", "25", "-proc:none"],
+    "preview": false,
+    "release": "25",
+    "runner_sha256": "c45e32e314b98ccb46481c4db18aa25173ca9b2fe46e45888f0a743ceb6c70ee",
+    "source_encoding": "UTF-8"
+  },
+  "verdicts": {
+    "k19/lf": [],
+    "k19/crlf": [],
+    "k19/cr": [],
+    "k19/nul-crlf": [],
+    "k19/before-closing": [],
+    "k19/next-to-escapes": [],
+    "k19/double-backslash": [],
+    "k19/triple-backslash": [],
+    "k19/ordinary-lf": ["compiler.err.illegal.esc.char", "compiler.err.unclosed.str.lit", "compiler.err.unclosed.str.lit", "compiler.err.premature.eof"],
+    "k19/ordinary-crlf": ["compiler.err.illegal.esc.char", "compiler.err.unclosed.str.lit", "compiler.err.unclosed.str.lit", "compiler.err.premature.eof"],
+    "k19/ordinary-cr": ["compiler.err.illegal.esc.char", "compiler.err.unclosed.str.lit", "compiler.err.unclosed.str.lit", "compiler.err.premature.eof"],
+    "k19/ordinary-escapes": [],
+    "k19/space-after-backslash": ["compiler.err.illegal.esc.char"],
+    "k19/unterminated": ["compiler.err.unclosed.text.block", "compiler.err.premature.eof"]
+  }
+}
