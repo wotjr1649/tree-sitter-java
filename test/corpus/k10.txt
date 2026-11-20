@@ -1,0 +1,242 @@
+=====================================
+K10 repeated u in string escapes
+=====================================
+
+"\uuu0041";
+
+---
+
+(program
+  (expression_statement
+    (string_literal
+      (escape_sequence))))
+
+=====================================
+K10 Unicode backslash before quotes
+=====================================
+
+"\u005c"";
+'\uuu005C'';
+
+---
+
+(program
+  (expression_statement
+    (string_literal
+      (escape_sequence)))
+  (expression_statement
+    (character_literal)))
+
+=====================================
+K10 Unicode escapes in a text block
+=====================================
+
+"""
+\uuu0041
+\u005c"""
+""";
+
+---
+
+(program
+  (expression_statement
+    (string_literal
+      (multiline_string_fragment)
+      (escape_sequence)
+      (multiline_string_fragment)
+      (escape_sequence)
+      (multiline_string_fragment)
+      (multiline_string_fragment))))
+
+=====================================
+K10 existing literal controls
+=====================================
+
+"\u0041";
+"\"";
+'\uuu0041';
+'\'';
+"""
+\u0041
+""";
+
+---
+
+(program
+  (expression_statement
+    (string_literal
+      (escape_sequence)))
+  (expression_statement
+    (string_literal
+      (escape_sequence)))
+  (expression_statement
+    (character_literal))
+  (expression_statement
+    (character_literal))
+  (expression_statement
+    (string_literal
+      (multiline_string_fragment)
+      (escape_sequence)
+      (multiline_string_fragment))))
+
+=====================================
+K10 paired encoded backslashes
+=====================================
+
+"\u005c\uuu005C";
+'\u005c\';
+"""
+\u005c\u005c""";
+
+---
+
+(program
+  (expression_statement
+    (string_literal
+      (escape_sequence)))
+  (expression_statement
+    (character_literal))
+  (expression_statement
+    (string_literal
+      (multiline_string_fragment)
+      (escape_sequence))))
+
+=====================================
+K10 inherited ordinary string tolerances
+=====================================
+
+"\uuu0022";
+"\uuu000A";
+"\uuu005Cu0041";
+"\uuu005Cq";
+"\uuu0041
+";
+STR."\uuu0041\{1}";
+
+---
+
+(program
+  (expression_statement
+    (string_literal
+      (escape_sequence)))
+  (expression_statement
+    (string_literal
+      (escape_sequence)))
+  (expression_statement
+    (string_literal
+      (escape_sequence)
+      (string_fragment)))
+  (expression_statement
+    (string_literal
+      (escape_sequence)
+      (string_fragment)))
+  (expression_statement
+    (string_literal
+      (escape_sequence)
+      (string_fragment)))
+  (expression_statement
+    (template_expression
+      (identifier)
+      (string_literal
+        (escape_sequence)
+        (string_interpolation
+          (decimal_integer_literal))))))
+
+=====================================
+K10 malformed ordinary Unicode escape
+:error
+=====================================
+
+class Case { String s = "\uuu041"; }
+
+---
+
+=====================================
+K10 encoded backslash before the only double quote
+:error
+=====================================
+
+class Case { String s = "\u005c"; }
+
+---
+
+=====================================
+K10 paired encoded backslashes before an extra double quote
+:error
+=====================================
+
+class Case { String s = "\u005c\u005c""; }
+
+---
+
+=====================================
+K10 paired encoded backslashes before an extra single quote
+:error
+=====================================
+
+class Case { char s = '\u005c\u005c''; }
+
+---
+
+=====================================
+K10 encoded backslash before the only text block delimiter
+:error
+=====================================
+
+class Case { String s = """
+\u005c"""; }
+
+---
+
+=====================================
+K10 Unicode and raw backslashes
+=====================================
+
+"\u005c\";
+"""
+\uuu005C\""";
+"""
+\u005c\
+""";
+
+---
+
+(program
+  (expression_statement
+    (string_literal
+      (escape_sequence)
+      (escape_sequence)))
+  (expression_statement
+    (string_literal
+      (multiline_string_fragment)
+      (escape_sequence)
+      (escape_sequence)))
+  (expression_statement
+    (string_literal
+      (multiline_string_fragment)
+      (escape_sequence)
+      (escape_sequence)
+      (multiline_string_fragment))))
+
+=====================================
+K10 a second Unicode escape after an encoded backslash
+=====================================
+
+"\u005c\u006e";
+
+---
+
+(program
+  (expression_statement
+    (string_literal
+      (escape_sequence)
+      (escape_sequence))))
+
+=====================================
+K10 malformed Unicode escape after an encoded backslash
+:error
+=====================================
+
+class Case { String s = "\u005c\uuu041"; }
+
+---

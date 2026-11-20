@@ -4,6 +4,16 @@
 
 - Extend the Ubuntu CI examples to parse OpenJDK 25.0.5+8 sources and javac langtools tests at pinned commit
   `fda231468e56663992785ec199a6efb8eca3cc7a`. No grammar change.
+- Parse Unicode escapes with repeated `u` in string literals and text blocks and escapes where `\u005c` supplies the
+  backslash before a matching quote, as in `"\u005c""` and `'\u005c''` (JLS 25 §3.3 and §3.10.7,
+  tree-sitter-java issues #207 and #209, based on PR #210 by theawless). String and text block escape nodes now span
+  the complete repeated-`u` escape, an encoded backslash with an escaped double quote, or a pair of encoded
+  backslashes. Strings and text blocks also parse an encoded backslash paired with a raw backslash before the
+  closing delimiter. Each backslash in a mixed pair has its own `escape_sequence` node.
+  An encoded backslash before the only closing double quote or text block delimiter now leaves the literal
+  unterminated. Repeated `u` inherits ordinary string tolerances for encoded quotes and line breaks, illegal
+  escape tails, raw line breaks and string templates. In `"\uuu005cu0041"`, `u0041` is a string fragment, as in the
+  previously accepted single-`u` spelling.
 
 ## 2.2.0
 
