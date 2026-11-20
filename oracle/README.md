@@ -8,7 +8,7 @@ name is not a syntax rejection; the runner's self-test shows one.
 | Path | Holds |
 | --- | --- |
 | `runner/ParseOracle.java` | The runner (single-file Java, run with `java ParseOracle.java`) |
-| `data/cases/<set>.jsonl` | Cases: `id`, `sha256` (of the UTF-8 `source`), `source`, `provenance`, optional `assert` and `file` |
+| `data/cases/<set>.jsonl` | Cases: `id`, `sha256` (of the UTF-8 `source`), `source`, `provenance`, optional `assert`, `file` and `expectError` |
 | `data/cases/NOTICE` | Credit and MIT notice for the inputs borrowed from tree-sitter-java PR #233 |
 | `data/verdicts/temurin-25.0.5+8.<set>.json` | The runner's verdicts: `[]` accepted, or javac's error codes |
 | `data/expected-failures.json` | Rule (a): the confirmed baseline mismatches |
@@ -49,11 +49,12 @@ results, cast and conditional labels, guarded patterns, colon and arrow controls
 `k23` (CR, CRLF, LF and EOF line comments, with literal and
 block-comment controls), `k24` (documented intersection-cast operand limits, single-type cast and binary-expression
 controls, and adjacent invalid inputs), `k25` (`when` as the name of a type pattern in switch labels and
-`instanceof`, with guard and invalid-input controls), `k26` (guarded empty record patterns in colon labels and arrow
-rules, with adjacent invalid inputs and unchanged controls), `k27` (parenthesized yield values, qualified calls,
+`instanceof`, with guard and invalid-input controls, including the withdrawn `instanceof super value` tolerance),
+`k26` (guarded empty record patterns in colon labels and arrow rules, with adjacent invalid inputs and unchanged controls), `k27` (parenthesized yield values, qualified calls,
 identifier controls and adjacent invalid inputs), `k28` (contextual statement labels and their break/continue
 targets, switch controls and adjacent invalid inputs), `k29` (qualified type names starting with `open`, `module`, or
-`with`, qualified `super` method references, ordinary name controls, and adjacent invalid inputs), and `structural`
+`with`, qualified `super` method references, ordinary name controls, and adjacent invalid inputs), `phase5`
+(the 14 corpus inputs with withdrawn reserved-word tolerances), and `structural`
 (Phase 3 ambiguity probes and independently written reproducers). Every case names its origin in `provenance`: the
 bundle path with its `SHA256SUMS` hash, the PR, or "written in this task" (the task that added the case; the 56
 `structural/p9/` probes say "independently written for Phase 3"). IDs are prefixed with the set name. To add a case,
@@ -149,6 +150,8 @@ kind of `forbid`. K3 uses it on `default` in `case null, default`: the anonymous
 
 A case is a **mismatch** when javac accepts it and the tree is bad. A case javac rejects whose tree is clean
 (`rejected-clean`) is only printed: the grammar is not required to enforce everything javac rejects.
+For a case with `"expectError": true`, the pinned javac verdict must be a rejection and replay must find an
+`ERROR` or `MISSING` node. Replay exits 1 if that node is absent or 2 if the verdict accepts the input.
 
 Exit codes: **0** the results equal the baseline; **1** they differ (a mismatch that is not in the expected-failure
 set, or a listed case that no longer fails); **2** the inputs are inconsistent (a case's hash does not match its

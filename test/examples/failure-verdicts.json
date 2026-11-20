@@ -21,8 +21,8 @@
       "jdk": "fda231468e56663992785ec199a6efb8eca3cc7a",
       "log4j2": "572cd83040450763a673ea749ad0c960563eeec9"
     },
-    "failure_count": 183,
-    "failures_sha256": "ab95f93da1ae1295d3f37d25f3b23022b07d88825437c06fd9c763ff5dc3a649"
+    "failure_count": 190,
+    "failures_sha256": "061f10aad811ca3e82010fea0ddb7ca5a9ce9385de0a48f0b57f6614b471757e"
   },
   "entries": [
     {
@@ -612,6 +612,14 @@
       ]
     },
     {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/AssertAsIdentifier2.java",
+      "sha256": "c806ef634b23576c952df0e09e0b59dfd1d19caa9cf6231d094ac4f58028cc24",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.assert.as.identifier"
+      ]
+    },
+    {
       "path": "examples/jdk/test/langtools/tools/javac/diags/examples/CallOnlyInConstructor.java",
       "sha256": "6448ce9951f3e485fbe3acdba7158bb374117b1ebe4e3f377db02c4aad470aaa",
       "verdict": "accepted",
@@ -697,6 +705,14 @@
       "verdict": "rejected",
       "codes": [
         "compiler.err.empty.char.lit"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/EnumAsIdentifier2.java",
+      "sha256": "15d9650584ec98430dcc8346c1686b9dfe96b5db8af68d2f11f82560bdb281fa",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.enum.as.identifier"
       ]
     },
     {
@@ -993,6 +1009,22 @@
       ]
     },
     {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/StatementNotExpected.java",
+      "sha256": "7933b935437bee48091ae2f609770379d352c271460c176e889baa0318517fdc",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.statement.not.expected"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/SwitchCaseUnexpectedStatement.java",
+      "sha256": "0439a031d1bec5940a83f2efffbc2bec4954991438ef4c4e458d84c956730fae",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.switch.case.unexpected.statement"
+      ]
+    },
+    {
       "path": "examples/jdk/test/langtools/tools/javac/diags/examples/SwitchMixingCaseTypes.java",
       "sha256": "f767c596187a5e6dd7ba2efd072aace6d226af9d9bc1774a0c05ad44891a0c89",
       "verdict": "accepted",
@@ -1074,6 +1106,14 @@
       ]
     },
     {
+      "path": "examples/jdk/test/langtools/tools/javac/diags/examples/UseOfUnderscoreNotAllowedNonVar.java",
+      "sha256": "c097ed1e5ae56e9e06bb621bc3bc8eccd3964b40cc480b18220a7072e62a34ac",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.use.of.underscore.not.allowed.non.variable"
+      ]
+    },
+    {
       "path": "examples/jdk/test/langtools/tools/javac/diags/examples/VarAllOrNothing.java",
       "sha256": "c26db8b96ffb0b77a08be0ffbed4f3d84ff4e9c670eac9aafada142a0e90489b",
       "verdict": "rejected",
@@ -1111,6 +1151,14 @@
       "verdict": "rejected",
       "codes": [
         "compiler.err.wrong.receiver"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/enum/EnumAsIdentifier.java",
+      "sha256": "b38764e19273633477e4f000ca6e7301c69d7d8b5f544b08f6409cd643dc73ad",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.enum.as.identifier"
       ]
     },
     {
@@ -1318,6 +1366,18 @@
       "verdict": "rejected",
       "codes": [
         "compiler.err.expected2",
+        "compiler.err.expected",
+        "compiler.err.expected"
+      ]
+    },
+    {
+      "path": "examples/jdk/test/langtools/tools/javac/parser/8081769/T8081769.java",
+      "sha256": "cfd135fa652ce8a46e9cf47c316e9c723729c15b7ab8d88bcc3d82fd86b99f3d",
+      "verdict": "rejected",
+      "codes": [
+        "compiler.err.expected",
+        "compiler.err.expected",
+        "compiler.err.expected",
         "compiler.err.expected",
         "compiler.err.expected"
       ]

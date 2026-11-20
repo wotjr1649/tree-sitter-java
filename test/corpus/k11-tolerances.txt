@@ -513,7 +513,17 @@ class C {
                   (pattern
                     (type_pattern
                       (type_identifier)
+                      (identifier))))
+                (ERROR
+                  (underscore_pattern))
+                (block))
+              (switch_rule
+                (switch_label
+                  (pattern
+                    (type_pattern
+                      (type_identifier)
                       (identifier)))
+                  (ERROR)
                   (pattern
                     (type_pattern
                       (type_identifier)
@@ -525,53 +535,41 @@ class C {
                     (type_pattern
                       (type_identifier)
                       (identifier)))
+                  (ERROR)
                   (pattern
                     (type_pattern
-                      (scoped_type_identifier
+                      (type_identifier)
+                      (ERROR)
+                      (identifier))))
+                (block))
+              (switch_rule
+                (switch_label
+                  (pattern
+                    (type_pattern
+                      (type_identifier)
+                      (identifier))))
+                (ERROR
+                  (underscore_pattern))
+                (block))
+              (switch_rule
+                (switch_label
+                  (pattern
+                    (type_pattern
+                      (type_identifier)
+                      (identifier))))
+                (ERROR)
+                (block))
+              (switch_rule
+                (switch_label
+                  (ERROR
+                    (pattern
+                      (type_pattern
                         (type_identifier)
-                        (type_identifier))
-                      (identifier))))
-                (block))
-              (switch_rule
-                (switch_label
-                  (pattern
-                    (type_pattern
-                      (type_identifier)
-                      (identifier)))
-                  (pattern
-                    (type_pattern
-                      (generic_type
-                        (type_identifier)
-                        (type_arguments
-                          (type_identifier)))
-                      (identifier))))
-                (block))
-              (switch_rule
-                (switch_label
-                  (pattern
-                    (type_pattern
-                      (type_identifier)
-                      (identifier)))
-                  (pattern
-                    (type_pattern
-                      (array_type
-                        (type_identifier)
-                        (dimensions))
-                      (identifier))))
-                (block))
-              (switch_rule
-                (switch_label
-                  (pattern
-                    (type_pattern
-                      (type_identifier)
-                      (identifier)))
-                  (pattern
-                    (record_pattern
-                      (identifier)
-                      (record_pattern_body))))
-                (block))
-              (switch_rule
-                (switch_label
+                        (identifier)))
+                    (lambda_expression
+                      (inferred_parameters
+                        (identifier))
+                      (block)))
                   (pattern
                     (type_pattern
                       (type_identifier)
@@ -580,6 +578,7 @@ class C {
                     (record_pattern
                       (identifier)
                       (record_pattern_body
+                        (ERROR)
                         (record_pattern_component
                           (underscore_pattern))))))
                 (block))
@@ -593,22 +592,7 @@ class C {
                     (record_pattern
                       (identifier)
                       (record_pattern_body
-                        (record_pattern_component
-                          (type_identifier)
-                          (identifier))))))
-                (block))
-              (switch_rule
-                (switch_label
-                  (pattern
-                    (type_pattern
-                      (type_identifier)
-                      (identifier)))
-                  (pattern
-                    (record_pattern
-                      (identifier)
-                      (record_pattern_body
-                        (record_pattern_component
-                          (type_identifier)
+                        (ERROR
                           (identifier))))))
                 (block))
               (switch_rule
@@ -624,9 +608,9 @@ class C {
                         (record_pattern
                           (identifier)
                           (record_pattern_body
+                            (ERROR)
                             (record_pattern_component
-                              (type_identifier)
-                              (identifier))))))))
+                              (underscore_pattern))))))))
                 (block))
               (switch_rule
                 (switch_label
@@ -775,14 +759,11 @@ class C {
             (switch_block
               (switch_block_statement_group
                 (switch_label
-                  (pattern
-                    (type_pattern
-                      (type_identifier)
-                      (identifier)))
-                  (pattern
-                    (type_pattern
-                      (type_identifier)
-                      (identifier))))
+                  (identifier)
+                  (ERROR)
+                  (identifier))
+                (ERROR
+                  (identifier))
                 (break_statement))
               (switch_block_statement_group
                 (switch_label

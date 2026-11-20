@@ -134,12 +134,16 @@ module.exports = grammar({
 
   word: $ => $.identifier,
 
-  // `final` and `this` are never identifiers: without this, a lookahead the current state cannot use as a keyword
-  // was read as an identifier, so `@A final e` parsed with `final` as a type name.
   reserved: {
-    global: _ => ['final', 'this'],
-    // An unambiguous first pattern drops the expression branch and its keyword lookahead.
-    additional_case_pattern: $ => ['final', 'this', 'default', 'instanceof', 'new', $.super, 'switch', $.null_literal, $.true, $.false],
+    // JLS 25 §3.8–3.10: reserved keywords and boolean/null literals cannot be identifiers.
+    global: $ => [
+      'abstract', 'assert', $.boolean_type, 'break', 'byte', 'case', 'catch', 'char', 'class', $._const,
+      'continue', 'default', 'do', 'double', 'else', 'enum', 'extends', 'final', 'finally', 'float',
+      'for', $._goto, 'if', 'implements', 'import', 'instanceof', 'int', 'interface', 'long', 'native',
+      'new', 'package', 'private', 'protected', 'public', 'return', 'short', 'static', 'strictfp',
+      $.super, 'switch', 'synchronized', $.this, 'throw', 'throws', 'transient', 'try', $.void_type,
+      'volatile', 'while', $.underscore_pattern, $.true, $.false, $.null_literal,
+    ],
   },
 
   rules: {
@@ -424,6 +428,7 @@ module.exports = grammar({
     lambda_expression: $ => seq(
       field('parameters', choice(
         $.identifier, $.formal_parameters, $.inferred_parameters, $._reserved_identifier,
+        alias($.underscore_pattern, $.identifier),
       )),
       '->',
       field('body', choice($.expression, $.block)),
@@ -431,7 +436,7 @@ module.exports = grammar({
 
     inferred_parameters: $ => seq(
       '(',
-      commaSep1(choice($.identifier, $._reserved_identifier)),
+      commaSep1(choice($.identifier, $._reserved_identifier, alias($.underscore_pattern, $.identifier))),
       ')',
     ),
 
@@ -665,16 +670,16 @@ module.exports = grammar({
         $.integral_type,
         $.floating_point_type,
         $.boolean_type,
-        alias(reserved('additional_case_pattern', $.identifier), $.type_identifier),
+        alias($.identifier, $.type_identifier),
         $.scoped_type_identifier,
         $.generic_type,
         $.array_type,
       ),
-      choice(reserved('additional_case_pattern', $.identifier), $._reserved_identifier, alias($.underscore_pattern, $.identifier)),
+      choice($.identifier, $._reserved_identifier, alias($.underscore_pattern, $.identifier)),
     ),
 
     _additional_case_record_pattern: $ => seq(
-      choice(reserved('additional_case_pattern', $.identifier), $._reserved_identifier, $.scoped_type_identifier, $.generic_type),
+      choice($.identifier, $._reserved_identifier, $.scoped_type_identifier, $.generic_type),
       alias($._additional_case_record_pattern_body, $.record_pattern_body),
     ),
 
@@ -1478,6 +1483,10 @@ module.exports = grammar({
       )),
       alias('yield', $.identifier),
     ),
+
+    // Hidden regex rules give these unused keywords tokens that can be reserved.
+    _const: _ => /const/,
+    _goto: _ => /goto/,
 
     this: _ => 'this',
 

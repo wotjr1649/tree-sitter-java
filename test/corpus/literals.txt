@@ -259,10 +259,10 @@ misplaced underscore or missing digits in 1_
 ---
 
 (program
-  (ERROR
-    (decimal_integer_literal))
   (expression_statement
-    (identifier)))
+    (decimal_integer_literal)
+    (ERROR
+      (identifier))))
 
 ==============================================
 misplaced underscore or missing digits in 0x_1
@@ -344,10 +344,10 @@ misplaced underscore or missing digits in 0_
 ---
 
 (program
-  (ERROR
-    (decimal_integer_literal))
   (expression_statement
-    (identifier)))
+    (decimal_integer_literal)
+    (ERROR
+      (identifier))))
 
 ==============================================
 misplaced underscore or missing digits in 0b_1
@@ -997,33 +997,27 @@ keywords as field names after literals that K6 newly accepts (javac rejects them
 
 (program
   (expression_statement
-    (field_access
-      (hex_integer_literal)
-      (identifier)))
+    (hex_integer_literal)
+    (ERROR))
   (expression_statement
-    (field_access
-      (hex_integer_literal)
-      (identifier)))
+    (hex_integer_literal)
+    (ERROR))
   (expression_statement
     (field_access
       (hex_integer_literal)
       (this)))
   (expression_statement
-    (field_access
-      (binary_integer_literal)
-      (identifier)))
+    (binary_integer_literal)
+    (ERROR))
   (expression_statement
-    (field_access
-      (octal_integer_literal)
-      (identifier)))
+    (octal_integer_literal)
+    (ERROR))
   (expression_statement
-    (field_access
-      (decimal_integer_literal)
-      (identifier)))
+    (decimal_integer_literal)
+    (ERROR))
   (expression_statement
-    (field_access
-      (octal_integer_literal)
-      (identifier))))
+    (octal_integer_literal)
+    (ERROR)))
 
 ====================================================================================================
 keywords as field names after literals that v2.1.0 accepts (javac rejects them, parsed since v2.1.0)
@@ -1043,38 +1037,30 @@ keywords as field names after literals that v2.1.0 accepts (javac rejects them, 
 
 (program
   (expression_statement
-    (field_access
-      (hex_integer_literal)
-      (identifier)))
+    (hex_integer_literal)
+    (ERROR))
   (expression_statement
-    (field_access
-      (hex_integer_literal)
-      (identifier)))
+    (hex_integer_literal)
+    (ERROR))
   (expression_statement
-    (field_access
-      (hex_integer_literal)
-      (identifier)))
+    (hex_integer_literal)
+    (ERROR))
   (expression_statement
     (field_access
       (hex_integer_literal)
       (this)))
   (expression_statement
-    (field_access
-      (binary_integer_literal)
-      (identifier)))
+    (binary_integer_literal)
+    (ERROR))
   (expression_statement
-    (field_access
-      (binary_integer_literal)
-      (identifier)))
+    (binary_integer_literal)
+    (ERROR))
   (expression_statement
-    (field_access
-      (octal_integer_literal)
-      (identifier)))
+    (octal_integer_literal)
+    (ERROR))
   (expression_statement
-    (field_access
-      (decimal_integer_literal)
-      (identifier)))
+    (decimal_integer_literal)
+    (ERROR))
   (expression_statement
-    (field_access
-      (decimal_integer_literal)
-      (identifier))))
+    (decimal_integer_literal)
+    (ERROR)))

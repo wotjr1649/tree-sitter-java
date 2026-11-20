@@ -651,11 +651,9 @@ class C {
                     (pattern
                       (type_pattern
                         (type_identifier)
-                        (identifier)))
-                    (pattern
-                      (type_pattern
-                        (type_identifier)
                         (identifier))))
+                  (ERROR
+                    (identifier))
                   (expression_statement
                     (decimal_integer_literal)))
                 (switch_rule
@@ -849,11 +847,9 @@ class C {  int f(Object x) { return switch (x) { case String _, int instanceof -
                     (pattern
                       (type_pattern
                         (type_identifier)
-                        (identifier)))
-                    (pattern
-                      (type_pattern
-                        (integral_type)
                         (identifier))))
+                  (ERROR
+                    (integral_type))
                   (expression_statement
                     (decimal_integer_literal)))
                 (switch_rule
@@ -903,9 +899,8 @@ class C { record R(int n) {} int f(Object x) { return switch (x) { case String _
                       (record_pattern
                         (identifier)
                         (record_pattern_body
-                          (record_pattern_component
-                            (integral_type)
-                            (identifier))))))
+                          (ERROR
+                            (integral_type))))))
                   (expression_statement
                     (decimal_integer_literal)))
                 (switch_rule

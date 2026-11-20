@@ -460,11 +460,15 @@ async function selfTest(config) {
   assert.ok(rows[0].counts.matched >= 3);
   assert.deepEqual(rows[0].mismatches, []);
   const parser = makeParser(config.binding, config.runtime);
-  // qualifiedSuper is false for unqualified super, type and package qualifiers, and the 2.3.0 shape (super inside the qualifier).
+  // A super token inside ERROR must not count as a qualified super reference.
   const refs = 'class T { Object a = super::m, b = T::m, c = a.b.C::m, d = C<String>.super::m; }';
   const refNodes = [...preorder(parser.parse(refs))].filter((node) => node.type === 'method_reference');
   assert.deepEqual(refNodes.map((node) => node.text), ['super::m', 'T::m', 'a.b.C::m', 'C<String>.super::m']);
-  assert.equal(refNodes[3].firstNamedChild.lastChild.type, 'type_identifier');
+  assert.deepEqual(refNodes.map((node) => node.hasError), [false, false, false, true]);
+  const [qualifier, recovery] = refNodes[3].namedChildren;
+  assert.equal(qualifier.type, 'generic_type');
+  assert.equal(recovery.type, 'ERROR');
+  assert.equal(recovery.firstNamedChild.type, 'super');
   for (const node of refNodes)
     assert.equal(describe(node, { qualifiedSuper: true }, {}, refs, (i) => i).qualifiedSuper, false, node.text);
   const wrongOperator = { ...config.mapping, PLUS: config.mapping.PLUS.map((rule) => ({ ...rule, operator: '-' })) };

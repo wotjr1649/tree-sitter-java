@@ -3,7 +3,8 @@
 // Every case in oracle/data/cases/*.jsonl is parsed through the tree-sitter Node API (never the CLI summary) and
 // judged: root hasError, any ERROR or MISSING node, zero-width nodes, the root ending at the end of the input, and
 // the case's own assertions. A case is a mismatch when javac accepted it (oracle/data/verdicts) and the tree is
-// bad. Rule (a): mismatches must equal oracle/data/expected-failures.json exactly.
+// bad. Rule (a): mismatches must equal oracle/data/expected-failures.json exactly. Cases marked expectError also
+// require javac to reject the input and the grammar to produce ERROR or MISSING.
 //
 // Usage: node scripts/oracle-replay.mjs
 // Exit 0: results equal the baseline. 1: they differ (an unlisted mismatch, or a listed case that no longer
@@ -105,6 +106,7 @@ export function loadCases() {
         if (typeof c[key] !== 'string') fail(`${name}: a case has no string "${key}"`);
       if (!isObject(c.provenance)) fail(`${name}: ${c.id} needs a "provenance" object`);
       if (c.file != null && typeof c.file !== 'string') fail(`${name}: ${c.id} "file" must be a string or null`);
+      if (c.expectError !== undefined && c.expectError !== true) fail(`${name}: ${c.id} "expectError" must be true when present`);
       checkAssertions(name, c);
       const actual = sha256(Buffer.from(c.source, 'utf8'));
       if (actual !== c.sha256) fail(`${name}: ${c.id} sha256 is ${c.sha256}, its source hashes to ${actual}`);
@@ -142,6 +144,8 @@ export function loadVerdicts(sets) {
     for (const [id, codes] of Object.entries(v))
       if (!Array.isArray(codes) || codes.some((code) => typeof code !== 'string'))
         fail(`${name}: the verdict of ${id} is not an array of strings`);
+    for (const c of set.cases)
+      if (c.expectError && !v[c.id].length) fail(`${name}: ${c.id} expects an error but javac accepts it`);
     Object.assign(verdicts, v);
   }
   for (const s of sets) if (!covered.has(s.name)) fail(`${s.name}: no verdict file`);
@@ -202,7 +206,7 @@ export function judge(parser, c) {
   if (zero) reasons.push(`${zero} zero-width`);
   if (rootNode.endIndex !== len) reasons.push(`root ends at ${rootNode.endIndex}, input has ${len}`);
   for (const a of c.assert ?? []) reasons.push(...assertion(c, a, nodes));
-  return { ok: reasons.length === 0, reasons, tree: rootNode.toString() };
+  return { ok: reasons.length === 0, hasSyntaxError: errors > 0 || missing > 0, reasons, tree: rootNode.toString() };
 }
 
 export function judgeAll(sets) {
@@ -256,6 +260,9 @@ function main() {
     for (const [id, e] of Object.entries(expected.cases))
       if (results[id].tree !== e.base_tree) fail(`expected-failures.json: the base_tree of ${id} is not its tree at the grammar base`);
   const r = compare(expected, verdicts, results);
+  const missedErrors = sets.flatMap((s) => s.cases
+    .filter((c) => c.expectError && !results[c.id].hasSyntaxError)
+    .map((c) => c.id));
 
   console.log(`oracle: ${jdk}, --release 25, preview off; ${Object.keys(results).length} cases`);
   for (const id of Object.keys(results)) {
@@ -271,8 +278,9 @@ function main() {
 
   for (const id of r.unlisted) console.error(`not in expected-failures.json: ${id} (javac accepts it, the tree is bad)`);
   for (const id of r.stale) console.error(`listed in expected-failures.json but no longer fails: ${id} (delete the entry)`);
-  const bad = r.unlisted.length + r.stale.length;
-  console.log(bad ? `FAIL: ${bad} difference(s) from the baseline` : `OK: ${r.mismatches.length} expected failure(s), no other mismatch`);
+  for (const id of missedErrors) console.error(`expected ERROR or MISSING: ${id}`);
+  const bad = r.unlisted.length + r.stale.length + missedErrors.length;
+  console.log(bad ? `FAIL: ${bad} unexpected result(s)` : `OK: ${r.mismatches.length} expected failure(s), no other mismatch`);
   return bad ? 1 : 0;
 }
 

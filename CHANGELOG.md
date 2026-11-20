@@ -12,6 +12,42 @@
   [grammar-orchard PR #20](https://codeberg.org/grammar-orchard/tree-sitter-java-orchard/pulls/20)
 - Record the repository as independent (ADR-0002): tree-sitter/tree-sitter-java v0.23.5 is the original grammar it
   started from, not an upstream. Its later changes are not tracked or merged. Documentation only; no grammar change.
+- **Breaking change (Phase 5).** Reserve all 51 Java keywords and the spellings `true`, `false` and `null`
+  in identifier positions. Contextual keywords remain usable as identifiers. Unnamed lambda parameters
+  keep their `identifier` nodes. The public node schema is unchanged by this change.
+  [JLS 25 §§3.8–3.10](https://docs.oracle.com/javase/specs/jls/se25/html/jls-3.html#jls-3.8)
+
+  The following 14 corpus inputs that javac rejects and that parsed without errors in 2.4.0 now produce errors.
+  The [Phase 5 oracle cases](oracle/data/cases/phase5.jsonl) use the same inputs.
+
+  1. Annotated multi-catch alternatives using `static` as a type (`expressions.txt`).
+  2. Annotated `instanceof` patterns using `static` as a binding (`expressions.txt`).
+  3. Arrow labels using `abstract` as a pattern type, record name or component binding (`k11-tolerances.txt`).
+  4. Colon labels using `new` as a type-pattern binding (`k11-tolerances.txt`).
+  5. A list of type patterns containing `Integer static` (`k11.txt`).
+  6. A primitive pattern using `int instanceof` (`k11.txt`).
+  7. A record component pattern using `R(int instanceof)` (`k11.txt`).
+  8. Assignments using `_` as a name and `default` as a field name (`k12.txt`).
+  9. A call argument with `(x) = _` and an assignment to `(obj.if)` (`k12.txt`).
+  10. Qualified method references using `super` as the member name in `open.super::super` and `C.super::super` (`k20.txt`).
+  11. Qualified method references using `_`, `int`, `true` or `class` as the member name (`k20.txt`).
+  12. Qualified method references using `false`, `null` or `return` as the member name (`k20.txt`).
+  13. Numeric spellings added by K6 with `.class` or `.if` read as field access (`literals.txt`).
+  14. Numeric spellings already accepted in 2.1.0 with `.class` or `.if` read as field access (`literals.txt`).
+
+  Existing oracle inputs also pin the following withdrawn forms.
+
+  - [K11](oracle/data/cases/k11.jsonl) single and list patterns with an underscore type, an annotated or
+    qualified `new` type, `List<null>`, or a component binding such as `R(int new)`.
+  - [K12](oracle/data/cases/k12.jsonl) the unparenthesized call-argument and field-assignment controls
+    `get().m(x = _)` and `obj.if = 1`.
+  - [K20](oracle/data/cases/k20.jsonl) generic or annotated qualifiers before a `super` method reference,
+    and repeated `super` qualifiers, including the `open` controls.
+  - [K25](oracle/data/cases/k25.jsonl) `o instanceof super value`, where `super` previously parsed as a type name.
+
+  Among 83,367 pinned Java files the new parser reports errors in seven more OpenJDK files, all rejected
+  by javac's parser. The example failure baseline rises from 183 to 190. See
+  [withdrawn and retained tolerances](docs/tolerances.md#withdrawn-in-300).
 
 ## 2.4.0
 

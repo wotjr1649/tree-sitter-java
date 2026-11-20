@@ -2529,55 +2529,59 @@ class A {
 
 --------------------------------------------------------------------------------
 
-1:0  - 9:0    program
-1:0  - 8:1      class_declaration
-1:0  - 1:5        "class"
-1:6  - 1:7        name: identifier `A`
-1:8  - 8:1        body: class_body
-1:8  - 1:9          "{"
-2:2  - 7:3          method_declaration
-2:2  - 2:6            type: void_type `void`
-2:7  - 2:8            name: identifier `m`
-2:8  - 2:10           parameters: formal_parameters
-2:8  - 2:9              "("
-2:9  - 2:10             ")"
-2:11 - 7:3            body: block
+1:0  - 9:0    •program
+1:0  - 8:1      •class_declaration
+1:0  - 1:5         "class"
+1:6  - 1:7         name: identifier `A`
+1:8  - 8:1        body: •class_body
+1:8  - 1:9           "{"
+2:2  - 7:3          •method_declaration
+2:2  - 2:6             type: void_type `void`
+2:7  - 2:8             name: identifier `m`
+2:8  - 2:10            parameters: formal_parameters
+2:8  - 2:9               "("
+2:9  - 2:10              ")"
+2:11 - 7:3            body: •block
 2:11 - 2:12             "{"
-3:4  - 6:5              try_statement
+3:4  - 6:5              •try_statement
 3:4  - 3:7                "try"
 3:8  - 4:5                body: block
 3:8  - 3:9                  "{"
 4:4  - 4:5                  "}"
-4:6  - 5:5                catch_clause
+4:6  - 5:5                •catch_clause
 4:6  - 4:11                 "catch"
 4:12 - 4:13                 "("
-4:13 - 4:29                 catch_formal_parameter
-4:13 - 4:27                   catch_type
-4:13 - 4:15                     type_identifier `T1`
-4:16 - 4:17                     "|"
-4:18 - 4:27                     annotated_type
-4:18 - 4:20                       marker_annotation
-4:18 - 4:19                         "@"
-4:19 - 4:20                         name: identifier `A`
-4:21 - 4:27                       type_identifier `static`
-4:28 - 4:29                   name: identifier `e`
+4:13 - 4:29                 •catch_formal_parameter
+4:13 - 4:29                   •catch_type
+4:13 - 4:15                      type_identifier `T1`
+4:16 - 4:17                      "|"
+4:18 - 4:29                     •annotated_type
+4:18 - 4:20                        marker_annotation
+4:18 - 4:19                          "@"
+4:19 - 4:20                          name: identifier `A`
+4:21 - 4:27                       •ERROR
+4:21 - 4:27                         "static"
+4:28 - 4:29                       type_identifier `e`
+4:29 - 4:29                   name: •identifier
 4:29 - 4:30                 ")"
 4:31 - 5:5                  body: block
 4:31 - 4:32                   "{"
 5:4  - 5:5                    "}"
-5:6  - 6:5                catch_clause
+5:6  - 6:5                •catch_clause
 5:6  - 5:11                 "catch"
 5:12 - 5:13                 "("
-5:13 - 5:29                 catch_formal_parameter
+5:13 - 5:29                 •catch_formal_parameter
 5:13 - 5:15                   modifiers
 5:13 - 5:15                     marker_annotation
 5:13 - 5:14                       "@"
 5:14 - 5:15                       name: identifier `A`
-5:16 - 5:27                   catch_type
+5:16 - 5:29                   •catch_type
 5:16 - 5:18                     type_identifier `T1`
 5:19 - 5:20                     "|"
-5:21 - 5:27                     type_identifier `static`
-5:28 - 5:29                   name: identifier `e`
+5:21 - 5:27                     •ERROR
+5:21 - 5:27                       "static"
+5:28 - 5:29                     type_identifier `e`
+5:29 - 5:29                   name: •identifier
 5:29 - 5:30                 ")"
 5:31 - 6:5                  body: block
 5:31 - 5:32                   "{"
@@ -2595,22 +2599,22 @@ a instanceof final @A T static;
 
 --------------------------------------------------------------------------------
 
-1:0  - 3:0    program
-1:0  - 1:31     expression_statement
-1:0  - 1:30       instanceof_expression
-1:0  - 1:1          left: identifier `a`
-1:2  - 1:12         "instanceof"
-1:13 - 1:21         modifiers
-1:13 - 1:15           marker_annotation
-1:13 - 1:14             "@"
-1:14 - 1:15             name: identifier `A`
-1:16 - 1:21           "final"
-1:22 - 1:23         right: type_identifier `T`
-1:24 - 1:30         name: identifier `static`
-1:30 - 1:31       ";"
-2:0  - 2:31     expression_statement
-2:0  - 2:30       instanceof_expression
-2:0  - 2:1          left: identifier `a`
+1:0  - 3:0    •program
+1:0  - 2:31     •expression_statement
+1:0  - 2:23       •instanceof_expression
+1:0  - 2:1          left: •instanceof_expression
+1:0  - 1:1             left: identifier `a`
+1:2  - 1:12            "instanceof"
+1:13 - 1:21            modifiers
+1:13 - 1:15              marker_annotation
+1:13 - 1:14                "@"
+1:14 - 1:15                name: identifier `A`
+1:16 - 1:21             "final"
+1:22 - 1:23           right: type_identifier `T`
+1:24 - 1:31           •ERROR
+1:24 - 1:30             "static"
+1:30 - 1:31             ";"
+2:0  - 2:1            name: identifier `a`
 2:2  - 2:12         "instanceof"
 2:13 - 2:18         "final"
 2:19 - 2:23         right: annotated_type
@@ -2618,7 +2622,8 @@ a instanceof final @A T static;
 2:19 - 2:20             "@"
 2:20 - 2:21             name: identifier `A`
 2:22 - 2:23           type_identifier `T`
-2:24 - 2:30         name: identifier `static`
+2:24 - 2:30       •ERROR
+2:24 - 2:30         "static"
 2:30 - 2:31       ";"
 
 ================================================================================
