@@ -44,6 +44,9 @@
   Typed `_` keeps its visible `identifier` node and uses `underscore_pattern` as its underlying grammar symbol.
   Bare `_` still exposes `underscore_pattern`. `node-types.json` is byte-identical, and the pinned examples retain
   all 192 baseline failure paths.
+- Fix incremental parsing of typed unnamed bindings in switch and `instanceof` type patterns (K14).
+  The binding shares the `underscore_pattern` token and keeps its visible `identifier` node. The node schema is
+  unchanged. The parser grows by 4,484 bytes and 4 states.
 - Add the CI jobs `fuzz` (`tree-sitter fuzz` over the corpus, up to 3 random edits and 10 iterations per case, 120 s
   cap; after the edits it checks the incremental tree's sizes and changed ranges, and after undoing them that the
   incremental reparse equals the expected corpus tree) and
@@ -61,6 +64,24 @@
   unterminated. Repeated `u` inherits ordinary string tolerances for encoded quotes and line breaks, illegal
   escape tails, raw line breaks and string templates. In `"\uuu005cu0041"`, `u0041` is a string fragment, as in the
   previously accepted single-`u` spelling.
+- Parse multiple type or record patterns in a single `case` label, with an optional trailing `when` guard (K11,
+  JLS 25 §14.11.1). The `switch_label` has a `pattern` child for each alternative, in source order. Empty record
+  pattern lists such as `case R(), S()` previously appeared as `method_invocation` children and now appear as
+  `pattern` children holding `record_pattern`, including the same syntax with lowercase names. The
+  `node-types.json` bytes and the node-kind and field names are unchanged. Single record patterns retain `when`
+  as a component binding name, including before a guard. Typed `_` in later record patterns uses the same
+  incremental parsing fix as K13 and keeps its visible `identifier` node. Lists inherit existing single-pattern
+  tolerances for `var` or `_` as a type name, duplicate `final` even with an annotation, and empty type arguments.
+  Some keywords can be names, including `abstract` in `case String _, abstract _` and `case String _, abstract(_)`.
+  This includes simple, qualified, generic and array type names, type arguments, and bindings in type patterns
+  and record components, including nested components. Examples include `@A new _`, `Outer.new _`, `List<null> _`,
+  `Integer static`, `int instanceof` and `R(int new)`. Record patterns in either position also accept annotations
+  inside their types, such as `G<@A ?> (_)` and `O.@A Inner<?> (_)`. javac's parser rejects these forms.
+  Additional patterns and their record components reserve specific keywords and literals in positions previously
+  disambiguated by the expression alternative. Named bindings and preview or invalid types can still be parsed
+  where javac's later phases reject them. Mixing a constant with a type pattern, as in `case 1, Integer i`, still
+  produces an error. The five OpenJDK example files fixed by K11 are removed from
+  `test/examples/failures.txt` (192 to 187 paths).
 
 ## 2.2.0
 
