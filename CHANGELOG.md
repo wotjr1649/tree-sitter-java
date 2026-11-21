@@ -1,28 +1,37 @@
 # Changelog
 
-## Unreleased
+## 3.0.2
+
+The reserved-word grammar now reuses more tokens during incremental reparses. In the 63-file
+sample, all eight edit types took less time than v1.0.0 in aggregate, by 19.6–23.4% with the C
+0.27.2 runtime and by 4.81–7.79% with the Node 0.25.1 binding. The public node schema is byte-identical
+to 3.0.1.
+
+Compared with 3.0.1, `parser.c` grows from 3,141,021 to 3,204,299 bytes
+(+63,278, +2.01%) and the state count grows from 1,740 to 1,784 (+44, +2.53%).
 
 ### Maintenance
 
-- Remove redundant grammar and highlight definitions, share javac verdict metadata and hashing, and restore the pkg-config description.
+- Remove redundant grammar and highlight definitions, share javac verdict metadata and hashing, and
+  restore the pkg-config description. The maintenance changes preserve the generated C byte for byte. (#60)
 
 ### Performance
 
-- Incremental reparses recover the slowdown introduced by per-state reserved-word sets, which split
-  lex modes and blocked first-token reuse. Package declarations and modifiers share their leading
-  annotation sequence. Interface methods use a dedicated rule, and root package and import declarations
-  use rules that share the enclosing program's lookahead. In 63 identifier insertions, lexer calls fell
-  from 13,056 to 9,492 and reserved-set rejections of the old tree's first token fell from 2,783 to 87.
-  With the C 0.27.2 runtime on the 63-file sample, the eight edit types took 19.6–23.4% less time
-  than v1.0.0 and 26.9–31.3% less than the previous parser (`57bb553`). Fresh parse time changed by
-  -0.8% and -0.5%, respectively, within the variation measured by same-source controls. The generated
-  `parser.c` grew from 3,141,021 to 3,204,299 bytes (+2.01%) and from 1,740 to 1,784 states. The node
-  schema and error-free trees in the 83,367 pinned examples are identical. The rejected oracle inputs
-  The error-recovery trees of `k5/x03-no-type` and `k7/rx3-qualified-without-dot` change; both still report
-  syntax errors. With the Node binding (runtime 0.25.1) they recover through `receiver_parameter` in place of
-  `spread_parameter` and `formal_parameter`, respectively; with the C runtime 0.27.2 `k5/x03-no-type` goes the
-  other way (`receiver_parameter` to `spread_parameter`), as recovery depends on the runtime.
-  Five pinned OpenJDK examples that already reported syntax errors also have different recovery trees.
+- Per-state reserved-word sets had split lex modes and blocked first-token reuse. Package declarations
+  and modifiers now share their leading annotation sequence. Interface methods use a dedicated rule, and
+  root package and import declarations use rules that share the enclosing program's lookahead. In 63
+  identifier insertions, lexer calls fell from 13,056 to 9,492 and reserved-set rejections of the old tree's
+  first token fell from 2,783 to 87.
+- In the same 63-file sample, the C 0.27.2 runtime took 26.9–31.3% less time on the eight edit types
+  than the previous parser (`57bb553`). Fresh parse time changed by −0.8% versus v1.0.0 and −0.5%
+  versus `57bb553`, within the variation measured by same-source controls. The independent review
+  measured 9.95–12.96% less incremental reparse time versus `57bb553` with the Node 0.25.1 binding.
+- The error-free trees in the 83,367 pinned examples are identical. The error-recovery trees of
+  `k5/x03-no-type` and `k7/rx3-qualified-without-dot` change. Both still report syntax errors. With the
+  Node binding (runtime 0.25.1) they recover through `receiver_parameter` in place of
+  `spread_parameter` and `formal_parameter`, respectively. With the C runtime 0.27.2
+  `k5/x03-no-type` goes from `receiver_parameter` to `spread_parameter`. Five pinned OpenJDK
+  examples that already reported syntax errors also have different recovery trees. (#61)
 
 ## 3.0.1
 
