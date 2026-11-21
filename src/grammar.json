@@ -10636,6 +10636,7 @@
   "precedences": [],
   "externals": [],
   "inline": [
+    "_annotation",
     "_assignment_target",
     "_name",
     "_simple_type",

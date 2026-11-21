@@ -20,6 +20,11 @@
   [§14.30.1](https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html#jls-14.30.1) ·
   [§15.16](https://docs.oracle.com/javase/specs/jls/se25/html/jls-15.html#jls-15.16)
 
+### Performance
+
+- Inline the internal annotation rule, shrinking the generated parser from 3,157,694 to
+  3,141,021 bytes (−0.53%). The generated node schema and the compared syntax trees are unchanged.
+
 ### Withdrawn tolerances
 
 - `(@A Integer) -k` reports `compiler.err.illegal.start.of.expr` during javac parsing.
