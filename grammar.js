@@ -77,10 +77,37 @@ function prefixUpdateExpression(expression) {
 
 const openModuleWith = () => choice('open', 'module', 'with');
 
+const methodDeclaration = $ => seq(
+  optional($.modifiers),
+  $._method_header,
+  choice(field('body', $.block), ';'),
+);
+
 const variableDeclaration = $ => seq(
   optional($.modifiers),
   field('type', $._unannotated_type),
   $._variable_declarator_list,
+  ';',
+);
+
+const packageDeclaration = $ => seq(
+  optional($._declaration_annotations),
+  'package',
+  $._name,
+  ';',
+);
+
+const importDeclaration = $ => seq(
+  'import',
+  choice(
+    seq(
+      optional('static'),
+      $._name,
+      optional(seq('.', $.asterisk)),
+    ),
+    // JLS 25 §7.5.5 single-module import (JEP 511); no `static`, no `.*`
+    seq('module', $._name),
+  ),
   ';',
 );
 
@@ -125,6 +152,7 @@ module.exports = grammar({
     [$.switch_label, $._arrow_switch_label],
     [$.expression, $._switch_label_expression],
     [$.modifiers, $.annotated_type, $.module_declaration, $.package_declaration],
+    [$.modifiers, $.annotated_type, $.module_declaration, $.package_declaration, $._root_package_declaration],
     [$.module_declaration, $._unannotated_type],
     // `enum E { @A sealed }`: `sealed` after annotations is a modifier or the constant name.
     [$.modifiers],
@@ -169,6 +197,10 @@ module.exports = grammar({
     _toplevel_statement: $ => choice(
       $.statement,
       $.method_declaration,
+      // Cover the root aliases with declaration so the generated schema retains statement.
+      prec(-1, $.declaration),
+      alias($._root_import_declaration, $.import_declaration),
+      alias($._root_package_declaration, $.package_declaration),
     ),
 
     // Literals
@@ -1071,26 +1103,13 @@ module.exports = grammar({
       ';',
     ),
 
-    package_declaration: $ => seq(
-      repeat($._annotation),
-      'package',
-      $._name,
-      ';',
-    ),
+    package_declaration: packageDeclaration,
 
-    import_declaration: $ => seq(
-      'import',
-      choice(
-        seq(
-          optional('static'),
-          $._name,
-          optional(seq('.', $.asterisk)),
-        ),
-        // JLS 25 §7.5.5 single-module import (JEP 511); no `static`, no `.*`
-        seq('module', $._name),
-      ),
-      ';',
-    ),
+    _root_package_declaration: $ => prec(-1, packageDeclaration($)),
+
+    import_declaration: importDeclaration,
+
+    _root_import_declaration: $ => prec(-1, importDeclaration($)),
 
     asterisk: _ => '*',
 
@@ -1134,8 +1153,18 @@ module.exports = grammar({
       field('body', $.class_body),
     ),
 
-    modifiers: $ => repeat1(choice(
-      $._annotation,
+    _declaration_annotations: $ => repeat1($._annotation),
+
+    modifiers: $ => choice(
+      $._declaration_annotations,
+      seq(
+        optional($._declaration_annotations),
+        $._keyword_modifier,
+        repeat(choice($._annotation, $._keyword_modifier)),
+      ),
+    ),
+
+    _keyword_modifier: $ => choice(
       'public',
       'protected',
       'private',
@@ -1150,7 +1179,7 @@ module.exports = grammar({
       'volatile',
       'sealed',
       'non-sealed',
-    )),
+    ),
 
     type_parameters: $ => seq(
       '<', commaSep1($.type_parameter), '>',
@@ -1328,7 +1357,7 @@ module.exports = grammar({
       repeat(choice(
         $.constant_declaration,
         $.enum_declaration,
-        $.method_declaration,
+        alias($._interface_method_declaration, $.method_declaration),
         $.class_declaration,
         $.interface_declaration,
         $.record_declaration,
@@ -1515,11 +1544,9 @@ module.exports = grammar({
 
     local_variable_declaration: variableDeclaration,
 
-    method_declaration: $ => seq(
-      optional($.modifiers),
-      $._method_header,
-      choice(field('body', $.block), ';'),
-    ),
+    method_declaration: methodDeclaration,
+
+    _interface_method_declaration: methodDeclaration,
 
     compact_constructor_declaration: $ => seq(
       optional($.modifiers),
