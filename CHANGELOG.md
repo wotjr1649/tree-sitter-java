@@ -18,8 +18,10 @@
   -0.8% and -0.5%, respectively, within the variation measured by same-source controls. The generated
   `parser.c` grew from 3,141,021 to 3,204,299 bytes (+2.01%) and from 1,740 to 1,784 states. The node
   schema and error-free trees in the 83,367 pinned examples are identical. The rejected oracle inputs
-  `k5/x03-no-type` and `k7/rx3-qualified-without-dot` now recover through `receiver_parameter` in
-  place of `spread_parameter` and `formal_parameter`, respectively. Both still report syntax errors.
+  The error-recovery trees of `k5/x03-no-type` and `k7/rx3-qualified-without-dot` change; both still report
+  syntax errors. With the Node binding (runtime 0.25.1) they recover through `receiver_parameter` in place of
+  `spread_parameter` and `formal_parameter`, respectively; with the C runtime 0.27.2 `k5/x03-no-type` goes the
+  other way (`receiver_parameter` to `spread_parameter`), as recovery depends on the runtime.
   Five pinned OpenJDK examples that already reported syntax errors also have different recovery trees.
 
 ## 3.0.1
