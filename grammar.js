@@ -101,6 +101,7 @@ module.exports = grammar({
   ],
 
   inline: $ => [
+    $._annotation, // Inlining reduces the generated parse table.
     $._assignment_target,
     $._name,
     $._simple_type,
