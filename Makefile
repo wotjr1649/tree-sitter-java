@@ -3,6 +3,7 @@ $(error Windows is not supported)
 endif
 
 LANGUAGE_NAME := tree-sitter-java
+DESCRIPTION ?= Java grammar for tree-sitter
 HOMEPAGE_URL := https://github.com/wotjr1649/tree-sitter-java
 VERSION := 3.0.1
 

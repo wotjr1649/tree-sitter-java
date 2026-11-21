@@ -21,9 +21,9 @@ const RUNNER = `${root}oracle/runner/ParseOracle.java`;
 
 // The oracle a verdict file must come from (oracle/runner/ParseOracle.java fixes the same values).
 export const ORACLE = {
-  'java.vendor': 'Eclipse Adoptium',
-  'java.runtime.version': '25.0.5+8-LTS',
   api: 'com.sun.source.util.JavacTask.parse()',
+  'java.runtime.version': '25.0.5+8-LTS',
+  'java.vendor': 'Eclipse Adoptium',
   options: ['--release', '25', '-proc:none'],
   preview: false,
   release: '25',
