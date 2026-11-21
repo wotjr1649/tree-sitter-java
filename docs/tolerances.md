@@ -152,7 +152,8 @@ accepted, as in javac's parse phase. For example, `(Comparable<Integer>) -k` als
 The reference-cast rule in the specification is stricter. [JLS 25 §15.16][jls-cast]
 The same holds for other forms javac's parser rejects before a sign: annotated simple or qualified names
 such as `(@A java.lang.Integer) -k` and `(Outer.@A Inner) -k`, qualified types with a generic qualifier such as
-`(Cn<T>.Inner) -k`, and `(@A void) -k`. The table lists the pinned cases only.
+`(Cn<T>.Inner) -k`. `(@A void) -k` passes javac's parser, like `(void) -k`, and javac 25.0.5+8 then stops with an
+internal error. The table lists the pinned cases only.
 
 | Java form | javac diagnostic code(s) | Oracle case | Reason |
 | --- | --- | --- | --- |

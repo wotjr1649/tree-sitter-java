@@ -45,7 +45,8 @@ Compared with 3.0.0, `parser.c` grows from 3,037,379 to 3,141,021 bytes
   `compiler.err.prob.found.req` (`compiler.misc.inconvertible.types`).
 - The same applies to other forms javac's parser rejects before a sign: annotated simple or qualified
   names (`(@A java.lang.Integer) -k`, `(Outer.@A Inner) -k`), qualified types with a generic qualifier
-  (`(Cn<T>.Inner) -k`, `(a.B<String>.D) -k`) and `(@A void) -k`. None of them is pinned as a case.
+  (`(Cn<T>.Inner) -k`, `(a.B<String>.D) -k`). `(@A void) -k` passes javac's parser, like `(void) -k`, and
+  javac 25.0.5+8 then stops with an internal error. None of them is pinned as a case.
 
 ## 3.0.0
 
