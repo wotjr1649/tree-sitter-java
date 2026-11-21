@@ -378,7 +378,11 @@ module.exports = grammar({
         seq(
           '(',
           field('type', $._type),
-          repeat1(seq('&', field('type', $._type))),
+          repeat1(seq('&',
+            // Keep _type reductions for queries. The lower-priority alternative
+            // lets the schema generator collapse its concrete field types.
+            field('type', choice($._type, prec(-1, $._unannotated_type))),
+          )),
           ')',
           field('value', choice(
             $.primary_expression,

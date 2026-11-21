@@ -1843,8 +1843,21 @@
                       "type": "FIELD",
                       "name": "type",
                       "content": {
-                        "type": "SYMBOL",
-                        "name": "_type"
+                        "type": "CHOICE",
+                        "members": [
+                          {
+                            "type": "SYMBOL",
+                            "name": "_type"
+                          },
+                          {
+                            "type": "PREC",
+                            "value": -1,
+                            "content": {
+                              "type": "SYMBOL",
+                              "name": "_unannotated_type"
+                            }
+                          }
+                        ]
                       }
                     }
                   ]
@@ -2050,8 +2063,21 @@
                       "type": "FIELD",
                       "name": "type",
                       "content": {
-                        "type": "SYMBOL",
-                        "name": "_type"
+                        "type": "CHOICE",
+                        "members": [
+                          {
+                            "type": "SYMBOL",
+                            "name": "_type"
+                          },
+                          {
+                            "type": "PREC",
+                            "value": -1,
+                            "content": {
+                              "type": "SYMBOL",
+                              "name": "_unannotated_type"
+                            }
+                          }
+                        ]
                       }
                     }
                   ]

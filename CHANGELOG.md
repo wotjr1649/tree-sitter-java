@@ -8,8 +8,8 @@
   additive expressions of the form `(Name) ± x`, including when an edit that introduced a syntax
   error elsewhere is undone. Raise the dynamic precedence of record patterns and distinguish primitive
   casts from reference casts in the grammar. A signed unary operand can follow a primitive cast.
-  `cast_expression.type` lists eight existing `_type` alternatives directly in the generated schema.
-  The generated parser grows from 3,037,379 to 3,157,054 bytes (+3.94%) and from 1,685 to 1,739 states.
+  The generated node schema is byte-identical to 3.0.0.
+  The generated parser grows from 3,037,379 to 3,157,564 bytes (+3.96%) and from 1,685 to 1,740 states.
   With Tree-sitter CLI 0.27.2, run `tree-sitter fuzz --edits 3 --iterations 10` with
   `--include K26.guarded.arrow` and `TREE_SITTER_SEED` set to `11199212549396579242` or
   `4772551502783724415`. Use `--include Parenthesized.names.before.additive.operators` with
