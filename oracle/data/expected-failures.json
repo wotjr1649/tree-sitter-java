@@ -264,6 +264,13 @@
       "base_failure": "root hasError; 1 ERROR",
       "base_tree": "(program (class_declaration name: (identifier) body: (class_body (method_declaration type: (void_type) name: (identifier) parameters: (formal_parameters (formal_parameter type: (array_type element: (type_identifier) dimensions: (dimensions)) name: (identifier)) (formal_parameter type: (array_type element: (integral_type) dimensions: (dimensions)) name: (identifier))) body: (block (local_variable_declaration type: (type_identifier) declarator: (variable_declarator name: (identifier) value: (lambda_expression parameters: (formal_parameters) body: (block (ERROR (identifier) (identifier)) (block))))))))))",
       "note": "documented limit (owner 2026-11-21)"
+    },
+    "k16/void-signed-operand": {
+      "k": "K34",
+      "sha256": "abf222b85c38cd6184a35ce247a0a71c5cac290cc64b9709ce769c3c4fd65d75",
+      "base_failure": "root hasError; 1 ERROR",
+      "base_tree": "(program (class_declaration name: (identifier) body: (class_body (field_declaration type: (integral_type) declarator: (variable_declarator name: (identifier))) (method_declaration type: (integral_type) name: (identifier) parameters: (formal_parameters (formal_parameter type: (type_identifier) name: (identifier)) (formal_parameter type: (integral_type) name: (identifier)) (formal_parameter type: (integral_type) name: (identifier))) body: (block (return_statement (cast_expression type: (void_type) (ERROR) value: (identifier))))))))",
+      "note": "withdrawn tolerance in 3.0.1 (fails full javac compilation, see docs/tolerances.md)"
     }
   }
 }

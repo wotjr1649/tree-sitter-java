@@ -1,5 +1,36 @@
 # Changelog
 
+## Unreleased
+
+### Fixes
+
+- **K34.** Incremental parsing agrees with a fresh parse for guarded empty record patterns and
+  additive expressions of the form `(Name) ± x`, including when an edit that introduced a syntax
+  error elsewhere is undone. Raise the dynamic precedence of record patterns and keep parenthesized
+  names before plus or minus in the additive grammar. Signed operands remain accepted after primitive,
+  generic and array cast types, matching javac's parser for those forms. For example,
+  `(Comparable<Integer>) -k` also passes full compilation.
+  The generated node schema is byte-identical to 3.0.0.
+  The generated parser grows from 3,037,379 to 3,157,694 bytes (+3.96%) and from 1,685 to 1,740 states.
+  With Tree-sitter CLI 0.27.2, run `tree-sitter fuzz --edits 3 --iterations 10` with
+  `--include K26.guarded.arrow` and `TREE_SITTER_SEED` set to `11199212549396579242` or
+  `4772551502783724415`. Use `--include Parenthesized.names.before.additive.operators` with
+  seed `11085115286979003466` for the additive case.
+  [JLS 25 §14.11.1](https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html#jls-14.11.1) ·
+  [§14.30.1](https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html#jls-14.30.1) ·
+  [§15.16](https://docs.oracle.com/javase/specs/jls/se25/html/jls-15.html#jls-15.16)
+
+### Withdrawn tolerances
+
+- `(@A Integer) -k` reports `compiler.err.illegal.start.of.expr` during javac parsing.
+  A simple or qualified name followed by plus or minus takes the additive reading.
+- `(void) -k` now produces a parse error because `void` is not a cast target. Javac parses the
+  form and rejects it during full compilation with `compiler.err.void.not.allowed.here` and
+  `compiler.err.prob.found.req` (`compiler.misc.inconvertible.types`).
+- The same applies to other forms javac's parser rejects before a sign: annotated simple or qualified
+  names (`(@A java.lang.Integer) -k`, `(Outer.@A Inner) -k`), qualified types with a generic qualifier
+  (`(Cn<T>.Inner) -k`, `(a.B<String>.D) -k`) and `(@A void) -k`. None of them is pinned as a case.
+
 ## 3.0.0
 
 Phase 5 makes three breaking changes. Java's reserved keywords and the literals `true`, `false` and `null`

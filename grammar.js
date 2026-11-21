@@ -71,6 +71,14 @@ function switchLabelRules(label) {
   };
 }
 
+function unaryExpression(operator, expression) {
+  return prec.left(PREC.UNARY, seq(field('operator', operator), field('operand', expression)));
+}
+
+function prefixUpdateExpression(expression) {
+  return prec.left(PREC.UNARY, seq(choice('++', '--'), expression));
+}
+
 module.exports = grammar({
   name: 'java',
 
@@ -101,18 +109,21 @@ module.exports = grammar({
   ],
 
   conflicts: $ => [
+    [$.primary_expression, $._non_primitive_cast_type],
+    [$._parenthesized_assignment_target, $.primary_expression, $._non_primitive_cast_type],
+    [$.inferred_parameters, $.primary_expression, $._non_primitive_cast_type],
+    [$.modifiers, $._annotated_signed_operand_cast_type, $._annotated_non_primitive_cast_type, $.annotated_type, $.receiver_parameter],
+    [$._parenthesized_assignment_target, $.inferred_parameters, $.primary_expression, $._non_primitive_cast_type],
+    [$._non_primitive_cast_type, $._reserved_identifier],
     // Both label interpretations can start with the same expression.
     [$.cast_expression, $._switch_cast_expression],
     [$.switch_label, $._arrow_switch_label],
     [$.expression, $._switch_label_expression],
-    [$.modifiers, $.annotated_type, $.receiver_parameter],
     [$.modifiers, $.annotated_type, $.module_declaration, $.package_declaration],
     [$.module_declaration, $._unannotated_type],
     // `enum E { @A sealed }`: `sealed` after annotations is a modifier or the constant name.
     [$.modifiers],
     // A closing parenthesis can end a target, a value, a cast type, or lambda parameters.
-    [$._parenthesized_assignment_target, $.inferred_parameters, $.primary_expression, $._unannotated_type],
-    [$._parenthesized_assignment_target, $.primary_expression, $._unannotated_type],
     [$._parenthesized_assignment_target, $.primary_expression],
     [$._parenthesized_assignment_target, $.inferred_parameters, $.primary_expression],
     [$._unannotated_type, $.primary_expression],
@@ -328,32 +339,56 @@ module.exports = grammar({
       $.lambda_expression,
       $.ternary_expression,
       $.update_expression,
+      alias($._prefix_update_expression, $.update_expression),
       $.primary_expression,
       $.unary_expression,
+      alias($._signed_unary_expression, $.unary_expression),
       $.cast_expression,
       $.switch_expression,
     ),
 
-    ...expressionRule('cast_expression', ($, expression, allowLambda) => prec(PREC.CAST, choice(
-      // JLS 25 §15.16: (Name) + x and (Name) - x are additive expressions.
-      prec.dynamic(-1, seq(
-        '(',
-        field('type', $._type),
-        ')',
-        field('value', expression),
-      )),
-      seq(
-        '(',
-        field('type', $._type),
-        repeat1(seq('&', field('type', $._type))),
-        ')',
-        field('value', choice(
-          $.primary_expression,
-          ...(allowLambda ? [$.lambda_expression] : []),
-          alias($._postfix_update_expression, $.update_expression),
-        )),
-      ),
-    ))),
+    ...expressionRule('cast_expression', ($, expression, allowLambda) => {
+      const unsignedOperand = choice(
+        $.primary_expression,
+        $.switch_expression,
+        alias($._postfix_update_expression, $.update_expression),
+        // Preserve the single-type prefix update tolerance (K21).
+        alias(allowLambda ? $._prefix_update_expression : $._switch_prefix_update_expression, $.update_expression),
+        allowLambda ? $.unary_expression : alias($._switch_unary_expression, $.unary_expression),
+        allowLambda ? $.cast_expression : alias($._switch_cast_expression, $.cast_expression),
+        ...(allowLambda ? [$.lambda_expression] : []),
+      );
+      return prec(PREC.CAST, choice(
+        // javac also accepts a signed operand after a generic or array type.
+        seq(
+          '(',
+          field('type', choice($._signed_operand_cast_type, alias($._annotated_signed_operand_cast_type, $.annotated_type))),
+          ')',
+          field('value', expression),
+        ),
+        seq(
+          '(',
+          field('type', choice($._non_primitive_cast_type, alias($._annotated_non_primitive_cast_type, $.annotated_type))),
+          ')',
+          field('value', unsignedOperand),
+        ),
+        seq(
+          '(',
+          field('type', $._type),
+          repeat1(seq('&',
+            // Keep _type reductions for queries. The lower-priority alternative
+            // lets the schema generator collapse its concrete field types.
+            field('type', choice($._type, prec(-1, $._unannotated_type))),
+          )),
+          ')',
+          field('value', choice(
+            $.primary_expression,
+            ...(allowLambda ? [$.lambda_expression] : []),
+            alias($._postfix_update_expression, $.update_expression),
+          )),
+        ),
+      ));
+    }),
 
     ...expressionRule('assignment_expression', ($, expression) => prec.right(PREC.ASSIGN, seq(
       field('left', $._assignment_target),
@@ -450,23 +485,17 @@ module.exports = grammar({
       field('alternative', expression),
     ))),
 
-    ...expressionRule('unary_expression', ($, expression) => choice(...[
-      ['+', PREC.UNARY],
-      ['-', PREC.UNARY],
-      ['!', PREC.UNARY],
-      ['~', PREC.UNARY],
-    ].map(([operator, precedence]) =>
-      prec.left(precedence, seq(
-        // @ts-ignore
-        field('operator', operator),
-        field('operand', expression),
-      )),
-    ))),
+    ...expressionRule('unary_expression', ($, expression) =>
+      unaryExpression(choice('!', '~'), expression)),
 
-    ...expressionRule('update_expression', ($, expression) => choice(
-      prec.left(PREC.POSTFIX, seq(expression, choice('++', '--'))),
-      prec.left(PREC.UNARY, seq(choice('++', '--'), expression)),
-    )),
+    _signed_unary_expression: $ => unaryExpression(choice('+', '-'), $.expression),
+    _switch_signed_unary_expression: $ => unaryExpression(choice('+', '-'), $._switch_label_expression),
+
+    ...expressionRule('update_expression', ($, expression) =>
+      prec.left(PREC.POSTFIX, seq(expression, choice('++', '--')))),
+
+    _prefix_update_expression: $ => prefixUpdateExpression($.expression),
+    _switch_prefix_update_expression: $ => prefixUpdateExpression($._switch_label_expression),
 
     _postfix_update_expression: $ => prec.left(PREC.POSTFIX, seq(
       // Shift the postfix operator before reducing a cast with a primary operand.
@@ -640,6 +669,8 @@ module.exports = grammar({
       alias($._switch_ternary_expression, $.ternary_expression),
       alias($._switch_unary_expression, $.unary_expression),
       alias($._switch_update_expression, $.update_expression),
+      alias($._switch_prefix_update_expression, $.update_expression),
+      alias($._switch_signed_unary_expression, $.unary_expression),
     ),
 
     ...switchLabelRules(($, expression, guard) => choice(
@@ -656,8 +687,8 @@ module.exports = grammar({
 
     pattern: $ => choice(
       $.type_pattern,
-      // A case label can also read an empty record pattern as a method call.
-      prec.dynamic(1, $.record_pattern),
+      // Prefer the record pattern even if only the method call gets the arrow-label bonus.
+      prec.dynamic(2, $.record_pattern),
     ),
     // Public aliases keep the same tree for the patterns that follow a comma.
     _additional_case_pattern: $ => choice(
@@ -1364,6 +1395,25 @@ module.exports = grammar({
       $.scoped_type_identifier,
       $.generic_type,
     ),
+
+    _signed_operand_cast_type: $ => choice(
+      $.integral_type,
+      $.floating_point_type,
+      $.boolean_type,
+      $.generic_type,
+      $.array_type,
+    ),
+
+    _annotated_signed_operand_cast_type: $ => seq(repeat1($._annotation), $._signed_operand_cast_type),
+
+    _non_primitive_cast_type: $ => choice(
+      $.void_type,
+      alias($.identifier, $.type_identifier),
+      prec.dynamic(-1, alias(choice('open', 'module', 'with'), $.type_identifier)),
+      $.scoped_type_identifier,
+    ),
+
+    _annotated_non_primitive_cast_type: $ => seq(repeat1($._annotation), $._non_primitive_cast_type),
 
     annotated_type: $ => seq(
       repeat1($._annotation),

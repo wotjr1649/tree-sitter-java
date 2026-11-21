@@ -80,7 +80,9 @@
     {"kind": "TYPE_CAST", "start": 72, "end": 79, "status": "no_node_at_range", "reason": "limit"}
   ],
   "corpus/k24.txt/K24 intersection nested primitive signed": [
-    {"kind": "TYPE_CAST", "start": 71, "end": 79, "status": "mismatched_kind", "reason": "limit"}
+    {"kind": "TYPE_CAST", "start": 38, "end": 79, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "TYPE_CAST", "start": 71, "end": 79, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "UNARY_MINUS", "start": 77, "end": 79, "status": "no_node_at_range", "reason": "limit"}
   ],
   "corpus/k24.txt/K24 intersection switch": [
     {"kind": "CLASS", "start": 1, "end": 104, "status": "no_node_at_range", "reason": "limit"},
@@ -90,6 +92,20 @@
     {"kind": "SWITCH_EXPRESSION", "start": 71, "end": 99, "status": "no_node_at_range", "reason": "limit"},
     {"kind": "PARENTHESIZED", "start": 78, "end": 81, "status": "mismatched_kind", "reason": "limit"},
     {"kind": "CASE", "start": 84, "end": 97, "status": "no_node_at_range", "reason": "limit"}
+  ],
+  "corpus/k34.txt/K34 javac generic casts with signed operands": [
+    {"kind": "ANNOTATED_TYPE", "start": 367, "end": 380, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "PARAMETERIZED_TYPE", "start": 367, "end": 389, "status": "mismatched_kind", "reason": "limit"}
+  ],
+  "corpus/k34.txt/K34 withdrawn signed cast to void": [
+    {"kind": "UNARY_MINUS", "start": 69, "end": 71, "status": "no_node_at_range", "reason": "error-case"}
+  ],
+  "k34/annotated-generic-minus-invocation": [
+    {"kind": "ANNOTATED_TYPE", "start": 63, "end": 76, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "PARAMETERIZED_TYPE", "start": 63, "end": 85, "status": "mismatched_kind", "reason": "limit"}
+  ],
+  "k16/void-signed-operand": [
+    {"kind": "UNARY_MINUS", "start": 68, "end": 70, "status": "no_node_at_range", "reason": "limit"}
   ],
   "k24/intersection-annotated": [
     {"kind": "LOGICAL_COMPLEMENT", "start": 171, "end": 176, "status": "no_node_at_range", "reason": "limit"}
@@ -105,7 +121,9 @@
     {"kind": "TYPE_CAST", "start": 71, "end": 78, "status": "no_node_at_range", "reason": "limit"}
   ],
   "k24/intersection-nested-primitive-signed": [
-    {"kind": "TYPE_CAST", "start": 70, "end": 78, "status": "mismatched_kind", "reason": "limit"}
+    {"kind": "TYPE_CAST", "start": 37, "end": 78, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "TYPE_CAST", "start": 70, "end": 78, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "UNARY_MINUS", "start": 76, "end": 78, "status": "no_node_at_range", "reason": "limit"}
   ],
   "k24/intersection-nested-reference": [
     {"kind": "TYPE_CAST", "start": 73, "end": 84, "status": "no_node_at_range", "reason": "limit"}
