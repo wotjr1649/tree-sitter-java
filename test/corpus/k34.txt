@@ -1,0 +1,51 @@
+==========================================================
+K34 guarded arrow after an error in the record declaration
+==========================================================
+
+class Case { record SgOO8
+! 0zob8iR tamp() {} int pick(Object value, boolean allowed) { return switch (value) { case Stamp() when allowed -> 1; default -> 0; }; } }
+
+---
+
+(program
+  (class_declaration
+    (identifier)
+    (class_body
+      (record_declaration
+        (identifier)
+        (ERROR
+          (decimal_integer_literal)
+          (identifier)
+          (identifier))
+        (formal_parameters)
+        (class_body))
+      (method_declaration
+        (integral_type)
+        (identifier)
+        (formal_parameters
+          (formal_parameter
+            (type_identifier)
+            (identifier))
+          (formal_parameter
+            (boolean_type)
+            (identifier)))
+        (block
+          (return_statement
+            (switch_expression
+              (parenthesized_expression
+                (identifier))
+              (switch_block
+                (switch_rule
+                  (switch_label
+                    (pattern
+                      (record_pattern
+                        (identifier)
+                        (record_pattern_body)))
+                    (guard
+                      (identifier)))
+                  (expression_statement
+                    (decimal_integer_literal)))
+                (switch_rule
+                  (switch_label)
+                  (expression_statement
+                    (decimal_integer_literal)))))))))))

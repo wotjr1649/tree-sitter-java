@@ -1,5 +1,18 @@
 # Changelog
 
+## Unreleased
+
+### Fixes
+
+- **K34.** Keep `case Stamp() when allowed ->` as a `record_pattern` when recovering from a
+  syntax error introduced earlier in the file, and when the edit is undone. Raising the record
+  pattern's dynamic precedence breaks its tie with the arrow-label reading of the method call.
+  The corpus case `K26 guarded arrow` reproduces the issue on 2.4.0 and 3.0.0. Use
+  Tree-sitter CLI 0.27.2 with `TREE_SITTER_SEED=11199212549396579242` and
+  `tree-sitter fuzz --include K26.guarded.arrow --edits 3 --iterations 10`.
+  [JLS 25 §14.11.1](https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html#jls-14.11.1) ·
+  [§14.30.1](https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html#jls-14.30.1)
+
 ## 3.0.0
 
 Phase 5 makes three breaking changes. Java's reserved keywords and the literals `true`, `false` and `null`
