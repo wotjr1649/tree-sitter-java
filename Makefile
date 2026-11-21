@@ -4,7 +4,7 @@ endif
 
 LANGUAGE_NAME := tree-sitter-java
 HOMEPAGE_URL := https://github.com/wotjr1649/tree-sitter-java
-VERSION := 3.0.0
+VERSION := 3.0.1
 
 # repository
 SRC_DIR := src

@@ -1,6 +1,16 @@
 # Changelog
 
-## Unreleased
+## 3.0.1
+
+K34 addresses Phase 6 exit criterion 3 by making incremental and fresh parses agree for guarded
+empty record patterns and expressions such as `(Name) + x` and `(Name) - x`. Parenthesized names
+follow the additive grammar under JLS 25 §15.16. Signed operands after primitive, generic and array
+cast types continue to follow javac's parser. The release withdraws the signed-cast forms listed below.
+Inlining `_annotation` recovers part of the parser size increase. The public node schema is
+byte-identical to 3.0.0.
+
+Compared with 3.0.0, `parser.c` grows from 3,037,379 to 3,141,021 bytes
+(+103,642, +3.41%) and the state count grows from 1,685 to 1,740 (+55, +3.26%).
 
 ### Fixes
 
@@ -11,7 +21,8 @@
   generic and array cast types, matching javac's parser for those forms. For example,
   `(Comparable<Integer>) -k` also passes full compilation.
   The generated node schema is byte-identical to 3.0.0.
-  The generated parser grows from 3,037,379 to 3,157,694 bytes (+3.96%) and from 1,685 to 1,740 states.
+  With K34 alone the generated parser grows from 3,037,379 to 3,157,694 bytes (+3.96%)
+  and from 1,685 to 1,740 states.
   With Tree-sitter CLI 0.27.2, run `tree-sitter fuzz --edits 3 --iterations 10` with
   `--include K26.guarded.arrow` and `TREE_SITTER_SEED` set to `11199212549396579242` or
   `4772551502783724415`. Use `--include Parenthesized.names.before.additive.operators` with

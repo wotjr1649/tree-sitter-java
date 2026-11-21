@@ -1,6 +1,7 @@
 # Java grammar tolerances and known limits
 
-This document describes the v3.0.0 grammar based on main commit `76c6d80` and the pending 3.0.1 changes.
+This document describes the v3.0.1 grammar based on main commit `4e19038`.
+The two pinned forms withdrawn in 3.0.1 were spot-checked with the v3.0.1 parser.
 Phase 5 and K30–K33 rows were spot-checked with the v3.0.0 parser. The Phase 3 rows were rechecked
 with the v2.4.0 parser.
 Javac verdicts use Eclipse Temurin 25.0.5+8 with `--release 25` and preview disabled.
