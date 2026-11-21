@@ -6,6 +6,22 @@
 
 - Remove redundant grammar and highlight definitions, share javac verdict metadata and hashing, and restore the pkg-config description.
 
+### Performance
+
+- Incremental reparses recover the slowdown introduced by per-state reserved-word sets, which split
+  lex modes and blocked first-token reuse. Package declarations and modifiers share their leading
+  annotation sequence. Interface methods use a dedicated rule, and root package and import declarations
+  use rules that share the enclosing program's lookahead. In 63 identifier insertions, lexer calls fell
+  from 13,056 to 9,492 and reserved-set rejections of the old tree's first token fell from 2,783 to 87.
+  With the C 0.27.2 runtime on the 63-file sample, the eight edit types took 19.6–23.4% less time
+  than v1.0.0 and 26.9–31.3% less than the previous parser (`57bb553`). Fresh parse time changed by
+  -0.8% and -0.5%, respectively, within the variation measured by same-source controls. The generated
+  `parser.c` grew from 3,141,021 to 3,204,299 bytes (+2.01%) and from 1,740 to 1,784 states. The node
+  schema and error-free trees in the 83,367 pinned examples are identical. The rejected oracle inputs
+  `k5/x03-no-type` and `k7/rx3-qualified-without-dot` now recover through `receiver_parameter` in
+  place of `spread_parameter` and `formal_parameter`, respectively. Both still report syntax errors.
+  Five pinned OpenJDK examples that already reported syntax errors also have different recovery trees.
+
 ## 3.0.1
 
 K34 addresses Phase 6 exit criterion 3 by making incremental and fresh parses agree for guarded
