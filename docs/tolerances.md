@@ -149,6 +149,9 @@ The following signed-operand cast forms now produce parse errors. A parenthesize
 before plus or minus follows the additive grammar. Signed operands after generic or array cast types stay
 accepted, as in javac's parse phase. For example, `(Comparable<Integer>) -k` also compiles in javac.
 The reference-cast rule in the specification is stricter. [JLS 25 §15.16][jls-cast]
+The same holds for other forms javac's parser rejects before a sign: annotated simple or qualified names
+such as `(@A java.lang.Integer) -k` and `(Outer.@A Inner) -k`, qualified types with a generic qualifier such as
+`(Cn<T>.Inner) -k`, and `(@A void) -k`. The table lists the pinned cases only.
 
 | Java form | javac diagnostic code(s) | Oracle case | Reason |
 | --- | --- | --- | --- |

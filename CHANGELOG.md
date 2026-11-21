@@ -27,6 +27,9 @@
 - `(void) -k` now produces a parse error because `void` is not a cast target. Javac parses the
   form and rejects it during full compilation with `compiler.err.void.not.allowed.here` and
   `compiler.err.prob.found.req` (`compiler.misc.inconvertible.types`).
+- The same applies to other forms javac's parser rejects before a sign: annotated simple or qualified
+  names (`(@A java.lang.Integer) -k`, `(Outer.@A Inner) -k`), qualified types with a generic qualifier
+  (`(Cn<T>.Inner) -k`, `(a.B<String>.D) -k`) and `(@A void) -k`. None of them is pinned as a case.
 
 ## 3.0.0
 
