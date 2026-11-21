@@ -51,32 +51,126 @@ class Case { record SgOO8
                     (decimal_integer_literal)))))))))))
 
 ==========================================================
-K34 withdrawn signed cast to array
-:error
+K34 restored signed cast to array
 ==========================================================
 
-// K34 withdraws signed-operand tolerances for non-primitive casts (JLS 25 15.16).
 class K16 { int count; int f(K16 box, int n, int k) { return (int[]) -k; } }
 
 ---
 
+(program
+  (class_declaration
+    (identifier)
+    (class_body
+      (field_declaration
+        (integral_type)
+        (variable_declarator
+          (identifier)))
+      (method_declaration
+        (integral_type)
+        (identifier)
+        (formal_parameters
+          (formal_parameter
+            (type_identifier)
+            (identifier))
+          (formal_parameter
+            (integral_type)
+            (identifier))
+          (formal_parameter
+            (integral_type)
+            (identifier)))
+        (block
+          (return_statement
+            (cast_expression
+              (array_type
+                (integral_type)
+                (dimensions))
+              (unary_expression
+                (identifier)))))))))
+
 ==========================================================
-K34 withdrawn signed cast to generic type
-:error
+K34 restored signed cast to generic type
 ==========================================================
 
 class K16 { int count; int f(K16 box, int n, int k) { return (java.util.List<String>) -k; } }
 
 ---
 
+(program
+  (class_declaration
+    (identifier)
+    (class_body
+      (field_declaration
+        (integral_type)
+        (variable_declarator
+          (identifier)))
+      (method_declaration
+        (integral_type)
+        (identifier)
+        (formal_parameters
+          (formal_parameter
+            (type_identifier)
+            (identifier))
+          (formal_parameter
+            (integral_type)
+            (identifier))
+          (formal_parameter
+            (integral_type)
+            (identifier)))
+        (block
+          (return_statement
+            (cast_expression
+              (generic_type
+                (scoped_type_identifier
+                  (scoped_type_identifier
+                    (type_identifier)
+                    (type_identifier))
+                  (type_identifier))
+                (type_arguments
+                  (type_identifier)))
+              (unary_expression
+                (identifier)))))))))
+
 ==========================================================
-K34 withdrawn signed cast to qualified generic type
-:error
+K34 restored signed cast to qualified generic type
 ==========================================================
 
 class K16 { int count; int f(K16 box, int n, int k) { return (K16.A<String>) +k; } }
 
 ---
+
+(program
+  (class_declaration
+    (identifier)
+    (class_body
+      (field_declaration
+        (integral_type)
+        (variable_declarator
+          (identifier)))
+      (method_declaration
+        (integral_type)
+        (identifier)
+        (formal_parameters
+          (formal_parameter
+            (type_identifier)
+            (identifier))
+          (formal_parameter
+            (integral_type)
+            (identifier))
+          (formal_parameter
+            (integral_type)
+            (identifier)))
+        (block
+          (return_statement
+            (cast_expression
+              (generic_type
+                (scoped_type_identifier
+                  (type_identifier)
+                  (type_identifier))
+                (type_arguments
+                  (type_identifier)))
+              (unary_expression
+                (identifier)))))))))
 
 ==========================================================
 K34 withdrawn signed cast to annotated reference type
@@ -95,3 +189,159 @@ K34 withdrawn signed cast to void
 class K16 { int count; int f(K16 box, int n, int k) { return (void) -k; } }
 
 ---
+
+==========================================================
+K34 javac generic casts with signed operands
+==========================================================
+
+class SignedCasts {
+  Comparable<Integer> f0(int k) { return (Comparable<Integer>) -k; }
+  Comparable<Integer> f1(int k) { return (java.lang.Comparable<Integer>) +k; }
+  Comparable<?> f2(int k) { return (Comparable<?>) -(k); }
+  Comparable<? super Integer> f3(int[] arr) { return (Comparable<? super Integer>) -arr[0]; }
+  Comparable<Integer> f4(Object t) { return (@A Comparable<Integer>) -t.hashCode(); }
+}
+@java.lang.annotation.Target(java.lang.annotation.ElementType.TYPE_USE) @interface A {}
+
+---
+
+(program
+  (class_declaration
+    (identifier)
+    (class_body
+      (method_declaration
+        (generic_type
+          (type_identifier)
+          (type_arguments
+            (type_identifier)))
+        (identifier)
+        (formal_parameters
+          (formal_parameter
+            (integral_type)
+            (identifier)))
+        (block
+          (return_statement
+            (cast_expression
+              (generic_type
+                (type_identifier)
+                (type_arguments
+                  (type_identifier)))
+              (unary_expression
+                (identifier))))))
+      (method_declaration
+        (generic_type
+          (type_identifier)
+          (type_arguments
+            (type_identifier)))
+        (identifier)
+        (formal_parameters
+          (formal_parameter
+            (integral_type)
+            (identifier)))
+        (block
+          (return_statement
+            (cast_expression
+              (generic_type
+                (scoped_type_identifier
+                  (scoped_type_identifier
+                    (type_identifier)
+                    (type_identifier))
+                  (type_identifier))
+                (type_arguments
+                  (type_identifier)))
+              (unary_expression
+                (identifier))))))
+      (method_declaration
+        (generic_type
+          (type_identifier)
+          (type_arguments
+            (wildcard)))
+        (identifier)
+        (formal_parameters
+          (formal_parameter
+            (integral_type)
+            (identifier)))
+        (block
+          (return_statement
+            (cast_expression
+              (generic_type
+                (type_identifier)
+                (type_arguments
+                  (wildcard)))
+              (unary_expression
+                (parenthesized_expression
+                  (identifier)))))))
+      (method_declaration
+        (generic_type
+          (type_identifier)
+          (type_arguments
+            (wildcard
+              (super)
+              (type_identifier))))
+        (identifier)
+        (formal_parameters
+          (formal_parameter
+            (array_type
+              (integral_type)
+              (dimensions))
+            (identifier)))
+        (block
+          (return_statement
+            (cast_expression
+              (generic_type
+                (type_identifier)
+                (type_arguments
+                  (wildcard
+                    (super)
+                    (type_identifier))))
+              (unary_expression
+                (array_access
+                  (identifier)
+                  (decimal_integer_literal)))))))
+      (method_declaration
+        (generic_type
+          (type_identifier)
+          (type_arguments
+            (type_identifier)))
+        (identifier)
+        (formal_parameters
+          (formal_parameter
+            (type_identifier)
+            (identifier)))
+        (block
+          (return_statement
+            (cast_expression
+              (annotated_type
+                (marker_annotation
+                  (identifier))
+                (generic_type
+                  (type_identifier)
+                  (type_arguments
+                    (type_identifier))))
+              (unary_expression
+                (method_invocation
+                  (identifier)
+                  (identifier)
+                  (argument_list)))))))))
+  (annotation_type_declaration
+    (modifiers
+      (annotation
+        (scoped_identifier
+          (scoped_identifier
+            (scoped_identifier
+              (identifier)
+              (identifier))
+            (identifier))
+          (identifier))
+        (annotation_argument_list
+          (field_access
+            (field_access
+              (field_access
+                (field_access
+                  (identifier)
+                  (identifier))
+                (identifier))
+              (identifier))
+            (identifier)))))
+    (identifier)
+    (annotation_type_body)))

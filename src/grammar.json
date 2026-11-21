@@ -1705,13 +1705,13 @@
                   "members": [
                     {
                       "type": "SYMBOL",
-                      "name": "_primitive_cast_type"
+                      "name": "_signed_operand_cast_type"
                     },
                     {
                       "type": "ALIAS",
                       "content": {
                         "type": "SYMBOL",
-                        "name": "_annotated_primitive_cast_type"
+                        "name": "_annotated_signed_operand_cast_type"
                       },
                       "named": true,
                       "value": "annotated_type"
@@ -1919,13 +1919,13 @@
                   "members": [
                     {
                       "type": "SYMBOL",
-                      "name": "_primitive_cast_type"
+                      "name": "_signed_operand_cast_type"
                     },
                     {
                       "type": "ALIAS",
                       "content": {
                         "type": "SYMBOL",
-                        "name": "_annotated_primitive_cast_type"
+                        "name": "_annotated_signed_operand_cast_type"
                       },
                       "named": true,
                       "value": "annotated_type"
@@ -9576,7 +9576,7 @@
         }
       ]
     },
-    "_primitive_cast_type": {
+    "_signed_operand_cast_type": {
       "type": "CHOICE",
       "members": [
         {
@@ -9590,10 +9590,18 @@
         {
           "type": "SYMBOL",
           "name": "boolean_type"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "generic_type"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "array_type"
         }
       ]
     },
-    "_annotated_primitive_cast_type": {
+    "_annotated_signed_operand_cast_type": {
       "type": "SEQ",
       "members": [
         {
@@ -9605,7 +9613,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "_primitive_cast_type"
+          "name": "_signed_operand_cast_type"
         }
       ]
     },
@@ -9654,14 +9662,6 @@
         {
           "type": "SYMBOL",
           "name": "scoped_type_identifier"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "generic_type"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "array_type"
         }
       ]
     },
@@ -10518,7 +10518,7 @@
     ],
     [
       "modifiers",
-      "_annotated_primitive_cast_type",
+      "_annotated_signed_operand_cast_type",
       "_annotated_non_primitive_cast_type",
       "annotated_type",
       "receiver_parameter"
@@ -10548,11 +10548,6 @@
     [
       "modifiers",
       "annotated_type",
-      "receiver_parameter"
-    ],
-    [
-      "modifiers",
-      "annotated_type",
       "module_declaration",
       "package_declaration"
     ],
@@ -10562,17 +10557,6 @@
     ],
     [
       "modifiers"
-    ],
-    [
-      "_parenthesized_assignment_target",
-      "inferred_parameters",
-      "primary_expression",
-      "_unannotated_type"
-    ],
-    [
-      "_parenthesized_assignment_target",
-      "primary_expression",
-      "_unannotated_type"
     ],
     [
       "_parenthesized_assignment_target",

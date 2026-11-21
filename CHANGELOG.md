@@ -6,10 +6,12 @@
 
 - **K34.** Incremental parsing agrees with a fresh parse for guarded empty record patterns and
   additive expressions of the form `(Name) ± x`, including when an edit that introduced a syntax
-  error elsewhere is undone. Raise the dynamic precedence of record patterns and distinguish primitive
-  casts from reference casts in the grammar. A signed unary operand can follow a primitive cast.
+  error elsewhere is undone. Raise the dynamic precedence of record patterns and keep parenthesized
+  names before plus or minus in the additive grammar. Signed operands remain accepted after primitive,
+  generic and array cast types, matching javac's parser for those forms. For example,
+  `(Comparable<Integer>) -k` also passes full compilation.
   The generated node schema is byte-identical to 3.0.0.
-  The generated parser grows from 3,037,379 to 3,157,564 bytes (+3.96%) and from 1,685 to 1,740 states.
+  The generated parser grows from 3,037,379 to 3,157,694 bytes (+3.96%) and from 1,685 to 1,740 states.
   With Tree-sitter CLI 0.27.2, run `tree-sitter fuzz --edits 3 --iterations 10` with
   `--include K26.guarded.arrow` and `TREE_SITTER_SEED` set to `11199212549396579242` or
   `4772551502783724415`. Use `--include Parenthesized.names.before.additive.operators` with
@@ -20,15 +22,11 @@
 
 ### Withdrawn tolerances
 
-These forms now produce parse errors. Temurin 25.0.5+8 reports the following diagnostics during full
-compilation with `javac --release 25 -proc:none -XDrawDiagnostics`.
-
-- `(int[]) -k` reports `compiler.err.prob.found.req` with `compiler.misc.inconvertible.types`.
-- `(java.util.List<String>) -k` reports `compiler.err.prob.found.req` with `compiler.misc.inconvertible.types`.
-- `(K16.A<String>) +k` reports `compiler.err.cant.resolve.location` for `A` in the fixture.
-- `(@A Integer) -k` reports `compiler.err.illegal.start.of.expr`.
-- `(void) -k` reports `compiler.err.void.not.allowed.here` and `compiler.err.prob.found.req`
-  with `compiler.misc.inconvertible.types`.
+- `(@A Integer) -k` reports `compiler.err.illegal.start.of.expr` during javac parsing.
+  A simple or qualified name followed by plus or minus takes the additive reading.
+- `(void) -k` now produces a parse error because `void` is not a cast target. Javac parses the
+  form and rejects it during full compilation with `compiler.err.void.not.allowed.here` and
+  `compiler.err.prob.found.req` (`compiler.misc.inconvertible.types`).
 
 ## 3.0.0
 

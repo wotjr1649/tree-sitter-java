@@ -1,8 +1,8 @@
 {
   "meta": {
     "api": "com.sun.source.util.JavacTask.parse()",
-    "case_count": 2,
-    "cases_sha256": "e492980313ad61167ad9bcdfd0a6d10127ac6fd62c37f524bd271a3cf89a5f77",
+    "case_count": 7,
+    "cases_sha256": "27ddc9c8fbfc660d807b24616003a647af51cefba22f0afe12ba0df848e7abb9",
     "java.runtime.version": "25.0.5+8-LTS",
     "java.vendor": "Eclipse Adoptium",
     "options": ["--release", "25", "-proc:none"],
@@ -13,6 +13,11 @@
   },
   "verdicts": {
     "k34/record-declaration-error": ["compiler.err.expected", "compiler.err.illegal.start.of.type"],
-    "k34/record-declaration-comment": []
+    "k34/record-declaration-comment": [],
+    "k34/generic-minus": [],
+    "k34/qualified-generic-plus": [],
+    "k34/wildcard-minus-parenthesized": [],
+    "k34/bounded-wildcard-minus-index": [],
+    "k34/annotated-generic-minus-invocation": []
   }
 }

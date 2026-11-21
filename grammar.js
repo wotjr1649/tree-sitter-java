@@ -112,21 +112,18 @@ module.exports = grammar({
     [$.primary_expression, $._non_primitive_cast_type],
     [$._parenthesized_assignment_target, $.primary_expression, $._non_primitive_cast_type],
     [$.inferred_parameters, $.primary_expression, $._non_primitive_cast_type],
-    [$.modifiers, $._annotated_primitive_cast_type, $._annotated_non_primitive_cast_type, $.annotated_type, $.receiver_parameter],
+    [$.modifiers, $._annotated_signed_operand_cast_type, $._annotated_non_primitive_cast_type, $.annotated_type, $.receiver_parameter],
     [$._parenthesized_assignment_target, $.inferred_parameters, $.primary_expression, $._non_primitive_cast_type],
     [$._non_primitive_cast_type, $._reserved_identifier],
     // Both label interpretations can start with the same expression.
     [$.cast_expression, $._switch_cast_expression],
     [$.switch_label, $._arrow_switch_label],
     [$.expression, $._switch_label_expression],
-    [$.modifiers, $.annotated_type, $.receiver_parameter],
     [$.modifiers, $.annotated_type, $.module_declaration, $.package_declaration],
     [$.module_declaration, $._unannotated_type],
     // `enum E { @A sealed }`: `sealed` after annotations is a modifier or the constant name.
     [$.modifiers],
     // A closing parenthesis can end a target, a value, a cast type, or lambda parameters.
-    [$._parenthesized_assignment_target, $.inferred_parameters, $.primary_expression, $._unannotated_type],
-    [$._parenthesized_assignment_target, $.primary_expression, $._unannotated_type],
     [$._parenthesized_assignment_target, $.primary_expression],
     [$._parenthesized_assignment_target, $.inferred_parameters, $.primary_expression],
     [$._unannotated_type, $.primary_expression],
@@ -362,10 +359,10 @@ module.exports = grammar({
         ...(allowLambda ? [$.lambda_expression] : []),
       );
       return prec(PREC.CAST, choice(
-        // JLS 25 §15.16 confines signed unary operands to primitive casts.
+        // javac also accepts a signed operand after a generic or array type.
         seq(
           '(',
-          field('type', choice($._primitive_cast_type, alias($._annotated_primitive_cast_type, $.annotated_type))),
+          field('type', choice($._signed_operand_cast_type, alias($._annotated_signed_operand_cast_type, $.annotated_type))),
           ')',
           field('value', expression),
         ),
@@ -1399,17 +1396,21 @@ module.exports = grammar({
       $.generic_type,
     ),
 
-    _primitive_cast_type: $ => choice($.integral_type, $.floating_point_type, $.boolean_type),
+    _signed_operand_cast_type: $ => choice(
+      $.integral_type,
+      $.floating_point_type,
+      $.boolean_type,
+      $.generic_type,
+      $.array_type,
+    ),
 
-    _annotated_primitive_cast_type: $ => seq(repeat1($._annotation), $._primitive_cast_type),
+    _annotated_signed_operand_cast_type: $ => seq(repeat1($._annotation), $._signed_operand_cast_type),
 
     _non_primitive_cast_type: $ => choice(
       $.void_type,
       alias($.identifier, $.type_identifier),
       prec.dynamic(-1, alias(choice('open', 'module', 'with'), $.type_identifier)),
       $.scoped_type_identifier,
-      $.generic_type,
-      $.array_type,
     ),
 
     _annotated_non_primitive_cast_type: $ => seq(repeat1($._annotation), $._non_primitive_cast_type),

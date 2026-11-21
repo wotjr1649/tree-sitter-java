@@ -93,26 +93,16 @@
     {"kind": "PARENTHESIZED", "start": 78, "end": 81, "status": "mismatched_kind", "reason": "limit"},
     {"kind": "CASE", "start": 84, "end": 97, "status": "no_node_at_range", "reason": "limit"}
   ],
-  "corpus/k34.txt/K34 withdrawn signed cast to array": [
-    {"kind": "UNARY_MINUS", "start": 153, "end": 155, "status": "no_node_at_range", "reason": "error-case"}
-  ],
-  "corpus/k34.txt/K34 withdrawn signed cast to generic type": [
-    {"kind": "UNARY_MINUS", "start": 87, "end": 89, "status": "no_node_at_range", "reason": "error-case"}
-  ],
-  "corpus/k34.txt/K34 withdrawn signed cast to qualified generic type": [
-    {"kind": "UNARY_PLUS", "start": 78, "end": 80, "status": "no_node_at_range", "reason": "error-case"}
+  "corpus/k34.txt/K34 javac generic casts with signed operands": [
+    {"kind": "ANNOTATED_TYPE", "start": 367, "end": 380, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "PARAMETERIZED_TYPE", "start": 367, "end": 389, "status": "mismatched_kind", "reason": "limit"}
   ],
   "corpus/k34.txt/K34 withdrawn signed cast to void": [
     {"kind": "UNARY_MINUS", "start": 69, "end": 71, "status": "no_node_at_range", "reason": "error-case"}
   ],
-  "k16/array-signed-operand": [
-    {"kind": "UNARY_MINUS", "start": 69, "end": 71, "status": "no_node_at_range", "reason": "limit"}
-  ],
-  "k16/generic-signed-operand": [
-    {"kind": "UNARY_MINUS", "start": 86, "end": 88, "status": "no_node_at_range", "reason": "limit"}
-  ],
-  "k16/qualified-generic-signed-operand": [
-    {"kind": "UNARY_PLUS", "start": 77, "end": 79, "status": "no_node_at_range", "reason": "limit"}
+  "k34/annotated-generic-minus-invocation": [
+    {"kind": "ANNOTATED_TYPE", "start": 63, "end": 76, "status": "no_node_at_range", "reason": "limit"},
+    {"kind": "PARAMETERIZED_TYPE", "start": 63, "end": 85, "status": "mismatched_kind", "reason": "limit"}
   ],
   "k16/void-signed-operand": [
     {"kind": "UNARY_MINUS", "start": 68, "end": 70, "status": "no_node_at_range", "reason": "limit"}

@@ -55,7 +55,8 @@ identifier controls and adjacent invalid inputs), `k28` (contextual statement la
 targets, switch controls and adjacent invalid inputs), `k29` (qualified type names starting with `open`, `module`, or
 `with`, qualified `super` method references, ordinary name controls, and adjacent invalid inputs), `k31` (`sealed` as an enum constant name, with
 the other contextual keywords, modifier tolerance controls and adjacent invalid inputs), `k34`
-(a guarded empty record pattern after an edit in the record declaration, plus a valid comment control), `phase5`
+(a guarded empty record pattern after an edit in the record declaration, a valid comment control, and
+signed generic casts from REVIEW-57), `phase5`
 (the 14 corpus inputs with withdrawn reserved-word tolerances), and `structural`
 (Phase 3 ambiguity probes and independently written reproducers). Every case names its origin in `provenance`: the
 bundle path with its `SHA256SUMS` hash, the PR, or "written in this task" (the task that added the case; the 56
@@ -184,8 +185,8 @@ A new input that the grammar fails but javac accepts is never added silently: it
 fix, or a recorded entry with its javac verdict and evidence. K25 records the documented limit on type-pattern
 bindings named `when`. Its dedicated cases record the trees from `f1e4257`, and the existing structural probes
 retain their recorded trees. K32 records `when` as a `for` variable name; its trees are those of `b8e1950`. See [known limits](../docs/tolerances.md#known-limits).
-K34 records four [withdrawn tolerances](../docs/tolerances.md#withdrawn-in-301) that javac accepts at parse time
-and rejects during full compilation. Their recorded trees are from the 3.0.1 K34 parser.
+K34 records `(void) -k` as a [withdrawn tolerance](../docs/tolerances.md#withdrawn-in-301). Javac accepts it
+at parse time and rejects it during full compilation. The recorded tree is from the 3.0.1 K34 parser.
 
 ## Node kinds and parser cost
 

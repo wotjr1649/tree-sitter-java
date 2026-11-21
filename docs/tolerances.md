@@ -145,18 +145,15 @@ parse error at the PR base must keep producing an error if its `C` counterpart a
 
 ## Withdrawn in 3.0.1
 
-The following signed-operand cast forms now produce parse errors. The diagnostics are from full compilation.
-The annotated reference case also fails in javac's parse phase. The other four pass that phase and are listed
-in the oracle's expected-failure set. A signed operand after a primitive cast such as `(@A int) -b` remains
-valid. [JLS 25 §15.16][jls-cast]
+The following signed-operand cast forms now produce parse errors. A parenthesized simple or qualified name
+before plus or minus follows the additive grammar. Signed operands after generic or array cast types stay
+accepted, as in javac's parse phase. For example, `(Comparable<Integer>) -k` also compiles in javac.
+The reference-cast rule in the specification is stricter. [JLS 25 §15.16][jls-cast]
 
-| Java form | javac diagnostic code(s) | Oracle case |
-| --- | --- | --- |
-| `(int[]) -k` | `prob.found.req` (`compiler.misc.inconvertible.types`) | `k16/array-signed-operand` |
-| `(java.util.List<String>) -k` | `prob.found.req` (`compiler.misc.inconvertible.types`) | `k16/generic-signed-operand` |
-| `(K16.A<String>) +k` | `cant.resolve.location` (`A` in the fixture) | `k16/qualified-generic-signed-operand` |
-| `(@A Integer) -k` | `illegal.start.of.expr` | `k16/annotated-reference-signed-operand` |
-| `(void) -k` | `void.not.allowed.here`, `prob.found.req` (`compiler.misc.inconvertible.types`) | `k16/void-signed-operand` |
+| Java form | javac diagnostic code(s) | Oracle case | Reason |
+| --- | --- | --- | --- |
+| `(@A Integer) -k` | `illegal.start.of.expr` | `k16/annotated-reference-signed-operand` | javac rejects the annotated reference name in this additive position during parsing. |
+| `(void) -k` | `void.not.allowed.here`, `prob.found.req` (`compiler.misc.inconvertible.types`) | `k16/void-signed-operand` | `void` cannot be a cast target. javac rejects the form during full compilation, and the oracle records its parse-phase acceptance as an expected difference. |
 
 ## Withdrawn in 3.0.0
 
