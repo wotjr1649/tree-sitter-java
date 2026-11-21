@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Maintenance
+
+- Remove redundant grammar and highlight definitions, share javac verdict metadata and hashing, and restore the pkg-config description.
+
 ## 3.0.1
 
 K34 addresses Phase 6 exit criterion 3 by making incremental and fresh parses agree for guarded

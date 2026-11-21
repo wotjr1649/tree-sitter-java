@@ -322,7 +322,7 @@ const runnerContexts = {
   PARAMETERIZED_TYPE: ['annotated-varargs-element'],
   NEW_CLASS: ['enum-constant-initializer'],
   CLASS: ['implicit-class', 'anonymous-class'],
-  // An anonymous class body is always a CLASS tree; ENUM keeps its existing row.
+  // javac reports enum constant class bodies as ENUM and other anonymous class bodies as CLASS.
   ENUM: ['anonymous-class'],
   INT_LITERAL: ['absorbed-decimal-minus'],
   LONG_LITERAL: ['absorbed-decimal-minus'],

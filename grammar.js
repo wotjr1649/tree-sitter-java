@@ -40,12 +40,8 @@ const PREC = {
   ADD: 12,            // +  -
   MULT: 13,           // *  /  %
   CAST: 14,           // (Type)
-  OBJ_INST: 14,       // new
   UNARY: 15,          // ++a  --a  +  -  !  ~
   POSTFIX: 16,        // a++  a--
-  ARRAY: 16,          // [Index]
-  OBJ_ACCESS: 16,     // .
-  PARENS: 16,         // (Expression)
   CLASS_LITERAL: 17,  // .
 };
 
@@ -79,6 +75,15 @@ function prefixUpdateExpression(expression) {
   return prec.left(PREC.UNARY, seq(choice('++', '--'), expression));
 }
 
+const openModuleWith = () => choice('open', 'module', 'with');
+
+const variableDeclaration = $ => seq(
+  optional($.modifiers),
+  field('type', $._unannotated_type),
+  $._variable_declarator_list,
+  ';',
+);
+
 module.exports = grammar({
   name: 'java',
 
@@ -95,7 +100,6 @@ module.exports = grammar({
     $.primary_expression,
     $._literal,
     $._type,
-    $._simple_type,
     $._unannotated_type,
     $.module_directive,
   ],
@@ -137,7 +141,6 @@ module.exports = grammar({
     [$.generic_type, $.primary_expression],
     [$.generic_type, $._reserved_identifier],
     [$.expression, $.statement],
-    // Only conflicts in switch expressions
     [$.lambda_expression, $.primary_expression],
     [$.inferred_parameters, $.primary_expression],
     [$.argument_list, $.record_pattern_body],
@@ -213,7 +216,7 @@ module.exports = grammar({
       seq(DECIMAL_DIGITS, '.', optional(DECIMAL_DIGITS), optional(seq((/[eE]/), optional(choice('-', '+')), DECIMAL_DIGITS)), optional(/[fFdD]/)),
       seq('.', DECIMAL_DIGITS, optional(seq((/[eE]/), optional(choice('-', '+')), DECIMAL_DIGITS)), optional(/[fFdD]/)),
       seq(DECIMAL_DIGITS, /[eE]/, optional(choice('-', '+')), DECIMAL_DIGITS, optional(/[fFdD]/)),
-      seq(DECIMAL_DIGITS, optional(seq((/[eE]/), optional(choice('-', '+')), DECIMAL_DIGITS)), (/[fFdD]/)),
+      seq(DECIMAL_DIGITS, /[fFdD]/),
     )),
 
     hex_floating_point_literal: _ => token(seq(
@@ -605,7 +608,7 @@ module.exports = grammar({
     argument_list: $ => seq('(', commaSep($.expression), ')'),
 
     method_reference: $ => seq(
-      choice($._type, $.primary_expression, $.super, seq(choice($.identifier, alias(choice('open', 'module', 'with'), $.identifier), $.scoped_type_identifier), '.', $.super)),
+      choice($._type, $.primary_expression, $.super, seq(choice($.identifier, alias(openModuleWith(), $.identifier), $.scoped_type_identifier), '.', $.super)),
       '::',
       optional($.type_arguments),
       choice('new', $.identifier),
@@ -1216,7 +1219,7 @@ module.exports = grammar({
 
     _constructor_declarator: $ => seq(
       field('type_parameters', optional($.type_parameters)),
-      field('name', choice($.identifier, alias(choice('open', 'module', 'with'), $.identifier))),
+      field('name', choice($.identifier, alias(openModuleWith(), $.identifier))),
       field('parameters', $.formal_parameters),
     ),
 
@@ -1257,12 +1260,7 @@ module.exports = grammar({
       field('name', $.identifier),
     ),
 
-    field_declaration: $ => seq(
-      optional($.modifiers),
-      field('type', $._unannotated_type),
-      $._variable_declarator_list,
-      ';',
-    ),
+    field_declaration: variableDeclaration,
 
     record_declaration: $ => seq(
       optional($.modifiers),
@@ -1340,12 +1338,7 @@ module.exports = grammar({
       '}',
     ),
 
-    constant_declaration: $ => seq(
-      optional($.modifiers),
-      field('type', $._unannotated_type),
-      $._variable_declarator_list,
-      ';',
-    ),
+    constant_declaration: variableDeclaration,
 
     _variable_declarator_list: $ => commaSep1(
       field('declarator', $.variable_declarator),
@@ -1392,7 +1385,7 @@ module.exports = grammar({
       $.boolean_type,
       alias($.identifier, $.type_identifier),
       // Keep the expression reading when both survive, for example `(with) + x`.
-      prec.dynamic(-1, alias(choice('open', 'module', 'with'), $.type_identifier)),
+      prec.dynamic(-1, alias(openModuleWith(), $.type_identifier)),
       $.scoped_type_identifier,
       $.generic_type,
     ),
@@ -1410,7 +1403,7 @@ module.exports = grammar({
     _non_primitive_cast_type: $ => choice(
       $.void_type,
       alias($.identifier, $.type_identifier),
-      prec.dynamic(-1, alias(choice('open', 'module', 'with'), $.type_identifier)),
+      prec.dynamic(-1, alias(openModuleWith(), $.type_identifier)),
       $.scoped_type_identifier,
     ),
 
@@ -1424,7 +1417,7 @@ module.exports = grammar({
     scoped_type_identifier: $ => seq(
       choice(
         alias($.identifier, $.type_identifier),
-        prec.dynamic(-1, alias(choice('open', 'module', 'with'), $.type_identifier)),
+        prec.dynamic(-1, alias(openModuleWith(), $.type_identifier)),
         $.scoped_type_identifier,
         $.generic_type,
       ),
@@ -1497,8 +1490,7 @@ module.exports = grammar({
       $._variable_declarator_id,
     ),
 
-    // `@A T this` also parses as a formal_parameter whose name is `this` read as an identifier (issue #234);
-    // javac never accepts that, so the receiver wins the GLR choice.
+    // `this` is a reserved token and cannot be used as a formal parameter name.
     receiver_parameter: $ => prec.dynamic(1, seq(
       repeat($._annotation),
       $._unannotated_type,
@@ -1521,12 +1513,7 @@ module.exports = grammar({
       'throws', commaSep1($._type),
     ),
 
-    local_variable_declaration: $ => seq(
-      optional($.modifiers),
-      field('type', $._unannotated_type),
-      $._variable_declarator_list,
-      ';',
-    ),
+    local_variable_declaration: variableDeclaration,
 
     method_declaration: $ => seq(
       optional($.modifiers),
@@ -1536,12 +1523,12 @@ module.exports = grammar({
 
     compact_constructor_declaration: $ => seq(
       optional($.modifiers),
-      field('name', choice($.identifier, alias(choice('open', 'module', 'with'), $.identifier))),
+      field('name', choice($.identifier, alias(openModuleWith(), $.identifier))),
       field('body', $.block),
     ),
 
     _reserved_identifier: $ => choice(
-      alias(choice('open', 'module', 'with'), $.identifier),
+      alias(openModuleWith(), $.identifier),
       prec(-3, alias(
         choice(
           'record',

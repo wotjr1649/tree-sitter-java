@@ -1,26 +1,16 @@
-import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import { mkdirSync, mkdtempSync, readFileSync, realpathSync, renameSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { basename, dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { isDeepStrictEqual, parseArgs } from 'node:util';
+import { ORACLE, sha256 } from './oracle-replay.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const runner = join(root, 'oracle/runner/ParseOracle.java');
 const repos = ['RxJava', 'cassandra', 'elasticsearch', 'flink', 'guava', 'jdk', 'log4j2'];
-const oracle = {
-  api: 'com.sun.source.util.JavacTask.parse()',
-  'java.runtime.version': '25.0.5+8-LTS',
-  'java.vendor': 'Eclipse Adoptium',
-  options: ['--release', '25', '-proc:none'],
-  preview: false,
-  release: '25',
-  source_encoding: 'UTF-8',
-};
 const limits = ['limit:k5', 'limit:unicode-escape'];
 const entryKeys = ['path', 'sha256', 'verdict', 'codes', 'category', 'group'];
-const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
 const decode = bytes => new TextDecoder('utf-8', { fatal: true, ignoreBOM: true }).decode(bytes);
 const readJson = file => JSON.parse(decode(readFileSync(file)));
 const isCode = value => typeof value === 'string' && /^compiler\.err\.[a-z0-9_.]+$/.test(value);
@@ -152,7 +142,7 @@ function generate(paths, checkouts, meta, file, java) {
       writeFileSync(input, jsonl);
       invoke(['--cases', input, '--out', output]);
       const batch = readJson(output);
-      const expected = { ...oracle, runner_sha256: meta.runner_sha256,
+      const expected = { ...ORACLE, runner_sha256: meta.runner_sha256,
         case_count: cases.length, cases_sha256: sha256(jsonl) };
       if (!isDeepStrictEqual(batch.meta, expected) || Object.keys(batch.verdicts).length !== cases.length) {
         throw new Error(`inconsistent runner output for batch starting at ${start}`);
@@ -214,7 +204,7 @@ function main() {
     statSync(join(checkouts[repo], '.git'));
     return [repo, run('git', ['-C', checkouts[repo], 'rev-parse', '--verify', 'HEAD']).trim()];
   }));
-  const meta = { ...oracle, runner_sha256: sha256(readFileSync(runner)), example_pins: pins,
+  const meta = { ...ORACLE, runner_sha256: sha256(readFileSync(runner)), example_pins: pins,
     failure_count: paths.length, failures_sha256: sha256(bytes) };
   const file = resolve(values.verdicts);
   if (values.check) check(paths, checkouts, meta, file);
