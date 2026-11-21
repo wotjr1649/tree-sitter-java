@@ -1,6 +1,7 @@
 # Java grammar tolerances and known limits
 
-This document describes the v3.0.0 grammar based on main commit `76c6d80` and the pending 3.0.1 changes.
+This document describes the v3.0.1 grammar based on main commit `4e19038`.
+The two pinned forms withdrawn in 3.0.1 were spot-checked with the v3.0.1 parser.
 Phase 5 and K30–K33 rows were spot-checked with the v3.0.0 parser. The Phase 3 rows were rechecked
 with the v2.4.0 parser.
 Javac verdicts use Eclipse Temurin 25.0.5+8 with `--release 25` and preview disabled.
@@ -151,7 +152,8 @@ accepted, as in javac's parse phase. For example, `(Comparable<Integer>) -k` als
 The reference-cast rule in the specification is stricter. [JLS 25 §15.16][jls-cast]
 The same holds for other forms javac's parser rejects before a sign: annotated simple or qualified names
 such as `(@A java.lang.Integer) -k` and `(Outer.@A Inner) -k`, qualified types with a generic qualifier such as
-`(Cn<T>.Inner) -k`, and `(@A void) -k`. The table lists the pinned cases only.
+`(Cn<T>.Inner) -k`. `(@A void) -k` passes javac's parser, like `(void) -k`, and javac 25.0.5+8 then stops with an
+internal error. The table lists the pinned cases only.
 
 | Java form | javac diagnostic code(s) | Oracle case | Reason |
 | --- | --- | --- | --- |

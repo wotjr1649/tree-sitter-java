@@ -1,7 +1,7 @@
 [package]
 name = "tree-sitter-java"
 description = "Java grammar for tree-sitter"
-version = "3.0.0"
+version = "3.0.1"
 authors = [
   "Ayman Nadeem <aymannadeem@github.com>",
   "Max Brunsfeld <maxbrunsfeld@gmail.com>",
