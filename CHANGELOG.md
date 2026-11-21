@@ -13,6 +13,12 @@
   [JLS 25 §14.11.1](https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html#jls-14.11.1) ·
   [§14.30.1](https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html#jls-14.30.1)
 
+- **K34 (K16 follow-up).** Reparse a block's trailing cast or binary return value after edits
+  to surrounding code. Undoing a syntax error restores the additive tree for `return (n) + k * 3;`.
+  To reproduce on 3.0.0, set `TREE_SITTER_SEED=11085115286979003466` and run
+  `tree-sitter fuzz --include Parenthesized.names.before.additive.operators --edits 3 --iterations 10`
+  with Tree-sitter CLI 0.27.2. [JLS 25 §15.16](https://docs.oracle.com/javase/specs/jls/se25/html/jls-15.html#jls-15.16)
+
 ## 3.0.0
 
 Phase 5 makes three breaking changes. Java's reserved keywords and the literals `true`, `false` and `null`

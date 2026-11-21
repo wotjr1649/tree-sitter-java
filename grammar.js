@@ -101,6 +101,8 @@ module.exports = grammar({
   ],
 
   conflicts: $ => [
+    // Reconsider a trailing return and its block after surrounding edits.
+    [$.expression, $._trailing_return_statement],
     // Both label interpretations can start with the same expression.
     [$.cast_expression, $._switch_cast_expression],
     [$.switch_label, $._arrow_switch_label],
@@ -750,7 +752,16 @@ module.exports = grammar({
     ),
 
     block: $ => seq(
-      '{', repeat($.statement), '}',
+      '{',
+      repeat($.statement),
+      optional(alias($._trailing_return_statement, $.return_statement)),
+      '}',
+    ),
+
+    _trailing_return_statement: $ => seq(
+      'return',
+      choice($.binary_expression, $.cast_expression),
+      ';',
     ),
 
     expression_statement: $ => seq(
