@@ -1,7 +1,8 @@
 # Java grammar tolerances and known limits
 
-This document describes the v3.0.0 grammar based on main commit `76c6d80`. Phase 5 and K30–K33 rows were
-spot-checked with the v3.0.0 parser. The Phase 3 rows were rechecked with the v2.4.0 parser.
+This document describes the v3.0.0 grammar based on main commit `76c6d80` and the pending 3.0.1 changes.
+Phase 5 and K30–K33 rows were spot-checked with the v3.0.0 parser. The Phase 3 rows were rechecked
+with the v2.4.0 parser.
 Javac verdicts use Eclipse Temurin 25.0.5+8 with `--release 25` and preview disabled.
 An error-free tree has no `ERROR` or `MISSING` nodes. Javac diagnostics come from `JavacTask.parse()` unless a
 row calls out full compilation. The diagnostic column omits the common `compiler.err.` prefix and lists the
@@ -13,9 +14,10 @@ OpenJDK paths are relative to the [pinned langtools corpus][openjdk]. The exampl
 
 The release column names the release that introduced or recorded the behavior. “Phase 2 (2.2.0)” marks
 forms recorded during the OpenJDK survey against the 2.2.0 parser. See [Withdrawn in 3.0.0](#withdrawn-in-300)
-for the reserved-word changes. Rows marked “Kept in Phase 5” cover restricted type names and `_` declarations
-that javac rejects and that were absent from valid code in the pinned examples. Tightening those individual
-positions would add grammar constraints without correcting a tree found in valid code.
+for the reserved-word changes and [Withdrawn in 3.0.1](#withdrawn-in-301) for the signed-operand cast changes.
+Rows marked “Kept in Phase 5” cover
+restricted type names and `_` declarations that javac rejects and that were absent from valid code in the pinned examples.
+Tightening those individual positions would add grammar constraints without correcting a tree found in valid code.
 
 [openjdk]: https://github.com/openjdk/jdk25u/tree/fda231468e56663992785ec199a6efb8eca3cc7a/test/langtools/tools/javac
 
@@ -117,7 +119,6 @@ The rows citing those reviews record existing fresh-parse behavior.
 | `((x) = 1) + 1;`<br>`-((x) = 1);`<br>`b ? (x) = 1 : 2;`<br>`(int) ((x) = 1);`<br>`((o) = get()).field;`<br>`((a) = new int[1][1])[0];`<br>`((o) = get())::run;` | `not.stmt` | k12/binary-statement, unary-statement, ternary-statement, cast-statement, field-access-statement, array-access-statement, method-reference-statement<br>unary-for-init, ternary-for-update, switch-statement-binary-arm, unary-switch-arrow, ternary-switch-arrow | 2.3.0 (K12) | The surrounding expression can parse as a statement. The pinned controls include (x = 1) + 1 and (1) + 1, plus unary, ternary, cast, member access and method reference expressions without assignments. Some wrappers also parse in for clauses and switch statement rules, such as for (-(1); x < 1; x++) {} (unary-for-init-control). |
 | `@A((x) = 1)`<br>`@A(value = (x) = 1)`<br>`@A(@B((x) = 1))`<br>`@A({(x) = 1})`<br>`@A({0, (x) = 1})`<br>`int value() default (x) = 1;`<br>`@A({x = 1})`<br>`int value() default x = 1;` | `expected`, `class.method.or.field.expected`, `annotation.missing.element.value` | k12/annotation-unkeyed, annotation-keyed, nested-annotation-value, annotation-array, mixed-annotation-array-value, annotation-default<br>annotation-array-base-tolerance, annotation-default-base-tolerance | 2.3.0 (K12) | Arrays give annotation.missing.element.value with or without parentheses on the assignment target. The default value gives expected alone. |
 | `default -> { (yield()).field = 1; yield (x) = 2; }` | `invalid.yield` | k12/switch-yield-call, switch-yield-call-base-tolerance | 2.3.0 (K12) | An unqualified yield call parses alongside a yield statement with either yield (x) = 2 or yield x = 2. |
-| `(@A Integer) -k` | `illegal.start.of.expr` | k16/annotated-reference-signed-operand | 2.3.0 (recorded by K16) | A cast to an annotated reference type takes a signed operand; the same shape with a primitive type, `(@A int) -b`, is valid (k16/annotated-primitive). The tree is unchanged by K16. |
 | `(Integer) ++i`<br>`(Integer) --i`<br>`(n) ++ k;`<br>`(n) -- k;` | `expected`, `not.stmt` | k21/reference-cast-prefix-increment, k21/reference-cast-prefix-decrement, k21/parenthesized-name-increment-name, k21/parenthesized-name-decrement-name | 2.3.0 (recorded by K21) | A reference cast takes a prefix update operand; the same shape with a primitive type, `(int) ++a`, is valid (k21/prefix-and-grouped). K21 does not change these trees. |
 | `o instanceof List<> _`<br>`o instanceof var _`<br>`o instanceof final var _` | `illegal.start.of.type`, `restricted.type.not.allowed.here` | Independent K14 review probes<br>patterns/VarErrors.java for the restricted type | 2.3.0 (K14) review | Kept in Phase 5. The empty-type-argument tolerance also remains. |
 | `o instanceof int _` | `preview.feature.disabled.plural` | Independent K14 review probe | 2.3.0 (K14) review | Full compile with preview off. Both parsers accept the pattern. |
@@ -141,6 +142,21 @@ A name or keyword newly accepted in a syntactic position inherits every toleranc
 position. For K20, this applies to `open`, `module` and `with` as qualifiers of `super::`, with `C` as the ordinary-name
 control. The corpus and oracle pin representative contexts and the forms found in review. A form that produced a
 parse error at the PR base must keep producing an error if its `C` counterpart also errored there.
+
+## Withdrawn in 3.0.1
+
+The following signed-operand cast forms now produce parse errors. The diagnostics are from full compilation.
+The annotated reference case also fails in javac's parse phase. The other four pass that phase and are listed
+in the oracle's expected-failure set. A signed operand after a primitive cast such as `(@A int) -b` remains
+valid. [JLS 25 §15.16][jls-cast]
+
+| Java form | javac diagnostic code(s) | Oracle case |
+| --- | --- | --- |
+| `(int[]) -k` | `prob.found.req` (`compiler.misc.inconvertible.types`) | `k16/array-signed-operand` |
+| `(java.util.List<String>) -k` | `prob.found.req` (`compiler.misc.inconvertible.types`) | `k16/generic-signed-operand` |
+| `(K16.A<String>) +k` | `cant.resolve.location` (`A` in the fixture) | `k16/qualified-generic-signed-operand` |
+| `(@A Integer) -k` | `illegal.start.of.expr` | `k16/annotated-reference-signed-operand` |
+| `(void) -k` | `void.not.allowed.here`, `prob.found.req` (`compiler.misc.inconvertible.types`) | `k16/void-signed-operand` |
 
 ## Withdrawn in 3.0.0
 

@@ -152,8 +152,9 @@ kind of `forbid`. K3 uses it on `default` in `case null, default`: the anonymous
 
 A case is a **mismatch** when javac accepts it and the tree is bad. A case javac rejects whose tree is clean
 (`rejected-clean`) is only printed: the grammar is not required to enforce everything javac rejects.
-For a case with `"expectError": true`, the pinned javac verdict must be a rejection and replay must find an
-`ERROR` or `MISSING` node. Replay exits 1 if that node is absent or 2 if the verdict accepts the input.
+For a case with `"expectError": true`, replay must find an `ERROR` or `MISSING` node and exits 1 if it
+is absent. If javac's parse phase accepts this input, the case also needs an explicit entry in
+`expected-failures.json`. Replay exits 2 if the entry is missing.
 
 Exit codes: **0** the results equal the baseline; **1** they differ (a mismatch that is not in the expected-failure
 set, or a listed case that no longer fails); **2** the inputs are inconsistent (a case's hash does not match its
@@ -183,6 +184,8 @@ A new input that the grammar fails but javac accepts is never added silently: it
 fix, or a recorded entry with its javac verdict and evidence. K25 records the documented limit on type-pattern
 bindings named `when`. Its dedicated cases record the trees from `f1e4257`, and the existing structural probes
 retain their recorded trees. K32 records `when` as a `for` variable name; its trees are those of `b8e1950`. See [known limits](../docs/tolerances.md#known-limits).
+K34 records four [withdrawn tolerances](../docs/tolerances.md#withdrawn-in-301) that javac accepts at parse time
+and rejects during full compilation. Their recorded trees are from the 3.0.1 K34 parser.
 
 ## Node kinds and parser cost
 

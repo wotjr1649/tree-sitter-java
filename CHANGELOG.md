@@ -4,20 +4,31 @@
 
 ### Fixes
 
-- **K34.** Keep `case Stamp() when allowed ->` as a `record_pattern` when recovering from a
-  syntax error introduced earlier in the file, and when the edit is undone. Raising the record
-  pattern's dynamic precedence breaks its tie with the arrow-label reading of the method call.
-  The corpus case `K26 guarded arrow` reproduces the issue on 2.4.0 and 3.0.0. Use
-  Tree-sitter CLI 0.27.2 with `TREE_SITTER_SEED=11199212549396579242` and
-  `tree-sitter fuzz --include K26.guarded.arrow --edits 3 --iterations 10`.
+- **K34.** Incremental parsing agrees with a fresh parse for guarded empty record patterns and
+  additive expressions of the form `(Name) ± x`, including when an edit that introduced a syntax
+  error elsewhere is undone. Raise the dynamic precedence of record patterns and distinguish primitive
+  casts from reference casts in the grammar. A signed unary operand can follow a primitive cast.
+  `cast_expression.type` lists eight existing `_type` alternatives directly in the generated schema.
+  The generated parser grows from 3,037,379 to 3,157,054 bytes (+3.94%) and from 1,685 to 1,739 states.
+  With Tree-sitter CLI 0.27.2, run `tree-sitter fuzz --edits 3 --iterations 10` with
+  `--include K26.guarded.arrow` and `TREE_SITTER_SEED` set to `11199212549396579242` or
+  `4772551502783724415`. Use `--include Parenthesized.names.before.additive.operators` with
+  seed `11085115286979003466` for the additive case.
   [JLS 25 §14.11.1](https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html#jls-14.11.1) ·
-  [§14.30.1](https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html#jls-14.30.1)
+  [§14.30.1](https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html#jls-14.30.1) ·
+  [§15.16](https://docs.oracle.com/javase/specs/jls/se25/html/jls-15.html#jls-15.16)
 
-- **K34 (K16 follow-up).** Reparse a block's trailing cast or binary return value after edits
-  to surrounding code. Undoing a syntax error restores the additive tree for `return (n) + k * 3;`.
-  To reproduce on 3.0.0, set `TREE_SITTER_SEED=11085115286979003466` and run
-  `tree-sitter fuzz --include Parenthesized.names.before.additive.operators --edits 3 --iterations 10`
-  with Tree-sitter CLI 0.27.2. [JLS 25 §15.16](https://docs.oracle.com/javase/specs/jls/se25/html/jls-15.html#jls-15.16)
+### Withdrawn tolerances
+
+These forms now produce parse errors. Temurin 25.0.5+8 reports the following diagnostics during full
+compilation with `javac --release 25 -proc:none -XDrawDiagnostics`.
+
+- `(int[]) -k` reports `compiler.err.prob.found.req` with `compiler.misc.inconvertible.types`.
+- `(java.util.List<String>) -k` reports `compiler.err.prob.found.req` with `compiler.misc.inconvertible.types`.
+- `(K16.A<String>) +k` reports `compiler.err.cant.resolve.location` for `A` in the fixture.
+- `(@A Integer) -k` reports `compiler.err.illegal.start.of.expr`.
+- `(void) -k` reports `compiler.err.void.not.allowed.here` and `compiler.err.prob.found.req`
+  with `compiler.misc.inconvertible.types`.
 
 ## 3.0.0
 

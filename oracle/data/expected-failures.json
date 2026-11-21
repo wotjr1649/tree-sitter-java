@@ -264,6 +264,34 @@
       "base_failure": "root hasError; 1 ERROR",
       "base_tree": "(program (class_declaration name: (identifier) body: (class_body (method_declaration type: (void_type) name: (identifier) parameters: (formal_parameters (formal_parameter type: (array_type element: (type_identifier) dimensions: (dimensions)) name: (identifier)) (formal_parameter type: (array_type element: (integral_type) dimensions: (dimensions)) name: (identifier))) body: (block (local_variable_declaration type: (type_identifier) declarator: (variable_declarator name: (identifier) value: (lambda_expression parameters: (formal_parameters) body: (block (ERROR (identifier) (identifier)) (block))))))))))",
       "note": "documented limit (owner 2026-11-21)"
+    },
+    "k16/array-signed-operand": {
+      "k": "K34",
+      "sha256": "eab300ef4f4ead70e10f42491315f20aa044fd06d3ed2a4dee7ddf254b6256cb",
+      "base_failure": "root hasError; 1 ERROR",
+      "base_tree": "(program (class_declaration name: (identifier) body: (class_body (field_declaration type: (integral_type) declarator: (variable_declarator name: (identifier))) (method_declaration type: (integral_type) name: (identifier) parameters: (formal_parameters (formal_parameter type: (type_identifier) name: (identifier)) (formal_parameter type: (integral_type) name: (identifier)) (formal_parameter type: (integral_type) name: (identifier))) body: (block (return_statement (cast_expression type: (array_type element: (integral_type) dimensions: (dimensions)) (ERROR) value: (identifier))))))))",
+      "note": "withdrawn tolerance in 3.0.1 (fails full javac compilation, see docs/tolerances.md)"
+    },
+    "k16/generic-signed-operand": {
+      "k": "K34",
+      "sha256": "b2bbdd904ca78dbbf0cfddcc42b4e39fcd296860cb3cff2433320ed842d57670",
+      "base_failure": "root hasError; 1 ERROR",
+      "base_tree": "(program (class_declaration name: (identifier) body: (class_body (field_declaration type: (integral_type) declarator: (variable_declarator name: (identifier))) (method_declaration type: (integral_type) name: (identifier) parameters: (formal_parameters (formal_parameter type: (type_identifier) name: (identifier)) (formal_parameter type: (integral_type) name: (identifier)) (formal_parameter type: (integral_type) name: (identifier))) body: (block (return_statement (cast_expression type: (generic_type (scoped_type_identifier (scoped_type_identifier (type_identifier) (type_identifier)) (type_identifier)) (type_arguments (type_identifier))) (ERROR) value: (identifier))))))))",
+      "note": "withdrawn tolerance in 3.0.1 (fails full javac compilation, see docs/tolerances.md)"
+    },
+    "k16/qualified-generic-signed-operand": {
+      "k": "K34",
+      "sha256": "47fcc75b0efd828f2428efed94c19828b7ade86e14914118a61ae76a811370e7",
+      "base_failure": "root hasError; 1 ERROR",
+      "base_tree": "(program (class_declaration name: (identifier) body: (class_body (field_declaration type: (integral_type) declarator: (variable_declarator name: (identifier))) (method_declaration type: (integral_type) name: (identifier) parameters: (formal_parameters (formal_parameter type: (type_identifier) name: (identifier)) (formal_parameter type: (integral_type) name: (identifier)) (formal_parameter type: (integral_type) name: (identifier))) body: (block (return_statement (cast_expression type: (generic_type (scoped_type_identifier (type_identifier) (type_identifier)) (type_arguments (type_identifier))) (ERROR) value: (identifier))))))))",
+      "note": "withdrawn tolerance in 3.0.1 (fails full javac compilation, see docs/tolerances.md)"
+    },
+    "k16/void-signed-operand": {
+      "k": "K34",
+      "sha256": "abf222b85c38cd6184a35ce247a0a71c5cac290cc64b9709ce769c3c4fd65d75",
+      "base_failure": "root hasError; 1 ERROR",
+      "base_tree": "(program (class_declaration name: (identifier) body: (class_body (field_declaration type: (integral_type) declarator: (variable_declarator name: (identifier))) (method_declaration type: (integral_type) name: (identifier) parameters: (formal_parameters (formal_parameter type: (type_identifier) name: (identifier)) (formal_parameter type: (integral_type) name: (identifier)) (formal_parameter type: (integral_type) name: (identifier))) body: (block (return_statement (cast_expression type: (void_type) (ERROR) value: (identifier))))))))",
+      "note": "withdrawn tolerance in 3.0.1 (fails full javac compilation, see docs/tolerances.md)"
     }
   }
 }

@@ -144,8 +144,6 @@ export function loadVerdicts(sets) {
     for (const [id, codes] of Object.entries(v))
       if (!Array.isArray(codes) || codes.some((code) => typeof code !== 'string'))
         fail(`${name}: the verdict of ${id} is not an array of strings`);
-    for (const c of set.cases)
-      if (c.expectError && !v[c.id].length) fail(`${name}: ${c.id} expects an error but javac accepts it`);
     Object.assign(verdicts, v);
   }
   for (const s of sets) if (!covered.has(s.name)) fail(`${s.name}: no verdict file`);
@@ -233,6 +231,9 @@ export function loadExpected(sets, verdicts) {
     if (e.sha256 !== byId[id].sha256) fail(`expected-failures.json: ${id} is bound to a different input (${e.sha256})`);
     if (verdicts[id].length) fail(`expected-failures.json: ${id} is not a confirmed mismatch, javac rejected it`);
   }
+  for (const c of Object.values(byId))
+    if (c.expectError && !verdicts[c.id].length && !Object.hasOwn(expected.cases, c.id))
+      fail(`${c.id} expects an error but javac accepts it and no expected failure is recorded`);
   return expected;
 }
 
