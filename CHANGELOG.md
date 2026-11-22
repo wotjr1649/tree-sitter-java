@@ -1,5 +1,31 @@
 # Changelog
 
+## 3.0.3
+
+Build, packaging and CI changes only. The grammar, the public node schema and all parse trees are unchanged;
+the generated parser differs from 3.0.2 only in its embedded patch version.
+
+### Build and packaging
+
+- CMake and Make build the committed `src/parser.c` without the tree-sitter CLI, even when `src/grammar.json` is
+  newer. Regenerate explicitly with the CMake `ts-generate` target or `make generate`, which use the pinned recipe
+  (`--abi` from `ci/tree-sitter-abi.txt`, `--js-runtime native`). The CMake SOVERSION comes from the parser's
+  `LANGUAGE_VERSION` and the project major. (#66)
+- pkg-config files keep absolute `libdir` and `includedir` values instead of prefixing them with `${prefix}`,
+  and the CMake file has an `includedir` again. Make resolves relative `LIBDIR` and `INCLUDEDIR` under `PREFIX`
+  and escapes its sed replacements. (#66)
+- Free-threaded CPython builds a native extension with native wheel tags. Ordinary CPython keeps the 3.10 Limited
+  API and the `cp310-abi3` tag. (#66)
+
+### CI
+
+- CI reads the CLI version from `devDependencies.tree-sitter-cli` and the ABI from `ci/tree-sitter-abi.txt`, which
+  the CMake default also reads. The generated-source check fails on untracked files under `src/` and on the
+  generator's optimize-off pragmas, and reports the main lexer case count. (#64)
+- CI compares `src/node-types.json` with the pull request's base commit and fails on removed kinds, fields,
+  children, types or supertype subtypes, lost multiplicity and newly required entries. (#65)
+- AGENTS.md applies the common grammar rules. (#63)
+
 ## 3.0.2
 
 The reserved-word grammar now reuses more tokens during incremental reparses. In the 63-file

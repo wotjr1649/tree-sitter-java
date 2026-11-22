@@ -1,6 +1,6 @@
 # Java grammar tolerances and known limits
 
-This document describes the v3.0.2 grammar based on main commit `644fc67`.
+This document describes the v3.0.3 grammar based on main commit `f8a6a9a`. The grammar is unchanged since v3.0.2.
 The two pinned forms withdrawn in 3.0.1 were spot-checked with the v3.0.2 parser.
 Phase 5 and K30–K33 rows were spot-checked with the v3.0.0 parser. The Phase 3 rows were rechecked
 with the v2.4.0 parser.
