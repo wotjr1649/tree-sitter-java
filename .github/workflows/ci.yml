@@ -24,17 +24,42 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
+      - name: Read tree-sitter CLI pin
+        id: tree-sitter-pin
+        shell: bash
+        run: node -p '"ref=v" + require("./package.json").devDependencies["tree-sitter-cli"]' >> "$GITHUB_OUTPUT"
       - name: Set up tree-sitter
         uses: tree-sitter/setup-action/cli@v2
         with:
-          tree-sitter-ref: v0.27.2
+          tree-sitter-ref: ${{ steps.tree-sitter-pin.outputs.ref }}
       - name: Verify generated sources
         shell: bash
         run: |
-          tree-sitter generate --abi 15 --js-runtime native
-          git diff --exit-code -- src
+          abi=$(cat ci/tree-sitter-abi.txt)
+          tree-sitter generate --abi "$abi" --js-runtime native
+          awk '
+            /^static bool ts_lex\(/ { in_main_lexer = 1 }
+            /^}/ { in_main_lexer = 0 }
+            in_main_lexer && /^[[:space:]]*case [0-9]+:/ { cases++ }
+            /^[[:space:]]*#[[:space:]]*pragma[[:space:]]+(optimize[[:space:]]*\(|clang[[:space:]]+optimize[[:space:]]+off([[:space:]]|$)|GCC[[:space:]]+optimize([[:space:](]|$))/ {
+              print FILENAME ":" FNR ": forbidden optimization pragma: " $0
+              blocked = 1
+            }
+            END { print "Main lexer cases: " (cases + 0); exit (blocked || !cases) }
+          ' src/parser.c
           parser_abi=$(sed -n 's/^#define LANGUAGE_VERSION //p' src/parser.c)
-          test "$parser_abi" = "$(sed -n 's/^set(TREE_SITTER_ABI_VERSION \([0-9]*\) CACHE .*/\1/p' CMakeLists.txt)"
+          if [ "$parser_abi" != "$abi" ]; then
+            echo "::error::src/parser.c LANGUAGE_VERSION $parser_abi differs from ci/tree-sitter-abi.txt $abi"
+            exit 1
+          fi
+          git diff --exit-code -- src
+          # git diff misses generated files that are not in the checkout.
+          status=$(git status --porcelain --untracked-files=all -- src)
+          if [ -n "$status" ]; then
+            printf '%s\n' "$status"
+            echo "::error::Generated sources differ from the checkout"
+            exit 1
+          fi
       - name: Run tests
         uses: tree-sitter/parser-test-action@v2
         env:
@@ -55,10 +80,14 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
+      - name: Read tree-sitter CLI pin
+        id: tree-sitter-pin
+        shell: bash
+        run: node -p '"ref=v" + require("./package.json").devDependencies["tree-sitter-cli"]' >> "$GITHUB_OUTPUT"
       - name: Set up tree-sitter
         uses: tree-sitter/setup-action/cli@v2
         with:
-          tree-sitter-ref: v0.27.2
+          tree-sitter-ref: ${{ steps.tree-sitter-pin.outputs.ref }}
       - name: Fuzz corpus
         shell: bash
         env:
@@ -95,10 +124,14 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
+      - name: Read tree-sitter CLI pin
+        id: tree-sitter-pin
+        shell: bash
+        run: node -p '"ref=v" + require("./package.json").devDependencies["tree-sitter-cli"]' >> "$GITHUB_OUTPUT"
       - name: Set up tree-sitter
         uses: tree-sitter/setup-action/cli@v2
         with:
-          tree-sitter-ref: v0.27.2
+          tree-sitter-ref: ${{ steps.tree-sitter-pin.outputs.ref }}
       # Pinned heads of the default branches, taken 2026-11-19. To move a pin,
       # change the SHA, run this job, update test/examples/failures.txt and regenerate the verdicts.
       - name: Set up examples
