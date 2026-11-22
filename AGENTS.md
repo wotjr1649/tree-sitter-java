@@ -15,13 +15,12 @@ approval. go-treesitter regenerates `src/parser.c` with its own pinned CLI.
   generated. Regenerate with the pinned CLI using the CI generate command (`tree-sitter generate --abi <ABI>
   --js-runtime native`), commit the generated files with the source change and run `tree-sitter test`. Never edit
   generated files by hand or by post-processing. A generated `parser.c` must not contain the generator's optimize-off
-  pragmas.
-- The CLI pin is `devDependencies.tree-sitter-cli` in `package.json`. Until CI reads it, the three `tree-sitter-ref`
-  values in `.github/workflows/ci.yml` repeat it: change all in the same PR. It tracks the latest stable tree-sitter
-  release (`gh release view -R tree-sitter/tree-sitter`). Move it in its own PR: regenerate, compare full CSTs on the
-  fixed inputs and record generated-code differences. Identical trees are a patch release; otherwise follow the SemVer
-  rules below.
-- The ABI is the `--abi` value of the CI generate command; the `CMakeLists.txt` default repeats it: change both.
+  pragmas (CI checks it).
+- The CLI pin is `devDependencies.tree-sitter-cli` in `package.json`; CI reads it. It tracks the latest stable
+  tree-sitter release (`gh release view -R tree-sitter/tree-sitter`). Move it in its own PR: regenerate, compare full
+  CSTs on the fixed inputs and record generated-code differences. Identical trees are a patch release; otherwise follow
+  the SemVer rules below.
+- The ABI is in `ci/tree-sitter-abi.txt`; the CI generate command and the `CMakeLists.txt` default read it.
   Binding runtime lower bounds are in the binding manifests. Changing the ABI or a runtime lower bound needs the
   owner's approval and a major release.
 - Releases are `vMAJOR.MINOR.PATCH` tags; the latest is the highest `v*` tag (`git ls-remote --tags --sort=-v:refname
