@@ -61,7 +61,7 @@ jobs:
             exit 1
           fi
       - name: Run tests
-        uses: tree-sitter/parser-test-action@v2
+        uses: tree-sitter/parser-test-action@v3
         env:
           PIP_CONSTRAINT: ${{ github.workspace }}/bindings/python/tests/requirements.txt
         with:
